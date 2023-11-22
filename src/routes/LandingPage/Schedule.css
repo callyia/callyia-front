@@ -1,4 +1,9 @@
 /* ScheduleCard.css */
+.schedule-container {
+  max-height: 800px; /* 원하는 높이로 조절하세요 */
+  overflow-y: auto;
+}
+
 .schedule-card {
   align-items: center;
   border: 1px solid #dddddd;
@@ -26,6 +31,11 @@ h3 {
   color: black;
 }
 
+h2 {
+  margin-left: 4px;
+  font-size: 40px;
+  font-weight: bold;
+}
 p {
   color: black;
 }
