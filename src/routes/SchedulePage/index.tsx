@@ -2,7 +2,7 @@ import Schedule from './Schedule'
 import Map from './Map'
 import Cart from './Cart'
 
-export default function LandingPage() {
+export default function SchedulePage() {
   return (
     <div style={{display: 'flex', height: '1000px'}}>
       <div

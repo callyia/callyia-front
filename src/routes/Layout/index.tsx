@@ -7,7 +7,7 @@ export default function Layout() {
     <>
       <NavigationBar />
       <Outlet />
-      {/* <Footer /> */}
+      <Footer />
     </>
   )
 }
