@@ -28,7 +28,7 @@ const Main: React.FC<MainPageProps> = ({ isLoggedIn }) => {
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
-      navigate(`/SignUpPage?searchcombo=${searchCombo}&searchkeyword=${searchKeyword}`, { state: { searchKeyword } });
+      navigate(`/ListPage?searchcombo=${searchCombo}&searchkeyword=${searchKeyword}`, { state: { searchKeyword } });
     }
   };
 
@@ -122,9 +122,6 @@ const Main: React.FC<MainPageProps> = ({ isLoggedIn }) => {
           <img src="/logo192.png" alt="Logo" className="margin-image" style={{marginLeft: '-200px', marginRight: '200px'}}/>
         </div>
       </main>
-      <footer className="footer">
-        © 2023 CALLYIA-TRIP
-      </footer>
       <button type="button" className="top-button"
         style={{ visibility: showTopButton ? 'visible' : 'hidden' }} // 스크롤이 조건이상 내려가면 보이게
         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}></button>
