@@ -130,14 +130,14 @@ input[type="text"] {
     padding: 10px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    min-height: 200px;
+    /* min-height: 200px; */
     width: 70%;
 }
 
 /* 수정 footer 컴포넌트로 해서 분리시키기 */
 /* Footer Styles */
 .footer {
-    margin-left: 37%;
+    /* margin-left: 37%; */
     margin-top: auto;
     font-size: 24px;
     margin-bottom: 20px;
