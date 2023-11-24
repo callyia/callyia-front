@@ -1,0 +1,181 @@
+/* 수정 -> */
+/* Global Styles */
+* {
+    font-weight: bold;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    background-color: white;
+}
+
+/* Button Styles */
+button {
+    background-color: #abcdef;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: blue;
+}
+
+/* Input Styles */
+input[type="text"] {
+    padding: 10px;
+    border-radius: 4px;
+    color: black;
+    font-size: 16px;
+}
+
+/* Header Styles */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+.top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.profile-section {
+    margin-left: auto;
+}
+
+/* Logo Styles */
+.logo {
+    width: 100px;
+    height: 50px;
+    display: block;
+    margin-left: 10px;
+    color: #abcdef;
+}
+
+/* Search Bar Styles */
+.search-bar {
+    margin-left: 20px;
+    display: flex;
+    align-items: center;
+    width: 50%;
+}
+
+.search-dropdown, .search-input {
+    padding: 5px 10px;
+    height: 50px;
+    border: 3px solid black;
+    border-radius: 8px;
+    background-color: black;
+    font-size: 16px;
+    color: white;
+    box-sizing: border-box;
+}
+
+.search-input {
+    box-sizing: border-box;
+    border-radius: 30px;
+    color: black;
+    background-color: #dddddd;
+    flex-grow: 1;
+    margin-left: -10px;
+}
+
+.search-dropdown {
+    border-radius: 4px;
+    margin-right: 10px;
+    color: white;
+}
+
+/* Margin Image Styles */
+.margin-image {
+    width: 100px;
+    height: auto;
+    margin-left: -100px;
+    margin-right: 100px;
+}
+
+/* Main Container Styles */
+.main-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Section Styles */
+.section-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 수정 여행 계획 서치바 css */
+.trip-plan-input {
+    background-color: green;
+}
+
+.section-div {
+    height: 1200px;
+    margin-bottom: 20px;
+    background-color: white;
+    border: 3px solid #abcdef;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    min-height: 200px;
+    width: 70%;
+}
+
+/* 수정 footer 컴포넌트로 해서 분리시키기 */
+/* Footer Styles */
+.footer {
+    margin-left: 37%;
+    margin-top: auto;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* Top Button Styles */
+.top-button {
+    position: fixed;
+    right: 10px;
+    bottom: 10px;
+    width: 75px;
+    height: 75px;
+    background-color: gray;
+    color: blue;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: background-color 0.5s;
+    border: none;
+    outline: none;
+}
+
+.top-button:before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    border: solid transparent;
+    border-width: 0 10px 15px 10px; 
+    border-bottom-color: white; 
+    transform: translate(-50%, -50%);
+    transition: opacity 0.3s ease;
+    opacity: 0;
+}
+
+.top-button:hover {
+    background-color: black;
+}
+
+.top-button:hover:before {
+    opacity: 1;
+}
