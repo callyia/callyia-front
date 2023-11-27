@@ -1,41 +1,29 @@
-// Mymap.tsx
 import React, { useEffect } from "react";
 
 declare global {
   interface Window {
-    Tmapv3: any;
+    kakao: any;
   }
 }
 
-const Mymap: React.FC = () => {
+const Mymap = () => {
   useEffect(() => {
-    const initTmap = () => {
-      const map = new window.Tmapv3.Map("map_div", {
-        center: new window.Tmapv3.LatLng(35.14299044, 129.03409987),
-        width: "890px",
-        height: "400px",
-        zoom: 18,
-      });
+    let container = document.getElementById("map"); //지도를 담을 영역의 DOM 레퍼런스
+    let options = {
+      //지도를 생성할 때 필요한 기본 옵션
+      center: new window.kakao.maps.LatLng(35.14299044, 129.03409987), //지도의 중심좌표.
+      level: 3, //지도의 레벨(확대, 축소 정도)
     };
 
-    if (window.Tmapv3) {
-      // Tmapv3 라이브러리가 이미 로드되어 있으면 초기화
-      initTmap();
-    } else {
-      // Tmapv3 라이브러리를 동적으로 로드합니다.
-      const script = document.createElement("script");
-      script.src =
-        "https://apis.openapi.sk.com/tmap/vectorjs?version=1&appKey=fAVBnOntPm1FUqkPuKQZc31F0pFE3KM41N1UeDkA";
-      script.async = true;
-      script.onload = () => {
-        initTmap();
-      };
-
-      document.head.appendChild(script);
-    }
+    let map = new window.kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
   }, []);
 
-  return <div id="map_div"></div>;
+  return (
+    <div>
+      <h2>지도</h2>
+      <div id="map" style={{ width: "47vw", height: "50vh" }} />
+    </div>
+  );
 };
 
 export default Mymap;
