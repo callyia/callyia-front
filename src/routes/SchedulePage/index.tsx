@@ -1,4 +1,5 @@
 //index.tsx
+import React, { useEffect } from "react";
 import Schedule from "./Schedule";
 import Mymap from "./Mymap";
 import Cart from "./Cart";
