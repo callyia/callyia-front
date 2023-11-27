@@ -19,6 +19,11 @@
   transform: scale(1.05);
 }
 
+.schedule-card.expanded {
+  background-color: lightblue;
+  height: 200px;
+}
+
 .schedule-number {
   font-size: 24px;
   font-weight: bold;
@@ -36,6 +41,73 @@ h2 {
   font-size: 40px;
   font-weight: bold;
 }
+
 p {
   color: black;
+  display: flex;
+  justify-content: space-between;
+}
+
+.details {
+  padding: 10px;
+  margin-top: 10px;
+  border-top: 1px solid orange;
+}
+
+.details ul {
+  overflow-y: auto;
+  align-items: center;
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+  padding: 10px;
+  margin: 6px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: orange;
+}
+
+.details ul li {
+  margin-bottom: 20px;
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+  padding: 10px;
+  margin: 6px;
+}
+
+.details input {
+  width: 90%;
+  padding: 5px;
+  margin-bottom: 10px;
+}
+
+.details img {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+//좋아요 버튼
+.LikeBtn {
+  background-color: gray;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.LikeBtn::before {
+  content: "\1F44D"; /* 따봉(👍) 이모지 유니코드 */
+  font-size: 20px;
+  margin-right: 5px;
+}
+
+.comment {
+  display: flex;
+  align-items: center; /* 수직 정렬을 중앙으로 설정 */
+}
+.comment button {
+  padding: 10px 15px;
+  background-color: gray;
+  color: white;
 }
