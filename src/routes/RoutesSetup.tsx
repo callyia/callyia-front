@@ -1,7 +1,8 @@
 import {Routes, Route} from 'react-router-dom'
 import Layout from './Layout'
 import SchedulePage from './SchedulePage'
-import MainPage from './MainPage';
+import MainPage from './MainPage'
+import ListPage from './ListPage'
 import NoMatch from './NoMatch'
 
 export default function RoutesSetup() {
@@ -9,6 +10,10 @@ export default function RoutesSetup() {
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<MainPage />} />
+        <Route path="*" element={<NoMatch />} />
+      </Route>
+      <Route path="/ListPage" element={<Layout />}>
+        <Route index element={<ListPage />} />
         <Route path="*" element={<NoMatch />} />
       </Route>
       <Route path="/SchedulePage" element={<Layout />}>
