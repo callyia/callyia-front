@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './MainPage.css';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import "./MainPage.css";
 
 interface MainPageProps {
   isLoggedIn: boolean;
@@ -8,27 +8,31 @@ interface MainPageProps {
 
 const Main: React.FC<MainPageProps> = ({ isLoggedIn }) => {
   const navigate = useNavigate();
-  const [searchKeyword, setSearchKeyword] = useState('');
-  const [searchCombo, setSearchCombo] = useState('user');
+  const [searchKeyword, setSearchKeyword] = useState("");
+  const [searchCombo, setSearchCombo] = useState("user");
   const [showTopButton, setShowTopButton] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 1000) { // 실제 사용할 때는 크기봐서 조절해야할 듯
+      if (window.scrollY > 1000) {
+        // 실제 사용할 때는 크기봐서 조절해야할 듯
         setShowTopButton(true);
       } else {
         setShowTopButton(false);
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
 
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-      navigate(`/SignUpPage?searchcombo=${searchCombo}&searchkeyword=${searchKeyword}`, { state: { searchKeyword } });
+    if (event.key === "Enter") {
+      navigate(
+        `/SignUpPage?searchcombo=${searchCombo}&searchkeyword=${searchKeyword}`,
+        { state: { searchKeyword } }
+      );
     }
   };
 
@@ -42,9 +46,12 @@ const Main: React.FC<MainPageProps> = ({ isLoggedIn }) => {
 
   const getPlaceholder = () => {
     switch (searchCombo) {
-      case 'user':      return '여행친구를 검색하세요!';
-      case 'location':  return '가고 싶은 곳에 대한 정보를 드리겠습니다';
-      case 'schedule':  return '아름다운 여행 일정을 만들기 위해 참고하세요';
+      case "user":
+        return "여행친구를 검색하세요!";
+      case "location":
+        return "가고 싶은 곳에 대한 정보를 드리겠습니다";
+      case "schedule":
+        return "아름다운 여행 일정을 만들기 위해 참고하세요";
     }
   };
 
@@ -77,7 +84,7 @@ const Main: React.FC<MainPageProps> = ({ isLoggedIn }) => {
       </header>
       <main className="content">
         <div className="section-container">
-          <section className="section-div" style={{marginRight: '30%'}}>
+          <section className="section-div" style={{ marginRight: "30%" }}>
             <h2>여행 정보</h2>
             <h3>여행 정보 1</h3>
             <table>
@@ -91,13 +98,23 @@ const Main: React.FC<MainPageProps> = ({ isLoggedIn }) => {
               </tr>
             </table>
             <h4>subTitle : subtitle</h4>
-              <img src="/topbar-logo.png" alt="Logo" className="logo" />
+            <img src="/topbar-logo.png" alt="Logo" className="logo" />
           </section>
-          <img src="/logo192.png" alt="Logo" className="margin-image" style={{marginLeft: '-200px', marginRight: '200px'}}/>
+          <img
+            src="/logo192.png"
+            alt="Logo"
+            className="margin-image"
+            style={{ marginLeft: "-200px", marginRight: "200px" }}
+          />
         </div>
         <div className="section-container">
-        <img src="/logo192.png" alt="Logo" className="margin-image" style={{marginLeft: '200px', marginRight: '0px'}}/>
-        <section className="section-div" style={{marginLeft: '30%'}}>
+          <img
+            src="/logo192.png"
+            alt="Logo"
+            className="margin-image"
+            style={{ marginLeft: "200px", marginRight: "0px" }}
+          />
+          <section className="section-div" style={{ marginLeft: "30%" }}>
             <h2>여행 계획</h2>
             <h1>
               <a href="/SchedulePage">Schedule</a>
@@ -109,25 +126,31 @@ const Main: React.FC<MainPageProps> = ({ isLoggedIn }) => {
               className="trip-plan-input"
               placeholder="여행 계획을 입력하세요!"
             />
-              <img src="/topbar-logo.png" alt="Logo" className="logo" />
+            <img src="/topbar-logo.png" alt="Logo" className="logo" />
           </section>
         </div>
         <div className="section-container">
-          <section className="section-div" style={{marginRight: '30%'}}>
+          <section className="section-div" style={{ marginRight: "30%" }}>
             <h2>여행 공유 커뮤니티</h2>
             <h3>Title : 여행 공유 커뮤니티1</h3>
             <h4>subTitle : subtitle</h4>
-              <img src="/topbar-logo.png" alt="Logo" className="logo" />
+            <img src="/topbar-logo.png" alt="Logo" className="logo" />
           </section>
-          <img src="/logo192.png" alt="Logo" className="margin-image" style={{marginLeft: '-200px', marginRight: '200px'}}/>
+          <img
+            src="/logo192.png"
+            alt="Logo"
+            className="margin-image"
+            style={{ marginLeft: "-200px", marginRight: "200px" }}
+          />
         </div>
       </main>
-      <footer className="footer">
-        © 2023 CALLYIA-TRIP
-      </footer>
-      <button type="button" className="top-button"
-        style={{ visibility: showTopButton ? 'visible' : 'hidden' }} // 스크롤이 조건이상 내려가면 보이게
-        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}></button>
+      <footer className="footer">© 2023 CALLYIA-TRIP</footer>
+      <button
+        type="button"
+        className="top-button"
+        style={{ visibility: showTopButton ? "visible" : "hidden" }} // 스크롤이 조건이상 내려가면 보이게
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+      ></button>
     </div>
   );
 };

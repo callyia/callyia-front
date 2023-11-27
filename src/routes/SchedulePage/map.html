@@ -1,0 +1,21 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>simpleMap</title>
+    <script src="https://apis.openapi.sk.com/tmap/vectorjs?version=1&appKey=fAVBnOntPm1FUqkPuKQZc31F0pFE3KM41N1UeDkA"></script>
+    <script type="text/javascript">
+      function initTmap() {
+        var map = new Tmapv3.Map("map_div", {
+          center: new Tmapv3.LatLng(35.14299044, 129.03409987), // 지도 초기 좌표
+          width: "890px",
+          height: "400px",
+          zoom: 18,
+        });
+      }
+    </script>
+  </head>
+
+  <body onload="initTmap()">
+    <div id="map_div"></div>
+  </body>
+</html>
