@@ -4,9 +4,10 @@ import './MainPage.css';
 
 interface MainPageProps {
   isLoggedIn: boolean;
+  toggleLogin: () => void;
 }
 
-const Main: React.FC<MainPageProps> = ({ isLoggedIn }) => {
+const Main: React.FC<MainPageProps> = ({ isLoggedIn, toggleLogin }) => {
   const navigate = useNavigate();
   const [searchKeyword, setSearchKeyword] = useState('');
   const [searchCombo, setSearchCombo] = useState('user');
@@ -69,9 +70,9 @@ const Main: React.FC<MainPageProps> = ({ isLoggedIn }) => {
               onChange={handleInputChange}
             />
           </div>
-          <div className="profile-section">
-            <h2>프로필 자리</h2>
-            {isLoggedIn ? <button>My profile</button> : null}
+          <div className="profile-section" >
+            <h2 onClick={toggleLogin}>프로필 자리</h2>
+            {isLoggedIn ? <button>My profile</button> : <><button>로그인</button><button>회원가입</button></>}
           </div>
         </div>
       </header>
