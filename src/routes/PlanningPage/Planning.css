@@ -1,0 +1,40 @@
+.div-container {
+  height: 831px;
+}
+
+.div-left {
+  float: left;
+  width: 35%;
+  height: 100%;
+  background-color: #ffe4ed;
+}
+
+.div-right {
+  float: right;
+  width: 65%;
+  height: 100%;
+  background-color: #f6f3df;
+}
+
+.toggle-right-up {
+  position: absolute;
+  right: 10px;
+  top: 90px;
+  z-index: 50;
+}
+
+.toggle-right-down {
+  position: absolute;
+  right: 10px;
+  bottom: 60px;
+  z-index: 50;
+}
+
+.div-right-title {
+  float: right;
+  width: 100%;
+  height: 130px;
+  background-color: #e151e6;
+}
+
+/* absolute right-4 top-4 btn btn-sm btn-primary */
