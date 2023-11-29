@@ -32,7 +32,7 @@ export default function Planning() {
       {area1 && (
         <div
           style={{ width: "800px", height: "350px" }}
-          className="toggle-right-up w-96 h-96 bg-slate-600"
+          className="toggle-right-up toggle-div w-96 h-96 bg-slate-600"
           onClick={toggleArea1}
         ></div>
       )}
@@ -47,7 +47,7 @@ export default function Planning() {
       {area2 && (
         <div
           style={{ width: "800px", height: "350px" }}
-          className="toggle-right-down w-96 h-96 bg-slate-300"
+          className="toggle-right-down toggle-div w-96 h-96 bg-slate-300"
           onClick={toggleArea2}
         ></div>
       )}
@@ -61,7 +61,13 @@ export default function Planning() {
       )}
 
       <div className="div-left">
-        <div className="div-right-title">asdf</div>
+        <div className="div-left-title">
+          <h2>Title</h2>
+        </div>
+        <div className="div-left-writer">
+          <h1>Writer</h1>
+        </div>
+        <div className="div-plan-list">as</div>
       </div>
       <div className="div-right">
         <div id="map" style={{ width: "100%", height: "100%" }} />
