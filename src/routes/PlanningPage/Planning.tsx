@@ -2,6 +2,14 @@ import { useToggle } from "../../hooks";
 import React, { useEffect } from "react";
 import "./Planning.css";
 
+// dnd 관련 import
+import BoardList from "../../pages/BoardList";
+import { useLists } from "../../store/useLists";
+import { ListDroppable } from "../../components";
+import CreateListForm from "../../pages/Board/CreateListForm";
+import { useMemo } from "react";
+import { DragDropContext } from "react-beautiful-dnd";
+
 declare global {
   interface Window {
     kakao: any;
@@ -9,6 +17,25 @@ declare global {
 }
 
 export default function Planning() {
+  // ------------- dnd 설정 위치 --------------
+  const { lists, onRemoveList, onCreateList, onMoveList, onDragEnd } =
+    useLists();
+
+  const children = useMemo(
+    () =>
+      lists.map((list, index) => (
+        <BoardList
+          key={list.uuid}
+          list={list}
+          onRemoveList={onRemoveList(list.uuid)}
+          index={index}
+          onMoveList={onMoveList}
+        />
+      )),
+    [lists, onRemoveList, onMoveList]
+  );
+  // -----------------------------------------
+
   const [area1, toggleArea1] = useToggle();
   const [area2, toggleArea2] = useToggle();
 
@@ -67,7 +94,16 @@ export default function Planning() {
         <div className="div-left-writer">
           <h1>Writer</h1>
         </div>
-        <div className="div-plan-list">as</div>
+        <div className="div-plan-list">
+          <DragDropContext onDragEnd={onDragEnd}>
+            <ListDroppable className="flex flex-row p-2 mt-4">
+              <div className="flex flex-wrap p-2 mt-4">
+                {children}
+                <CreateListForm onCreateList={onCreateList} />
+              </div>
+            </ListDroppable>
+          </DragDropContext>
+        </div>
       </div>
       <div className="div-right">
         <div id="map" style={{ width: "100%", height: "100%" }} />
