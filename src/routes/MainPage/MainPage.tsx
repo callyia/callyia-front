@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-// import { useNavigate } from "react-router-dom";
 
 import "./MainPage.css";
 
@@ -8,11 +7,7 @@ interface MainPageProps {
   toggleLogin: () => void;
 }
 
-// const Main: React.FC<MainPageProps> = ({ isLoggedIn, toggleLogin }) => {
 const Main: React.FC<MainPageProps> = () => {
-  // const navigate = useNavigate();
-  // const [searchKeyword, setSearchKeyword] = useState("");
-  // const [searchCombo, setSearchCombo] = useState("user");
   const [showTopButton, setShowTopButton] = useState(false);
 
   useEffect(() => {
@@ -30,68 +25,8 @@ const Main: React.FC<MainPageProps> = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-  //   if (event.key === "Enter") {
-  //     navigate(
-  //       `/SignUpPage?searchcombo=${searchCombo}&searchkeyword=${searchKeyword}`,
-  //       { state: { searchKeyword } }
-  //     );
-  //   }
-  // };
-
-  // const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   setSearchKeyword(event.target.value);
-  // };
-
-  // const handleComboChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-  //   setSearchCombo(event.target.value);
-  // };
-
-  // const getPlaceholder = () => {
-  //   switch (searchCombo) {
-  //     case "user":
-  //       return "여행친구를 검색하세요!";
-  //     case "location":
-  //       return "가고 싶은 곳에 대한 정보를 드리겠습니다";
-  //     case "schedule":
-  //       return "아름다운 여행 일정을 만들기 위해 참고하세요";
-  //   }
-  // };
-
   return (
     <div className="main-container">
-      {/* <header className="header">
-        <div className="top-bar">
-          <a href="/">
-            <img src="/topbar-logo.png" alt="Logo" className="logo" />
-          </a>
-          <div className="search-bar">
-            <select onChange={handleComboChange} className="search-dropdown">
-              <option value="user">유저</option>
-              <option value="location">장소</option>
-              <option value="schedule">일정</option>
-            </select>
-            <input
-              type="text"
-              className="search-input"
-              placeholder={getPlaceholder()}
-              onKeyDown={handleKeyDown}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div className="profile-section">
-            <h2 onClick={toggleLogin}>프로필 자리</h2>
-            {isLoggedIn ? (
-              <button>My profile</button>
-            ) : (
-              <>
-                <button>로그인</button>
-                <button>회원가입</button>
-              </>
-            )}
-          </div>
-        </div>
-      </header> */}
       <main className="content">
         <div className="section-container">
           <section className="section-div" style={{ marginRight: "30%" }}>
