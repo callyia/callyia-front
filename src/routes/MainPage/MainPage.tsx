@@ -1,5 +1,6 @@
-// import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 // import { useNavigate } from "react-router-dom";
+
 import "./MainPage.css";
 
 interface MainPageProps {
@@ -12,22 +13,22 @@ const Main: React.FC<MainPageProps> = () => {
   // const navigate = useNavigate();
   // const [searchKeyword, setSearchKeyword] = useState("");
   // const [searchCombo, setSearchCombo] = useState("user");
-  // const [showTopButton, setShowTopButton] = useState(false);
+  const [showTopButton, setShowTopButton] = useState(false);
 
-  // useEffect(() => {
-  //   const handleScroll = () => {
-  //     if (window.scrollY > 1000) {
-  //       // 실제 사용할 때는 크기봐서 조절해야할 듯
-  //       setShowTopButton(true);
-  //     } else {
-  //       setShowTopButton(false);
-  //     }
-  //   };
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 1000) {
+        // 실제 사용할 때는 크기봐서 조절해야할 듯
+        setShowTopButton(true);
+      } else {
+        setShowTopButton(false);
+      }
+    };
 
-  //   window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll);
 
-  //   return () => window.removeEventListener("scroll", handleScroll);
-  // }, []);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   // const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
   //   if (event.key === "Enter") {
@@ -112,7 +113,7 @@ const Main: React.FC<MainPageProps> = () => {
           <img
             src="/logo192.png"
             alt="Logo"
-            className="margin-image"
+            className="main-margin-image"
             style={{ marginLeft: "-200px", marginRight: "200px" }}
           />
         </div>
@@ -120,8 +121,8 @@ const Main: React.FC<MainPageProps> = () => {
           <img
             src="/logo192.png"
             alt="Logo"
-            className="margin-image"
-            style={{ marginLeft: "200px", marginRight: "0px" }}
+            className="main-margin-image"
+            style={{ marginLeft: "200px", marginRight: "-200px" }}
           />
           <section className="section-div" style={{ marginLeft: "30%" }}>
             <h2>여행 계획</h2>
@@ -148,17 +149,17 @@ const Main: React.FC<MainPageProps> = () => {
           <img
             src="/logo192.png"
             alt="Logo"
-            className="margin-image"
+            className="main-margin-image"
             style={{ marginLeft: "-200px", marginRight: "200px" }}
           />
         </div>
       </main>
-      {/* <button
+      <button
         type="button"
         className="top-button"
         style={{ visibility: showTopButton ? "visible" : "hidden" }} // 스크롤이 조건이상 내려가면 보이게
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-      ></button> */}
+      ></button>
     </div>
   );
 };
