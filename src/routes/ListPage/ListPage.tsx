@@ -10,10 +10,7 @@ const List: React.FC = () => {
   const searchKeyword = searchParams.get('searchkeyword');
 
   return (
-    <div className="main-container">
-          <a href="/">
-            <img src="/topbar-logo.png" alt="Logo" className="logo" />
-          </a>
+    <div className="list-main-container">
       <p style={{backgroundColor: '#abcdef'}}>Search Combo: {searchCombo}</p>
       <p style={{backgroundColor: '#abcdef'}}>Search Keyword: {searchKeyword}</p>
     </div>

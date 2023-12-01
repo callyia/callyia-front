@@ -1,0 +1,18 @@
+.modal-contentContainer {
+  grid-column-start: 1;
+  grid-row-start: 1;
+  weight: 1024px;
+}
+
+.acceptPage-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 2px;
+}
+
+.acceptPage-cols {
+  grid-column: span 2 / span 2;
+  border-width: 2px;
+  border-style: solid;
+}
