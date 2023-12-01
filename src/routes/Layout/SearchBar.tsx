@@ -1,5 +1,6 @@
-// SearchBar.tsx
 import React from "react";
+
+import "./Header.css";
 
 interface SearchBarProps {
   searchKeyword: string;
@@ -14,26 +15,24 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchKeyword, setSearchKeyword, 
   const getPlaceholder = () => {
     switch (searchCombo) {
       case "user":
-        return "유저를 검색하세요!";
+        return "여행친구를 검색하세요!";
       case "location":
-        return "장소를 검색하세요!";
+        return "가고 싶은 곳에 대한 정보를 드리겠습니다";
       case "schedule":
-        return "일정을 검색하세요!";
-      default:
-        return "검색항목을 선택하세요!";
+        return "아름다운 여행 일정을 만들기 위해 참고하세요";
     }
   };
 
   return (
-    <div className="search-bar">
-      <select onChange={(e) => setSearchCombo(e.target.value)} value={searchCombo} className="search-dropdown">
+    <div className="header-search-bar">
+      <select onChange={(e) => setSearchCombo(e.target.value)} value={searchCombo} className="header-search-dropdown">
         <option value="user">유저</option>
         <option value="location">장소</option>
         <option value="schedule">일정</option>
       </select>
       <input
         type="text"
-        className="search-input"
+        className="header-search-input"
         placeholder={getPlaceholder()}
         value={searchKeyword}
         onKeyDown={onSearch}

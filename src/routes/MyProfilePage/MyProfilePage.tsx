@@ -19,11 +19,6 @@ const MyProfile = () => {
           </div>
         </div>
       </div>
-      <div className="profile-actions">
-        <button className="action-button">내 일정 바로가기</button>
-        <button className="action-button">일정 장바구니</button>
-        <button className="action-button">내가 좋아요한 글</button>
-      </div>
       <div className="profile-user-posts">
         <h2>내 글</h2>
       </div>

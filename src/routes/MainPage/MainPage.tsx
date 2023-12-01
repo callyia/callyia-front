@@ -28,8 +28,8 @@ const Main: React.FC<MainPageProps> = () => {
   return (
     <div className="main-container">
       <main className="content">
-        <div className="section-container">
-          <section className="section-div" style={{ marginRight: "30%" }}>
+        <div className="main-section-container">
+          <section className="main-section-div" style={{ marginRight: "30%" }}>
             <h2>여행 정보</h2>
             <h3>여행 정보 1</h3>
             <table>
@@ -43,7 +43,7 @@ const Main: React.FC<MainPageProps> = () => {
               </tr>
             </table>
             <h4>subTitle : subtitle</h4>
-            <img src="/topbar-logo.png" alt="Logo" className="logo" />
+            <img src="/topbar-logo.png" alt="Logo" className="header-logo" />
           </section>
           <img
             src="/logo192.png"
@@ -52,14 +52,14 @@ const Main: React.FC<MainPageProps> = () => {
             style={{ marginLeft: "-200px", marginRight: "200px" }}
           />
         </div>
-        <div className="section-container">
+        <div className="main-section-container">
           <img
             src="/logo192.png"
             alt="Logo"
             className="main-margin-image"
             style={{ marginLeft: "200px", marginRight: "-200px" }}
           />
-          <section className="section-div" style={{ marginLeft: "30%" }}>
+          <section className="main-section-div" style={{ marginLeft: "30%" }}>
             <h2>여행 계획</h2>
             <h1>
               <a href="/SchedulePage">Schedule</a>
@@ -71,15 +71,15 @@ const Main: React.FC<MainPageProps> = () => {
               className="trip-plan-input"
               placeholder="여행 계획을 입력하세요!"
             />
-            <img src="/topbar-logo.png" alt="Logo" className="logo" />
+            <img src="/topbar-logo.png" alt="Logo" className="header-logo" />
           </section>
         </div>
-        <div className="section-container">
-          <section className="section-div" style={{ marginRight: "30%" }}>
+        <div className="main-section-container">
+          <section className="main-section-div" style={{ marginRight: "30%" }}>
             <h2>여행 공유 커뮤니티</h2>
             <h3>Title : 여행 공유 커뮤니티1</h3>
             <h4>subTitle : subtitle</h4>
-            <img src="/topbar-logo.png" alt="Logo" className="logo" />
+            <img src="/topbar-logo.png" alt="Logo" className="header-logo" />
           </section>
           <img
             src="/logo192.png"
