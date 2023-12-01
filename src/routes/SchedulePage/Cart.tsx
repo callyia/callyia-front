@@ -24,7 +24,7 @@ const Cart: React.FC = () => {
     const updatedCards = droppedCards.filter((card) => card.id !== idToRemove);
     setDroppedCards(updatedCards);
   };
-
+  //
   return (
     <div ref={drop} className={`cart ${isOver ? "hovered" : ""}`}>
       <h2>장바구니</h2>
