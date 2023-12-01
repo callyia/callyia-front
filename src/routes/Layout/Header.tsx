@@ -45,7 +45,7 @@ export default function Header() {
   };
 
   const renderSearchBar = () => {
-    if (location.pathname === "/") {
+    if (location.pathname === "/" || location.pathname === "/MyProfilePage" || location.pathname === "/UserProfilePage") {
       return (
         <SearchBar
           searchKeyword={searchKeyword}
@@ -61,22 +61,23 @@ export default function Header() {
 
   return (
     <header className="header">
-      <div className="top-bar">
+      <div className="header-top-bar">
         <a href="/">
-          <img src="/topbar-logo.png" alt="Logo" className="logo" />
+          <img src="/topbar-logo.png" alt="Logo" className="header-logo" />
         </a>
         {renderSearchBar()}
+        <div></div>
       </div>
-      <button className="action-button" onClick={toggleBtn}>
+      <button className="header-action-button" onClick={toggleBtn}>
         toggle btn
       </button>
-      <button className="action-button" onClick={handleProfileButtonClick}>
+      <button className="header-action-button" onClick={handleProfileButtonClick}>
       {isLoggedIn ? "My Profile" : "Sign In"}
       </button>
-      <button className="action-button" onClick={goToUserProfilePage}>
+      <button className="header-action-button" onClick={goToUserProfilePage}>
         User Profile
       </button>
-      <button className="action-button" onClick={goToSignUpPage}>
+      <button className="header-action-button" onClick={goToSignUpPage}>
         Sign Up
       </button>
     </header>
