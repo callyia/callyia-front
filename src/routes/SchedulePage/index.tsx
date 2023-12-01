@@ -6,7 +6,7 @@ import Cart from "./Cart";
 
 export default function SchedulePage() {
   return (
-    <div style={{ display: "flex", height: "1000px" }}>
+    <div style={{ display: "flex", height: "100%" }}>
       <div
         style={{
           flex: 1,

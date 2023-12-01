@@ -1,14 +1,58 @@
 // Cart.tsx
-import React from 'react'
+import React, { useState } from "react";
+import { useDrop } from "react-dnd";
+import { ScheduleItem } from "../../components/ScheduleCard";
+import "./Cart.css";
 
 const Cart: React.FC = () => {
-  return (
-    <div>
-      {/* 장바구니 내용 및 스타일을 추가하세요 */}
-      <h2>장바구니</h2>
-      {/* ... */}
-    </div>
-  )
-}
+  const [droppedCards, setDroppedCards] = useState<ScheduleItem[]>([]);
 
-export default Cart
+  const [{ isOver }, drop] = useDrop({
+    accept: "SCHEDULE_CARD",
+    drop: (item: ScheduleItem) => {
+      // ScheduleCard 중복 체크
+      if (!droppedCards.some((card) => card.id === item.id)) {
+        setDroppedCards([...droppedCards, item]);
+      }
+    },
+    collect: (monitor) => ({
+      isOver: !!monitor.isOver(),
+    }),
+  });
+
+  const handleRemoveCard = (idToRemove: number) => {
+    const updatedCards = droppedCards.filter((card) => card.id !== idToRemove);
+    setDroppedCards(updatedCards);
+  };
+
+  return (
+    <div ref={drop} className={`cart ${isOver ? "hovered" : ""}`}>
+      <h2>장바구니</h2>
+      <div>
+        원하는 일정을 여기에 드래그 해주세요!
+        {droppedCards.map((droppedCard) => (
+          <div
+            key={droppedCard.id}
+            className={`schedule-card dragged ${isOver ? "hovered" : ""}`}
+          >
+            <span className="schedule-number">
+              {droppedCard.id}번 일정 : {droppedCard.place}
+            </span>
+            <h3>{droppedCard.content}</h3>
+            <p>
+              TIP : {droppedCard.tip}
+              <button
+                className="removeBtn"
+                onClick={() => handleRemoveCard(droppedCard.id)}
+              >
+                삭제
+              </button>
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default Cart;
