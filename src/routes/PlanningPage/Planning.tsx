@@ -2,6 +2,7 @@ import { useToggle } from "../../hooks";
 import React, { useEffect, useState } from "react";
 import "./Planning.css";
 import Plan from "../../pages/Plan";
+import PlaceCard from "../../pages/PlaceCard";
 
 declare global {
   interface Window {
@@ -14,15 +15,36 @@ export default function Planning() {
     panTo(lat, lng);
   };
 
-  const Marker = (lat: number, lng: number) => {
-    var markerPosition = new window.kakao.maps.LatLng(lat, lng);
+  // const Marker = (lat: number, lng: number) => {
+  //   var markerPosition = new window.kakao.maps.LatLng(lat, lng);
 
-    // 마커를 생성합니다
-    const marker = new window.kakao.maps.Marker({
-      position: markerPosition,
-    });
+  //   // 마커를 생성합니다
+  //   const marker = new window.kakao.maps.Marker({
+  //     position: markerPosition,
+  //   });
 
-    marker.setMap(map);
+  //   marker.setMap(map);
+  // };
+
+  const searchEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      const searchBtn = document.getElementById("searchBtn");
+      if (searchBtn) {
+        searchBtn.click();
+      }
+    }
+  };
+
+  const searchBtnClick = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    const searchInput = document.getElementById(
+      "searchInput"
+    ) as HTMLInputElement;
+    if (searchInput) {
+      const text = searchInput.value;
+      if (text !== "") alert(`${text}`);
+    }
   };
 
   const [area1, toggleArea1] = useToggle();
@@ -69,10 +91,75 @@ export default function Planning() {
       {area1 && (
         <div
           style={{ width: "800px", height: "350px" }}
-          className="toggle-right-up toggle-div w-96 h-96 bg-slate-600"
-          onClick={toggleArea1}
+          className="toggle-right-up toggle-div bg-slate-600"
         >
-          <input type="text" className="toggle-search" />
+          <div className="toggle-right-search-div1">
+            <button
+              className="toggle-right-up-X"
+              onClick={toggleArea1}
+            ></button>
+          </div>
+          <div className="toggle-right-search-div2">
+            <input
+              id="searchInput"
+              type="text"
+              className="toggle-search-input"
+              onKeyPress={searchEnter}
+            />
+            <button
+              id="searchBtn"
+              className="toggle-search-button bg-slate-900"
+              onClick={searchBtnClick}
+            >
+              검색
+            </button>
+          </div>
+          <div className="toggle-right-search-div3">
+            <PlaceCard
+              placeCard={{
+                lat: 35.14299044,
+                lng: 129.03409987,
+                name: "동의대",
+              }}
+              onClick={Click}
+            />
+            <PlaceCard
+              placeCard={{ lat: 35.147, lng: 129.04, name: "부드러운움직임" }}
+              onClick={Click}
+            />
+            <PlaceCard
+              placeCard={{
+                lat: 35.14299044,
+                lng: 129.03409987,
+                name: "동의대",
+              }}
+              onClick={Click}
+            />
+            <PlaceCard
+              placeCard={{ lat: 35.147, lng: 129.04, name: "부드러운움직임" }}
+              onClick={Click}
+            />
+            <PlaceCard
+              placeCard={{
+                lat: 35.14299044,
+                lng: 129.03409987,
+                name: "동의대",
+              }}
+              onClick={Click}
+            />
+            <PlaceCard
+              placeCard={{ lat: 35.147, lng: 129.04, name: "부드러운움직임" }}
+              onClick={Click}
+            />
+            <PlaceCard
+              placeCard={{
+                lat: 35.14299044,
+                lng: 129.03409987,
+                name: "동의대",
+              }}
+              onClick={Click}
+            />
+          </div>
         </div>
       )}
       {!area1 && (
@@ -86,9 +173,61 @@ export default function Planning() {
       {area2 && (
         <div
           style={{ width: "800px", height: "350px" }}
-          className="toggle-right-down toggle-div w-96 h-96 bg-slate-300"
-          onClick={toggleArea2}
-        ></div>
+          className="toggle-right-down toggle-div bg-slate-300"
+        >
+          <div className="toggle-right-basket-div1">
+            <PlaceCard
+              placeCard={{
+                lat: 35.14299044,
+                lng: 129.03409987,
+                name: "동의대",
+              }}
+              onClick={Click}
+            />
+            <PlaceCard
+              placeCard={{ lat: 35.147, lng: 129.04, name: "부드러운움직임" }}
+              onClick={Click}
+            />
+            <PlaceCard
+              placeCard={{
+                lat: 35.14299044,
+                lng: 129.03409987,
+                name: "동의대",
+              }}
+              onClick={Click}
+            />
+            <PlaceCard
+              placeCard={{ lat: 35.147, lng: 129.04, name: "부드러운움직임" }}
+              onClick={Click}
+            />
+            <PlaceCard
+              placeCard={{
+                lat: 35.14299044,
+                lng: 129.03409987,
+                name: "동의대",
+              }}
+              onClick={Click}
+            />
+            <PlaceCard
+              placeCard={{ lat: 35.147, lng: 129.04, name: "부드러운움직임" }}
+              onClick={Click}
+            />
+            <PlaceCard
+              placeCard={{
+                lat: 35.14299044,
+                lng: 129.03409987,
+                name: "동의대",
+              }}
+              onClick={Click}
+            />
+          </div>
+          <div className="toggle-right-basket-div2">
+            <button
+              className="toggle-right-down-X"
+              onClick={toggleArea2}
+            ></button>
+          </div>
+        </div>
       )}
       {!area2 && (
         <button

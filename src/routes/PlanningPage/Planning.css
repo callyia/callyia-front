@@ -1,5 +1,5 @@
 .div-container {
-  height: 805px;
+  height: 785px;
 }
 
 .div-left {
@@ -19,8 +19,57 @@
 .toggle-right-up {
   position: absolute;
   right: 15px;
-  top: 100px;
+  top: 115px;
   z-index: 50;
+}
+
+.toggle-right-up-X {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  width: 10px;
+  height: 20px;
+  z-index: 50;
+}
+
+.toggle-right-down-X {
+  position: absolute;
+  right: 5px;
+  bottom: 5px;
+  width: 10px;
+  height: 20px;
+  z-index: 50;
+}
+
+.toggle-right-search-div1 {
+  width: 100%;
+  height: 10%;
+}
+.toggle-right-search-div2 {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 15%;
+}
+.toggle-right-search-div3 {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  height: 75%;
+  overflow: auto;
+}
+
+.toggle-right-basket-div1 {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  height: 90%;
+  overflow: auto;
+}
+
+.toggle-right-basket-div2 {
+  width: 100%;
+  height: 10%;
 }
 
 .toggle-right-down {
@@ -36,8 +85,13 @@
   border: 5px solid #ffffff;
 }
 
-.toggle-search {
-  width: 90%;
+.toggle-search-input {
+  width: 85%;
+  height: 40px;
+}
+
+.toggle-search-button {
+  height: 40px;
 }
 
 .div-left-title {

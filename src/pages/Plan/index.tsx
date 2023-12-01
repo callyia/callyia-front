@@ -16,12 +16,12 @@ export type PlanProps = {
 const Plan: React.FC<PlanProps> = ({ plan, onClick }) => {
   const { lat, lng, name } = plan;
 
-  const XYClick = () => {
+  const MapClick = () => {
     onClick(lat, lng);
   };
 
   return (
-    <div className="plan-div" onClick={XYClick}>
+    <div className="plan-div" onClick={MapClick}>
       <div className="div-gap"></div>
       <div className="plan-image"></div>
       {lat},{lng},{name}
