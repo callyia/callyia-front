@@ -10,6 +10,7 @@ import PlanningPage from "./PlanningPage";
 import MyProfilePage from "./MyProfilePage";
 import UserProfilePage from "./UserProfilePage";
 import NoMatch from "./NoMatch";
+import TourPage from "./TourPage";
 
 export default function RoutesSetup() {
   return (
@@ -44,6 +45,10 @@ export default function RoutesSetup() {
       </Route>
       <Route path="/UserProfilePage" element={<Layout />}>
         <Route index element={<UserProfilePage />} />
+        <Route path="*" element={<NoMatch />} />
+      </Route>
+      <Route path="/TourPage" element={<Layout />}>
+        <Route index element={<TourPage />} />
         <Route path="*" element={<NoMatch />} />
       </Route>
     </Routes>
