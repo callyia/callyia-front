@@ -1,0 +1,8 @@
+.plan-card {
+  width: 600px;
+  height: 110px;
+  background-color: #ffffff;
+  border-radius: 15px 15px 15px 15px;
+  border: 5px solid #eca1a1;
+  margin: 5px;
+}
