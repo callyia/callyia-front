@@ -14,14 +14,6 @@ input[type="text"] {
   font-size: 16px;
 }
 
-.header-logo {
-  width: 100px;
-  height: 50px;
-  display: block;
-  margin-left: 10px;
-  color: #abcdef;
-}
-
 /* Margin Image Styles */
 .main-margin-image {
   width: 100px;
@@ -35,6 +27,7 @@ input[type="text"] {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  min-height: calc(100vh - 100px);
 }
 
 /* Section Styles */
@@ -50,7 +43,7 @@ input[type="text"] {
 }
 
 .main-section-div {
-  height: 1200px;
+  height: 550px;
   margin-bottom: 20px;
   background-color: white;
   border: 3px solid #abcdef;

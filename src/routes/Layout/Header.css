@@ -5,6 +5,7 @@
     padding: 5px;
   }
 
+  /* button */
   .header-action-button {
     background-color: #abcdef;
     color: white;
@@ -19,6 +20,7 @@
     background-color: blue;
   }
 
+  /* search-bar */
   .header-search-input {
     padding: 5px 10px;
     height: 50px;
@@ -60,3 +62,11 @@
     color: white;
   }
   
+  /* logo */
+  .header-logo {
+    width: 100px;
+    height: 50px;
+    display: block;
+    margin-left: 10px;
+    color: #abcdef;
+  }
