@@ -59,7 +59,7 @@ const Main: React.FC<MainPageProps> = () => {
             className="main-margin-image"
             style={{ marginLeft: "200px", marginRight: "-200px" }}
           />
-          <section className="section-div" style={{ marginLeft: "30%" }}>
+          <section className="main-section-div" style={{ marginLeft: "30%" }}>
             <h2>여행 계획</h2>
             <h1>
               <a href="/SchedulePage">Schedule</a>
@@ -75,7 +75,7 @@ const Main: React.FC<MainPageProps> = () => {
           </section>
         </div>
         <div className="main-section-container">
-          <section className="section-div" style={{ marginRight: "30%" }}>
+          <section className="main-section-div" style={{ marginRight: "30%" }}>
             <h2>여행 공유 커뮤니티</h2>
             <h3>Title : 여행 공유 커뮤니티1</h3>
             <h4>subTitle : subtitle</h4>
