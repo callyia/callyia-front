@@ -1,6 +1,6 @@
 /* ScheduleCard.css */
 .schedule-container {
-  max-height: 800px; /* 원하는 높이로 조절하세요 */
+  max-height: 1000px; /* 원하는 높이로 조절하세요 */
   overflow-y: auto;
 }
 
@@ -16,7 +16,7 @@
 }
 
 .schedule-card:hover {
-  transform: scale(1.05);
+  transform: scale(1.025);
 }
 
 .schedule-card.expanded {
