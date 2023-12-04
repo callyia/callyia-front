@@ -34,12 +34,44 @@ const Main: React.FC<MainPageProps> = () => {
             <h3>여행 정보 1</h3>
             <table>
               <tr>
-                <td>subTitle : subtitle</td>
-                <td>subTitle : subtitle</td>
+                <td>
+                  <a href="/ListPage">ListPage</a>
+                </td>
               </tr>
               <tr>
-                <td>subTitle : subtitle</td>
-                <td>subTitle : subtitle</td>
+                <td>
+                  <a href="/MyProfilePage">MyProfilePage</a>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a href="/PlanningPage">PlanningPage</a>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a href="/SchedulePage">SchedulePage</a>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a href="/SignInPage">SignInPage</a>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a href="/SignUpPage">SignUpPage</a>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a href="/TourPage">TourPage</a>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a href="/UserProfilePage">UserProfilePage</a>
+                </td>
               </tr>
             </table>
             <h4>subTitle : subtitle</h4>
