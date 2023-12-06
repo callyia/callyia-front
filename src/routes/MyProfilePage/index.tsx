@@ -47,8 +47,8 @@ export default function MyProfilePage() {
               }}
             >
               {/* font h2 사이즈로 맞춰서 닉네임 받아오기 */}
-              <h2 style={{textAlign: "center"}}>MYUSER</h2>
-              <h6 style={{textAlign: "center"}}>MYUSER@EMAIL.COM</h6>
+              <div className = "profile-id">MYUSER</div>
+              <div className = "profile-email">MYUSER@EMAIL.COM</div>
             </div>
             {/* <div style={{ flex: 1 }}> */}
             <div

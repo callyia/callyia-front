@@ -1,28 +1,44 @@
-import type {FC, PropsWithChildren} from 'react'
-import {Draggable} from 'react-beautiful-dnd'
+import type { FC, PropsWithChildren } from "react";
+import { Draggable } from "react-beautiful-dnd";
+import "./PlanCard.css";
 
 export type CardDraggableProps = {
-  draggableId: string
-  index: number
-}
+  draggableId: string;
+  index: number;
+};
 
 export const CardDraggable: FC<PropsWithChildren<CardDraggableProps>> = ({
   draggableId,
   index,
-  children
+  children,
 }) => {
   return (
+    // <Draggable draggableId={draggableId} index={index}>
+    //   {provided => {
+    //     return (
+    //       <div
+    //         ref={provided.innerRef}
+    //         {...provided.draggableProps}
+    //         {...provided.dragHandleProps}>
+    //         {children}
+    //       </div>
+
+    //     )
+    //   }}
+    // </Draggable>
+
     <Draggable draggableId={draggableId} index={index}>
-      {provided => {
+      {(provided) => {
         return (
           <div
             ref={provided.innerRef}
             {...provided.draggableProps}
-            {...provided.dragHandleProps}>
-            {children}
+            {...provided.dragHandleProps}
+          >
+            <div className="plan-card">as</div>
           </div>
-        )
+        );
       }}
     </Draggable>
-  )
-}
+  );
+};

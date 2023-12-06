@@ -1,0 +1,7 @@
+.cart {
+  max-height: 500px; /* 높이를 원하는 값으로 조절 */
+  overflow-y: auto;
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+  border-color: red;
+}

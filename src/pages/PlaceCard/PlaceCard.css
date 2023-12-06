@@ -1,0 +1,17 @@
+.placeCard-div {
+  width: 360px;
+  height: 100px;
+  background-color: #ffffff;
+  border-radius: 15px 15px 15px 15px;
+
+  margin: 10px;
+}
+
+.place-image {
+  width: 100px;
+  height: 100px;
+  background-color: #eedede;
+  border-radius: 15px 0 0 15px;
+  float: left;
+  opacity: 1;
+}
