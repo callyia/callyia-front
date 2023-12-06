@@ -1,0 +1,66 @@
+/* DivImg */
+.DivImg {
+  justify-content: space-between;
+  display: flex;
+  border-radius: 0.3rem;
+  border: 0.01rem solid #efeff1;
+  padding: 0.1rem;
+  background-color: #efeff1;
+  align-items: center;
+  font-weight: 400;
+}
+
+.DivImg button {
+  margin-left: 0.05rem;
+  color: gray;
+  background-color: white;
+  border-radius: 0.5rem;
+  height: 0.3rem;
+}
+
+/* NotDownload */
+.NotDownload {
+  color: gray;
+  font-size: 0.24rem;
+}
+
+/* TableDiv */
+.TableDiv {
+  width: 11.84rem;
+  /* height: 8rem; */
+  font-size: 0.25rem;
+  margin-left: 0.12rem;
+  border: 0.01rem solid red;
+  padding: 0.18rem;
+  display: flex;
+}
+
+.TableDiv input {
+  position: relative;
+  text-align: right;
+  opacity: 0;
+  z-index: 2;
+  cursor: pointer;
+  height: 0.5rem;
+  max-width: 1.28rem;
+}
+
+/* ChangeButton */
+.ChangeButton {
+  background-color: green;
+  color: white;
+  font-size: 0.24rem;
+  width: 1.28rem;
+  height: 0.52rem;
+  cursor: pointer;
+  margin-left: 10.25rem;
+  /* margin-bottom: -0.1rem; */
+  bottom: 24%;
+  position: absolute;
+  z-index: 1;
+}
+
+.ImagePreview {
+  width: 100%;
+  height: auto;
+}
