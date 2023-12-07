@@ -1,6 +1,24 @@
+import React, { ChangeEvent, useState } from 'react';
+
 import MyProfile from './MyProfilePage';
 
-export default function MyProfilePage() {
+export default function MyProfilePage() { 
+  const [isEditing, setIsEditing] = useState(false); 
+  const [profileImage, setProfileImage] = useState<string>('./dummyimages/image1.jpeg'); // 기본 이미지
+
+  const handleProfileImageChange = (event:ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files ? event.target.files[0] : null;
+    if (file) {
+      const fileReader = new FileReader();
+      fileReader.onloadend = () => {
+        if (typeof fileReader.result === 'string') {
+          setProfileImage(fileReader.result);
+        }
+      };
+      fileReader.readAsDataURL(file);
+    }
+  };
+
     return (
         <div style={{ flex:1, display: 'flex', height: '1200px'}}>
           <div
@@ -23,13 +41,15 @@ export default function MyProfilePage() {
               }}
             >
               {/* data image 받아오고 dnd + 이미지 안쪽으로 넣기*/}
-              <img src="./dummyimages/image1.jpeg" alt="Profile" className="my-profile-picture" 
+              
+              <img src="./dummyimages/image1.jpeg" alt="Profile" className="my-profile-picture"  
               style={{
                 cursor:"pointer", 
                 textAlign: "center", 
                 margin: "auto", 
                 display: "block",
                 }}/>
+                <input type="file" onChange={handleProfileImageChange} accept="image/*" />
             </div>
             <div
               style={{
@@ -86,14 +106,18 @@ export default function MyProfilePage() {
             <div
               style={{
                 flex: 2,
-                border: "2px solid black",
+                border: "5px solid black",
                 borderRadius: "8px",
                 padding: "16px",
                 margin: "8px",
               }}
             >
               {/* 오른쪽 상단 */}
-              <MyProfile />
+              <MyProfile 
+              isEditing={isEditing}
+              toggleIsEditing={() => setIsEditing(!isEditing)}
+              profileImage={profileImage} 
+              handleProfileImageChange={handleProfileImageChange}/>
             </div>
             
           </div>

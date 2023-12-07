@@ -1,17 +1,53 @@
 .plan-div {
   width: 600px;
   height: 110px;
-  background-color: #ffffff;
+  background-color: #8ecae6;
   border-radius: 15px 15px 15px 15px;
-  border: 5px solid #eca1a1;
+  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
   margin: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.plan-div:hover {
+  background-color: #023047;
+}
+
+.plan-text {
+  transition: color 0.3s ease;
+}
+
+.plan-div:hover .plan-text {
+  color: #ffffff;
 }
 
 .plan-image {
-  width: 100px;
-  height: 100px;
+  width: 90px;
+  height: 90px;
   background-color: #eedede;
+  margin: 10px;
   float: left;
+  border-radius: 50%;
+  border: 4px solid #ffffff;
+  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
+}
+
+.right-container {
+  width: 475px;
+  height: 100%;
+  float: right;
+  border-radius: 0px 15px 15px 0px;
+}
+
+.right-div-title {
+  width: 100%;
+  height: 60px;
+  border-radius: 0px 15px 0px 0px;
+}
+
+.right-div-detail {
+  width: 100%;
+  height: 50px;
+  border-radius: 0px 15px 0px 0px;
 }
 
 .div-gap {

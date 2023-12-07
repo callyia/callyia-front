@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import "./Planning.css";
 import Plan from "../../pages/Plan";
 import PlaceCard from "../../pages/PlaceCard";
+import toast, { Toaster } from "react-hot-toast";
+import { Modal, ModalContent } from "../../theme/daisyui/Modal";
 
 declare global {
   interface Window {
@@ -47,8 +49,36 @@ export default function Planning() {
     }
   };
 
+  const saveBtnClick = () => {
+    toast.success("저장 성공!");
+  };
+
   const [area1, toggleArea1] = useToggle();
   const [area2, toggleArea2] = useToggle();
+  const [isModalOpen, setModalOpen] = useState(false);
+
+  const openModal = () => {
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+  };
+
+  const updateTitle = () => {
+    setModalOpen(false);
+    const titleInput = document.querySelector(
+      "#titleInput"
+    ) as HTMLInputElement;
+    const titleText = document.querySelector(
+      "#titleText"
+    ) as HTMLHeadingElement;
+    titleText.textContent = titleInput.value;
+    titleInput.value = "";
+
+    toast.success("이름 변경 성공!");
+  };
+
   const [map, setMap] = useState<Window["kakao"]["maps"]["Map"] | null>(null);
 
   useEffect(() => {
@@ -88,6 +118,7 @@ export default function Planning() {
 
   return (
     <div className="div-container">
+      {/* 토글 버튼 관련 컴포넌트 */}
       {area1 && (
         <div
           style={{ width: "800px", height: "350px" }}
@@ -108,7 +139,7 @@ export default function Planning() {
             />
             <button
               id="searchBtn"
-              className="toggle-search-button bg-slate-900"
+              className="toggle-search-button"
               onClick={searchBtnClick}
             >
               검색
@@ -164,7 +195,7 @@ export default function Planning() {
       )}
       {!area1 && (
         <button
-          className="toggle-right-up btn btn-sm btn-primary"
+          className="toggle-right-up btn circle-btn btn-primary"
           onClick={toggleArea1}
         >
           click
@@ -231,16 +262,17 @@ export default function Planning() {
       )}
       {!area2 && (
         <button
-          className="toggle-right-down btn btn-sm btn-primary"
+          className="toggle-right-down btn btn-lg btn-primary circle-btn"
           onClick={toggleArea2}
         >
           click
         </button>
       )}
 
+      {/* 플랜 리스트 관련 컴포넌트 (좌측) */}
       <div className="div-left">
         <div className="div-left-title">
-          <h2>Title</h2>
+          <h2 id="titleText">초기 제목</h2>
         </div>
         <div className="div-left-writer">
           <h1>Writer</h1>
@@ -277,7 +309,36 @@ export default function Planning() {
           <Plan plan={{ lat: 10, lng: 10.23, name: "name" }} onClick={Click} />
           <Plan plan={{ lat: 10, lng: 10.23, name: "name" }} onClick={Click} />
         </div>
+        <div className="div-plan-button">
+          <button className="float-right m-1 btn" onClick={openModal}>
+            여행 이름 변경
+          </button>
+          <button className="float-right mt-1 btn" onClick={saveBtnClick}>
+            저장
+          </button>
+        </div>
       </div>
+      <Toaster position="top-center" reverseOrder={false} />
+      <Modal open={isModalOpen}>
+        asdasd
+        <ModalContent>
+          <h1>변경할 여행의 이름을 입력하세요.</h1>
+          <div className="w-full h-6"></div>
+          <input type="text" id="titleInput" className="w-full border-b-2" />
+          <div className="w-full h-6"></div>
+          <button className="float-right btn btn-warning" onClick={closeModal}>
+            Close
+          </button>
+          <button
+            className="float-right mr-1 btn btn-success"
+            onClick={updateTitle}
+          >
+            Save
+          </button>
+        </ModalContent>
+      </Modal>
+
+      {/* 지도 관련 컴포넌트 (우측) */}
       <div className="div-right">
         <div id="map" style={{ width: "100%", height: "100%" }} />
       </div>
