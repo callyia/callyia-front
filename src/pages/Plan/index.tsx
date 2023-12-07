@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./Plan.css";
 
 export type IPlanProps = {
@@ -22,9 +22,19 @@ const Plan: React.FC<PlanProps> = ({ plan, onClick }) => {
 
   return (
     <div className="plan-div" onClick={MapClick}>
-      <div className="div-gap"></div>
-      <div className="plan-image"></div>
-      {lat},{lng},{name}
+      <img
+        className="plan-image"
+        src="./dummyimages/samplePlaceImage.jpg"
+      ></img>
+      <div className="right-container">
+        <div className="right-div-title">
+          <div className="w-full h-6"></div>
+          <span className="text-lg plan-text">{name}</span>
+        </div>
+        <div className="right-div-detail">
+          <span className="plan-text">간단한 설명</span>
+        </div>
+      </div>
     </div>
   );
 };

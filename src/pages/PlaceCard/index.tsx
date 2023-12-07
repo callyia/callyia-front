@@ -27,7 +27,13 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ placeCard, onClick }) => {
         alt="place_img"
         className="place-image"
       />
-      {lat},{lng},{name}
+      <div className="w-full h-4"></div>
+      <div className="w-full h-10">
+        <span className="ml-3 text-lg placeCard-text">{name}</span>
+      </div>
+      <div className="w-full h-10">
+        <span className="ml-3 placeCard-text">간단한 설명</span>
+      </div>
     </div>
   );
 };

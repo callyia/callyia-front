@@ -1,17 +1,33 @@
 .placeCard-div {
   width: 360px;
   height: 100px;
-  background-color: #ffffff;
+  background-color: #ffb703;
   border-radius: 15px 15px 15px 15px;
-
   margin: 10px;
+  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease;
+}
+
+.placeCard-div:hover {
+  background-color: #fb8500;
+}
+
+.placeCard-text {
+  transition: color 0.3s ease;
+}
+
+.placeCard-div:hover .placeCard-text {
+  color: #ffffff;
 }
 
 .place-image {
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
   background-color: #eedede;
   border-radius: 15px 0 0 15px;
   float: left;
-  opacity: 1;
+  margin: 10px;
+  border-radius: 50%;
+  border: 4px solid #ffffff;
+  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
 }
