@@ -20,7 +20,7 @@ const UserProfile = () => {
         </div>
       </div>
       <div className="profile-actions">
-        <a href="">서치바</a>
+        <a href="/">서치바</a>
       </div>
         <h2>남의 글</h2>
         <table>
