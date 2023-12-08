@@ -94,6 +94,69 @@ const dummyData: DummyData = {
       area: "대전",
       image: "/dummyimages_second/river.jpg",
     },
+    {
+      id: 10,
+      title: "음식점",
+      name: "칼국수",
+      content:
+        " have an alt prop, either with meaningful text, or an empty string for",
+      area: "대전",
+      image: "/dummyimages_second/river.jpg",
+    },
+    {
+      id: 11,
+      title: "음식점",
+      name: "칼국수",
+      content:
+        " have an alt prop, either with meaningful text, or an empty string for",
+      area: "대전",
+      image: "/dummyimages_second/river.jpg",
+    },
+    {
+      id: 12,
+      title: "음식점",
+      name: "칼국수",
+      content:
+        " have an alt prop, either with meaningful text, or an empty string for",
+      area: "대전",
+      image: "/dummyimages_second/river.jpg",
+    },
+    {
+      id: 13,
+      title: "음식점",
+      name: "칼국수",
+      content:
+        " have an alt prop, either with meaningful text, or an empty string for",
+      area: "대전",
+      image: "/dummyimages_second/river.jpg",
+    },
+    {
+      id: 14,
+      title: "음식점",
+      name: "칼국수",
+      content:
+        " have an alt prop, either with meaningful text, or an empty string for",
+      area: "대전",
+      image: "/dummyimages_second/river.jpg",
+    },
+    {
+      id: 15,
+      title: "음식점",
+      name: "칼국수",
+      content:
+        " have an alt prop, either with meaningful text, or an empty string for",
+      area: "대전",
+      image: "/dummyimages_second/river.jpg",
+    },
+    {
+      id: 16,
+      title: "음식점",
+      name: "칼국수",
+      content:
+        " have an alt prop, either with meaningful text, or an empty string for",
+      area: "대전",
+      image: "/dummyimages_second/river.jpg",
+    },
   ],
 };
 
