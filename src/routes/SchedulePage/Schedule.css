@@ -1,9 +1,24 @@
 /* ScheduleCard.css */
-.schedule-container {
+.Schedule {
   max-height: 1000px; /* 원하는 높이로 조절하세요 */
   overflow-y: auto;
 }
+.day-header {
+  background-color: #f0f0f0;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
 
+.day-schedule {
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.day-header h2 {
+  margin: 0;
+}
 .schedule-card {
   align-items: center;
   border: 1px solid #dddddd;
@@ -15,6 +30,12 @@
   background-color: orange;
 }
 
+.schedule-card button {
+  border: 2px solid #dddddd;
+  border-radius: 8px;
+  padding: 8px;
+  background-color: white;
+}
 .schedule-card:hover {
   transform: scale(1.025);
 }
@@ -31,18 +52,32 @@
   color: black;
 }
 
-h3 {
+.schedule-card h3 {
   margin-bottom: 8px;
   color: black;
 }
 
-h2 {
+.Schedule h2 {
   margin-left: 4px;
   font-size: 40px;
   font-weight: bold;
 }
 
-p {
+.MapArea h2 {
+  margin-left: 4px;
+  font-size: 40px;
+  font-weight: bold;
+}
+
+.cart {
+  height: 100%;
+}
+.cart h2 {
+  margin-left: 4px;
+  font-size: 40px;
+  font-weight: bold;
+}
+.schedule-card p {
   color: black;
   display: flex;
   justify-content: space-between;
