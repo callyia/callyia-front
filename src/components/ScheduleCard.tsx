@@ -1,16 +1,27 @@
+//ScheduleCard.tsx
 import React, { useState, useEffect } from "react";
 import { useDrag } from "react-dnd";
 import "../routes/SchedulePage/Schedule.css"; // Schedule.css 파일을 import
 
 interface ScheduleItem {
   id: number;
+  day: number;
   place: string;
   content: string;
   tip: string;
+  lat: number;
+  lng: number;
 }
 
 // 세부일정카드-----------------------------------------
-const ScheduleCard: React.FC<ScheduleItem> = ({ id, place, content, tip }) => {
+const ScheduleCard: React.FC<ScheduleItem> = ({
+  id,
+  place,
+  content,
+  tip,
+  lat,
+  lng,
+}) => {
   //expanded는 상태값을 나타내며, 현재는 false로 초기화
   //setExpanded는 expanded 상태를 변경하기 위한 함수
   const [expanded, setExpanded] = useState(false);
@@ -29,7 +40,7 @@ const ScheduleCard: React.FC<ScheduleItem> = ({ id, place, content, tip }) => {
   //드래그 이벤트
   const [{ isDragging }, drag] = useDrag({
     type: "SCHEDULE_CARD", // 드래그 항목의 타입을 지정
-    item: { id, type: "SCHEDULE_CARD", place, content, tip }, // 드래그 중인 항목의 정보를 지정
+    item: { id, type: "SCHEDULE_CARD", place, content, tip, lat, lng }, // 드래그 중인 항목의 정보를 지정
     collect: (monitor) => ({
       isDragging: monitor.isDragging(), // 현재 드래그 중인지 여부를 수집
     }),
@@ -60,7 +71,6 @@ const ScheduleCard: React.FC<ScheduleItem> = ({ id, place, content, tip }) => {
           {expanded ? "간략히" : "더보기"}
         </button>
       </p>
-
       {showDetails && (
         <div className="details">
           <img src="image_url" alt="Schedule Image" />

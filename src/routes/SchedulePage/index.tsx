@@ -12,8 +12,7 @@ export default function SchedulePage() {
           flex: 1,
           display: "flex",
           flexDirection: "column",
-          border: "2px solid #dddddd",
-          borderRadius: "8px",
+          borderRight: "2px solid #abcdef",
           padding: "16px",
           margin: "8px",
         }}
@@ -29,8 +28,7 @@ export default function SchedulePage() {
         <div
           style={{
             flex: 2,
-            border: "2px solid #dddddd",
-            borderRadius: "8px",
+            borderBottom: "2px solid #abcdef",
             padding: "16px",
             margin: "8px",
           }}
@@ -41,8 +39,7 @@ export default function SchedulePage() {
         <div
           style={{
             flex: 1,
-            border: "2px solid #dddddd",
-            borderRadius: "8px",
+            borderTop: "2px solid #abcdef",
             padding: "16px",
             margin: "8px",
           }}
