@@ -35,9 +35,7 @@ const Cart: React.FC = () => {
             key={droppedCard.id}
             className={`schedule-card dragged ${isOver ? "hovered" : ""}`}
           >
-            <span className="schedule-number">
-              {droppedCard.id}번 일정 : {droppedCard.place}
-            </span>
+            <span className="schedule-number">{droppedCard.place}</span>
             <h3>{droppedCard.content}</h3>
             <p>
               TIP : {droppedCard.tip}
