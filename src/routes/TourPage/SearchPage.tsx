@@ -38,8 +38,8 @@ const SearchPage = ({ onSearchResults }: { onSearchResults: any }) => {
   };
 
   return (
-    <section>
-      <section className="swiper-container h-[540px]">
+    <div>
+      <div className="swiper-container h-[540px]">
         <Swiper
           navigation
           pagination={{ clickable: true }}
@@ -60,7 +60,7 @@ const SearchPage = ({ onSearchResults }: { onSearchResults: any }) => {
         >
           <FaArrowUp size={20} color="#16578F" />
         </button>
-      </section>
+      </div>
       <div className="relative left-[720px] border border-t-0 border-b-2 border-x-0 w-[540px] mt-8">
         <select
           className="w-1/5"
@@ -81,7 +81,7 @@ const SearchPage = ({ onSearchResults }: { onSearchResults: any }) => {
           검색
         </button>
       </div>
-    </section>
+    </div>
   );
 };
 
