@@ -19,7 +19,7 @@ export default function RoutesSetup() {
         <Route index element={<MainPage />} />
         <Route path="*" element={<NoMatch />} />
       </Route>
-      <Route path="/SignInPage">
+      <Route path="/SignInPage" element={<Layout />}>
         <Route index element={<SignInPage />} />
         <Route path="*" element={<NoMatch />} />
       </Route>
