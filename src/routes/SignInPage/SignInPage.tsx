@@ -8,7 +8,7 @@ const SignIn = () => {
   const handleSignIn = () => {
     // Implement your sign-in logic here
   };
-  //
+
   return (
     <div className="auth-container">
       <h2>Sign In</h2>
