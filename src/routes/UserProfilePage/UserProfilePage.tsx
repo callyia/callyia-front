@@ -1,46 +1,87 @@
 import React from 'react';
-import './ProfilePage.css';
 
-const UserProfile = () => {
+import './ProfilePage.css';
+import  UserSelfIntroduction  from './UserSelfIntroduction';
+
+function formatNumber(num: number) {
+  if (num >= 100000000) {
+    return (Math.floor(num / 10000000) / 10).toFixed(1) + '억';
+  }
+  
+  if (num >= 10000) {
+    return (Math.floor(num / 1000) / 10).toFixed(1) + '만';
+  }
+  return num.toString();
+}
+
+const UserProfile: React.FC = () => {
+
+  const likesCount = 12223243;
+  const postCount = 1111110;
+
+  const exampleText = '남의 소개글 test 중입니다. my profile에서 45자를 넘지 않습니다';
+
   return (
-    <div className="profile-container">
+    <div className="profile-container" >
+          <div className ="profile-self-introduction-title">
+            자기소개
+          </div>
+          
       <div className="profile-header">
+      
         <div className="profile-left-section">
-          <img src="./dummyimages/image1.jpeg" alt="Profile" className="profile-picture"/>
-          <div className="profile-id">ID : 남의 프로필</div>
-        </div>
-        <div className="profile-center-section">
-          <p className="profile-self-introduction">남의 소개글</p>
+          <p className="profile-self-introduction"> 
+           <UserSelfIntroduction text={exampleText}/>
+          </p>
         </div>
         <div className="profile-right-section">
-          <div className="profile-stats">
-            <p className="profile-post-count">남의 게시글 수: 인자로 받기 1</p>
-            <p className="profile-likes-count">남의 좋아요 수 : 인자로 받기 2</p>
+        <div className="profile-stats" >
+        <div className="profile-post-count" >
+          <div className="profile-icon-number-container">
+            <img src='./profile/profile_post_icon.png' alt="Post icon" className="profile-post-icon" />
           </div>
+            <span className='profile-post-number'>{formatNumber(likesCount)}</span>
+        </div>
+        <div className="profile-likes-count">
+          <div className="profile-icon-number-container">
+            <img src='./profile/profile_like_icon.png' alt="Like icon" className="profile-likes-icon" />
+          </div>
+            <span className='profile-likes-number'>{formatNumber(postCount)}</span>
         </div>
       </div>
-      <div className="profile-actions">
-        <a href="/">서치바</a>
       </div>
-        <h2>남의 글</h2>
-        <table>
-          <tr>
-            <td>1</td>
-            <td>2</td>
-            <td>3</td>
-          </tr>
-          <tr>
-            <td>11</td>
-            <td>22</td>
-            <td>33</td>
-          </tr>
-          <tr>
-            <td>111</td>
-            <td>222</td>
-            <td>333333333333333333333333333333333333333333333333333333333</td>
-          </tr>
-        </table>
+    </div>
+      <div className="profile-user-posts" style={{border: "7px solid gray"}}>
+        <div className='profile-post-img'>
+          <img src="./profile/profile_like_icon.png" alt="post i liked" />
+        </div>
+        <div className='profile-post-img'>
+          <img src="./profile/profile_like_icon.png" alt="post i liked" />
+        </div><div className='profile-post-img'>
+          <img src="./profile/profile_like_icon.png" alt="post i liked" />
+        </div><div className='profile-post-img'>
+          <img src="./profile/profile_like_icon.png" alt="post i liked" />
+        </div><div className='profile-post-img'>
+          <img src="./profile/profile_like_icon.png" alt="post i liked" />
+        </div><div className='profile-post-img'>
+          <img src="./profile/profile_like_icon.png" alt="post i liked" />
+        </div><div className='profile-post-img'>
+          <img src="./profile/profile_like_icon.png" alt="post i liked" />
+        </div><div className='profile-post-img'>
+          <img src="./profile/profile_like_icon.png" alt="post i liked" />
+        </div><div className='profile-post-img'>
+          <img src="./profile/profile_like_icon.png" alt="post i liked" />
+        </div><div className='profile-post-img'>
+          <img src="./profile/profile_like_icon.png" alt="post i liked" />
+        </div><div className='profile-post-img'>
+          <img src="./profile/profile_like_icon.png" alt="post i liked" />
+        </div><div className='profile-post-img'>
+          <img src="./profile/profile_like_icon.png" alt="post i liked" />
+        </div><div className='profile-post-img'>
+          <img src="./profile/profile_like_icon.png" alt="post i liked" />
+        </div>
       </div>
+    </div>
   );
 };
 
