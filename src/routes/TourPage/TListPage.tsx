@@ -51,6 +51,23 @@ const TListPage = ({ searchResults }: { searchResults: any }) => {
         role="button"
         tabIndex={0}
         onClick={() => openDetailClicked(dummy)}
+        onMouseOver={(e) => {
+          const targetContent = e.currentTarget;
+  
+          // 마우스 오버 시 위로 올라가는 애니메이션 클래스 추가
+          targetContent.classList.add("hoverAnimation");
+        }}
+        onMouseLeave={(e) => {
+          const targetContent = e.currentTarget;
+  
+          // 마우스 떠날 때 아래로 내려가는 애니메이션 클래스 추가
+          targetContent.classList.add("leaveAnimation");
+  
+          // 일정 시간 후 클래스 제거
+          setTimeout(() => {
+            targetContent.classList.remove("hoverAnimation", "leaveAnimation");
+          }, 300);
+        }}
       >
         <div>
           <div className="contentContainer">
@@ -75,7 +92,26 @@ const TListPage = ({ searchResults }: { searchResults: any }) => {
       pageNumbers.push(
         <button
           key={i}
-          className={`pageBtn ${currentPage === i ? "text-[#b42954]" : ""}`}
+          className={`pageBtn ${currentPage === i ? "text-blue-700 font-bold" : ""}`}
+
+          onMouseOver={(e) => {
+            const targetButton = e.currentTarget;
+            
+            // 마우스 오버 시 위로 올라가는 애니메이션 클래스 추가
+            targetButton.classList.add("hoverAnimation");
+          }}
+          onMouseLeave={(e) => {
+            const targetButton = e.currentTarget;
+            
+            // 마우스 떠날 때 아래로 내려가는 애니메이션 클래스 추가
+            targetButton.classList.add("leaveAnimation");
+  
+            // 일정 시간 후 클래스 제거
+            setTimeout(() => {
+              targetButton.classList.remove("hoverAnimation", "leaveAnimation");
+            }, 300);
+          }}
+          
           onClick={() => setCurrentPage(i)}
         >
           {i}
