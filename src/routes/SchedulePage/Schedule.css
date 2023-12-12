@@ -1,26 +1,26 @@
 /* ScheduleCard.css */
 .Schedule {
-  max-height: 1000px; /* 원하는 높이로 조절하세요 */
+  max-height: 1000px;
   overflow-y: auto;
 }
 
-.profile-info {
+.Schedule-profile-info {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.profile-info img {
+.Schedule-profile-info img {
   border-radius: 50%;
   width: 50px;
-  height: 50px; /* 원 모양으로 이미지를 만들기 위해 */
+  height: 50px;
 }
 
-.profile-header {
-  background-color: #f5f5f5; /* 배경색 추가 */
-  padding: 20px; /* 내부 여백 추가 */
-  border-radius: 10px; /* 모서리를 둥글게 만들기 위해 */
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 그림자 효과 추가 */
+.Schedule-header {
+  background-color: #f5f5f5;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .day-header {
@@ -29,7 +29,7 @@
   border-bottom: 1px solid #ddd;
 }
 .details {
-  max-height: 350px; /* 원하는 높이로 조절하세요 */
+  max-height: 350px;
   overflow-y: auto;
 }
 .day-schedule {
@@ -143,7 +143,6 @@
   margin-bottom: 10px;
 }
 
-//좋아요 버튼
 .LikeBtn {
   background-color: gray;
   color: white;
@@ -155,7 +154,7 @@
 }
 
 .LikeBtn::before {
-  content: "\1F44D"; /* 따봉(👍) 이모지 유니코드 */
+  content: "\1F44D";
   font-size: 20px;
   margin-right: 5px;
 }
@@ -163,7 +162,7 @@
 .comment {
   margin: 10px;
   display: flex;
-  align-items: center; /* 수직 정렬을 중앙으로 설정 */
+  align-items: center;
 }
 .comment button {
   padding: 10px 15px;
