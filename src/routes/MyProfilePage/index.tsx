@@ -1,10 +1,11 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useState, useRef} from 'react';
 
 import MyProfile from './MyProfilePage';
 
 export default function MyProfilePage() { 
   const [isEditing, setIsEditing] = useState(false); 
   const [profileImage, setProfileImage] = useState<string>('./dummyimages/image1.jpeg'); // 기본 이미지
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleProfileImageChange = (event:ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files ? event.target.files[0] : null;
@@ -19,6 +20,11 @@ export default function MyProfilePage() {
     }
   };
 
+  const handleImageClick = () => {
+    if (isEditing && fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
     return (
         <div style={{ flex:1, display: 'flex', height: '1200px'}}>
           <div
@@ -40,16 +46,11 @@ export default function MyProfilePage() {
                 marginRight: "10px"
               }}
             >
-              {/* data image 받아오고 dnd + 이미지 안쪽으로 넣기*/}
-              
-              <img src="./dummyimages/image1.jpeg" alt="Profile" className="my-profile-picture"  
-              style={{
-                cursor:"pointer", 
-                textAlign: "center", 
-                margin: "auto", 
-                display: "block",
-                }}/>
-                <input type="file" onChange={handleProfileImageChange} accept="image/*" />
+              <img src={profileImage} alt="Profile" className={`my-profile-picture ${isEditing ? 'my-profile-picture-hover' : ''}`} onClick={handleImageClick}
+              style={{ cursor: 'pointer', textAlign: 'center', margin: 'auto', display: 'block' }}/>
+              <input type="file" ref={fileInputRef} onChange={handleProfileImageChange} accept="image/*"
+              style={{ display: 'none' }} />
+                
             </div>
             <div
               style={{
