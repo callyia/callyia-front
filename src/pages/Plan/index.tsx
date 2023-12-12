@@ -3,9 +3,11 @@ import React, { useEffect, useState } from "react";
 import "./Plan.css";
 
 export type IPlanProps = {
+  id: number;
   lat: number;
   lng: number;
   name: string;
+  content: string;
 };
 
 export type PlanProps = {
@@ -14,7 +16,7 @@ export type PlanProps = {
 };
 
 const Plan: React.FC<PlanProps> = ({ plan, onClick }) => {
-  const { lat, lng, name } = plan;
+  const { lat, lng, name, content } = plan;
 
   const MapClick = () => {
     onClick(lat, lng);
@@ -32,7 +34,7 @@ const Plan: React.FC<PlanProps> = ({ plan, onClick }) => {
           <span className="text-lg plan-text">{name}</span>
         </div>
         <div className="right-div-detail">
-          <span className="plan-text">간단한 설명</span>
+          <span className="plan-text">{content}</span>
         </div>
       </div>
     </div>

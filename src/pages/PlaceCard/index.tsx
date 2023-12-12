@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import "./PlaceCard.css";
 
 export type IPlaceCardProps = {
+  id: number;
   lat: number;
   lng: number;
   name: string;
