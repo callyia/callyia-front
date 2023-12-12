@@ -93,9 +93,12 @@
 }
 
 .cart {
+  max-height: 500px;
+  overflow-y: auto;
   height: 100%;
 }
 .cart h2 {
+  background-color: #f5f5f5;
   margin-left: 4px;
   font-size: 40px;
   font-weight: bold;
@@ -168,4 +171,8 @@
   padding: 10px 15px;
   background-color: gray;
   color: white;
+}
+
+.MapArea h2 {
+  background-color: #f5f5f5;
 }
