@@ -7,13 +7,37 @@ import RegistMap from "./RegistMap";
 const RegistPage = () => {
   const [openModal, setOpenModal] = useState(false);
   const [selectedPlace, setSelectedPlace] = useState<any>(null);
+  const [content, setContent] = useState<string>("");
 
   const closeClicked = () => {
     setOpenModal(false); // 모달 닫기
   };
 
-  const acceptClicked = () => {
-    alert("파일이 등록되었습니다.");
+  const acceptClicked = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/Callyia/Tour", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          placeName: selectedPlace?.place_name,
+          address:
+            selectedPlace?.road_address_name || selectedPlace?.address_name,
+          latitude: selectedPlace?.x,
+          longitude: selectedPlace?.y,
+          content: content,
+        }),
+      });
+      if (!response.ok) {
+        throw new Error("서버 응답 실패");
+      }
+      const responseData = await response.json();
+      console.log("백엔드 응답 데이터:", responseData);
+    } catch (error: any) {
+      console.error("백엔드 통신 오류:", error.message);
+    }
+    alert(`파일이 등록되었습니다. 내용 : ${content}`);
     setOpenModal(false); // 모달 닫기
   };
 
@@ -57,12 +81,26 @@ const RegistPage = () => {
                 </div>
               </div>
               <div className="flex items-center mb-2">
+                <label className="mr-2">좌표 :</label>
+                <div className="flex-grow p-1 border rounded">
+                  {selectedPlace?.x && selectedPlace?.y ? (
+                    <>
+                      위도: {selectedPlace.x}, 경도: {selectedPlace.y}
+                    </>
+                  ) : (
+                    "좌표 정보 없음"
+                  )}
+                </div>
+              </div>
+              <div className="flex items-center mb-2">
                 <label className="mr-2">내용 :</label>
                 <input
                   className="flex-grow p-1 border rounded"
                   type="text"
                   name=""
                   id=""
+                  value={content}
+                  onChange={(e) => setContent(e.target.value)}
                 />
               </div>
               <div>

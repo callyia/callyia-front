@@ -45,7 +45,7 @@ const TListPage = ({ searchResults }: { searchResults: any }) => {
       ? searchResults.slice(indexOfFirstItem, indexOfLastItem)
       : dummyData.dummy.slice(indexOfFirstItem, indexOfLastItem);
   const renderItems = currentItems.map((dummy: any, index: any) => (
-    <div key={index} className="flex-wrap mr-8 mb-4 w-[320px]">
+    <div key={index} className="flex-wrap mr-10 mb-4 w-[320px]">
       <div
         className="ListContent shadowList"
         role="button"
@@ -53,16 +53,16 @@ const TListPage = ({ searchResults }: { searchResults: any }) => {
         onClick={() => openDetailClicked(dummy)}
         onMouseOver={(e) => {
           const targetContent = e.currentTarget;
-  
+
           // 마우스 오버 시 위로 올라가는 애니메이션 클래스 추가
           targetContent.classList.add("hoverAnimation");
         }}
         onMouseLeave={(e) => {
           const targetContent = e.currentTarget;
-  
+
           // 마우스 떠날 때 아래로 내려가는 애니메이션 클래스 추가
           targetContent.classList.add("leaveAnimation");
-  
+
           // 일정 시간 후 클래스 제거
           setTimeout(() => {
             targetContent.classList.remove("hoverAnimation", "leaveAnimation");
@@ -92,26 +92,26 @@ const TListPage = ({ searchResults }: { searchResults: any }) => {
       pageNumbers.push(
         <button
           key={i}
-          className={`pageBtn ${currentPage === i ? "text-blue-700 font-bold" : ""}`}
-
+          className={`pageBtn ${
+            currentPage === i ? "text-blue-700 font-bold" : ""
+          }`}
           onMouseOver={(e) => {
             const targetButton = e.currentTarget;
-            
+
             // 마우스 오버 시 위로 올라가는 애니메이션 클래스 추가
             targetButton.classList.add("hoverAnimation");
           }}
           onMouseLeave={(e) => {
             const targetButton = e.currentTarget;
-            
+
             // 마우스 떠날 때 아래로 내려가는 애니메이션 클래스 추가
             targetButton.classList.add("leaveAnimation");
-  
+
             // 일정 시간 후 클래스 제거
             setTimeout(() => {
               targetButton.classList.remove("hoverAnimation", "leaveAnimation");
             }, 300);
           }}
-          
           onClick={() => setCurrentPage(i)}
         >
           {i}
