@@ -10,117 +10,82 @@ interface MyProfileProps {
   handleProfileImageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const MyProfile: React.FC<MyProfileProps> = ({profileImage, handleProfileImageChange}) => {
-  const [isEditing, setIsEditing] = React.useState(false);
+function formatNumber(num: number) {
+  if (num >= 100000000) {
+    return (Math.floor(num / 10000000) / 10).toFixed(1) + '억';
+  }
+  
+  if (num >= 10000) {
+    return (Math.floor(num / 1000) / 10).toFixed(1) + '만';
+  }
+  return num.toString();
+}
 
+const MyProfile: React.FC<MyProfileProps> = ({isEditing, toggleIsEditing}) => {
+
+  const likesCount = 12223243;
+  const postCount = 1111110;
 
   return (
-    <div className="profile-container">
+    <div className="profile-container" >
           <div className ="profile-self-introduction-title">
             자기소개
           </div>
           
-          {/* 버튼 이름 주기 */}
-          <button onClick={() => setIsEditing(!isEditing)}> 
-            {isEditing ? '저장' : '수정'}
-          </button>
       <div className="profile-header">
+      
         <div className="profile-left-section">
           <p className="profile-self-introduction"> 
            <SelfIntroduction isEditing = {isEditing}/>
+            <button className="edit-save-btn" onClick={toggleIsEditing} > 
+              {isEditing ? '저장' : '수정'}
+            </button>
           </p>
         </div>
         <div className="profile-right-section">
-        <div className="profile-stats">
-        <div className="profile-post-count">
-          <div className="profile-icon-text-container">
-            <img src='./profile/profile_post_icon1.png' alt="Post icon" className="profile-post-icon" />
-            <span>9999</span>
+        <div className="profile-stats" >
+        <div className="profile-post-count" >
+          <div className="profile-icon-number-container">
+            <img src='./profile/profile_post_icon.png' alt="Post icon" className="profile-post-icon" />
           </div>
+            <span className='profile-post-number'>{formatNumber(likesCount)}</span>
         </div>
         <div className="profile-likes-count">
-          <div className="profile-icon-text-container">
+          <div className="profile-icon-number-container">
             <img src='./profile/profile_like_icon.png' alt="Like icon" className="profile-likes-icon" />
-            <span>78</span>
           </div>
+            <span className='profile-likes-number'>{formatNumber(postCount)}</span>
         </div>
       </div>
       </div>
     </div>
-      {/* 이미지 디브 별로 3, 4씩 해서 스크롤 되게 */}
       <div className="profile-user-posts" style={{border: "7px solid gray"}}>
-        {/* <h2>내 글</h2> */}
-        <div className='test-test-test'>
+        <div className='profile-post-img'>
           <img src="./profile/profile_like_icon.png" alt="post i liked" />
         </div>
-        <div className='test-test-test'>
+        <div className='profile-post-img'>
           <img src="./profile/profile_like_icon.png" alt="post i liked" />
-        </div>
-        
-        <div className='test-test-test'>
+        </div><div className='profile-post-img'>
           <img src="./profile/profile_like_icon.png" alt="post i liked" />
-        </div>
-        <div className='test-test-test'>
+        </div><div className='profile-post-img'>
           <img src="./profile/profile_like_icon.png" alt="post i liked" />
-        </div>
-        <div className='test-test-test'>
+        </div><div className='profile-post-img'>
           <img src="./profile/profile_like_icon.png" alt="post i liked" />
-        </div>
-        <div className='test-test-test'>
+        </div><div className='profile-post-img'>
           <img src="./profile/profile_like_icon.png" alt="post i liked" />
-        </div>
-        <div className='test-test-test'>
+        </div><div className='profile-post-img'>
           <img src="./profile/profile_like_icon.png" alt="post i liked" />
-        </div>
-        <div className='test-test-test'>
+        </div><div className='profile-post-img'>
           <img src="./profile/profile_like_icon.png" alt="post i liked" />
-        </div>
-        <div className='test-test-test'>
+        </div><div className='profile-post-img'>
           <img src="./profile/profile_like_icon.png" alt="post i liked" />
-        </div>
-        <div className='test-test-test'>
+        </div><div className='profile-post-img'>
           <img src="./profile/profile_like_icon.png" alt="post i liked" />
-        </div>
-        <div className='test-test-test'>
+        </div><div className='profile-post-img'>
           <img src="./profile/profile_like_icon.png" alt="post i liked" />
-        </div>
-        <div className='test-test-test'>
+        </div><div className='profile-post-img'>
           <img src="./profile/profile_like_icon.png" alt="post i liked" />
-        </div>
-        <div className='test-test-test'>
-          <img src="./profile/profile_like_icon.png" alt="post i liked" />
-        </div>
-        <div className='test-test-test'>
-          <img src="./profile/profile_like_icon.png" alt="post i liked" />
-        </div>
-        <div className='test-test-test'>
-          <img src="./profile/profile_like_icon.png" alt="post i liked" />
-        </div>
-        <div className='test-test-test'>
-          <img src="./profile/profile_like_icon.png" alt="post i liked" />
-        </div>
-        <div className='test-test-test'>
-          <img src="./profile/profile_like_icon.png" alt="post i liked" />
-        </div>
-        <div className='test-test-test'>
-          <img src="./profile/profile_like_icon.png" alt="post i liked" />
-        </div>
-        <div className='test-test-test'>
-          <img src="./profile/profile_like_icon.png" alt="post i liked" />
-        </div>
-        <div className='test-test-test'>
-          <img src="./profile/profile_like_icon.png" alt="post i liked" />
-        </div>
-        <div className='test-test-test'>
-          <img src="./profile/profile_like_icon.png" alt="post i liked" />
-        </div>
-        <div className='test-test-test'>
-          <img src="./profile/profile_like_icon.png" alt="post i liked" />
-        </div>
-        <div className='test-test-test'>
-          <img src="./profile/profile_like_icon.png" alt="post i liked" />
-        </div>
-        <div className='test-test-test'>
+        </div><div className='profile-post-img'>
           <img src="./profile/profile_like_icon.png" alt="post i liked" />
         </div>
       </div>
