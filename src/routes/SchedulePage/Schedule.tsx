@@ -2,6 +2,7 @@
 import React from "react";
 import "./Schedule.css";
 import ScheduleCard, { ScheduleItem } from "../../components/ScheduleCard";
+import { Link } from "react-router-dom";
 
 // 'day' 속성이 추가된 타입 정의
 interface ExtendedScheduleItem extends ScheduleItem {
@@ -156,10 +157,12 @@ const Schedule: React.FC = () => {
     <div className="Schedule">
       <div className="Schedule-header">
         <div className="Schedule-profile-info">
-          <img
-            src="https://search.pstatic.net/sunny/?src=https%3A%2F%2Fcdn2.ppomppu.co.kr%2Fzboard%2Fdata3%2F2022%2F0509%2F20220509173224_d9N4ZGtBVR.jpeg&type=sc960_832"
-            alt="프로필 이미지"
-          />
+          <Link to="/UserProfilePage">
+            <img
+              src="https://search.pstatic.net/sunny/?src=https%3A%2F%2Fcdn2.ppomppu.co.kr%2Fzboard%2Fdata3%2F2022%2F0509%2F20220509173224_d9N4ZGtBVR.jpeg&type=sc960_832"
+              alt="프로필 이미지"
+            />
+          </Link>
           <p style={{ fontSize: "12px", color: "gray" }}>김준기</p>
         </div>
         <h2>부산 여행</h2>

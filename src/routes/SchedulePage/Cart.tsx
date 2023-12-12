@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { useDrop } from "react-dnd";
 import { ScheduleItem } from "../../components/ScheduleCard";
-import "./Cart.css";
+import "./Schedule.css";
 
 const Cart: React.FC = () => {
   const [droppedCards, setDroppedCards] = useState<ScheduleItem[]>([]);

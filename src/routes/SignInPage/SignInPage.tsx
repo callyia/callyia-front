@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "./SignInPage.css"; // 스타일 파일을 만들어주세요
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -12,21 +13,23 @@ const SignIn = () => {
     <div className="auth-container">
       <h2>Sign In</h2>
       <form>
-        <label>Email:</label>
-        <input
-          type="email"
-          value={email}
-          style={{backgroundColor: "gray", color: "white"}}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+        <div className="form-group">
+          <label>Email:</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
 
-        <label>Password:</label>
-        <input
-          type="password"
-          value={password}
-          style={{backgroundColor: "gray", color: "white"}}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+        <div className="form-group">
+          <label>Password:</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
 
         <button type="button" onClick={handleSignIn}>
           Sign In
