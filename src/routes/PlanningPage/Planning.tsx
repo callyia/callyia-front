@@ -1,11 +1,13 @@
 import { useToggle } from "../../hooks";
 import React, { useEffect, useState } from "react";
 import "./Planning.css";
-import Plan from "../../pages/Plan";
-import PlaceCard from "../../pages/PlaceCard";
+import Plan from "../../components/Plan";
+import PlaceCard from "../../components/PlaceCard";
 import toast, { Toaster } from "react-hot-toast";
 import { Modal, ModalContent } from "../../theme/daisyui/Modal";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+
+import axios from "axios";
 
 const plans = [
   {
@@ -56,6 +58,10 @@ const placeCards1 = [
   { id: 1, lat: 33.306037, lng: 126.289577, name: "오설록" },
   { id: 2, lat: 35.150311, lng: 129.037077, name: "자취자취" },
   { id: 3, lat: 33.35, lng: 126.333, name: "여긴어디고" },
+  { id: 1, lat: 35.14299044, lng: 129.03409987, name: "동의대" },
+  { id: 2, lat: 35.147, lng: 129.04, name: "부드러운움직임" },
+  { id: 3, lat: 35.154297, lng: 129.05977, name: "더조은" },
+  { id: 4, lat: 35.150311, lng: 129.037077, name: "자취자취" },
 ];
 
 const placeCards2 = [
@@ -347,12 +353,6 @@ export default function Planning() {
             )}
           </Droppable>
         </DragDropContext>
-
-        {/* <div className="div-plan-list">
-          {plans.map((plan) => (
-            <Plan plan={plan} onClick={Click} />
-          ))}
-        </div> */}
         <div className="div-plan-button">
           <button className="float-right m-1 btn" onClick={openModal}>
             여행 이름 변경
