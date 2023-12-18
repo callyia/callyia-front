@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState, useRef} from 'react';
+import React, { useState, useRef} from 'react';
 
 import UserProfile from './UserProfilePage';
 
@@ -7,7 +7,10 @@ export default function UserProfilePage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
     return (
-        <div style={{ flex:1, display: 'flex', height: '1200px'}}>
+      <div style={{ flex: 1, display: "flex", flexDirection: 'column', height: '1000px'}}>
+      <div style={{ flex: 1, display: "flex", height: '530px', flexDirection: 'column', width: '100%'}}>
+        <div>
+        <div style={{ flex:1, display: 'flex', height: '500px'}}>
           <div
             style={{
               flex: 1,
@@ -16,7 +19,7 @@ export default function UserProfilePage() {
               borderRadius: "8px",
               padding: "16px",
               margin: "8px",
-              maxHeight: "1200px",
+              maxHeight: "503px"
             }}
           >
             <div
@@ -27,8 +30,8 @@ export default function UserProfilePage() {
                 marginRight: "10px"
               }}
             >
-              <img src={profileImage} alt="Profile" className="my-profile-picture"
-              style={{ cursor: 'pointer', textAlign: 'center', margin: 'auto', display: 'block' }}/>
+              <img src={profileImage} alt="Profile" className="user-profile-picture"
+              style={{ textAlign: 'center', margin: 'auto', display: 'block' }}/>
               <input type="file" ref={fileInputRef} accept="image/*"
               style={{ display: 'none' }} />
                 
@@ -36,54 +39,76 @@ export default function UserProfilePage() {
             <div
               style={{
                 flex: 0.2,
-                border: "2px",
                 borderRadius: "8px",
                 backgroundColor: "black",
-                padding: "16px",
+                padding: "26px",
                 margin: "8px",
                 marginTop: "40px",
                 marginLeft: "10px",
                 marginRight: "10px",
                 color: "white"
-
               }}
             >
-              {/* font h2 사이즈로 맞춰서 닉네임 받아오기 */}
-              <div className = "profile-id">MYUSER</div>
-              <div className = "profile-email">MYUSER@EMAIL.COM</div>
-            </div>
-            {/* <div style={{ flex: 1 }}> */}
-            <div
-              style={{
-                flex: 1.2,
-                border: "2px",
-                borderRadius: "8px",
-                padding: "16px",
-                backgroundColor: "white",
-                margin: "8px",
-                marginTop: "20px",
-                marginLeft: "10px",
-                marginRight: "10px",
-              }}
-            >
+              <div className = "user-profile-id">MYUSER</div>
+              <div className = "user-profile-email">MYUSER@EMAIL.COM</div>
             </div>
           </div>
     
-          <div style={{ flex: 3, display: "flex", flexDirection: "column" }}>
+          <div style={{ flex: 3, display: "flex", height: "502px" }}>
             <div
               style={{
                   flex: 2,
-                  border: "5px solid red",
+                  border: "5px solid black",
                   borderRadius: "8px",
                   padding: "16px",
                   margin: "8px",
                 }}
             >
               {/* 오른쪽 상단 */}
-          <UserProfile />
+            <UserProfile />
+          
             </div>
-            
           </div>
+          </div>
+        </div>
+        <div style={{ display: "grid", height: "702px", width: '100%'}} >
+          <div className="user-profile-user-posts">
+          <div className='user-profile-post-img'>
+            <img src="./profile/profile_like_icon.png" alt="post i liked" />
+          </div><div className='user-profile-post-img'>
+            <img src="./profile/profile_like_icon.png" alt="post i liked" />
+          </div><div className='user-profile-post-img'>
+            <img src="./profile/profile_like_icon.png" alt="post i liked" />
+          </div><div className='user-profile-post-img'>
+            <img src="./profile/profile_like_icon.png" alt="post i liked" />
+          </div><div className='user-profile-post-img'>
+            <img src="./profile/profile_like_icon.png" alt="post i liked" />
+          </div><div className='user-profile-post-img'>
+            <img src="./profile/profile_like_icon.png" alt="post i liked" />
+          </div><div className='user-profile-post-img'>
+            <img src="./profile/profile_like_icon.png" alt="post i liked" />
+          </div><div className='user-profile-post-img'>
+            <img src="./profile/profile_like_icon.png" alt="post i liked" />
+          </div><div className='user-profile-post-img'>
+            <img src="./profile/profile_like_icon.png" alt="post i liked" />
+          </div><div className='user-profile-post-img'>
+            <img src="./profile/profile_like_icon.png" alt="post i liked" />
+          </div><div className='user-profile-post-img'>
+            <img src="./profile/profile_like_icon.png" alt="post i liked" />
+          </div><div className='user-profile-post-img'>
+            <img src="./profile/profile_like_icon.png" alt="post i liked" />
+          </div><div className='user-profile-post-img'>
+            <img src="./profile/profile_like_icon.png" alt="post i liked" />
+          </div><div className='user-profile-post-img'>
+            <img src="./profile/profile_like_icon.png" alt="post i liked" />
+          </div><div className='user-profile-post-img'>
+            <img src="./profile/profile_like_icon.png" alt="post i liked" />
+          </div><div className='user-profile-post-img'>
+            <img src="./profile/profile_like_icon.png" alt="post i liked" />
+          </div>
+          </div> 
+          </div>
+        </div>
         </div>
       );
 }

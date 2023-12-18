@@ -57,9 +57,9 @@
   border-radius: 8px;
   transform: scale(1);
   margin: auto; 
-  max-width: 500px;
+  max-width: 480px;
   height: 100%;
-  padding: 3%;
+  padding: 0.01%;
   border: 2px solid black;
   box-sizing: border-box;
 }
@@ -111,7 +111,7 @@
   grid-template-columns: repeat(3, 1fr); 
   max-height: 450px; 
   overflow-y: auto; 
-  border: 7px solid gray;
+  /* border: 7px solid gray; */
   border-radius: 50px;
   padding: 10px;
   -ms-overflow-style: none; /* 인터넷 익스플로러에서 스크롤바 안보이게 */

@@ -1,4 +1,4 @@
-.profile-container {
+.user-profile-container {
   display: grid;
   grid-gap: 100px;
   max-width: 100%; 
@@ -6,7 +6,13 @@
   padding: 0 0 20px 10px;
 }
 
-.profile-header {
+.user-profile-picture {
+  width: 300px; 
+  height: 300px;
+  border-radius: 50%;
+}
+
+.user-profile-header {
   grid-column: 1/3;
   display: grid;
   grid-template-columns: minmax(0, 1fr) min-content;
@@ -17,39 +23,32 @@
   position: relative; 
 }
 
-.profile-left-section {
+.user-profile-left-section {
   display: flex;
 }
 
-.profile-right-section {
+.user-profile-right-section {
   height: 100%;
   weight: 100px;
   display: grid;
   align-items: center;
 }
 
-.my-profile-picture {
-  width: 300px; 
-  height: 300px;
-  border-radius: 50%;
-}
 
-.my-profile-picture-hover:hover {
-  filter: brightness(0.7);
-  transition: 0.5s;
-  border: 1px solid black;
-}
-
-.profile-id, .profile-email, .profile-self-introduction, .profile-stats, .profile-action-button {
+.user-profile-id, .user-profile-email, .user-profile-self-introduction, .user-profile-stats, .user-profile-action-button {
   text-align: center;
 }
 
-.profile-id {
-  margin-top: 10px;
+.user-profile-id {
+  /* margin-top: 5px; */
   font-size: 30px;
 }
 
-.profile-stats {
+.user-profile-email {
+  margin-bottom: 5px;
+}
+
+.user-profile-stats {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -57,80 +56,45 @@
   border-radius: 8px;
   transform: scale(1);
   margin: auto; 
-  max-width: 500px;
+  max-width: 480px;
   height: 100%;
-  padding: 3%;
+  padding: 0.01%;
   border: 2px solid black;
   box-sizing: border-box;
 }
 
-.profile-stats > div {
+.user-profile-stats > div {
   align-items: center;
   justify-content: flex-end; 
   width: 100%; 
 }
 
-.profile-actions {
-  flex-direction: column;
-  align-items: center;
-}
-
-.profile-action-div {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.profile-action-div:hover {
-  color: black;
-  transition: 0.7s;
-  transform: scale(1.3);
-}
-
-.profile-action-button {
-  width: 100%;
-  height: 150px;
-  border-radius: 5px;
-  cursor: pointer;
-  justify-content: center;
-  margin-bottom: 12px;
-  margin-top: 20px;
-  display: flex;
-}
-
-.profile-action-button:hover {
-  color: black;
-  transition: 0.5s;
-  transform: scale(1.1);
-}
-
-.profile-user-posts {
+.user-profile-user-posts {
   grid-gap: 10px;
   grid-column: 1/3;
   display: grid;
-  grid-template-columns: repeat(3, 1fr); 
+  grid-template-columns: repeat(4, 1fr); 
   max-height: 450px; 
   overflow-y: auto; 
-  border: 7px solid gray;
   border-radius: 50px;
   padding: 10px;
   -ms-overflow-style: none; /* 인터넷 익스플로러에서 스크롤바 안보이게 */
   scrollbar-width: none; /* 파이어폭스에서 스크롤바 안보이게 */
 }
 
-.profile-user-posts::-webkit-scrollbar {
+.user-profile-user-posts::-webkit-scrollbar {
   display: none !important; /* 크롬, 사파리 등에서 스크롤바 안보이게 */
 }
 
 
-.profile-self-introduction-title {
+.user-profile-self-introduction-title {
   margin-top: 90px; 
   padding: 10px;
   border-bottom: none; 
   position: relative;
 }
 
-.profile-self-introduction {
+.user-profile-self-introduction {
   width: 100%;
   height: 50em;
   max-height: 300px;
@@ -141,7 +105,7 @@
   position: relative;
 }
 
-.profile-post-count, .profile-likes-count {
+.user-profile-post-count, .user-profile-likes-count {
   display: flex;
   justify-content: center;
   align-items: center;  
@@ -155,12 +119,7 @@
   color: black;
 }
 
-.profile-post-img:hover {
-  filter: brightness(0.7);
-  pointer: cursor;
-}
-
-.profile-icon-number-container {
+.user-profile-icon-number-container {
   position: relative;
   width: 70px; 
   height: 70px;
@@ -168,18 +127,18 @@
   margin-right: 20px;
 }
 
-.profile-post-icon,.profile-likes-icon {
+.user-profile-post-icon,.profile-likes-icon {
   width: 70px; 
   height: 70px; 
 }
 
-.self-introduction-container {
+.user-self-introduction-container {
   width: 100%;
   height: 100%;
   position: absolute;
 }
 
-.self-introduction-textarea {
+.user-self-introduction-textarea {
   background-color: white;
   width: 100%;
   height: 100%;
@@ -188,7 +147,7 @@
   resize: none;
 }
 
-.self-introduction-character-count {
+.user-self-introduction-character-count {
   position: absolute;
   bottom: 10px; 
   right: 10px;
@@ -197,7 +156,7 @@
   padding: 5px;
 }
 
-.self-introduction-alert-message {
+.user-self-introduction-alert-message {
   color: black;
   position: absolute;
   font-size: 0.8rem;
@@ -207,7 +166,7 @@
   text-align: center;
 }
 
-.self-introduction-max-reached-alert-message {
+.user-self-introduction-max-reached-alert-message {
   color: red;
   position: absolute;
   font-size: 1.2rem;
@@ -217,7 +176,7 @@
   text-align: center;
 }
 
-.edit-save-btn {
+.user-edit-save-btn {
   position: absolute;
   width: 90px;
   height: 45px;
@@ -231,25 +190,25 @@
   font-size: 20px;
 }
 
-.edit-save-btn:hover {
+.user-edit-save-btn:hover {
   filter: brightness(0.5);
 }
 
-.profile-post-img {
+.user-profile-post-img {
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 0;
 }
 
-.profile-post-img img {
+.user-profile-post-img img {
   width: 100%; 
   height: auto;
   max-height: 100%; 
   object-fit: cover;
 }
 
-.profile-post-number, .profile-likes-number {
+.user-profile-post-number, .user-profile-likes-number {
   position: flex;
   align-items: center;
   text-align: center;
