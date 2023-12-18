@@ -6,14 +6,14 @@ const LoginPage: React.FC = () => {
     <div className="page-container">
       <div className="shadow login-form-container">
         <div className="login-form-right-side">
-          <div className="top-logo-wrap">{/* You can add content here */}</div>
+          <div className="top-logo-wrap"></div>
           <h1>콜이야 트립</h1>
         </div>
         <div className="login-form-left-side">
           <div className="login-top-wrap">
             <span>계정이 없으신가요?</span>
             <button className="create-account-btn shadow-light">
-              회원가입
+              <a href="/SignUpPage">회원가입</a>
             </button>
           </div>
           <div className="login-input-container">
@@ -27,7 +27,9 @@ const LoginPage: React.FC = () => {
             </div>
           </div>
           <div className="login-btn-wrap">
-            <button className="login-btn">로그인</button>
+            <button className="login-btn">
+              <h1>로그인</h1>
+            </button>
             <a href="#">비밀번호를 잊으셨습니까?</a>
           </div>
         </div>
