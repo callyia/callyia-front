@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useDrag } from "react-dnd";
 import "../routes/SchedulePage/Schedule.css"; // Schedule.css 파일을 import
+import Swal from "sweetalert2"; //alert 디자인 임포트
 
 interface ScheduleItem {
   id: number;
@@ -32,6 +33,17 @@ const ScheduleCard: React.FC<ScheduleItem> = ({
   const [cardHeight, setCardHeight] = useState<number | undefined>(undefined);
   const cardRef = useRef<HTMLDivElement | null>(null);
 
+  //댓글 클릭 시 alert창으로 전체 내용 보여줌
+  const handleCommentClick = (comment: string) => {
+    Swal.fire({
+      text: `${comment}`,
+      showConfirmButton: false,
+      showCancelButton: true,
+      cancelButtonText: "닫기",
+    });
+    //alert(`${comment}`);
+  };
+
   const handleToggleExpand = () => {
     setExpanded(!expanded);
     setShowDetails(!showDetails);
@@ -54,7 +66,9 @@ const ScheduleCard: React.FC<ScheduleItem> = ({
       const startIdx = (currentPage - 1) * itemsPerPage;
       const endIdx = startIdx + itemsPerPage;
       const visibleComments = comments.slice(startIdx, endIdx);
-
+      const handleCommentClick = (comment: string) => {
+        alert(`Comment: ${comment}`);
+      };
       const commentHeight = visibleComments.reduce(
         (height, _) => height + 20,
         0
@@ -80,6 +94,7 @@ const ScheduleCard: React.FC<ScheduleItem> = ({
     >
       <span className="schedule-number">{place}</span>
       <h3>{content}</h3>
+
       <p>
         TIP : {tip}
         <button onClick={handleToggleExpand}>
@@ -99,7 +114,9 @@ const ScheduleCard: React.FC<ScheduleItem> = ({
                 currentPage * itemsPerPage
               )
               .map((comment, index) => (
-                <li key={index}>{comment}</li>
+                <li key={index} onClick={() => handleCommentClick(comment)}>
+                  {comment}
+                </li>
               ))}
           </ul>
           <button

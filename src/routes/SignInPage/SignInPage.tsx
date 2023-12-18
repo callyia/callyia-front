@@ -1,12 +1,12 @@
 import React from "react";
-import "./SignInPage.css"; // Import your stylesheet
+import "./SignInPage.css";
 
 const LoginPage: React.FC = () => {
   return (
     <div className="page-container">
       <div className="shadow login-form-container">
         <div className="login-form-right-side">
-          <div className="top-logo-wrap">{/* You can add content here */}</div>
+          <div className="top-logo-wrap"></div>
           <h1>콜이야 트립</h1>
         </div>
         <div className="login-form-left-side">

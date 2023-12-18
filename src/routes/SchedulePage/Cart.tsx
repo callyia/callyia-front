@@ -20,6 +20,7 @@ const Cart: React.FC = () => {
     }),
   });
 
+  // 장바구니에 담은 일정을 삭제하는 버튼 핸들러
   const handleRemoveCard = (idToRemove: number) => {
     const updatedCards = droppedCards.filter((card) => card.id !== idToRemove);
     setDroppedCards(updatedCards);
