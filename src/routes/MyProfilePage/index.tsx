@@ -32,7 +32,6 @@ export default function MyProfilePage() {
               flex: 1,
               display: "flex",
               flexDirection: "column",
-              borderRadius: "8px",
               padding: "16px",
               margin: "8px",
               maxHeight: "1200px",
@@ -67,11 +66,9 @@ export default function MyProfilePage() {
 
               }}
             >
-              {/* font h2 사이즈로 맞춰서 닉네임 받아오기 */}
               <div className = "profile-id">MYUSER</div>
               <div className = "profile-email">MYUSER@EMAIL.COM</div>
             </div>
-            {/* <div style={{ flex: 1 }}> */}
             <div
               style={{
                 flex: 1.2,
