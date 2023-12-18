@@ -13,7 +13,9 @@ const SignUp = () => {
 
   return (
     <div className="auth-container">
-      <h2>Sign Up</h2>
+      <div className="auth-SignUp">
+        <h2>Sign Up</h2>
+      </div>
       <form>
         <div>
           <label>Email:</label>

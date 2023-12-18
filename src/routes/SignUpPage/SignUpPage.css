@@ -31,3 +31,8 @@ button {
 button:hover {
   background-color: #45a049;
 }
+
+.auth-SignUp {
+  height: 30px;
+  margin-bottom: 10px;
+}
