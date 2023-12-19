@@ -111,7 +111,6 @@
   grid-template-columns: repeat(3, 1fr); 
   max-height: 450px; 
   overflow-y: auto; 
-  /* border: 7px solid gray; */
   border-radius: 50px;
   padding: 10px;
   -ms-overflow-style: none; /* 인터넷 익스플로러에서 스크롤바 안보이게 */
