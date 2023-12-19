@@ -1,38 +1,184 @@
-.auth-container {
-  max-width: 300px;
-  margin: 50px auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  background-color: gray;
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Alata", sans-serif;
 }
 
-label {
-  display: block;
-  margin-bottom: 5px;
+.page-container {
+  width: 100vw;
+  height: 100vh;
+  background: #eff0f2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+.shadow {
+  -webkit-box-shadow: 27px 43px 43px -26px rgba(89, 89, 89, 0.39);
+  -moz-box-shadow: 27px 43px 43px -26px rgba(89, 89, 89, 0.39);
+  box-shadow: 27px 43px 43px -26px rgba(89, 89, 89, 0.39);
+} /*
+.shadow-light{
+    -webkit-box-shadow: 45px 45px 104px -33px rgba(38,38,38,0.92);
+    -moz-box-shadow: 45px 45px 104px -33px rgba(38,38,38,0.92);
+    box-shadow: 45px 45px 104px -33px rgba(38,38,38,0.92);
 
-input {
+}*/
+.SignUp-form-container {
+  background: #f5f5f5;
+  width: 1010px;
+  height: 800px;
+  display: flex;
+  flex-direction: row;
+  box-shadow: 10px black;
+  border-radius: 10px;
+  /* background-image: url("/public/loginDog.jpg");
+  background-repeat: no-repeat; */
+  /* background-size:  */
+}
+.SignUp-form-right-side {
+  width: 50%;
+  border-radius: 10px 0px 0px 10px;
+  padding-top: 15px;
+  padding-left: 15px;
+  display: absolute;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  background-image: url("/public/travelBulldog.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  /* background-image: radial-gradient(
+    ellipse farthest-corner at 0 140%,
+    #5d9dff 0%,
+    #2178ff 70%,
+    #3585ff 70%
+  ); */
+}
+.SignUp-form-right-side h1 {
+  color: lightskyblue;
   width: 100%;
-  padding: 8px;
-  margin-bottom: 10px;
+  text-align: left;
+  padding-top: 0;
+  opacity: 0.9;
+  font-size: 18px;
 }
+.SignUp-form-right-side p {
+  padding-top: 50px;
+  font-size: 12px;
+  text-align: right;
+  opacity: 0.8;
+}
+.SignUp-form-left-side {
+  width: 50%;
+  border-radius: 0px 10px 10px 0px;
+  display: flex;
 
-button {
-  background-color: #4caf50;
-  color: red;
-  padding: 10px;
-  border: none;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px;
+  background: rgb(255, 255, 255);
+  background: linear-gradient(
+    287deg,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(243, 244, 244, 1) 0%,
+    rgba(255, 255, 255, 1) 100%
+  );
+}
+/* .SignUp-form-left-side .SignUp-top-wrap {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+}
+.SignUp-form-left-side .SignUp-top-wrap span {
+  color: gray;
+  font-size: 11px;
+  padding-right: 20px;
+} */
+/* .SignUp-form-left-side .SignUp-top-wrap .create-account-btn {
+  background: white;
+  border: 0;
+  width: 85px;
+  height: 35px;
+  font-size: 13px;
+  color: #2178ff;
   border-radius: 3px;
-  cursor: pointer;
+} */
+//회원가입 a태그 폼
+
+.SignUp-input-container {
+  padding-top: 0;
+  width: 450px;
+}
+.SignUp-input-container .SignUp-input-wrap {
+  width: 420px;
+  height: 45px;
+  margin-top: 20px;
+  border-radius: 2px;
+  border-bottom: solid 2px #2178ff;
+  line-height: 50px;
 }
 
-button:hover {
-  background-color: #45a049;
+.SignUp-input-container .SignUp-input-wrap input {
+  background: none;
+
+  border: none;
+  line-height: 0;
+  padding-left: 10px;
+  width: 100%;
 }
 
-.auth-SignUp {
-  height: 30px;
-  margin-bottom: 10px;
+.SignUp-form-left-side .SignUp-input-choice {
+  margin-top: 100px;
+  background: none;
+
+  /* border-bottom: solid 2px #2178ff; */
+  line-height: 30px;
+  width: 160px;
+  justify-content: center;
+}
+
+.SignUp-form-left-side .SignUp-input-choice #ch1 {
+  padding: 10px;
+}
+.SignUp-form-left-side .SignUp-input-choice #ch2 {
+  padding: 10px;
+}
+
+.SignUp-form-left-side .SignUp-input-phone {
+  width: 100%;
+}
+
+.SignUp-input-container .SignUp-input-wrap input:focus {
+  outline: none;
+}
+.SignUp-btn-wrap {
+  margin-top: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.SignUp-btn-wrap .login-btn {
+  width: 95px;
+  height: 35px;
+  color: white;
+  border: 0;
+  border-radius: 4px;
+
+  background: rgb(105, 163, 255);
+  background: linear-gradient(
+    162deg,
+    rgba(105, 163, 255, 1) 0%,
+    rgba(43, 125, 254, 1) 50%,
+    rgba(43, 125, 254, 1) 100%
+  );
+}
+.SignUp-btn-wrap a {
+  margin-top: 10px;
+  text-decoration: none;
+  font-size: 11px;
+  color: gray;
 }
