@@ -29,28 +29,38 @@
   flex-direction: row;
   box-shadow: 10px black;
   border-radius: 10px;
+  /* background-image: url("/public/loginDog.jpg");
+  background-repeat: no-repeat; */
+  /* background-size:  */
 }
 .login-form-right-side {
   width: 50%;
   border-radius: 10px 0px 0px 10px;
-  padding: 75px;
-  display: flex;
+  padding-top: 15px;
+  padding-left: 15px;
+  display: absolute;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   color: white;
-  background-image: radial-gradient(
+  background-image: url("/public/travelDog.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  /* background-image: radial-gradient(
     ellipse farthest-corner at 0 140%,
     #5d9dff 0%,
     #2178ff 70%,
     #3585ff 70%
-  );
+  ); */
 }
 .login-form-right-side h1 {
-  color: white;
+  color: lightskyblue;
   width: 100%;
-  text-align: right;
+  text-align: left;
+  padding-top: 0;
   opacity: 0.9;
+  font-size: 18px;
 }
 .login-form-right-side p {
   padding-top: 50px;
@@ -90,7 +100,7 @@
   border: 0;
   width: 85px;
   height: 35px;
-  font-size: 11px;
+  font-size: 13px;
   color: #2178ff;
   border-radius: 3px;
 }
@@ -107,14 +117,14 @@
 }
 .login-input-container .login-input-wrap i {
   color: #2178ff;
-  line-height: 45px;
+  line-height: 50px;
 }
 
 .login-input-container .login-input-wrap input {
   background: none;
 
   border: none;
-  line-height: 45px;
+  line-height: 30px;
   padding-left: 10px;
   width: 267px;
 }

@@ -44,7 +44,7 @@ const MyProfile: React.FC<MyProfileProps> = ({isEditing, toggleIsEditing}) => {
         </div>
         <div className="profile-right-section">
         <div className="profile-stats" >
-        <div className="profile-post-count" >
+        <div className="profile-post-count">
           <div className="profile-icon-number-container">
             <img src='./profile/profile_post_icon.png' alt="Post icon" className="profile-post-icon" />
           </div>
@@ -59,7 +59,7 @@ const MyProfile: React.FC<MyProfileProps> = ({isEditing, toggleIsEditing}) => {
       </div>
       </div>
     </div>
-      <div className="profile-user-posts" style={{border: "7px solid gray"}}>
+      <div className="profile-user-posts">
         <div className='profile-post-img'>
           <img src="./profile/profile_like_icon.png" alt="post i liked" />
         </div>
