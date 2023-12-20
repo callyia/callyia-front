@@ -1,5 +1,4 @@
 import React from "react";
-import "./SignInPage.css"; // Import your stylesheet
 
 const LoginPage: React.FC = () => {
   return (

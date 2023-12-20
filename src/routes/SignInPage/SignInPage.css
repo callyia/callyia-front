@@ -123,15 +123,17 @@
 .login-input-container .login-input-wrap i {
   color: #2178ff;
   line-height: 50px;
+  background-color: white;
 }
 
 .login-input-container .login-input-wrap input {
-  background: none;
+  /* background: none; */
 
+  height: 23px;
   border: none;
   line-height: 30px;
   padding-left: 10px;
-  width: 267px;
+  width: 300px;
 }
 .login-input-container .login-input-wrap input:focus {
   outline: none;
@@ -162,4 +164,17 @@
   text-decoration: none;
   font-size: 11px;
   color: gray;
+}
+
+@media only screen and (max-width: 750px) {
+  .page-container {
+    width: auto;
+  }
+  .login-form-right-side {
+    width: auto;
+    display: none;
+  }
+  .login-form-left-side {
+    width: auto;
+  }
 }

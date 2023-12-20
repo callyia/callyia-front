@@ -27,7 +27,7 @@
 .SignUp-form-container {
   background: #f5f5f5;
   width: 1010px;
-  height: 800px;
+  height: 650px;
   display: flex;
   flex-direction: row;
   box-shadow: 10px black;
@@ -112,6 +112,9 @@
 .SignUp-input-container {
   padding-top: 0;
   width: 450px;
+  position: relative;
+  /* justify-content: center; */
+  /* align-items: center; */
 }
 .SignUp-input-container .SignUp-input-wrap {
   width: 420px;
@@ -131,32 +134,50 @@
   width: 100%;
 }
 
-.SignUp-form-left-side .SignUp-input-choice {
+.SignUp-input-container .SignUp-input-choice {
+  width: 400px;
+  padding: 0;
+  /* margin-left: 90px; */
+  margin-top: 90px;
+  justify-items: center;
+}
+.SignUp-input-container .SignUp-input-choice span {
+  display: inline-block;
   margin-top: 100px;
-  background: none;
-
-  /* border-bottom: solid 2px #2178ff; */
-  line-height: 30px;
-  width: 160px;
-  justify-content: center;
+  /* position: absolute; */
+  /* display: grid; */
+  /* grid-template-column: 100px 1fr; */
+  width: 150px;
+  padding: 0;
+  margin: 0;
 }
 
-.SignUp-form-left-side .SignUp-input-choice #ch1 {
-  padding: 10px;
-}
-.SignUp-form-left-side .SignUp-input-choice #ch2 {
-  padding: 10px;
+.SignUp-input-container .SignUp-input-choice input {
+  margin-top: 5px;
+  /* display: inline-block; */
+  /* position: absolute; */
+  width: 50px;
+  height: 18px;
 }
 
-.SignUp-form-left-side .SignUp-input-phone {
-  width: 100%;
+.SignUp-input-container .SignUp-input-phone {
+  margin-top: 20px;
+  border: solid 2px #2178ff;
+  padding: 4px;
+}
+
+.SignUp-input-container .SignUp-input-phone input {
+  display: inline-block;
+  margin-top: 10px;
+  width: 150px;
+  height: 23px;
 }
 
 .SignUp-input-container .SignUp-input-wrap input:focus {
   outline: none;
 }
 .SignUp-btn-wrap {
-  margin-top: 300px;
+  margin-top: 130px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -181,4 +202,17 @@
   text-decoration: none;
   font-size: 11px;
   color: gray;
+}
+
+@media only screen and (max-width: 750px) {
+  .page-container {
+    width: auto;
+  }
+  .SignUp-form-right-side {
+    width: auto;
+    display: none;
+  }
+  .SignUp-form-left-side {
+    width: auto;
+  }
 }
