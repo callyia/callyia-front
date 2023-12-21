@@ -13,6 +13,16 @@
   justify-content: center;
   align-items: center;
 }
+.auth-SignUp h2 {
+  background: white;
+  border: 0;
+  width: 130px;
+  height: 35px;
+  font-size: 20px;
+  color: #2178ff;
+  border-radius: 3px;
+  text-align: center;
+}
 .shadow {
   -webkit-box-shadow: 27px 43px 43px -26px rgba(89, 89, 89, 0.39);
   -moz-box-shadow: 27px 43px 43px -26px rgba(89, 89, 89, 0.39);
@@ -134,11 +144,16 @@
   width: 100%;
 }
 
+.SignUp-input-container .SignUp-input-wrap #name {
+  height: 18px;
+}
+
 .SignUp-input-container .SignUp-input-choice {
   width: 400px;
   padding: 0;
+  margin-left: 10px;
   /* margin-left: 90px; */
-  margin-top: 90px;
+  margin-top: 160px;
   justify-items: center;
 }
 .SignUp-input-container .SignUp-input-choice span {
@@ -153,9 +168,9 @@
 }
 
 .SignUp-input-container .SignUp-input-choice input {
-  margin-top: 5px;
+  margin-top: 4px;
   /* display: inline-block; */
-  /* position: absolute; */
+  position: absolute;
   width: 50px;
   height: 18px;
 }
@@ -163,7 +178,7 @@
 .SignUp-input-container .SignUp-input-phone {
   margin-top: 20px;
   border: solid 2px #2178ff;
-  padding: 4px;
+  padding: 10px;
 }
 
 .SignUp-input-container .SignUp-input-phone input {
@@ -182,7 +197,7 @@
   flex-direction: column;
   align-items: center;
 }
-.SignUp-btn-wrap .login-btn {
+.SignUp-btn-wrap .SignUp-btn {
   width: 95px;
   height: 35px;
   color: white;

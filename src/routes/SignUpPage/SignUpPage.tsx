@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { FormEvent, ChangeEvent } from "react";
 import "./SignUpPage.css";
 
@@ -6,6 +6,7 @@ const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [name, setName] = useState("");
   const [tel2, setTel2] = useState("");
   const [tel3, setTel3] = useState("");
 
@@ -26,16 +27,57 @@ const SignUp = () => {
     return emailRegex.test(email);
   };
 
-  const handleSignUp = () => {
+  const isNameValid = (name: string): boolean => {
+    // 정규식을 사용하여 영어 또는 한국어 문자로만 이루어진지 확인
+    const nameRegex = /^[a-zA-Z가-힣]+$/;
+
+    // 자음 또는 모음만 있는 경우를 확인
+    const consonantVowelRegex =
+      /^[^aeiouAEIOUㄱ-ㅎㅏ-ㅣ]*[aeiouAEIOUㄱ-ㅎㅏ-ㅣ]+[^aeiouAEIOUㄱ-ㅎㅏ-ㅣ]*$/;
+
+    // 특수 기호가 포함되어 있는지 확인
+    const specialCharacterRegex = /[!@#$%^&*(),.?":{}|<>]/;
+
+    return (
+      nameRegex.test(name) &&
+      consonantVowelRegex.test(name) &&
+      !specialCharacterRegex.test(name)
+    );
+  };
+
+  const handleSignUp = (e: React.FormEvent) => {
+    e.preventDefault();
     // 이메일 유효성 검사
-    if (!isEmailValid(email)) {
-      alert("유효한 이메일을 입력하세요.");
+    if (email === "") {
+      alert("이메일을 입력하세요.");
       return;
+    } else {
+      if (!isEmailValid(email)) {
+        alert("유효한 이메일을 입력하세요.");
+        // if (refEmail.current !== null) refEmail.current.focus();
+        return;
+      }
     }
     // 비밀번호 유효성 검사
-    if (password !== confirmPassword) {
-      alert("비밀번호가 일치하지 않습니다. 다시 확인해주세요.");
+    if (password === "") {
+      alert("비밀번호를 입력하세요.");
       return;
+    } else {
+      if (password !== confirmPassword) {
+        alert("비밀번호가 일치하지 않습니다. 다시 확인해주세요.");
+        return;
+      }
+    }
+    // 이름 유효성 검사
+    if (name === "") {
+      alert("이름을 입력해주세요.");
+      // if (name.current !== null) name.current.focus();
+      return;
+    } else {
+      if (!isNameValid(name)) {
+        alert("올바른 이름을 입력해주세요.");
+        return;
+      }
     }
     // Implement your sign-up logic here
     console.log("Signing up with:", email, password, tel2, tel3);
@@ -50,10 +92,14 @@ const SignUp = () => {
         </div>
         <div className="SignUp-form-left-side">
           <div className="auth-SignUp">
-            <h2>Sign Up</h2>
+            <h2>Membership</h2>
           </div>
           <div className="SignUp-input-container">
-            <div className="SignUp-input-wrap input-id" id="email">
+            <form
+              className="SignUp-input-wrap input-id"
+              id="email"
+              // onSubmit={onSubmit}
+            >
               <input
                 type="email"
                 value={email}
@@ -61,7 +107,7 @@ const SignUp = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Email"
               />
-            </div>
+            </form>
             <div className="SignUp-input-wrap input-password" id="pw">
               <input
                 type="password"
@@ -77,6 +123,17 @@ const SignUp = () => {
                   style={{ backgroundColor: "white", color: "black" }}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="Confirm Password"
+                />
+              </div>
+
+              <div className="SignUp-input-wrap input-name">
+                <input
+                  type="text"
+                  value={name}
+                  id="name"
+                  onChange={(e) => setName(e.target.value)}
+                  style={{ backgroundColor: "white", color: "black" }}
+                  placeholder="Name"
                 />
               </div>
             </div>
@@ -122,9 +179,9 @@ const SignUp = () => {
             </div>
           </div>
           <div className="SignUp-btn-wrap">
-            <button className="login-btn">
-              <h1>Sign Up</h1>
-            </button>
+            <form onSubmit={handleSignUp}>
+              <input type="submit" value="Sign Up" className="SignUp-btn" />
+            </form>
           </div>
         </div>
       </div>

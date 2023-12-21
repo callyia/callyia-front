@@ -1,7 +1,33 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./SignInPage.css"; // Import your stylesheet
 
 const LoginPage: React.FC = () => {
+  useEffect(() => {
+    //validation check : 유효성 검사
+    const email = document.querySelector("#email") as HTMLInputElement;
+    const pw = document.querySelector("#pw") as HTMLInputElement;
+    const loginBtn = document.querySelector("#loginBtn") as HTMLInputElement;
+    const loginForm = document.querySelector("#loginForm") as HTMLFormElement;
+
+    if (loginBtn) {
+      loginBtn.onclick = function (e) {
+        e.preventDefault();
+        if (email.value === "") {
+          alert("Email을 확인하세요");
+          email.focus();
+          return;
+        }
+        if (pw.value === "") {
+          alert("비밀번호를 확인하세요");
+          pw.focus();
+          return;
+        }
+        if (loginForm) {
+          loginForm.submit();
+        }
+      };
+    }
+  }, []);
   return (
     <div className="page-container">
       <div className="shadow login-form-container">
@@ -13,21 +39,21 @@ const LoginPage: React.FC = () => {
           <div className="login-top-wrap">
             <span>계정이 없으신가요?</span>
             <button className="create-account-btn shadow-light">
-              <a href="/SignUpPage">회원가입</a>
+              <a href="/SignUpPage">Sign Up</a>
             </button>
           </div>
           <div className="login-input-container">
             <div className="login-input-wrap input-id">
               <i className="far fa-envelope"></i>
-              <input placeholder="Email" type="text" />
+              <input placeholder="Email" type="text" id="email" />
             </div>
             <div className="login-input-wrap input-password">
               <i className="fas fa-key"></i>
-              <input placeholder="Password" type="password" />
+              <input placeholder="Password" type="password" id="pw" />
             </div>
           </div>
           <div className="login-btn-wrap">
-            <button className="login-btn">
+            <button className="login-btn" id="loginBtn">
               <h1>로그인</h1>
             </button>
             <a href="./findPW.tsx">비밀번호를 잊으셨습니까?</a>
