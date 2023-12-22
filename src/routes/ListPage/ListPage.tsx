@@ -2,10 +2,9 @@ import React, { useState, useEffect } from 'react';
 import './ListPage.css';
 
 interface SearchResult {
-  id: number;
+  userid: string;
   usernickname: string,
-  title: string;
-  description: string;
+  useremail: string;
   imageUrl: string;
 }
 
@@ -13,21 +12,36 @@ const ListPage = () => {
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [searchCombo, setSearchCombo] = useState<string | null>(null);
   const [searchKeyword, setSearchKeyword] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 1; // 4개씩 6줄해서 24명
+  const numberOfPages = Math.ceil(searchResults.length / itemsPerPage);
 
   useEffect(() => {
     const dummyData: SearchResult[] = [
-      { id: 1, usernickname: '신중현', title: '신중현', description: 'Description 1', imageUrl: 'https://picsum.photos/200' },
-      { id: 2, usernickname: '전성모' ,title: '전성모', description: 'Description 2', imageUrl: 'https://picsum.photos/200' },
-      { id: 3, usernickname: '이규훈' ,title: '이규훈', description: 'Description 1', imageUrl: 'https://picsum.photos/200' },
-      { id: 4, usernickname: '김지영' ,title: '김지영', description: 'Description 2', imageUrl: 'https://picsum.photos/200' },
-      { id: 5, usernickname: '정영훈' ,title: '정영훈', description: 'Description 1', imageUrl: 'https://picsum.photos/200' },
-      { id: 6, usernickname: '임윤서' ,title: '임윤서', description: 'Description 2', imageUrl: 'https://picsum.photos/200' },
-      { id: 7, usernickname: '홍희범' ,title: '홍희범', description: 'Description 1', imageUrl: 'https://picsum.photos/200' },
-      { id: 8, usernickname: '이해창' ,title: '이해창', description: 'Description 2', imageUrl: 'https://picsum.photos/200' },      
-      { id: 9, usernickname: '임성훈' ,title: '임성훈', description: 'Description 1', imageUrl: 'https://picsum.photos/200' },
-      { id: 10, usernickname: '김준기' ,title: '김준기', description: 'Description 2', imageUrl: 'https://picsum.photos/200' },
-      { id: 11, usernickname: '김상백' ,title: '김상백', description: 'Description 1', imageUrl: 'https://picsum.photos/200' },
-      { id: 12, usernickname: '문영현' ,title: '문영현', description: 'Description 2', imageUrl: 'https://picsum.photos/200' }
+      { userid: 'aa1', usernickname: '신중현', useremail: '신중현', imageUrl: 'https://picsum.photos/200' },
+      { userid: 'aa2', usernickname: '전성모' ,useremail: '전성모', imageUrl: 'https://picsum.photos/200' },
+      { userid: 'aa3', usernickname: '이규훈' ,useremail: '이규훈', imageUrl: 'https://picsum.photos/200' },
+      { userid: 'aa4', usernickname: '김지영' ,useremail: '김지영', imageUrl: 'https://picsum.photos/200' },
+      { userid: 'aa5', usernickname: '정영훈' ,useremail: '정영훈', imageUrl: 'https://picsum.photos/200' },
+      { userid: 'aa6', usernickname: '임윤서' ,useremail: '임윤서', imageUrl: 'https://picsum.photos/200' },
+      { userid: 'aa7', usernickname: '홍희범' ,useremail: '홍희범', imageUrl: 'https://picsum.photos/200' },
+      { userid: 'aa8', usernickname: '이해창' ,useremail: '이해창', imageUrl: 'https://picsum.photos/200' },      
+      { userid: 'aa9', usernickname: '임성훈' ,useremail: '임성훈', imageUrl: 'https://picsum.photos/200' },
+      { userid: 'aaa1', usernickname: '김준기' ,useremail: 'wnsrl123123123@naver.com', imageUrl: 'https://picsum.photos/200' },
+      { userid: 'aaa2', usernickname: '김상백' ,useremail: '김상백', imageUrl: 'https://picsum.photos/200' },
+      { userid: 'aaa3', usernickname: '문영현' ,useremail: '문영현', imageUrl: 'https://picsum.photos/200' },
+      { userid: 'aaa4', usernickname: '신중현부계', useremail: '신중현', imageUrl: 'https://picsum.photos/200' },
+      { userid: 'aaa5', usernickname: '전성모부계' ,useremail: '전성모', imageUrl: 'https://picsum.photos/200' },
+      { userid: 'aaa6', usernickname: '이규훈부계' ,useremail: '이규훈', imageUrl: 'https://picsum.photos/200' },
+      { userid: 'aaa7', usernickname: '김지영부계' ,useremail: '김지영', imageUrl: 'https://picsum.photos/200' },
+      { userid: 'aaa8', usernickname: '정영훈부계' ,useremail: '정영훈', imageUrl: 'https://picsum.photos/200' },
+      { userid: 'aaa9', usernickname: '임윤서부계' ,useremail: '임윤서', imageUrl: 'https://picsum.photos/200' },
+      { userid: 'aaaa1', usernickname: '홍희범부계' ,useremail: '홍희범', imageUrl: 'https://picsum.photos/200' },
+      { userid: 'aaaa2', usernickname: '이해창부계' ,useremail: '이해창', imageUrl: 'https://picsum.photos/200' },      
+      { userid: 'aaaa3', usernickname: '임성훈부계' ,useremail: '임성훈', imageUrl: 'https://picsum.photos/200' },
+      { userid: 'aaaa4', usernickname: '김준기부계' ,useremail: '김준기', imageUrl: 'https://picsum.photos/200' },
+      { userid: 'aaaa5', usernickname: '김상백부계' ,useremail: '김상백', imageUrl: 'https://picsum.photos/200' },
+      { userid: 'aaaa6', usernickname: '문영현부계' ,useremail: '문영현', imageUrl: 'https://picsum.photos/200' }
     ];
 
     const urlParams = new URLSearchParams(window.location.search);
@@ -43,20 +57,60 @@ const ListPage = () => {
     setSearchResults(filteredData);
   }, []);
 
+  const paginatedResults = searchResults.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const goToPage = (page: number) => {
+    const newPage = Math.max(1, Math.min(numberOfPages, page));
+    setCurrentPage(newPage);
+  };
+
   return (
     <div className="list-page">
-        <div className='list-search-keyword-header'><span className='list-search-combo'>{searchCombo}</span>로 선택하여 <span className='list-search-keyword'>{searchKeyword}</span>를 검색한 결과입니다.</div>
-        <div className='list-page-search-keyword-bar'>
-          <div className="image-grid">
+        <div className='list-search-keyword-header' ><span className='list-search-combo'>{searchCombo}</span>로 선택하여 <span className='list-search-keyword'>{searchKeyword}</span>를 검색한 결과입니다.</div>
+        <div className='list-page-search-keyword-bar' >
+          <div className="list-image-grid">
           {searchResults.map(result => (
-            <div key={result.id} className="image-item">
-              <img src={result.imageUrl} alt={result.title} />
-              <h3>{result.title}</h3>
-              <p>{result.description}</p>
+            <div key={result.userid} className="list-image-item">
+              <img src={result.imageUrl} />
+              <p>
+                <a className='list-user-nickname' href={`/UserProfilePage?userid=${result.userid}`}>{result.usernickname}</a>
+              </p> 
+              <p>
+                <a className='list-user-email'>{result.useremail}</a>
+              </p>
             </div>
           ))} 
       </div>
       </div>
+            {searchResults.length > itemsPerPage && (
+  <div className="list-pagination-controls">
+    <button onClick={() => goToPage(Math.ceil(currentPage/10)*10 - 10)} disabled={currentPage === 1}>
+      {'<<'}
+    </button>
+    <button onClick={() => goToPage(currentPage - 1)} disabled={currentPage === 1}>
+      {'<'}
+    </button>
+    {Array.from({ length: numberOfPages }, (_, i) => i + 1).map(page => (
+      <span
+        key={page}
+        className={`list-page-number ${currentPage === page ? 'list-current-page' : ''}`}
+        onClick={() => goToPage(page)}
+      >
+        {page}
+      </span>
+    ))}
+    <button onClick={() => goToPage(currentPage + 1)} disabled={currentPage === numberOfPages}>
+      {'>'}
+    </button>
+    <button onClick={() => goToPage(Math.ceil(currentPage/10)*10 + 1)} disabled={currentPage === numberOfPages}>
+      {'>>'}
+    </button>
+  </div>
+)}
+
     </div>
   );
 };
