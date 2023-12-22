@@ -58,14 +58,14 @@ const placeCards1 = [
   { id: 1, lat: 33.306037, lng: 126.289577, name: "오설록" },
   { id: 2, lat: 35.150311, lng: 129.037077, name: "자취자취" },
   { id: 3, lat: 33.35, lng: 126.333, name: "여긴어디고" },
-  { id: 1, lat: 35.14299044, lng: 129.03409987, name: "동의대" },
-  { id: 2, lat: 35.147, lng: 129.04, name: "부드러운움직임" },
-  { id: 3, lat: 35.154297, lng: 129.05977, name: "더조은" },
-  { id: 4, lat: 35.150311, lng: 129.037077, name: "자취자취" },
+  { id: 5, lat: 35.14299044, lng: 129.03409987, name: "동의대" },
+  { id: 4, lat: 35.147, lng: 129.04, name: "부드러운움직임" },
+  { id: 6, lat: 35.154297, lng: 129.05977, name: "더조은" },
+  { id: 2, lat: 35.150311, lng: 129.037077, name: "자취자취" },
 ];
 
 const placeCards2 = [
-  { id: 1, lat: 35.14299044, lng: 129.03409987, name: "동의대" },
+  { id: 5, lat: 35.14299044, lng: 129.03409987, name: "동의대" },
   { id: 2, lat: 35.147, lng: 129.04, name: "부드러운움직임" },
   { id: 3, lat: 35.154297, lng: 129.05977, name: "더조은" },
   { id: 4, lat: 35.150311, lng: 129.037077, name: "자취자취" },
@@ -77,8 +77,31 @@ declare global {
   }
 }
 
+let markers: any[] = [];
+
 export default function Planning() {
   const [planData, setPlanData] = useState(plans);
+
+  // plan값의 리스트인 planData에 값에 따라 이전 마커들을 모두 지우고 새로운 마커로 업데이트해주는 함수
+  const updateMarker = () => {
+    markers.forEach((marker) => {
+      marker.setMap(null);
+    });
+
+    markers = [];
+
+    planData.forEach((plan) => {
+      const markerPosition = new window.kakao.maps.LatLng(plan.lat, plan.lng);
+      const marker = new window.kakao.maps.Marker({
+        position: markerPosition,
+      });
+      markers.push(marker);
+    });
+
+    markers.forEach((marker) => {
+      marker.setMap(map);
+    });
+  };
 
   // 드래그 앤 드롭이 끝났을 때 호출되는 함수
   const onDragEnd = (result: any) => {
@@ -89,26 +112,55 @@ export default function Planning() {
 
     const updatedPlans = Array.from(planData); // 현재 아이템 배열을 복사
     const [movedPlan] = updatedPlans.splice(result.source.index, 1); // 드래그된 아이템을 소스 인덱스에서 제거
-    updatedPlans.splice(result.destination.index, 0, movedPlan); // 목적지 인덱스에 드래그된 아이템 삽입
+
+    console.log(result);
+    if (result.destination.droppableId != "droppable_trash")
+      updatedPlans.splice(result.destination.index, 0, movedPlan); // 목적지 인덱스에 드래그된 아이템 삽입
 
     setPlanData(updatedPlans); // 상태 업데이트
     console.log(updatedPlans);
+
+    updateMarker();
+    console.log(`markers : ${markers}`);
   };
 
   const Click = (lat: number, lng: number) => {
     panTo(lat, lng);
   };
 
-  // const Marker = (lat: number, lng: number) => {
-  //   var markerPosition = new window.kakao.maps.LatLng(lat, lng);
+  const plusClick = (
+    id: number,
+    lat: number,
+    lng: number,
+    name: string,
+    isBtnClick: boolean
+  ) => {
+    panTo(lat, lng);
+    console.log(`id : ${id} / name : ${name}`);
+    if (isBtnClick == true) {
+      setPlanData([
+        ...planData,
+        {
+          id: id,
+          lat: lat,
+          lng: lng,
+          name: name,
+          content: "plus",
+        },
+      ]);
+      updateMarker();
+    }
+  };
 
-  //   // 마커를 생성합니다
-  //   const marker = new window.kakao.maps.Marker({
-  //     position: markerPosition,
-  //   });
+  const Marker = (lat: number, lng: number) => {
+    var markerPosition = new window.kakao.maps.LatLng(lat, lng);
 
-  //   marker.setMap(map);
-  // };
+    // 마커를 생성합니다
+    const marker = new window.kakao.maps.Marker({
+      position: markerPosition,
+    });
+    marker.setMap(map);
+  };
 
   const searchEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -223,19 +275,9 @@ export default function Planning() {
 
     const newMap = new window.kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
     setMap(newMap);
-
-    var markerPosition = new window.kakao.maps.LatLng(
-      35.14299044,
-      129.03409987
-    );
-
-    // 마커를 생성합니다
-    const marker = new window.kakao.maps.Marker({
-      position: markerPosition,
-    });
-
-    marker.setMap(newMap);
   }, []);
+
+  updateMarker();
 
   const panTo = (lat: number, lng: number) => {
     if (map) {
@@ -274,8 +316,12 @@ export default function Planning() {
             </button>
           </div>
           <div className="toggle-right-search-div3">
-            {placeCards1.map((placeCard) => (
-              <PlaceCard placeCard={placeCard} onClick={Click} />
+            {placeCards1.map((placeCard, index) => (
+              <PlaceCard
+                key={index}
+                placeCard={placeCard}
+                onClick={plusClick}
+              />
             ))}
           </div>
         </div>
@@ -294,8 +340,12 @@ export default function Planning() {
           className="toggle-right-down toggle-div bg-slate-300"
         >
           <div className="toggle-right-basket-div1">
-            {placeCards2.map((placeCard) => (
-              <PlaceCard placeCard={placeCard} onClick={Click} />
+            {placeCards2.map((placeCard, index) => (
+              <PlaceCard
+                key={index}
+                placeCard={placeCard}
+                onClick={plusClick}
+              />
             ))}
           </div>
           <div className="toggle-right-basket-div2">
@@ -333,8 +383,8 @@ export default function Planning() {
               >
                 {planData.map((plan, index) => (
                   <Draggable
-                    key={plan.id}
-                    draggableId={plan.id.toString()}
+                    key={`${index}`}
+                    draggableId={`${index}`}
                     index={index}
                   >
                     {(provided) => (
@@ -348,6 +398,17 @@ export default function Planning() {
                     )}
                   </Draggable>
                 ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+          <Droppable droppableId="droppable_trash">
+            {(provided) => (
+              <div
+                className="div-plan-trash"
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+              >
                 {provided.placeholder}
               </div>
             )}
