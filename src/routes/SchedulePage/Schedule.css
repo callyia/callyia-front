@@ -1,6 +1,7 @@
 /* ScheduleCard.css */
 .Schedule {
   max-height: 1000px;
+  max-width: 1000px;
   overflow-y: auto;
 }
 
@@ -29,8 +30,9 @@
   border-bottom: 1px solid #ddd;
 }
 .details {
-  max-height: 350px;
+  max-height: 370px;
   overflow-y: auto;
+  background-color: lightblue;
 }
 .day-schedule {
   border: 1px solid #dddddd;
@@ -50,7 +52,7 @@
   margin: 16px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease-in-out;
-  background-color: orange;
+  background-color: #beefff;
 }
 
 .schedule-card button {
@@ -64,7 +66,7 @@
 }
 
 .schedule-card.expanded {
-  background-color: lightblue;
+  background-color: #beefff;
   height: 200px;
 }
 
@@ -85,7 +87,11 @@
   font-size: 40px;
   font-weight: bold;
 }
-
+.schedule-card p {
+  color: black;
+  display: flex;
+  justify-content: space-between;
+}
 .MapArea h2 {
   margin-left: 4px;
   font-size: 40px;
@@ -103,16 +109,11 @@
   font-size: 40px;
   font-weight: bold;
 }
-.schedule-card p {
-  color: black;
-  display: flex;
-  justify-content: space-between;
-}
 
 .details {
   padding: 10px;
   margin-top: 10px;
-  border-top: 1px solid orange;
+  border-top: 1px solid black;
 }
 
 .details ul {
@@ -123,17 +124,22 @@
   padding: 10px;
   margin: 6px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  background-color: orange;
 }
 
-.details ul li {
+.details li {
   margin-bottom: 20px;
-  border: 1px solid #dddddd;
+  border: 1px solid #dcdcdc;
   border-radius: 8px;
   padding: 10px;
   margin: 6px;
+  background-color: white;
+  max-height: 3em; /* 원하는 높이로 설정 */
+  overflow: hidden; /* 내용이 넘칠 경우 숨기기 */
+  margin-bottom: 10px;
 }
-
+.details li:hover {
+  transform: scale(1.025);
+}
 .details input {
   width: 90%;
   padding: 5px;
@@ -145,23 +151,9 @@
   height: auto;
   margin-bottom: 10px;
 }
-
-.LikeBtn {
-  background-color: gray;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 16px;
+.details button:hover {
+  transform: scale(1.025);
 }
-
-.LikeBtn::before {
-  content: "\1F44D";
-  font-size: 20px;
-  margin-right: 5px;
-}
-
 .comment {
   margin: 10px;
   display: flex;
@@ -172,7 +164,16 @@
   background-color: gray;
   color: white;
 }
-
+.details ul {
+  background-color: #dcdcdc;
+}
 .MapArea h2 {
   background-color: #f5f5f5;
+}
+
+.Schedule-profile-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 10px;
 }

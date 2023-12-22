@@ -1,33 +1,44 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { FormEvent, ChangeEvent } from "react";
 import "./SignInPage.css"; // Import your stylesheet
 
 const LoginPage: React.FC = () => {
-  useEffect(() => {
-    //validation check : 유효성 검사
-    const emailInput = document.querySelector("#email") as HTMLInputElement;
-    const pwInput = document.querySelector("#pw") as HTMLInputElement;
-    const loginBtn = document.querySelector("#loginBtn") as HTMLInputElement;
-    const loginForm = document.querySelector("#loginForm") as HTMLFormElement;
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const loginForm = document.querySelector("#loginBtn") as HTMLFormElement;
 
-    if (loginBtn) {
-      loginBtn.onclick = function (e) {
-        e.preventDefault();
-        if (emailInput.value === "") {
-          alert("Email을 확인하세요");
-          emailInput.focus();
-          return;
-        }
-        if (pwInput.value === "") {
-          alert("비밀번호를 확인하세요");
-          pwInput.focus();
-          return;
-        }
-        if (loginForm) {
-          loginForm.submit();
-        }
-      };
+  const isEmailValid = (email: string): boolean => {
+    // 이메일 유효성 검사 정규식
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    // 이메일 유효성 검사
+    if (email === "") {
+      alert("Email을 입력하세요.");
+      // email.focus();
+      return;
+    } else {
+      if (!isEmailValid(email)) {
+        alert("유효한 Email을 입력하세요.");
+        // if (refEmail.current !== null) refEmail.current.focus();
+        return;
+      }
     }
-  }, []);
+    // 비밀번호 유효성 검사
+    if (password === "") {
+      alert("비밀번호를 입력하세요.");
+      return;
+    }
+    if (loginForm) {
+      loginForm.submit();
+    }
+    // Implement your sign-up logic here
+    console.log("Signing up with:", email, password);
+  };
+
   return (
     <div className="page-container">
       <div className="shadow login-form-container">
@@ -45,17 +56,34 @@ const LoginPage: React.FC = () => {
           <div className="login-input-container">
             <div className="login-input-wrap input-id">
               <i className="far fa-envelope"></i>
-              <input placeholder="Email" type="text" id="email" />
+              <input
+                placeholder="Email"
+                type="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
             </div>
             <div className="login-input-wrap input-password">
               <i className="fas fa-key"></i>
-              <input placeholder="Password" type="password" id="pw" />
+              <input
+                placeholder="Password"
+                type="password"
+                id="pw"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
             </div>
           </div>
           <div className="login-btn-wrap">
-            <button className="login-btn" id="loginBtn">
-              <h1>로그인</h1>
-            </button>
+            <form onSubmit={handleLogin}>
+              <input
+                type="submit"
+                className="login-btn"
+                id="loginBtn"
+                value="로그인"
+              ></input>
+            </form>
             <a href="./findPW.tsx">비밀번호를 잊으셨습니까?</a>
           </div>
         </div>

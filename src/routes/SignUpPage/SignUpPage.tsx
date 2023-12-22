@@ -108,11 +108,7 @@ const SignUp = () => {
             <h2>Membership</h2>
           </div>
           <div className="SignUp-input-container">
-            <form
-              className="SignUp-input-wrap input-id"
-              id="email"
-              // onSubmit={onSubmit}
-            >
+            <form className="SignUp-input-wrap input-id" id="email">
               <input
                 type="email"
                 value={email}

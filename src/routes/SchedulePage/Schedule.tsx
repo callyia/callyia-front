@@ -4,17 +4,14 @@ import "./Schedule.css";
 import ScheduleCard, { ScheduleItem } from "../../components/ScheduleCard";
 import { Link } from "react-router-dom";
 
-// 'day' 속성이 추가된 타입 정의
+// ScheduleItem을 확장하며, 추가적으로 day, images, comments 속성들을 추가
 interface ExtendedScheduleItem extends ScheduleItem {
   day: number;
-}
-
-// ScheduleItem에 images와 comments 속성 추가
-interface ExtendedScheduleItem extends ScheduleItem {
   images: string[];
   comments: string[];
 }
 
+// 세부 일정 내용들
 const scheduleData: ExtendedScheduleItem[] = [
   {
     id: 1,
@@ -27,7 +24,13 @@ const scheduleData: ExtendedScheduleItem[] = [
     images: [
       "https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMzA5MjNfNDYg%2FMDAxNjk1NDM2NzQ1MTYw.UZL4gCHsnhz04a5AuL630sEUnls3rs6uROBACAyXAQsg.boAW1VUtyrsonBBopxCtg2fj24_A_JUKwkyZUxVu264g.JPEG.j787646%2F20230903%25A3%25DF155228.jpg&type=l340_165",
     ],
-    comments: ["댓1", "댓2", "댓3", "댓4", "댓5"],
+    comments: [
+      "악성댓글(惡性對글, malicious comment)은 타인을 악의적으로 비하할 목적으로 다는 댓글을 말한다. 약칭인 악플로 부르는 경우가 흔하며, 이는 악성 리플의 줄임말이다. 악플의 반댓말은 주로 선플(선성 리플)이라고 부른다. '리플'이란 단어가 댓글로 거의 완벽하게 대체된 이후로도 '악성 댓글'이나 줄임말 '악댓' 등은 마이너한 사용 빈도에 머무는 수준이고, '악플'이란 줄임말이 훨씬 폭넓게 쓰인다악성 댓글을 다는 사람을 흔히 악플러라고 부른다.",
+      "댓2",
+      "댓3",
+      "댓4",
+      "댓5",
+    ],
   },
   {
     id: 2,
@@ -149,7 +152,7 @@ const groupByDay = (schedule: ExtendedScheduleItem[]) => {
   return grouped;
 };
 
-//일정 데이터
+// 여행 일정을 표시하는 메인 컴포넌트
 const Schedule: React.FC = () => {
   const groupedSchedule = groupByDay(scheduleData);
 
@@ -157,15 +160,19 @@ const Schedule: React.FC = () => {
     <div className="Schedule">
       <div className="Schedule-header">
         <div className="Schedule-profile-info">
-          <Link to="/UserProfilePage">
-            <img
-              src="https://search.pstatic.net/sunny/?src=https%3A%2F%2Fcdn2.ppomppu.co.kr%2Fzboard%2Fdata3%2F2022%2F0509%2F20220509173224_d9N4ZGtBVR.jpeg&type=sc960_832"
-              alt="프로필 이미지"
-            />
-          </Link>
-          <p style={{ fontSize: "12px", color: "gray" }}>김준기</p>
+          <div className="Schedule-profile-icon">
+            <Link to="/UserProfilePage">
+              <img
+                src="https://search.pstatic.net/sunny/?src=https%3A%2F%2Fcdn2.ppomppu.co.kr%2Fzboard%2Fdata3%2F2022%2F0509%2F20220509173224_d9N4ZGtBVR.jpeg&type=sc960_832"
+                alt="프로필 이미지"
+              />
+            </Link>
+            <p style={{ fontSize: "12px", color: "gray" }}>김준기</p>
+          </div>
+          <div>
+            <h2>부산 여행</h2>
+          </div>
         </div>
-        <h2>부산 여행</h2>
       </div>
       {Object.entries(groupedSchedule).map(([day, items]) => (
         <div key={day} className="day-schedule">
