@@ -97,26 +97,7 @@
     rgba(255, 255, 255, 1) 100%
   );
 }
-/* .SignUp-form-left-side .SignUp-top-wrap {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  width: 100%;
-}
-.SignUp-form-left-side .SignUp-top-wrap span {
-  color: gray;
-  font-size: 11px;
-  padding-right: 20px;
-} */
-/* .SignUp-form-left-side .SignUp-top-wrap .create-account-btn {
-  background: white;
-  border: 0;
-  width: 85px;
-  height: 35px;
-  font-size: 13px;
-  color: #2178ff;
-  border-radius: 3px;
-} */
+
 //회원가입 a태그 폼
 
 .SignUp-input-container {
@@ -192,7 +173,7 @@
   outline: none;
 }
 .SignUp-btn-wrap {
-  margin-top: 130px;
+  margin-top: 80px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -201,8 +182,9 @@
   width: 95px;
   height: 35px;
   color: white;
-  border: 0;
+  border: solid 1px #2178ff;
   border-radius: 4px;
+  cursor: pointer;
 
   background: rgb(105, 163, 255);
   background: linear-gradient(
@@ -211,6 +193,13 @@
     rgba(43, 125, 254, 1) 50%,
     rgba(43, 125, 254, 1) 100%
   );
+
+  transition: 0.3s;
+
+  &:hover {
+    color: #2178ff;
+    box-shadow: inset 100px 0 0 0 white;
+  }
 }
 .SignUp-btn-wrap a {
   margin-top: 10px;

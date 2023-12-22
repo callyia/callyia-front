@@ -108,6 +108,13 @@
   font-size: 13px;
   color: #2178ff;
   border-radius: 3px;
+
+  transition: 0.3s;
+
+  &:hover {
+    color: white;
+    box-shadow: inset 100px 0 0 0 #2178ff;
+  }
 }
 .login-input-container {
   padding-top: 120px;
@@ -158,6 +165,13 @@
     rgba(43, 125, 254, 1) 50%,
     rgba(43, 125, 254, 1) 100%
   );
+
+  transition: 0.3s;
+
+  &:hover {
+    color: #2178ff;
+    box-shadow: inset 100px 0 0 0 white;
+  }
 }
 .login-btn-wrap a {
   margin-top: 10px;

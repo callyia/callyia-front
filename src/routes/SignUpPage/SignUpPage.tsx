@@ -7,8 +7,13 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [name, setName] = useState("");
+  const [tel1, setTel1] = useState("");
   const [tel2, setTel2] = useState("");
   const [tel3, setTel3] = useState("");
+
+  const handleTel1Change = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setTel1(e.target.value);
+  };
 
   const handleTel2Change = (e: React.ChangeEvent<HTMLInputElement>) => {
     // 정규식을 사용하여 숫자 4자리로 제한
@@ -40,7 +45,7 @@ const SignUp = () => {
 
     return (
       nameRegex.test(name) &&
-      consonantVowelRegex.test(name) &&
+      !consonantVowelRegex.test(name) &&
       !specialCharacterRegex.test(name)
     );
   };
@@ -49,11 +54,11 @@ const SignUp = () => {
     e.preventDefault();
     // 이메일 유효성 검사
     if (email === "") {
-      alert("이메일을 입력하세요.");
+      alert("Email을 입력하세요.");
       return;
     } else {
       if (!isEmailValid(email)) {
-        alert("유효한 이메일을 입력하세요.");
+        alert("유효한 Email을 입력하세요.");
         // if (refEmail.current !== null) refEmail.current.focus();
         return;
       }
@@ -78,6 +83,14 @@ const SignUp = () => {
         alert("올바른 이름을 입력해주세요.");
         return;
       }
+    }
+    if (tel1 !== "010" && tel1 !== "011") {
+      alert("전화번호 앞자리를 선택해주세요");
+      return;
+    }
+    if (tel2 === "" || tel3 === "") {
+      alert("전화번호를 입력해주세요");
+      return;
     }
     // Implement your sign-up logic here
     console.log("Signing up with:", email, password, tel2, tel3);
@@ -155,7 +168,7 @@ const SignUp = () => {
             </div>
             <div className="SignUp-input-phone">
               <h4>Phone</h4>
-              <select id="tel1">
+              <select id="tel1" value={tel1} onChange={handleTel1Change}>
                 <option value="">Select</option>
                 <option value="010">010</option>
                 <option value="011">011</option>

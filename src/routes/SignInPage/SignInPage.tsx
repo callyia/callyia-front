@@ -4,22 +4,22 @@ import "./SignInPage.css"; // Import your stylesheet
 const LoginPage: React.FC = () => {
   useEffect(() => {
     //validation check : 유효성 검사
-    const email = document.querySelector("#email") as HTMLInputElement;
-    const pw = document.querySelector("#pw") as HTMLInputElement;
+    const emailInput = document.querySelector("#email") as HTMLInputElement;
+    const pwInput = document.querySelector("#pw") as HTMLInputElement;
     const loginBtn = document.querySelector("#loginBtn") as HTMLInputElement;
     const loginForm = document.querySelector("#loginForm") as HTMLFormElement;
 
     if (loginBtn) {
       loginBtn.onclick = function (e) {
         e.preventDefault();
-        if (email.value === "") {
+        if (emailInput.value === "") {
           alert("Email을 확인하세요");
-          email.focus();
+          emailInput.focus();
           return;
         }
-        if (pw.value === "") {
+        if (pwInput.value === "") {
           alert("비밀번호를 확인하세요");
-          pw.focus();
+          pwInput.focus();
           return;
         }
         if (loginForm) {
@@ -39,7 +39,7 @@ const LoginPage: React.FC = () => {
           <div className="login-top-wrap">
             <span>계정이 없으신가요?</span>
             <button className="create-account-btn shadow-light">
-              <a href="/SignUpPage">Sign Up</a>
+              <a href="/SignUpPage">회원가입</a>
             </button>
           </div>
           <div className="login-input-container">
