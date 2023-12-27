@@ -11,6 +11,7 @@ import MyProfilePage from "./MyProfilePage";
 import UserProfilePage from "./UserProfilePage";
 import NoMatch from "./NoMatch";
 import TourPage from "./TourPage";
+import SignInPageFind from "./SignInPageFind";
 
 export default function RoutesSetup() {
   return (
@@ -21,6 +22,10 @@ export default function RoutesSetup() {
       </Route>
       <Route path="/SignInPage" element={<Layout />}>
         <Route index element={<SignInPage />} />
+        <Route path="*" element={<NoMatch />} />
+      </Route>
+      <Route path="/SignInPageFind" element={<Layout />}>
+        <Route index element={<SignInPageFind />} />
         <Route path="*" element={<NoMatch />} />
       </Route>
       <Route path="/SignUpPage" element={<Layout />}>
