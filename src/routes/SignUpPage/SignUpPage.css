@@ -1,3 +1,9 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Alata", sans-serif;
+}
 .auth-container {
   max-width: 300px;
   margin: 50px auto;
@@ -7,26 +13,218 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-label {
-  display: block;
-  margin-bottom: 5px;
+.page-container {
+  width: 100vw;
+  height: 100vh;
+  background: #eff0f2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-
-input {
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 10px;
-}
-
-button {
-  background-color: #4caf50;
-  color: red;
-  padding: 10px;
-  border: none;
+.auth-SignUp h2 {
+  background: white;
+  border: 0;
+  width: 130px;
+  height: 35px;
+  font-size: 20px;
+  color: #2178ff;
   border-radius: 3px;
-  cursor: pointer;
+  text-align: center;
+}
+.shadow {
+  -webkit-box-shadow: 27px 43px 43px -26px rgba(89, 89, 89, 0.39);
+  -moz-box-shadow: 27px 43px 43px -26px rgba(89, 89, 89, 0.39);
+  box-shadow: 27px 43px 43px -26px rgba(89, 89, 89, 0.39);
+} /*
+.shadow-light{
+    -webkit-box-shadow: 45px 45px 104px -33px rgba(38,38,38,0.92);
+    -moz-box-shadow: 45px 45px 104px -33px rgba(38,38,38,0.92);
+    box-shadow: 45px 45px 104px -33px rgba(38,38,38,0.92);
+
+}*/
+.SignUp-form-container {
+  background: #f5f5f5;
+  width: 860px;
+  height: 650px;
+  display: flex;
+  flex-direction: row;
+  box-shadow: 10px black;
+  border-radius: 10px;
+  /* background-image: url("/public/loginDog.jpg");
+  background-repeat: no-repeat; */
+  /* background-size:  */
+}
+.SignUp-form-right-side {
+  width: 50%;
+  border-radius: 10px 0px 0px 10px;
+  padding-top: 15px;
+  padding-left: 15px;
+  display: absolute;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  background-image: url("/public/travelBulldog.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  /* background-image: radial-gradient(
+    ellipse farthest-corner at 0 140%,
+    #5d9dff 0%,
+    #2178ff 70%,
+    #3585ff 70%
+  ); */
+}
+.SignUp-form-right-side h1 {
+  color: lightskyblue;
+  width: 100%;
+  text-align: left;
+  padding-top: 0;
+  opacity: 0.9;
+  font-size: 18px;
+}
+.SignUp-form-right-side p {
+  padding-top: 50px;
+  font-size: 12px;
+  text-align: right;
+  opacity: 0.8;
+}
+.SignUp-form-left-side {
+  width: 50%;
+  border-radius: 0px 10px 10px 0px;
+  display: flex;
+
+  flex-direction: column;
+  align-items: center;
+  padding: 40px;
+  background: rgb(255, 255, 255);
+  background: linear-gradient(
+    287deg,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(243, 244, 244, 1) 0%,
+    rgba(255, 255, 255, 1) 100%
+  );
 }
 
-button:hover {
-  background-color: #45a049;
+//회원가입 a태그 폼
+
+.SignUp-input-container {
+  padding-top: 0;
+  width: 400px;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+.SignUp-input-container .SignUp-input-wrap {
+  width: 300px;
+  height: 45px;
+  margin-top: 20px;
+  /* margin-left: 20px; */
+  border-radius: 2px;
+  border-bottom: solid 2px #2178ff;
+  line-height: 50px;
+}
+
+.SignUp-input-container .SignUp-input-wrap input {
+  background: none;
+
+  border: none;
+  line-height: 0;
+  padding-left: 10px;
+  width: 100%;
+}
+
+.SignUp-input-container .SignUp-input-wrap #name {
+  height: 18px;
+}
+
+.SignUp-input-container .SignUp-input-choice {
+  width: 300px;
+  padding: 0;
+  margin-left: 10px;
+  /* margin-left: 90px; */
+  margin-top: 160px;
+}
+.SignUp-input-container .SignUp-input-choice span {
+  display: inline-block;
+  margin-top: 100px;
+  /* position: absolute; */
+  /* display: grid; */
+  /* grid-template-column: 100px 1fr; */
+  width: 150px;
+  padding: 0;
+  margin: 0;
+}
+
+.SignUp-input-container .SignUp-input-choice input {
+  margin-top: 4px;
+  /* display: inline-block; */
+  position: absolute;
+  width: 50px;
+  height: 18px;
+}
+
+.SignUp-input-container .SignUp-input-phone {
+  width: 300px;
+  margin-top: 20px;
+  border: solid 2px #2178ff;
+  padding: 10px;
+}
+
+.SignUp-input-container .SignUp-input-phone input {
+  display: inline-block;
+  margin-top: 10px;
+  width: 90px;
+  height: 23px;
+}
+
+.SignUp-input-container .SignUp-input-wrap input:focus {
+  outline: none;
+}
+.SignUp-btn-wrap {
+  margin-top: 55px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.SignUp-btn-wrap .SignUp-btn {
+  width: 95px;
+  height: 35px;
+  color: white;
+  border: solid 1px #2178ff;
+  border-radius: 4px;
+  cursor: pointer;
+  background: rgb(105, 163, 255);
+  background: linear-gradient(
+    162deg,
+    rgba(105, 163, 255, 1) 0%,
+    rgba(43, 125, 254, 1) 50%,
+    rgba(43, 125, 254, 1) 100%
+  );
+  transition: 0.3s;
+  &:hover {
+    color: #2178ff;
+    box-shadow: inset 100px 0 0 0 white;
+  }
+}
+
+.SignUp-btn-wrap a {
+  margin-top: 10px;
+  text-decoration: none;
+  font-size: 11px;
+  color: gray;
+}
+
+@media only screen and (max-width: 750px) {
+  .page-container {
+    width: auto;
+  }
+  .SignUp-form-right-side {
+    width: auto;
+    display: none;
+  }
+  .SignUp-form-left-side {
+    width: auto;
+  }
 }
