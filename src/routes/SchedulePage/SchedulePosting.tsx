@@ -1,8 +1,8 @@
-// Schedule.tsx
-import React from "react";
-import "./Schedule.css";
+//SchedulePosting.tsx
+import React, { useEffect, useState } from "react";
 import ScheduleCard, { ScheduleItem } from "../../components/ScheduleCard";
 import { Link } from "react-router-dom";
+import "./SchedulePosting.css";
 
 // ScheduleItem을 확장하며, 추가적으로 day, images, comments 속성들을 추가
 interface ExtendedScheduleItem extends ScheduleItem {
@@ -140,53 +140,114 @@ const scheduleData: ExtendedScheduleItem[] = [
   // 추가적인 일정 항목들을 필요에 따라 추가
 ];
 
-// ScheduleCard를 DAY별로 그룹화하는 함수
-const groupByDay = (schedule: ExtendedScheduleItem[]) => {
-  const grouped: { [day: number]: ExtendedScheduleItem[] } = {};
-  schedule.forEach((item) => {
-    if (!grouped[item.day]) {
-      grouped[item.day] = [];
-    }
-    grouped[item.day].push(item);
-  });
-  return grouped;
-};
+// 지도
+declare global {
+  interface Window {
+    kakao: any;
+  }
+}
 
-// 여행 일정을 표시하는 메인 컴포넌트
-const Schedule: React.FC = () => {
+export default function SchedulePosting() {
+  // ScheduleCard를 DAY별로 그룹화하는 함수------------------------------
+  const groupByDay = (schedule: ExtendedScheduleItem[]) => {
+    const grouped: { [day: number]: ExtendedScheduleItem[] } = {};
+    schedule.forEach((item) => {
+      if (!grouped[item.day]) {
+        grouped[item.day] = [];
+      }
+      grouped[item.day].push(item);
+    });
+    return grouped;
+  };
   const groupedSchedule = groupByDay(scheduleData);
 
+  const Click = (lat: number, lng: number) => {
+    panTo(lat, lng);
+  };
+
+  useEffect(() => {
+    const container = document.getElementById("map"); //지도를 담을 영역의 DOM 레퍼런스
+    const mainPosition = new window.kakao.maps.LatLng( //Default위치 설정
+      scheduleData[0].lat,
+      scheduleData[0].lng
+    );
+
+    const options = {
+      //지도를 생성할 때 필요한 기본 옵션
+      center: mainPosition, //지도의 중심좌표.
+      level: 3, //지도의 레벨(확대, 축소 정도)
+    };
+
+    const newmap = new window.kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+    setMap(newmap);
+  }, []);
+  //-------------------------------------------------------------------------------
+  const [map, setMap] = useState<Window["kakao"]["maps"]["Map"] | null>(null);
+  const panTo = (lat: number, lng: number) => {
+    if (map) {
+      const moveLatLon = new window.kakao.maps.LatLng(lat, lng);
+      map.panTo(moveLatLon);
+    }
+  };
   return (
-    <div className="Schedule">
-      <div className="Schedule-header">
-        <div className="Schedule-profile-info">
-          <div className="Schedule-profile-icon">
-            <Link to="/UserProfilePage">
-              <img
-                src="https://search.pstatic.net/sunny/?src=https%3A%2F%2Fcdn2.ppomppu.co.kr%2Fzboard%2Fdata3%2F2022%2F0509%2F20220509173224_d9N4ZGtBVR.jpeg&type=sc960_832"
-                alt="프로필 이미지"
-              />
-            </Link>
-            <p style={{ fontSize: "12px", color: "gray" }}>김준기</p>
-          </div>
-          <div>
-            <h2>부산 여행</h2>
-          </div>
-        </div>
-      </div>
-      {Object.entries(groupedSchedule).map(([day, items]) => (
-        <div key={day} className="day-schedule">
-          <div className="day-header">
-            <h2>DAY {day}</h2>
-          </div>
-          <div className="schedule-container">
-            {items.map((item) => (
-              <ScheduleCard key={item.id} {...item} />
+    <div className="WholePage" style={{ display: "flex", height: "100%" }}>
+      <div className="left">
+        <div style={{ flex: 1 }}>
+          {/* 왼쪽 상단 */}
+          <div className="Schedule">
+            <div className="Schedule-header">
+              <div className="Schedule-profile-info">
+                <div className="Schedule-profile-icon">
+                  <Link to="/UserProfilePage">
+                    <img
+                      src="https://search.pstatic.net/sunny/?src=https%3A%2F%2Fcdn2.ppomppu.co.kr%2Fzboard%2Fdata3%2F2022%2F0509%2F20220509173224_d9N4ZGtBVR.jpeg&type=sc960_832"
+                      alt="프로필 이미지"
+                    />
+                  </Link>
+                  <p style={{ fontSize: "12px", color: "gray" }}>김준기</p>
+                </div>
+                <div>
+                  <h2>부산 여행</h2>
+                </div>
+              </div>
+            </div>
+            {Object.entries(groupedSchedule).map(([day, items]) => (
+              <div key={day} className="day-schedule">
+                <div className="day-header">
+                  <h2>DAY {day}</h2>
+                </div>
+                <div className="schedule-container">
+                  {/* 여기에 Draggable */}
+                  {items.map((item) => (
+                    <ScheduleCard key={item.id} {...item} onClick={Click} />
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
         </div>
-      ))}
+      </div>
+
+      <div className="rightArea">
+        <div className="right-top">
+          {/* 오른쪽 상단 */}
+          {/* <Mymap /> */}
+          {/* 여기에 Droppable */}
+          <div className="MapArea">
+            <h2>지도</h2>
+            <div id="map" style={{ width: "47vw", height: "50vh" }} />
+          </div>
+        </div>
+        {/* 오른쪽 하단 */}
+        <div className="right-bottom">
+          {/* <Cart /> */}
+          {/* 여기에 Droppable */}
+          <div className={`cart  "hovered" : ""}`}>
+            <h2>장바구니</h2>
+            <div>원하는 일정을 여기에 드래그 해주세요!</div>
+          </div>
+        </div>
+      </div>
     </div>
   );
-};
-export default Schedule;
+}

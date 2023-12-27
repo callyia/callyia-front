@@ -1,6 +1,6 @@
+//ScheduleCard.tsx
 import React, { useState, useEffect, useRef } from "react";
-import { useDrag } from "react-dnd";
-import "../routes/SchedulePage/Schedule.css"; // Schedule.css 파일을 import
+import "../routes/SchedulePage/SchedulePosting.css"; // Schedule.css 파일을 import
 import Swal from "sweetalert2"; //alert 디자인 임포트
 
 interface ScheduleItem {
@@ -15,7 +15,12 @@ interface ScheduleItem {
   comments: string[];
 }
 
-const ScheduleCard: React.FC<ScheduleItem> = ({
+export interface ScheduleCardProps extends ScheduleItem {
+  onClick: (lat: number, lng: number) => void;
+}
+
+const ScheduleCard: React.FC<ScheduleCardProps> = ({
+  onClick,
   id,
   place,
   content,
@@ -31,7 +36,10 @@ const ScheduleCard: React.FC<ScheduleItem> = ({
   const itemsPerPage = 3; // 페이지당 보여줄 댓글 수
   const totalPages = Math.ceil(comments.length / itemsPerPage);
   const [cardHeight, setCardHeight] = useState<number | undefined>(undefined);
-  const cardRef = useRef<HTMLDivElement | null>(null);
+
+  const MapClick = () => {
+    onClick(lat, lng);
+  };
 
   //댓글 클릭 시 alert창으로 전체 내용 보여줌
   const handleCommentClick = (comment: string) => {
@@ -52,14 +60,6 @@ const ScheduleCard: React.FC<ScheduleItem> = ({
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
-
-  const [{ isDragging }, drag] = useDrag({
-    type: "SCHEDULE_CARD",
-    item: { id, type: "SCHEDULE_CARD", place, content, tip, lat, lng },
-    collect: (monitor) => ({
-      isDragging: monitor.isDragging(),
-    }),
-  });
 
   useEffect(() => {
     if (expanded) {
@@ -83,13 +83,8 @@ const ScheduleCard: React.FC<ScheduleItem> = ({
 
   return (
     <div
-      ref={(node) => {
-        drag(node);
-        cardRef.current = node;
-      }}
-      className={`schedule-card ${expanded ? "expanded" : ""} ${
-        isDragging ? "dragging" : ""
-      }`}
+      className={`schedule-card ${expanded ? "expanded" : ""}`}
+      onClick={MapClick}
       style={{ height: cardHeight }}
     >
       <span className="schedule-number">{place}</span>
