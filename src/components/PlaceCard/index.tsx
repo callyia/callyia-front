@@ -3,49 +3,77 @@ import React, { useEffect } from "react";
 import "./PlaceCard.css";
 
 export type IPlaceCardProps = {
-  id: number;
-  lat: number;
-  lng: number;
-  name: string;
+  placeId: number;
+  placeName: string;
+  address: string;
+  image: string;
+  latitude: number;
+  longitude: number;
+  placeContent: string;
 };
 
 export type PlaceCardProps = {
   index?: number;
   placeCard: IPlaceCardProps;
   onClick: (
-    id: number,
-    lat: number,
-    lng: number,
-    name: string,
+    placeId: number,
+    placeName: string,
+    address: string,
+    image: string,
+    latitude: number,
+    longitude: number,
+    placeContent: string,
     isBtnClick: boolean
   ) => void;
 };
 
 const PlaceCard: React.FC<PlaceCardProps> = ({ placeCard, onClick }) => {
-  const { id, lat, lng, name } = placeCard;
+  const {
+    placeId,
+    placeName,
+    address,
+    image,
+    latitude,
+    longitude,
+    placeContent,
+  } = placeCard;
 
   const DivClick = () => {
-    onClick(id, lat, lng, name, false);
+    onClick(
+      placeId,
+      placeName,
+      address,
+      image,
+      latitude,
+      longitude,
+      placeContent,
+      false
+    );
   };
 
   const BtnClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    onClick(id, lat, lng, name, true);
+    onClick(
+      placeId,
+      placeName,
+      address,
+      image,
+      latitude,
+      longitude,
+      placeContent,
+      true
+    );
   };
 
   return (
     <div className="placeCard-div" onClick={DivClick}>
-      <img
-        src="https://img1.kakaocdn.net/cthumb/local/R0x420/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flocal%2FkakaomapPhoto%2Freview%2F2040259719a82596f3517fc8313dc47071d76b6c%3Foriginal"
-        alt="place_img"
-        className="place-image"
-      />
-      <div className="w-full h-4"></div>
-      <div className="w-full h-10">
-        <span className="ml-3 text-lg placeCard-text">{name}</span>
+      <img src={image} alt="place_img" className="place-image" />
+      <div className="w-full h-2"></div>
+      <div className="w-full h-8">
+        <span className="ml-3 text-lg placeCard-text">{placeName}</span>
       </div>
       <div className="w-full h-10">
-        <span className="ml-3 placeCard-text">간단한 설명</span>
+        <span className="ml-3 placeCard-text">{placeContent}</span>
         <button type="button" className="plus-btn" onClick={BtnClick}></button>
       </div>
     </div>

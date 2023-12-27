@@ -7,8 +7,6 @@ import toast, { Toaster } from "react-hot-toast";
 import { Modal, ModalContent } from "../../theme/daisyui/Modal";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
-import axios from "axios";
-
 const plans = [
   {
     id: 1,
@@ -73,6 +71,13 @@ const plans = [
     name: "부전역",
     content: "부전역",
   },
+  {
+    id: 10,
+    lat: 35.154705,
+    lng: 129.060653,
+    name: "고베규카츠",
+    content: "맛없음",
+  },
 ];
 
 const placeCards1 = [
@@ -114,11 +119,11 @@ var polyline: any = null;
 var distance;
 var distanceContent;
 var distanceOverlay: any = null;
-var planDataPosition: any[] = [];
 
 export default function Planning() {
   const [map, setMap] = useState<Window["kakao"]["maps"]["Map"] | null>(null);
   const [planData, setPlanData] = useState(plans);
+  const [searchData, setSearchData] = useState([]);
   const [area1, toggleArea1] = useToggle();
   const [area2, toggleArea2] = useToggle();
   const [isModalOpen, setModalOpen] = useState(false);
@@ -147,10 +152,23 @@ export default function Planning() {
 
     markers = [];
 
-    planData.forEach((plan) => {
+    planData.forEach((plan, index) => {
+      const imageSrc =
+          "../../../dummyimages/NumberImage/number" + (index + 1) + ".png", // 마커이미지의 주소입니다
+        imageSize = new window.kakao.maps.Size(35, 70), // 마커이미지의 크기입니다
+        imageOption = { offset: new window.kakao.maps.Point(18, 48) }; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+
+      // 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
+      const markerImage = new window.kakao.maps.MarkerImage(
+        imageSrc,
+        imageSize,
+        imageOption
+      );
+
       const markerPosition = new window.kakao.maps.LatLng(plan.lat, plan.lng);
       const marker = new window.kakao.maps.Marker({
         position: markerPosition,
+        image: markerImage,
       });
       markers.push(marker);
     });
@@ -216,7 +234,7 @@ export default function Planning() {
       polyline.setMap(map);
 
       distance = Math.round(polyline.getLength());
-      distanceContent = getTimeHTML(distance);
+      distanceContent = getTimeHTML(distance, planData[index].name);
       console.log(distance);
 
       showDistance(distanceContent, currentPos);
@@ -224,40 +242,37 @@ export default function Planning() {
   };
 
   const plusClick = (
-    id: number,
-    lat: number,
-    lng: number,
-    name: string,
+    placeId: number,
+    placeName: string,
+    address: string,
+    image: string,
+    latitude: number,
+    longitude: number,
+    placeContent: string,
     isBtnClick: boolean
   ) => {
     if (distanceOverlay) distanceOverlay.setMap(null);
     if (polyline) polyline.setMap(null);
 
-    panTo(lat, lng);
-    console.log(`id : ${id} / name : ${name}`);
+    panTo(latitude, longitude);
+    console.log(`id : ${placeId} / name : ${placeName}`);
     if (isBtnClick == true) {
-      setPlanData([
-        ...planData,
-        {
-          id: id,
-          lat: lat,
-          lng: lng,
-          name: name,
-          content: "plus",
-        },
-      ]);
-      updateMarker();
+      if (planData.length >= 99)
+        toast.error("플랜은 최대 99개까지 저장할 수 있어요!");
+      else {
+        setPlanData([
+          ...planData,
+          {
+            id: placeId,
+            lat: latitude,
+            lng: longitude,
+            name: placeName,
+            content: placeContent,
+          },
+        ]);
+        updateMarker();
+      }
     }
-  };
-
-  const Marker = (lat: number, lng: number) => {
-    var markerPosition = new window.kakao.maps.LatLng(lat, lng);
-
-    // 마커를 생성합니다
-    const marker = new window.kakao.maps.Marker({
-      position: markerPosition,
-    });
-    marker.setMap(map);
   };
 
   const showDistance = (content: any, position: any) => {
@@ -284,7 +299,7 @@ export default function Planning() {
     distanceOverlay.setMap(map);
   };
 
-  const getTimeHTML = (distance: any) => {
+  const getTimeHTML = (distance: any, placeName: string) => {
     // 도보의 시속은 평균 4km/h 이고 도보의 분속은 67m/min입니다
     var walkkTime = (distance / 67) | 0;
     var walkHour = "",
@@ -311,7 +326,15 @@ export default function Planning() {
 
     // 거리와 도보 시간, 자전거 시간을 가지고 HTML Content를 만들어 리턴합니다
     var content =
-      '<div style="width: 200px; height: 105px; background-color: white; border: 2px solid lightgray; border-radius: 5px;"><ul>';
+      '<div style="width: 200px; height: 135px; background-color: white; border: 2px solid lightgray; border-radius: 5px;"><ul>';
+
+    content += "    <li>";
+    content +=
+      '        <span style="display: inline-block; color: #4a4e69; font-weight: 900; text-align: center; width:100%; height:30px; line-height: 30px; background-color: lightgray">' +
+      placeName +
+      "</span>";
+    content += "    </li>";
+
     content += "    <li>";
     content +=
       '        <span style="display: inline-block; width: 70px; padding: 5px;">총거리 </span><span style="color: red; font-weight: bold;">' +
@@ -336,6 +359,37 @@ export default function Planning() {
 
     return content;
   };
+
+  const fetchSearch = (searchKeyword: string) => {
+    // axios
+    //   .get("http://localhost:8080/Callyia/planning/search", {
+    //     params: { keyword: searchKeyword },
+    //   })
+    //   .then((response) => console.log(response));
+
+    const url = `http://localhost:8080/Callyia/planning/search?keyword=${searchKeyword}`;
+
+    fetch(url)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(
+            `Network response was not ok: ${response.statusText}`
+          );
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setSearchData(data);
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  };
+
+  useEffect(() => {
+    console.log(searchData);
+  }, [searchData]);
 
   const searchEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -364,39 +418,7 @@ export default function Planning() {
     if (searchInput) {
       const text = searchInput.value;
       if (text !== "") {
-        toast.custom((t) => (
-          <div
-            className={`${
-              t.visible ? "animate-enter" : "animate-leave"
-            } max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5`}
-          >
-            <div className="flex-1 w-0 p-4">
-              <div className="flex items-start">
-                <div className="flex-shrink-0 pt-0.5">
-                  <img
-                    className="w-10 h-10 rounded-full"
-                    src="https://images.pexels.com/photos/2269872/pexels-photo-2269872.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                    alt="사람사진"
-                  />
-                </div>
-                <div className="flex-1 ml-3">
-                  <p className="text-sm font-medium text-gray-900">콜이야</p>
-                  <p className="mt-1 text-sm text-gray-500">
-                    검색 내용 : {text}
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="flex border-l border-gray-200">
-              <button
-                onClick={() => toast.dismiss(t.id)}
-                className="flex items-center justify-center w-full p-4 text-sm font-medium text-indigo-600 border border-transparent rounded-none rounded-r-lg hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        ));
+        fetchSearch(text);
       }
     }
   };
@@ -499,7 +521,14 @@ export default function Planning() {
             </button>
           </div>
           <div className="toggle-right-search-div3">
-            {placeCards1.map((placeCard, index) => (
+            {/* {placeCards1.map((placeCard, index) => (
+              <PlaceCard
+                key={index}
+                placeCard={placeCard}
+                onClick={plusClick}
+              />
+            ))} */}
+            {searchData.map((placeCard, index) => (
               <PlaceCard
                 key={index}
                 placeCard={placeCard}
@@ -523,13 +552,13 @@ export default function Planning() {
           className="toggle-right-down toggle-div bg-slate-300"
         >
           <div className="toggle-right-basket-div1">
-            {placeCards2.map((placeCard, index) => (
+            {/* {placeCards2.map((placeCard, index) => (
               <PlaceCard
                 key={index}
                 placeCard={placeCard}
                 onClick={plusClick}
               />
-            ))}
+            ))} */}
           </div>
           <div className="toggle-right-basket-div2">
             <button
