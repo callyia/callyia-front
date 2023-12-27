@@ -7,8 +7,6 @@ import toast, { Toaster } from "react-hot-toast";
 import { Modal, ModalContent } from "../../theme/daisyui/Modal";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
-import axios from "axios";
-
 const plans = [
   {
     id: 1,
@@ -26,10 +24,10 @@ const plans = [
   },
   {
     id: 3,
-    lat: 33.306037,
-    lng: 126.289577,
-    name: "오설록",
-    content: "맛도리",
+    lat: 35.155735,
+    lng: 129.058165,
+    name: "서면시장",
+    content: "우마이",
   },
   {
     id: 4,
@@ -47,10 +45,38 @@ const plans = [
   },
   {
     id: 6,
-    lat: 33.35,
-    lng: 126.333,
-    name: "여긴어디고",
-    content: "어디 ~",
+    lat: 35.156638,
+    lng: 129.055955,
+    name: "롯데백화점",
+    content: "서면롯데백화점.",
+  },
+  {
+    id: 7,
+    lat: 35.157032,
+    lng: 129.06303,
+    name: "NC백화점",
+    content: "NC백화점 서면점",
+  },
+  {
+    id: 8,
+    lat: 35.15294,
+    lng: 129.059568,
+    name: "삼정타워",
+    content: "삼정타워",
+  },
+  {
+    id: 9,
+    lat: 35.16177,
+    lng: 129.062347,
+    name: "부전역",
+    content: "부전역",
+  },
+  {
+    id: 10,
+    lat: 35.154705,
+    lng: 129.060653,
+    name: "고베규카츠",
+    content: "맛없음",
   },
 ];
 
@@ -77,10 +103,46 @@ declare global {
   }
 }
 
+// 마커 생성과 삭제를 담당하는 마커 배열 변수
 let markers: any[] = [];
 
+// 배경 라인의 생성을 위한 좌표 배열 변수
+var backLinePosition = [];
+// 배경 라인의 생성을 담당하는 라인 변수
+var backPolyline: any = null;
+
+// 2개의 좌표에 대한 라인의 생성 및 삭제를 위한 좌표 배열 변수
+var linePosition = [];
+// 2개의 좌표에 대한 라인의 생성 및 삭제를 담당하는 라인 변수
+var polyline: any = null;
+// 2개의 좌표에 대한 라인의 거리정보를 표시하기 위한 변수
+var distance;
+var distanceContent;
+var distanceOverlay: any = null;
+
 export default function Planning() {
+  const [map, setMap] = useState<Window["kakao"]["maps"]["Map"] | null>(null);
   const [planData, setPlanData] = useState(plans);
+  const [searchData, setSearchData] = useState([]);
+  const [area1, toggleArea1] = useToggle();
+  const [area2, toggleArea2] = useToggle();
+  const [isModalOpen, setModalOpen] = useState(false);
+
+  const showBackgroundLine = (planData: any[]) => {
+    if (backPolyline) backPolyline.setMap(null);
+
+    backLinePosition = planData.map(
+      (plan) => new window.kakao.maps.LatLng(plan.lat, plan.lng)
+    );
+    backPolyline = new window.kakao.maps.Polyline({
+      path: backLinePosition, // 선을 구성하는 좌표배열 입니다
+      strokeWeight: 3, // 선의 두께 입니다
+      strokeColor: "#5B5B5B", // 선의 색깔입니다
+      strokeOpacity: 0.5, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+      strokeStyle: "solid", // 선의 스타일입니다
+    });
+    backPolyline.setMap(map);
+  };
 
   // plan값의 리스트인 planData에 값에 따라 이전 마커들을 모두 지우고 새로운 마커로 업데이트해주는 함수
   const updateMarker = () => {
@@ -90,10 +152,23 @@ export default function Planning() {
 
     markers = [];
 
-    planData.forEach((plan) => {
+    planData.forEach((plan, index) => {
+      const imageSrc =
+          "../../../dummyimages/NumberImage/number" + (index + 1) + ".png", // 마커이미지의 주소입니다
+        imageSize = new window.kakao.maps.Size(35, 70), // 마커이미지의 크기입니다
+        imageOption = { offset: new window.kakao.maps.Point(18, 48) }; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+
+      // 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
+      const markerImage = new window.kakao.maps.MarkerImage(
+        imageSrc,
+        imageSize,
+        imageOption
+      );
+
       const markerPosition = new window.kakao.maps.LatLng(plan.lat, plan.lng);
       const marker = new window.kakao.maps.Marker({
         position: markerPosition,
+        image: markerImage,
       });
       markers.push(marker);
     });
@@ -105,6 +180,9 @@ export default function Planning() {
 
   // 드래그 앤 드롭이 끝났을 때 호출되는 함수
   const onDragEnd = (result: any) => {
+    if (distanceOverlay) distanceOverlay.setMap(null);
+    if (polyline) polyline.setMap(null);
+
     if (!result.destination) {
       // 리스트 외부로 드래그된 경우 처리
       return;
@@ -124,43 +202,194 @@ export default function Planning() {
     console.log(`markers : ${markers}`);
   };
 
-  const Click = (lat: number, lng: number) => {
+  const Click = (lat: number, lng: number, index: number) => {
+    if (distanceOverlay) distanceOverlay.setMap(null);
+    if (polyline) polyline.setMap(null);
     panTo(lat, lng);
-  };
+    console.log(`index : ${index}`);
 
-  const plusClick = (
-    id: number,
-    lat: number,
-    lng: number,
-    name: string,
-    isBtnClick: boolean
-  ) => {
-    panTo(lat, lng);
-    console.log(`id : ${id} / name : ${name}`);
-    if (isBtnClick == true) {
-      setPlanData([
-        ...planData,
-        {
-          id: id,
-          lat: lat,
-          lng: lng,
-          name: name,
-          content: "plus",
-        },
-      ]);
-      updateMarker();
+    if (index >= 1) {
+      console.log(planData[index - 1].name);
+      console.log(planData[index].name);
+
+      var beforePos = new window.kakao.maps.LatLng(
+        planData[index - 1].lat,
+        planData[index - 1].lng
+      );
+      var currentPos = new window.kakao.maps.LatLng(
+        planData[index].lat,
+        planData[index].lng
+      );
+      linePosition = [beforePos, currentPos];
+      // console.log(linePosition[0]);
+      // console.log(linePosition[1]);
+
+      polyline = new window.kakao.maps.Polyline({
+        path: linePosition, // 선을 구성하는 좌표배열 입니다
+        strokeWeight: 5, // 선의 두께 입니다
+        strokeColor: "#f21818", // 선의 색깔입니다
+        strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+        strokeStyle: "solid", // 선의 스타일입니다
+      });
+      polyline.setMap(map);
+
+      distance = Math.round(polyline.getLength());
+      distanceContent = getTimeHTML(distance, planData[index].name);
+      console.log(distance);
+
+      showDistance(distanceContent, currentPos);
     }
   };
 
-  const Marker = (lat: number, lng: number) => {
-    var markerPosition = new window.kakao.maps.LatLng(lat, lng);
+  const plusClick = (
+    placeId: number,
+    placeName: string,
+    address: string,
+    image: string,
+    latitude: number,
+    longitude: number,
+    placeContent: string,
+    isBtnClick: boolean
+  ) => {
+    if (distanceOverlay) distanceOverlay.setMap(null);
+    if (polyline) polyline.setMap(null);
 
-    // 마커를 생성합니다
-    const marker = new window.kakao.maps.Marker({
-      position: markerPosition,
-    });
-    marker.setMap(map);
+    panTo(latitude, longitude);
+    console.log(`id : ${placeId} / name : ${placeName}`);
+    if (isBtnClick == true) {
+      if (planData.length >= 99)
+        toast.error("플랜은 최대 99개까지 저장할 수 있어요!");
+      else {
+        setPlanData([
+          ...planData,
+          {
+            id: placeId,
+            lat: latitude,
+            lng: longitude,
+            name: placeName,
+            content: placeContent,
+          },
+        ]);
+        updateMarker();
+      }
+    }
   };
+
+  const showDistance = (content: any, position: any) => {
+    if (distanceOverlay) {
+      // 커스텀오버레이가 생성된 상태이면
+
+      // 커스텀 오버레이의 위치와 표시할 내용을 설정합니다
+      distanceOverlay.setPosition(position);
+      distanceOverlay.setContent(content);
+    } else {
+      // 커스텀 오버레이가 생성되지 않은 상태이면
+
+      // 커스텀 오버레이를 생성하고 지도에 표시합니다
+      distanceOverlay = new window.kakao.maps.CustomOverlay({
+        map: map, // 커스텀오버레이를 표시할 지도입니다
+        content: content, // 커스텀오버레이에 표시할 내용입니다
+        position: position, // 커스텀오버레이를 표시할 위치입니다.
+        xAnchor: 0,
+        yAnchor: 0,
+        zIndex: 3,
+      });
+    }
+
+    distanceOverlay.setMap(map);
+  };
+
+  const getTimeHTML = (distance: any, placeName: string) => {
+    // 도보의 시속은 평균 4km/h 이고 도보의 분속은 67m/min입니다
+    var walkkTime = (distance / 67) | 0;
+    var walkHour = "",
+      walkMin = "";
+
+    // 계산한 도보 시간이 60분 보다 크면 시간으로 표시합니다
+    if (walkkTime > 60) {
+      walkHour =
+        '<span class="number">' + Math.floor(walkkTime / 60) + "</span>시간 ";
+    }
+    walkMin = '<span class="number">' + (walkkTime % 60) + "</span>분";
+
+    // 자전거의 평균 시속은 16km/h 이고 이것을 기준으로 자전거의 분속은 267m/min입니다
+    var bycicleTime = (distance / 227) | 0;
+    var bycicleHour = "",
+      bycicleMin = "";
+
+    // 계산한 자전거 시간이 60분 보다 크면 시간으로 표출합니다
+    if (bycicleTime > 60) {
+      bycicleHour =
+        '<span class="number">' + Math.floor(bycicleTime / 60) + "</span>시간 ";
+    }
+    bycicleMin = '<span class="number">' + (bycicleTime % 60) + "</span>분";
+
+    // 거리와 도보 시간, 자전거 시간을 가지고 HTML Content를 만들어 리턴합니다
+    var content =
+      '<div style="width: 200px; height: 135px; background-color: white; border: 2px solid lightgray; border-radius: 5px;"><ul>';
+
+    content += "    <li>";
+    content +=
+      '        <span style="display: inline-block; color: #4a4e69; font-weight: 900; text-align: center; width:100%; height:30px; line-height: 30px; background-color: lightgray">' +
+      placeName +
+      "</span>";
+    content += "    </li>";
+
+    content += "    <li>";
+    content +=
+      '        <span style="display: inline-block; width: 70px; padding: 5px;">총거리 </span><span style="color: red; font-weight: bold;">' +
+      distance +
+      '</span><span style="font-weight: bold;">m</span>';
+    content += "    </li>";
+    content += "    <li>";
+    content +=
+      '        <span style="display: inline-block; width: 70px; padding: 5px;">도보 </span><span style="font-weight: bold;">' +
+      walkHour +
+      walkMin +
+      "</span>";
+    content += "    </li>";
+    content += "    <li>";
+    content +=
+      '        <span style="display: inline-block; width: 70px; padding: 5px;">자전거 </span><span style="font-weight: bold;">' +
+      bycicleHour +
+      bycicleMin +
+      "</span>";
+    content += "    </li>";
+    content += "</ul></div>";
+
+    return content;
+  };
+
+  const fetchSearch = (searchKeyword: string) => {
+    // axios
+    //   .get("http://localhost:8080/Callyia/planning/search", {
+    //     params: { keyword: searchKeyword },
+    //   })
+    //   .then((response) => console.log(response));
+
+    const url = `http://localhost:8080/Callyia/planning/search?keyword=${searchKeyword}`;
+
+    fetch(url)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(
+            `Network response was not ok: ${response.statusText}`
+          );
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setSearchData(data);
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  };
+
+  useEffect(() => {
+    console.log(searchData);
+  }, [searchData]);
 
   const searchEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -189,50 +418,27 @@ export default function Planning() {
     if (searchInput) {
       const text = searchInput.value;
       if (text !== "") {
-        toast.custom((t) => (
-          <div
-            className={`${
-              t.visible ? "animate-enter" : "animate-leave"
-            } max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5`}
-          >
-            <div className="flex-1 w-0 p-4">
-              <div className="flex items-start">
-                <div className="flex-shrink-0 pt-0.5">
-                  <img
-                    className="w-10 h-10 rounded-full"
-                    src="https://images.pexels.com/photos/2269872/pexels-photo-2269872.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                    alt="사람사진"
-                  />
-                </div>
-                <div className="flex-1 ml-3">
-                  <p className="text-sm font-medium text-gray-900">콜이야</p>
-                  <p className="mt-1 text-sm text-gray-500">
-                    검색 내용 : {text}
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="flex border-l border-gray-200">
-              <button
-                onClick={() => toast.dismiss(t.id)}
-                className="flex items-center justify-center w-full p-4 text-sm font-medium text-indigo-600 border border-transparent rounded-none rounded-r-lg hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        ));
+        fetchSearch(text);
       }
     }
   };
 
   const saveBtnClick = () => {
+    const titleText = document.querySelector(
+      "#titleText"
+    ) as HTMLHeadingElement;
+
+    // 여따가 나중에 백엔드에서 DB로 보내는 코드 작성할 것!
+    console.log("");
+    console.log("============저장을 시도합니다============");
+    console.log("타이틀 : " + titleText.textContent);
+    console.log("-----Plan Data-----");
+    console.log(planData);
+    console.log("=======================================");
+    console.log("");
+    // 저장 성공 시
     toast.success("저장 성공!");
   };
-
-  const [area1, toggleArea1] = useToggle();
-  const [area2, toggleArea2] = useToggle();
-  const [isModalOpen, setModalOpen] = useState(false);
 
   const openModal = () => {
     setModalOpen(true);
@@ -259,8 +465,6 @@ export default function Planning() {
     }
   };
 
-  const [map, setMap] = useState<Window["kakao"]["maps"]["Map"] | null>(null);
-
   useEffect(() => {
     const mainPosition = new window.kakao.maps.LatLng(
       35.14299044,
@@ -277,14 +481,15 @@ export default function Planning() {
     setMap(newMap);
   }, []);
 
-  updateMarker();
-
   const panTo = (lat: number, lng: number) => {
     if (map) {
       const moveLatLon = new window.kakao.maps.LatLng(lat, lng);
       map.panTo(moveLatLon);
     }
   };
+
+  updateMarker();
+  showBackgroundLine(planData);
 
   return (
     <div className="div-container">
@@ -316,7 +521,14 @@ export default function Planning() {
             </button>
           </div>
           <div className="toggle-right-search-div3">
-            {placeCards1.map((placeCard, index) => (
+            {/* {placeCards1.map((placeCard, index) => (
+              <PlaceCard
+                key={index}
+                placeCard={placeCard}
+                onClick={plusClick}
+              />
+            ))} */}
+            {searchData.map((placeCard, index) => (
               <PlaceCard
                 key={index}
                 placeCard={placeCard}
@@ -340,13 +552,13 @@ export default function Planning() {
           className="toggle-right-down toggle-div bg-slate-300"
         >
           <div className="toggle-right-basket-div1">
-            {placeCards2.map((placeCard, index) => (
+            {/* {placeCards2.map((placeCard, index) => (
               <PlaceCard
                 key={index}
                 placeCard={placeCard}
                 onClick={plusClick}
               />
-            ))}
+            ))} */}
           </div>
           <div className="toggle-right-basket-div2">
             <button
@@ -393,7 +605,10 @@ export default function Planning() {
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
                       >
-                        <Plan plan={plan} onClick={Click} />
+                        <Plan
+                          plan={plan}
+                          onClick={() => Click(plan.lat, plan.lng, index)}
+                        />
                       </div>
                     )}
                   </Draggable>
