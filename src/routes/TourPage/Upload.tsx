@@ -2,63 +2,49 @@ import React, { useState } from "react";
 import { IoCloseCircleOutline } from "react-icons/io5";
 import "./Upload.css";
 
-const Upload = () => {
-  const [selectedImages, setSelectedImages] = useState<string[]>([]); // 초기 상태 명시
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([]); // 초기 상태 명시
+interface UploadProps {
+  onSelectedImageChange: (image: string) => void; // 이미지 하나만 전달하도록 수정
+}
+
+const Upload: React.FC<UploadProps> = ({ onSelectedImageChange }) => {
+  const [selectedImage, setSelectedImage] = useState<string | null>(null); // 이미지 하나만 저장
 
   const onSelectFile = (e: any) => {
-    const selectedFiles = e.target.files;
+    const selectedFile = e.target.files[0];
 
-    const fileArray = Array.from(selectedFiles) as File[]; // 타입 명시
-
-    setSelectedFiles((prevFiles: File[]) => [...prevFiles, ...fileArray]);
-
-    const imageArray = fileArray.map((file) => URL.createObjectURL(file));
-    setSelectedImages((prevImages: string[]) => [...prevImages, ...imageArray]);
+    if (selectedFile) {
+      const image = URL.createObjectURL(selectedFile);
+      setSelectedImage(image);
+      onSelectedImageChange(image); // 이미지 하나만 전달
+    }
 
     e.target.value = "";
   };
 
-  const attachFile = selectedImages.map((image, index) => (
-    <div
-      className="flex items-center justify-between p-1 font-normal bg-gray-100 border border-gray-300 border-solid rounded-md w-[350px]"
-      key={index}
-    >
-      <div className="w-full h-auto">
-        <img
-          src={image}
-          alt={`Image Preview ${index}`}
-          className="w-auto h-auto max-h-[128px]"
-        />
-      </div>
-      <div>{selectedFiles[index].name}</div>
-      <button onClick={() => removeFile(index)}>
-        <IoCloseCircleOutline size="30" />
-      </button>
-    </div>
-  ));
-
-  const removeFile = (index: number) => {
-    setSelectedImages((prevImages: string[]) =>
-      prevImages.filter((_, i) => i !== index)
-    );
-    setSelectedFiles((prevFiles: File[]) =>
-      prevFiles.filter((_, i) => i !== index)
-    );
-  };
-
-  const registerFiles = async () => {
-    // 여기에 파일 등록 로직을 추가
-    // 서버로 파일을 업로드하거나 다른 처리를 수행할 수 있습니다.
-    alert("파일이 등록되었습니다.");
+  const removeFile = () => {
+    setSelectedImage(null);
+    onSelectedImageChange(""); // 이미지 제거 시 빈 문자열 전달
   };
 
   return (
     <div>
       <div>첨부파일</div>
-      <div className="flex w-full border border-solid rounded font-sm ">
-        {selectedImages.length !== 0 ? <div>{attachFile}</div> : null}
-        {selectedImages.length === 0 && (
+      <div className="flex w-full border border-solid rounded font-sm">
+        {selectedImage && (
+          <div className="flex items-center justify-between p-1 font-normal bg-gray-100 border border-gray-300 border-solid rounded-md w-[350px]">
+            <div className="w-full h-auto">
+              <img
+                src={selectedImage}
+                alt={`Image Preview`}
+                className="w-auto h-auto max-h-[128px]"
+              />
+            </div>
+            <button onClick={removeFile}>
+              <IoCloseCircleOutline size="30" />
+            </button>
+          </div>
+        )}
+        {!selectedImage && (
           <input
             type="file"
             name="images"
