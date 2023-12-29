@@ -72,6 +72,9 @@ const RegistPage = () => {
     setSelectedImage(undefined);
     setSelectedImageUrl(undefined);
     setSelectedCheck("관광지");
+    handleSelectedImagesChange(null);
+    handlePlaceSelected(null);
+    handleCheckBoxChange("관광지");
     setOpenModal(false);
   };
 
