@@ -3,6 +3,12 @@ import React, { useEffect, useState } from "react";
 import ScheduleCard, { ScheduleItem } from "../../components/ScheduleCard";
 import { Link } from "react-router-dom";
 import "./SchedulePosting.css";
+import {
+  DragDropContext,
+  Draggable,
+  Droppable,
+  DropResult,
+} from "react-beautiful-dnd";
 
 // ScheduleItem을 확장하며, 추가적으로 day, images, comments 속성들을 추가
 interface ExtendedScheduleItem extends ScheduleItem {
@@ -161,6 +167,7 @@ export default function SchedulePosting() {
   };
   const groupedSchedule = groupByDay(scheduleData);
 
+  //Map -------------------------------------------------------------------------------
   const Click = (lat: number, lng: number) => {
     panTo(lat, lng);
   };
@@ -180,8 +187,36 @@ export default function SchedulePosting() {
 
     const newmap = new window.kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
     setMap(newmap);
+
+    //ScheduleData에 있는 각 장소에 대한 마커 생성
+    scheduleData.forEach((place) => {
+      const markerPosition = new window.kakao.maps.LatLng(place.lat, place.lng);
+
+      const marker = new window.kakao.maps.Marker({
+        position: markerPosition,
+        title: place.place,
+      });
+
+      marker.setMap(newmap);
+    });
+
+    const linePath = scheduleData.map(
+      (place) => new window.kakao.maps.LatLng(place.lat, place.lng)
+    );
+
+    const polyline = new window.kakao.maps.Polyline({
+      path: linePath,
+      strokeWeight: 5,
+      strokeColor: "red",
+      strokeOpacity: 0.7,
+      strokeStyle: "solid",
+    });
+
+    if (newmap) {
+      polyline.setMap(newmap);
+    }
   }, []);
-  //-------------------------------------------------------------------------------
+
   const [map, setMap] = useState<Window["kakao"]["maps"]["Map"] | null>(null);
   const panTo = (lat: number, lng: number) => {
     if (map) {
@@ -189,8 +224,13 @@ export default function SchedulePosting() {
       map.panTo(moveLatLon);
     }
   };
+  //--------------------------------------------------------------------------------
+
   return (
-    <div className="WholePage" style={{ display: "flex", height: "100%" }}>
+    <div
+      className="WholePage" // Adjust the class name as needed
+      style={{ display: "flex", height: "100%" }}
+    >
       <div className="left">
         <div style={{ flex: 1 }}>
           {/* 왼쪽 상단 */}
@@ -216,9 +256,10 @@ export default function SchedulePosting() {
                 <div className="day-header">
                   <h2>DAY {day}</h2>
                 </div>
+
                 <div className="schedule-container">
                   {/* 여기에 Draggable */}
-                  {items.map((item) => (
+                  {items.map((item, index) => (
                     <ScheduleCard key={item.id} {...item} onClick={Click} />
                   ))}
                 </div>
