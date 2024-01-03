@@ -103,6 +103,9 @@ const RegistPage = () => {
       alert(`장바구니에 추가하였습니다. 내용: ${selectedTour?.placeId}`);
     } catch (error: any) {
       console.error("Error accepting data:", error.message);
+      if (error.message.includes("409")) {
+        alert("해당 파일은 이미 등록되어 있습니다.");
+      }
     }
   };
 
@@ -343,24 +346,29 @@ const RegistPage = () => {
         }
       );
 
-      if (response.status !== 200) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+      switch (response.status) {
+        case 200:
+          const result = response.data;
+          console.log("결과:", result);
+          fetchTourData();
+          alert(`파일이 등록되었습니다. 내용: ${selectedPlace?.place_name}`);
+          // 등록이 완료되면 상태 초기화
+          setSelectedPlace(null);
+          setContent("");
+          setOpenModal(false); // 모달 닫기
+          setClearUploadImage(true);
+          break;
+        case 409:
+          alert("해당 파일은 이미 등록되어 있습니다.");
+          break;
+        default:
+          throw new Error(`HTTP error! Status: ${response.status}`);
       }
-
-      const result = response.data;
-      console.log("결과:", result);
-      fetchTourData();
-
-      alert(`파일이 등록되었습니다. 내용: ${selectedPlace?.place_name}`);
-
-      // 등록이 완료되면 상태 초기화
-      setSelectedPlace(null);
-      setContent("");
-      setOpenModal(false); // 모달 닫기
-
-      setClearUploadImage(true);
     } catch (error: any) {
       console.error("Error accepting data:", error.message);
+      if (error.message.includes("409")) {
+        alert("해당 파일은 이미 등록되어 있습니다.");
+      }
     }
   };
 
@@ -522,7 +530,7 @@ const RegistPage = () => {
       </section>
       <section>
         <div className="mx-[220px] my-[80px]">
-          <div className="mb-10 font-bold underline">List</div>
+          <div className="mb-10 text-3xl font-bold underline">여행정보</div>
           <div className="flex flex-wrap">{renderTourItems()}</div>
           <Modal className="" open={openDetail}>
             <ModalContent
