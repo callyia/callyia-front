@@ -11,18 +11,22 @@ export default function Header() {
   const [searchCombo, setSearchCombo] = useState("user");
 
   const goToSignInPage = () => {
+    setSearchKeyword("");
     navigate("/SignInPage");
   };
 
   const goToSignUpPage = () => {
+    setSearchKeyword("");
     navigate("/SignUpPage");
   };
 
   const goToMyProfilePage = () => {
+    setSearchKeyword("");
     navigate("/MyProfilePage");
   };
 
   const goToUserProfilePage = () => {
+    setSearchKeyword("");
     navigate("/UserProfilePage");
   };
 
@@ -39,13 +43,15 @@ export default function Header() {
   };
 
   const handleSearchKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") {
+    // if (event.key === "Enter") {
+    if (event.key === "Enter" && searchKeyword.trim() !== "") {
       navigate(`/ListPage?searchcombo=${searchCombo}&searchkeyword=${searchKeyword}`);
     }
   };
 
   const renderSearchBar = () => {
-    if (location.pathname === "/" || location.pathname === "/MyProfilePage" || location.pathname === "/UserProfilePage") {
+    if (location.pathname === "/" || location.pathname === "/MyProfilePage" || location.pathname === "/UserProfilePage"
+    || location.pathname === "/ListPage") {
       return (
         <SearchBar
           searchKeyword={searchKeyword}
@@ -72,7 +78,7 @@ export default function Header() {
         toggle btn
       </button>
       <button className="header-action-button" onClick={handleProfileButtonClick}>
-      {isLoggedIn ? "My Profile" : "Sign In"}
+      {isLoggedIn ? "Profile" : "Sign In"}
       </button>
       <button className="header-action-button" onClick={goToUserProfilePage}>
         User Profile

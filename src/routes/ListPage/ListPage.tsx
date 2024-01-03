@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+
 import './ListPage.css';
 
 interface SearchResult {
@@ -9,11 +11,12 @@ interface SearchResult {
 }
 
 const ListPage = () => {
+  const location = useLocation();
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [searchCombo, setSearchCombo] = useState<string | null>(null);
   const [searchKeyword, setSearchKeyword] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 1; // 4개씩 6줄해서 24명
+  const itemsPerPage = 20; 
   const numberOfPages = Math.ceil(searchResults.length / itemsPerPage);
 
   useEffect(() => {
@@ -41,21 +44,24 @@ const ListPage = () => {
       { userid: 'aaaa3', usernickname: '임성훈부계' ,useremail: '임성훈', imageUrl: 'https://picsum.photos/200' },
       { userid: 'aaaa4', usernickname: '김준기부계' ,useremail: '김준기', imageUrl: 'https://picsum.photos/200' },
       { userid: 'aaaa5', usernickname: '김상백부계' ,useremail: '김상백', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa6', usernickname: '문영현부계' ,useremail: '문영현', imageUrl: 'https://picsum.photos/200' }
+      { userid: 'aaaa6', usernickname: '문영현부계' ,useremail: '문영현', imageUrl: 'https://picsum.photos/200' },
+      { userid: 'a', usernickname: 'a' ,useremail: 'a', imageUrl: 'https://picsum.photos/200' }
     ];
 
-    const urlParams = new URLSearchParams(window.location.search);
-    setSearchCombo(urlParams.get('searchcombo'));
-    setSearchKeyword(urlParams.get('searchkeyword'));
+    const urlParams = new URLSearchParams(location.search);
+    const newSearchCombo = urlParams.get('searchcombo');
+    const newSearchKeyword = urlParams.get('searchkeyword');
+
+    setSearchCombo(newSearchCombo);
+    setSearchKeyword(newSearchKeyword);
 
     const filteredData = dummyData.filter(item => {
-      if (!searchCombo || !searchKeyword) return true;
-      const value = item[searchCombo as keyof SearchResult];
-      return value?.toString().toLowerCase().includes(searchKeyword.toLowerCase());
+      if (!newSearchCombo || !newSearchKeyword) return true;
+      return newSearchKeyword ? item.usernickname.toLowerCase().includes(newSearchKeyword.toLowerCase()) : true;
     });
 
     setSearchResults(filteredData);
-  }, []);
+  }, [location.search]);
 
   const paginatedResults = searchResults.slice(
     (currentPage - 1) * itemsPerPage,
@@ -69,17 +75,19 @@ const ListPage = () => {
 
   return (
     <div className="list-page">
-        <div className='list-search-keyword-header' ><span className='list-search-combo'>{searchCombo}</span>로 선택하여 <span className='list-search-keyword'>{searchKeyword}</span>를 검색한 결과입니다.</div>
+        <div className='list-search-keyword-header' >
+          <span className='list-search-combo'>{searchCombo}</span>로 선택하여 
+          <span className='list-search-keyword'> {searchKeyword}</span>를 검색한 결과입니다.</div>
         <div className='list-page-search-keyword-bar' >
           <div className="list-image-grid">
-          {searchResults.map(result => (
+          {paginatedResults.map(result => (
             <div key={result.userid} className="list-image-item">
-              <img src={result.imageUrl} />
+              <img src={result.imageUrl} alt={`${result.usernickname}의 profile`}/>
               <p>
                 <a className='list-user-nickname' href={`/UserProfilePage?userid=${result.userid}`}>{result.usernickname}</a>
               </p> 
               <p>
-                <a className='list-user-email'>{result.useremail}</a>
+                <span className='list-user-email'>{result.useremail}</span>
               </p>
             </div>
           ))} 
