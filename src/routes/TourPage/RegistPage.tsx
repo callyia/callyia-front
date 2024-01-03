@@ -12,6 +12,7 @@ import "swiper/swiper-bundle.css";
 import bglist from "./bglist";
 import "./RegistPage.css";
 import axios from "axios";
+import { IoSearchCircleOutline } from "react-icons/io5";
 
 // 관광지 데이터의 타입 정의
 interface TourData {
@@ -32,10 +33,11 @@ const RegistPage = () => {
   const [openModal, setOpenModal] = useState(false); //등록페이지 열림 닫힘 상태
   const [selectedPlace, setSelectedPlace] = useState<any>(null);
   const [content, setContent] = useState<string>("");
-  const [selectedImage, setSelectedImage] = useState<Blob | undefined>();
+
   const [selectedImageUrl, setSelectedImageUrl] = useState<
     string | undefined
   >();
+  const [clearUploadImage, setClearUploadImage] = useState(false); //등록페이지 이미지 초기화
   const [selectedCheck, setSelectedCheck] = useState("관광지");
   const [checkColumn, setCheckColumn] = useState<string>("전체"); //검색 옵션 지정
   const [keyword, setKeyword] = useState<string>(""); //검색 keyword 저장 공간
@@ -44,7 +46,6 @@ const RegistPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [openDetail, setOpenDetail] = useState(false);
   const [selectedTour, setSelectedTour] = useState<TourData | null>(null); //List에 선택한 데이터 정보 저장 공간
-  const [searchData, setSearchData] = useState<TourData[]>([]);
   const [totalPages, setTotalPages] = useState<number>(1); //전체 페이지
 
   // 상세페이지 열기
@@ -61,6 +62,7 @@ const RegistPage = () => {
 
   // 등록페이지 열기
   const openClicked = () => {
+    setClearUploadImage(false);
     setOpenModal(true); // 모달 열기
   };
 
@@ -69,12 +71,8 @@ const RegistPage = () => {
     // 등록이 완료되면 상태 초기화
     setSelectedPlace(null);
     setContent("");
-    setSelectedImage(undefined);
-    setSelectedImageUrl(undefined);
-    setSelectedCheck("관광지");
-    handleSelectedImagesChange(null);
-    handlePlaceSelected(null);
-    handleCheckBoxChange("관광지");
+
+    setClearUploadImage(true);
     setOpenModal(false);
   };
 
@@ -129,7 +127,7 @@ const RegistPage = () => {
   const fetchSearchData = async () => {
     try {
       const response = await fetch(
-        `http://localhost:8080/Callyia/Tour/search?checkColumn=${checkColumn}&keyword=${keyword}`
+        `http://localhost:8080/Callyia/Tour/search?checkColumn=${checkColumn}&keyword=${keyword}&page=${currentPage}`
       );
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -154,9 +152,6 @@ const RegistPage = () => {
   const renderTourItems = () => {
     // 검색 결과 유무에 따라 데이터 렌더링
     const dataToRender = searchResults.length > 0 ? searchResults : tourData;
-    console.log("Data to Render:", dataToRender);
-    console.log("Data to Check:", searchResults);
-    console.log("Data to length Check:", searchResults.length);
 
     return dataToRender.map((tour) => (
       <div key={tour.placeId} className="flex-wrap mr-10 mb-4 w-[320px]">
@@ -207,15 +202,31 @@ const RegistPage = () => {
   };
 
   // useEffect를 사용하여 초기 데이터 로딩
-  useEffect(() => {
+  const searchBtnClick = async () => {
     if (keyword === "" && checkColumn === "전체") {
       setSearchResults([]);
-      fetchTourData();
+      await fetchTourData();
     } else {
       setTourData([]);
-      fetchSearchData();
+      await fetchSearchData();
     }
-  }, [checkColumn, keyword, currentPage]);
+    setCurrentPage(1); // 페이지를 1페이지로 초기화
+    renderTourItems();
+  };
+
+  useEffect(() => {
+    const currentPageCheck = async () => {
+      if (keyword === "" && checkColumn === "전체") {
+        setSearchResults([]);
+        await fetchTourData();
+      } else {
+        setTourData([]);
+        await fetchSearchData();
+      }
+      renderTourItems();
+    };
+    currentPageCheck();
+  }, [currentPage]);
 
   // 페이지 번호 렌더링
   const renderPageNumbers = () => {
@@ -345,9 +356,9 @@ const RegistPage = () => {
       // 등록이 완료되면 상태 초기화
       setSelectedPlace(null);
       setContent("");
-      setSelectedImage(undefined);
-      setSelectedImageUrl(undefined);
       setOpenModal(false); // 모달 닫기
+
+      setClearUploadImage(true);
     } catch (error: any) {
       console.error("Error accepting data:", error.message);
     }
@@ -363,7 +374,6 @@ const RegistPage = () => {
     if (image) {
       setSelectedImageUrl(image); // 이미지 URL 저장
     } else {
-      setSelectedImage(undefined);
       setSelectedImageUrl(undefined);
     }
   };
@@ -414,8 +424,16 @@ const RegistPage = () => {
               placeholder={getPlaceholder()}
               value={keyword}
               onChange={(e) => setKeyword(e.target.value)}
-              className="w-4/5"
+              className="w-3/5 outline-none"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  searchBtnClick();
+                }
+              }}
             />
+            <button className="relative w-1/5" onClick={searchBtnClick}>
+              <IoSearchCircleOutline className="absolute text-2xl transform -translate-y-1/2 right-2 top-1/2" />
+            </button>
           </div>
         </div>
       </div>
@@ -475,7 +493,10 @@ const RegistPage = () => {
                   />
                 </div>
                 <div>
-                  <Upload onSelectedImageChange={handleSelectedImagesChange} />
+                  <Upload
+                    onSelectedImageChange={handleSelectedImagesChange}
+                    clearSelectedImage={clearUploadImage}
+                  />
                 </div>
                 <div className="absolute bottom-4 right-4">
                   <ModalAction className="absolute bottom-0 right-0 flex flex-row">
