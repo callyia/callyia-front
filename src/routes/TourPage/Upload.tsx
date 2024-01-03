@@ -1,13 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { IoCloseCircleOutline } from "react-icons/io5";
 import "./Upload.css";
 
 interface UploadProps {
   onSelectedImageChange: (image: string) => void; // 이미지 하나만 전달하도록 수정
+  clearSelectedImage: boolean;
 }
 
-const Upload: React.FC<UploadProps> = ({ onSelectedImageChange }) => {
+const Upload: React.FC<UploadProps> = ({
+  onSelectedImageChange,
+  clearSelectedImage,
+}) => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null); // 이미지 하나만 저장
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (clearSelectedImage) {
+      setSelectedImage(null);
+      onSelectedImageChange("");
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    }
+  }, [clearSelectedImage, onSelectedImageChange]);
 
   const onSelectFile = (e: any) => {
     const selectedFile = e.target.files[0];
@@ -46,6 +61,7 @@ const Upload: React.FC<UploadProps> = ({ onSelectedImageChange }) => {
         )}
         {!selectedImage && (
           <input
+            ref={fileInputRef}
             type="file"
             name="images"
             onChange={onSelectFile}
