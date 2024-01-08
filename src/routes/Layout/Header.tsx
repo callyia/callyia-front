@@ -43,8 +43,8 @@ export default function Header() {
   };
 
   const handleSearchKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    // if (event.key === "Enter") {
-    if (event.key === "Enter" && searchKeyword.trim() !== "") {
+    if (event.key === "Enter") {
+    // if (event.key === "Enter" && searchKeyword.trim() !== "") {
       navigate(`/ListPage?searchcombo=${searchCombo}&searchkeyword=${searchKeyword}`);
     }
   };
@@ -74,16 +74,16 @@ export default function Header() {
         {renderSearchBar()}
         <div></div>
       </div>
-      <button className="header-action-button" onClick={toggleBtn}>
+      <button className="header-action-button header-action-button-1" onClick={toggleBtn}>
         toggle btn
       </button>
-      <button className="header-action-button" onClick={handleProfileButtonClick}>
+      <button className="header-action-button header-action-button-2" onClick={handleProfileButtonClick}>
       {isLoggedIn ? "Profile" : "Sign In"}
       </button>
-      <button className="header-action-button" onClick={goToUserProfilePage}>
+      <button className="header-action-button header-action-button-3" onClick={goToUserProfilePage}>
         User Profile
       </button>
-      <button className="header-action-button" onClick={goToSignUpPage}>
+      <button className="header-action-button header-action-button-4" onClick={goToSignUpPage}>
         Sign Up
       </button>
     </header>

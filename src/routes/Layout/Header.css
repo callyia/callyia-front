@@ -3,10 +3,12 @@
     justify-content: space-between;
     align-items: center;
     padding: 5px;
+    width: 100%;
   }
 
   /* button */
   .header-action-button {
+    position: fixed;
     background-color: #abcdef;
     color: white;
     border: none;
@@ -16,6 +18,7 @@
     font-size: 16px;
     width: 100px;
     height: 68px;
+    margin-left: 90px;
   }
 
   .header-action-button:hover {
@@ -70,4 +73,24 @@
     display: block;
     margin-left: 10px;
     color: #abcdef;
+  }
+
+  .header-action-button-1 {
+    top: 5px;
+    right: 0px;
+  }
+  
+  .header-action-button-2 {
+    top: 5px;
+    right: 100px;
+  }
+  
+  .header-action-button-3 {
+    top: 5px;
+    right: 200px;
+  }
+  
+  .header-action-button-4 {
+    top: 5px;
+    right: 300px;
   }
