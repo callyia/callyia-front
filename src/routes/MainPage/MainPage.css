@@ -165,11 +165,11 @@ input[type="text"] {
 
 .main-info-pagination-controls button {
   bottom: 90px;
-  width: 80px;
-  height: 80px;
+  width: 30px;
+  height: 30px;
   margin: 0 10px;
-  padding: 10px 15px;
-  font-size: 44px;
+  /* padding: 10px 15px; */
+  font-size: 14px;
   background-color: #f5f5f5;
   border: 2px solid #ddd; 
   border-radius: 5px;
