@@ -60,10 +60,10 @@ const MyProfile: React.FC<MyProfileProps> = ({isEditing, toggleIsEditing}) => {
       </div>
     </div>
       <div className="profile-user-posts">
+        {/* 변경 */}
         <div className='profile-post-img'>
           <img src="./profile/profile_like_icon.png" alt="post i liked" />
-        </div>
-        <div className='profile-post-img'>
+        </div><div className='profile-post-img'>
           <img src="./profile/profile_like_icon.png" alt="post i liked" />
         </div><div className='profile-post-img'>
           <img src="./profile/profile_like_icon.png" alt="post i liked" />
