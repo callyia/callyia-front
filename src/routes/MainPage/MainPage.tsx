@@ -30,7 +30,7 @@ const Main: React.FC<MainPageProps> = () => {
       <main className="content">
         <div className="main-section-container">
           <section className="main-section-div" style={{ marginRight: "30%" }}>
-            <h2>여행 정보</h2>
+            <span className="main-section-span-title">여행 정보</span>
             <h3>여행 정보 1</h3>
             <table>
               <tr>
@@ -74,8 +74,6 @@ const Main: React.FC<MainPageProps> = () => {
                 </td>
               </tr>
             </table>
-            <h4>subTitle : subtitle</h4>
-            <img src="/topbar-logo.png" alt="Logo" className="header-logo" />
           </section>
           <img
             src="/logo192.png"
@@ -92,23 +90,18 @@ const Main: React.FC<MainPageProps> = () => {
             style={{ marginLeft: "200px", marginRight: "-200px" }}
           />
           <section className="main-section-div" style={{ marginLeft: "30%" }}>
-            <h2>여행 계획</h2>
-            <h1>
-              <a href="/SchedulePage">Schedule</a>
-            </h1>
-            <h3>여행 계획 1</h3>
-            <h4>subTitle : subtitle</h4>
+            <span className="main-section-span-title">여행 계획</span>
+            <div></div>
             <input
               type="text"
               className="trip-plan-input"
               placeholder="여행 계획을 입력하세요!"
             />
-            <img src="/topbar-logo.png" alt="Logo" className="header-logo" />
           </section>
         </div>
         <div className="main-section-container">
           <section className="main-section-div" style={{ marginRight: "30%" }}>
-            <h2>여행 공유 커뮤니티</h2>
+            <span className="main-section-span-title">여행 공유 커뮤니티</span>
             <h3>Title : 여행 공유 커뮤니티1</h3>
             <h4>subTitle : subtitle</h4>
             <img src="/topbar-logo.png" alt="Logo" className="header-logo" />

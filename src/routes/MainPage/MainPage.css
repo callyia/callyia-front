@@ -60,7 +60,6 @@ input[type="text"] {
 .main-container {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
   min-height: calc(100vh - 100px);
 }
 
@@ -71,9 +70,19 @@ input[type="text"] {
   justify-content: center;
 }
 
+.main-section-span-title {
+  justify-content: center;
+  text-align: center;
+  font-size: 50px;
+  font-weight: 700;
+  font-family: "GmarketSans500";
+  margin-bottom: 20px;
+}
+
 /* 수정 여행 계획 서치바 준기  css */
 .trip-plan-input {
-  background-color: green;
+  font-family: "GmarketSans500";
+  width: 400px;
 }
 
 .main-section-div {
