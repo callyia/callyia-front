@@ -9,8 +9,8 @@ interface SearchResult {
   usernickname: string,
   useremail: string;
   imageUrl: string;
-  likesCount?: number;
-  postCount?: number;
+  likesCount: number;
+  postCount: number;
   userselfintroduction?: string;
 }
 
@@ -20,7 +20,7 @@ const ListPage = () => {
   const [searchCombo, setSearchCombo] = useState<string | null>(null);
   const [searchKeyword, setSearchKeyword] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 20;
+  const itemsPerPage = 12;
   const numberOfPages = Math.ceil(searchResults.length / itemsPerPage);
   const pagesToShow = 10;
   const startPage = Math.floor((currentPage - 1) / pagesToShow) * pagesToShow + 1;
@@ -50,7 +50,7 @@ const ListPage = () => {
     }
     setIsValidQuery(true); 
 
-  }, [location.search]);
+  }, [location.search, currentPage]);
 
   const paginatedResults = searchResults.slice(
     (currentPage - 1) * itemsPerPage,
