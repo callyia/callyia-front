@@ -1,4 +1,5 @@
 import React, { ChangeEvent, useState, useRef} from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import MyProfile from './MyProfilePage';
 
@@ -6,6 +7,8 @@ export default function MyProfilePage() {
   const [isEditing, setIsEditing] = useState(false); 
   const [profileImage, setProfileImage] = useState<string>('./dummyimages/image1.jpeg'); // 기본 이미지
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const userId = 'dummyUser'; 
+  const navigate = useNavigate();
 
   const handleProfileImageChange = (event:ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files ? event.target.files[0] : null;
@@ -25,6 +28,11 @@ export default function MyProfilePage() {
       fileInputRef.current.click();
     }
   };
+
+  const handleEditScheduleClick = () => {
+    navigate(`/PlanningPage?id=${userId}`);
+  };
+
     return (
         <div style={{ flex:1, display: 'flex', height: '1200px'}}>
           <div
@@ -66,6 +74,7 @@ export default function MyProfilePage() {
 
               }}
             >
+              {/* 내 아이디 이메일 불러오기 */}
               <div className = "profile-id">MYUSER</div>
               <div className = "profile-email">MYUSER@EMAIL.COM</div>
             </div>
@@ -89,11 +98,12 @@ export default function MyProfilePage() {
                 </div>
                 <div className='profile-action-div'>
                 <button className="profile-action-button"><img src="./profile/profile_shop_bag_basket_icon.png" alt="my scuedule cart" /></button>
-                <h3>나의 일정 장바구니</h3>
+                <h3>나의 일정 장바구니</h3> 
+                {/* 클릭하면 SchedulePage로 가게 */}
                 </div>
                 <div className='profile-action-div'>
-                <button className="profile-action-button"><img src="./profile/profile_like_icon.png" alt="post i liked" /></button>
-                <h3>내가 좋아요 한 글</h3>
+                <button className="profile-action-button-post" onClick={handleEditScheduleClick}><img src="./profile/profile_post_icon.png" alt="schedule being edited" /></button>
+                <h3>편집 중인 일정</h3>
                 </div>
               </div>
             {/* </div> */}

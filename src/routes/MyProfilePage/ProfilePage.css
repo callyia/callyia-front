@@ -87,7 +87,7 @@
   transform: scale(1.3);
 }
 
-.profile-action-button {
+.profile-action-button, .profile-action-button-post {
   width: 100%;
   height: 150px;
   border-radius: 5px;
@@ -102,6 +102,10 @@
   color: black;
   transition: 0.5s;
   transform: scale(1.1);
+}
+
+.profile-action-button-post {
+  margin-left: 20px;
 }
 
 .profile-user-posts {

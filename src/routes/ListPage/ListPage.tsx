@@ -2,12 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import './ListPage.css';
+import { dummyUser } from './../UserProfilePage/dummydata';
 
 interface SearchResult {
   userid: string;
   usernickname: string,
   useremail: string;
   imageUrl: string;
+  likesCount?: number;
+  postCount?: number;
+  userselfintroduction?: string;
 }
 
 const ListPage = () => {
@@ -22,273 +26,9 @@ const ListPage = () => {
   const startPage = Math.floor((currentPage - 1) / pagesToShow) * pagesToShow + 1;
   const endPage = Math.min(startPage + pagesToShow - 1, numberOfPages);
 
+  const [isValidQuery, setIsValidQuery] = useState(true);
+
   useEffect(() => {
-    const dummyData: SearchResult[] = [
-      { userid: 'aa1', usernickname: '신중현', useremail: '신중현', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa2', usernickname: '전성모', useremail: '전성모', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa3', usernickname: '이규훈', useremail: '이규훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa4', usernickname: '김지영', useremail: '김지영', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa5', usernickname: '정영훈', useremail: '정영훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa6', usernickname: '임윤서', useremail: '임윤서', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa7', usernickname: '홍희범', useremail: '홍희범', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa8', usernickname: '이해창', useremail: '이해창', imageUrl: 'https://picsum.photos/200' },      
-      { userid: 'aa9', usernickname: '임성훈', useremail: '임성훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa1', usernickname: '김준기', useremail: 'wnsrl123123123@naver.com', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa2', usernickname: '김상백', useremail: '김상백', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa3', usernickname: '문영현', useremail: '문영현', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa4', usernickname: '신중현부계', useremail: '신중현', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa5', usernickname: '전성모부계', useremail: '전성모', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa6', usernickname: '이규훈부계', useremail: '이규훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa7', usernickname: '김지영부계', useremail: '김지영', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa8', usernickname: '정영훈부계', useremail: '정영훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa9', usernickname: '임윤서부계', useremail: '임윤서', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa1', usernickname: '홍희범부계', useremail: '홍희범', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa2', usernickname: '이해창부계', useremail: '이해창', imageUrl: 'https://picsum.photos/200' },      
-      { userid: 'aaaa3', usernickname: '임성훈부계', useremail: '임성훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa4', usernickname: '김준기부계', useremail: '김준기', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa5', usernickname: '김상백부계', useremail: '김상백', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa6', usernickname: '문영현부계', useremail: '문영현', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa1', usernickname: '신중현', useremail: '신중현', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa2', usernickname: '전성모', useremail: '전성모', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa3', usernickname: '이규훈', useremail: '이규훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa4', usernickname: '김지영', useremail: '김지영', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa5', usernickname: '정영훈', useremail: '정영훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa6', usernickname: '임윤서', useremail: '임윤서', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa7', usernickname: '홍희범', useremail: '홍희범', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa8', usernickname: '이해창', useremail: '이해창', imageUrl: 'https://picsum.photos/200' },      
-      { userid: 'aa9', usernickname: '임성훈', useremail: '임성훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa1', usernickname: '김준기', useremail: 'wnsrl123123123@naver.com', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa2', usernickname: '김상백', useremail: '김상백', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa3', usernickname: '문영현', useremail: '문영현', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa4', usernickname: '신중현부계', useremail: '신중현', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa5', usernickname: '전성모부계', useremail: '전성모', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa6', usernickname: '이규훈부계', useremail: '이규훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa7', usernickname: '김지영부계', useremail: '김지영', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa8', usernickname: '정영훈부계', useremail: '정영훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa9', usernickname: '임윤서부계', useremail: '임윤서', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa1', usernickname: '홍희범부계', useremail: '홍희범', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa2', usernickname: '이해창부계', useremail: '이해창', imageUrl: 'https://picsum.photos/200' },      
-      { userid: 'aaaa3', usernickname: '임성훈부계', useremail: '임성훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa4', usernickname: '김준기부계', useremail: '김준기', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa5', usernickname: '김상백부계', useremail: '김상백', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa6', usernickname: '문영현부계', useremail: '문영현', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa1', usernickname: '신중현', useremail: '신중현', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa2', usernickname: '전성모', useremail: '전성모', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa3', usernickname: '이규훈', useremail: '이규훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa4', usernickname: '김지영', useremail: '김지영', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa5', usernickname: '정영훈', useremail: '정영훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa6', usernickname: '임윤서', useremail: '임윤서', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa7', usernickname: '홍희범', useremail: '홍희범', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa8', usernickname: '이해창', useremail: '이해창', imageUrl: 'https://picsum.photos/200' },      
-      { userid: 'aa9', usernickname: '임성훈', useremail: '임성훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa1', usernickname: '김준기', useremail: 'wnsrl123123123@naver.com', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa2', usernickname: '김상백', useremail: '김상백', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa3', usernickname: '문영현', useremail: '문영현', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa4', usernickname: '신중현부계', useremail: '신중현', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa5', usernickname: '전성모부계', useremail: '전성모', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa6', usernickname: '이규훈부계', useremail: '이규훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa7', usernickname: '김지영부계', useremail: '김지영', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa8', usernickname: '정영훈부계', useremail: '정영훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa9', usernickname: '임윤서부계', useremail: '임윤서', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa1', usernickname: '홍희범부계', useremail: '홍희범', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa2', usernickname: '이해창부계', useremail: '이해창', imageUrl: 'https://picsum.photos/200' },      
-      { userid: 'aaaa3', usernickname: '임성훈부계', useremail: '임성훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa4', usernickname: '김준기부계', useremail: '김준기', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa5', usernickname: '김상백부계', useremail: '김상백', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa6', usernickname: '문영현부계', useremail: '문영현', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa1', usernickname: '신중현', useremail: '신중현', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa2', usernickname: '전성모', useremail: '전성모', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa3', usernickname: '이규훈', useremail: '이규훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa4', usernickname: '김지영', useremail: '김지영', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa5', usernickname: '정영훈', useremail: '정영훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa6', usernickname: '임윤서', useremail: '임윤서', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa7', usernickname: '홍희범', useremail: '홍희범', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa8', usernickname: '이해창', useremail: '이해창', imageUrl: 'https://picsum.photos/200' },      
-      { userid: 'aa9', usernickname: '임성훈', useremail: '임성훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa1', usernickname: '김준기', useremail: 'wnsrl123123123@naver.com', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa2', usernickname: '김상백', useremail: '김상백', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa3', usernickname: '문영현', useremail: '문영현', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa4', usernickname: '신중현부계', useremail: '신중현', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa5', usernickname: '전성모부계', useremail: '전성모', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa6', usernickname: '이규훈부계', useremail: '이규훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa7', usernickname: '김지영부계', useremail: '김지영', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa8', usernickname: '정영훈부계', useremail: '정영훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa9', usernickname: '임윤서부계', useremail: '임윤서', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa1', usernickname: '홍희범부계', useremail: '홍희범', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa2', usernickname: '이해창부계', useremail: '이해창', imageUrl: 'https://picsum.photos/200' },      
-      { userid: 'aaaa3', usernickname: '임성훈부계', useremail: '임성훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa4', usernickname: '김준기부계', useremail: '김준기', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa5', usernickname: '김상백부계', useremail: '김상백', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa6', usernickname: '문영현부계', useremail: '문영현', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa1', usernickname: '신중현', useremail: '신중현', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa2', usernickname: '전성모', useremail: '전성모', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa3', usernickname: '이규훈', useremail: '이규훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa4', usernickname: '김지영', useremail: '김지영', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa5', usernickname: '정영훈', useremail: '정영훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa6', usernickname: '임윤서', useremail: '임윤서', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa7', usernickname: '홍희범', useremail: '홍희범', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa8', usernickname: '이해창', useremail: '이해창', imageUrl: 'https://picsum.photos/200' },      
-      { userid: 'aa9', usernickname: '임성훈', useremail: '임성훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa1', usernickname: '김준기', useremail: 'wnsrl123123123@naver.com', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa2', usernickname: '김상백', useremail: '김상백', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa3', usernickname: '문영현', useremail: '문영현', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa4', usernickname: '신중현부계', useremail: '신중현', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa5', usernickname: '전성모부계', useremail: '전성모', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa6', usernickname: '이규훈부계', useremail: '이규훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa7', usernickname: '김지영부계', useremail: '김지영', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa8', usernickname: '정영훈부계', useremail: '정영훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa9', usernickname: '임윤서부계', useremail: '임윤서', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa1', usernickname: '홍희범부계', useremail: '홍희범', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa2', usernickname: '이해창부계', useremail: '이해창', imageUrl: 'https://picsum.photos/200' },      
-      { userid: 'aaaa3', usernickname: '임성훈부계', useremail: '임성훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa4', usernickname: '김준기부계', useremail: '김준기', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa5', usernickname: '김상백부계', useremail: '김상백', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa6', usernickname: '문영현부계', useremail: '문영현', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa1', usernickname: '신중현', useremail: '신중현', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa2', usernickname: '전성모', useremail: '전성모', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa3', usernickname: '이규훈', useremail: '이규훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa4', usernickname: '김지영', useremail: '김지영', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa5', usernickname: '정영훈', useremail: '정영훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa6', usernickname: '임윤서', useremail: '임윤서', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa7', usernickname: '홍희범', useremail: '홍희범', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa8', usernickname: '이해창', useremail: '이해창', imageUrl: 'https://picsum.photos/200' },      
-      { userid: 'aa9', usernickname: '임성훈', useremail: '임성훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa1', usernickname: '김준기', useremail: 'wnsrl123123123@naver.com', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa2', usernickname: '김상백', useremail: '김상백', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa3', usernickname: '문영현', useremail: '문영현', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa4', usernickname: '신중현부계', useremail: '신중현', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa5', usernickname: '전성모부계', useremail: '전성모', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa6', usernickname: '이규훈부계', useremail: '이규훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa7', usernickname: '김지영부계', useremail: '김지영', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa8', usernickname: '정영훈부계', useremail: '정영훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa9', usernickname: '임윤서부계', useremail: '임윤서', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa1', usernickname: '홍희범부계', useremail: '홍희범', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa2', usernickname: '이해창부계', useremail: '이해창', imageUrl: 'https://picsum.photos/200' },      
-      { userid: 'aaaa3', usernickname: '임성훈부계', useremail: '임성훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa4', usernickname: '김준기부계', useremail: '김준기', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa5', usernickname: '김상백부계', useremail: '김상백', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa6', usernickname: '문영현부계', useremail: '문영현', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa1', usernickname: '신중현', useremail: '신중현', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa2', usernickname: '전성모', useremail: '전성모', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa3', usernickname: '이규훈', useremail: '이규훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa4', usernickname: '김지영', useremail: '김지영', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa5', usernickname: '정영훈', useremail: '정영훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa6', usernickname: '임윤서', useremail: '임윤서', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa7', usernickname: '홍희범', useremail: '홍희범', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa8', usernickname: '이해창', useremail: '이해창', imageUrl: 'https://picsum.photos/200' },      
-      { userid: 'aa9', usernickname: '임성훈', useremail: '임성훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa1', usernickname: '김준기', useremail: 'wnsrl123123123@naver.com', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa2', usernickname: '김상백', useremail: '김상백', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa3', usernickname: '문영현', useremail: '문영현', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa4', usernickname: '신중현부계', useremail: '신중현', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa5', usernickname: '전성모부계', useremail: '전성모', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa6', usernickname: '이규훈부계', useremail: '이규훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa7', usernickname: '김지영부계', useremail: '김지영', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa8', usernickname: '정영훈부계', useremail: '정영훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa9', usernickname: '임윤서부계', useremail: '임윤서', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa1', usernickname: '홍희범부계', useremail: '홍희범', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa2', usernickname: '이해창부계', useremail: '이해창', imageUrl: 'https://picsum.photos/200' },      
-      { userid: 'aaaa3', usernickname: '임성훈부계', useremail: '임성훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa4', usernickname: '김준기부계', useremail: '김준기', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa5', usernickname: '김상백부계', useremail: '김상백', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa6', usernickname: '문영현부계', useremail: '문영현', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa1', usernickname: '신중현', useremail: '신중현', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa2', usernickname: '전성모', useremail: '전성모', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa3', usernickname: '이규훈', useremail: '이규훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa4', usernickname: '김지영', useremail: '김지영', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa5', usernickname: '정영훈', useremail: '정영훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa6', usernickname: '임윤서', useremail: '임윤서', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa7', usernickname: '홍희범', useremail: '홍희범', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa8', usernickname: '이해창', useremail: '이해창', imageUrl: 'https://picsum.photos/200' },      
-      { userid: 'aa9', usernickname: '임성훈', useremail: '임성훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa1', usernickname: '김준기', useremail: 'wnsrl123123123@naver.com', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa2', usernickname: '김상백', useremail: '김상백', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa3', usernickname: '문영현', useremail: '문영현', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa4', usernickname: '신중현부계', useremail: '신중현', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa5', usernickname: '전성모부계', useremail: '전성모', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa6', usernickname: '이규훈부계', useremail: '이규훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa7', usernickname: '김지영부계', useremail: '김지영', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa8', usernickname: '정영훈부계', useremail: '정영훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa9', usernickname: '임윤서부계', useremail: '임윤서', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa1', usernickname: '홍희범부계', useremail: '홍희범', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa2', usernickname: '이해창부계', useremail: '이해창', imageUrl: 'https://picsum.photos/200' },      
-      { userid: 'aaaa3', usernickname: '임성훈부계', useremail: '임성훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa4', usernickname: '김준기부계', useremail: '김준기', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa5', usernickname: '김상백부계', useremail: '김상백', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa6', usernickname: '문영현부계', useremail: '문영현', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa1', usernickname: '신중현', useremail: '신중현', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa2', usernickname: '전성모', useremail: '전성모', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa3', usernickname: '이규훈', useremail: '이규훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa4', usernickname: '김지영', useremail: '김지영', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa5', usernickname: '정영훈', useremail: '정영훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa6', usernickname: '임윤서', useremail: '임윤서', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa7', usernickname: '홍희범', useremail: '홍희범', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa8', usernickname: '이해창', useremail: '이해창', imageUrl: 'https://picsum.photos/200' },      
-      { userid: 'aa9', usernickname: '임성훈', useremail: '임성훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa1', usernickname: '김준기', useremail: 'wnsrl123123123@naver.com', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa2', usernickname: '김상백', useremail: '김상백', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa3', usernickname: '문영현', useremail: '문영현', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa4', usernickname: '신중현부계', useremail: '신중현', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa5', usernickname: '전성모부계', useremail: '전성모', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa6', usernickname: '이규훈부계', useremail: '이규훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa7', usernickname: '김지영부계', useremail: '김지영', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa8', usernickname: '정영훈부계', useremail: '정영훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa9', usernickname: '임윤서부계', useremail: '임윤서', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa1', usernickname: '홍희범부계', useremail: '홍희범', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa2', usernickname: '이해창부계', useremail: '이해창', imageUrl: 'https://picsum.photos/200' },      
-      { userid: 'aaaa3', usernickname: '임성훈부계', useremail: '임성훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa4', usernickname: '김준기부계', useremail: '김준기', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa5', usernickname: '김상백부계', useremail: '김상백', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa6', usernickname: '문영현부계', useremail: '문영현', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa1', usernickname: '신중현', useremail: '신중현', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa2', usernickname: '전성모', useremail: '전성모', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa3', usernickname: '이규훈', useremail: '이규훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa4', usernickname: '김지영', useremail: '김지영', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa5', usernickname: '정영훈', useremail: '정영훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa6', usernickname: '임윤서', useremail: '임윤서', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa7', usernickname: '홍희범', useremail: '홍희범', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa8', usernickname: '이해창', useremail: '이해창', imageUrl: 'https://picsum.photos/200' },      
-      { userid: 'aa9', usernickname: '임성훈', useremail: '임성훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa1', usernickname: '김준기', useremail: 'wnsrl123123123@naver.com', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa2', usernickname: '김상백', useremail: '김상백', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa3', usernickname: '문영현', useremail: '문영현', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa4', usernickname: '신중현부계', useremail: '신중현', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa5', usernickname: '전성모부계', useremail: '전성모', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa6', usernickname: '이규훈부계', useremail: '이규훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa7', usernickname: '김지영부계', useremail: '김지영', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa8', usernickname: '정영훈부계', useremail: '정영훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa9', usernickname: '임윤서부계', useremail: '임윤서', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa1', usernickname: '홍희범부계', useremail: '홍희범', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa2', usernickname: '이해창부계', useremail: '이해창', imageUrl: 'https://picsum.photos/200' },      
-      { userid: 'aaaa3', usernickname: '임성훈부계', useremail: '임성훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa4', usernickname: '김준기부계', useremail: '김준기', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa5', usernickname: '김상백부계', useremail: '김상백', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa6', usernickname: '문영현부계', useremail: '문영현', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa1', usernickname: '신중현', useremail: '신중현', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa2', usernickname: '전성모', useremail: '전성모', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa3', usernickname: '이규훈', useremail: '이규훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa4', usernickname: '김지영', useremail: '김지영', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa5', usernickname: '정영훈', useremail: '정영훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa6', usernickname: '임윤서', useremail: '임윤서', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa7', usernickname: '홍희범', useremail: '홍희범', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aa8', usernickname: '이해창', useremail: '이해창', imageUrl: 'https://picsum.photos/200' },      
-      { userid: 'aa9', usernickname: '임성훈', useremail: '임성훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa1', usernickname: '김준기', useremail: 'wnsrl123123123@naver.com', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa2', usernickname: '김상백', useremail: '김상백', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa3', usernickname: '문영현', useremail: '문영현', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa4', usernickname: '신중현부계', useremail: '신중현', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa5', usernickname: '전성모부계', useremail: '전성모', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa6', usernickname: '이규훈부계', useremail: '이규훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa7', usernickname: '김지영부계', useremail: '김지영', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa8', usernickname: '정영훈부계', useremail: '정영훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaa9', usernickname: '임윤서부계', useremail: '임윤서', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa1', usernickname: '홍희범부계', useremail: '홍희범', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa2', usernickname: '이해창부계', useremail: '이해창', imageUrl: 'https://picsum.photos/200' },      
-      { userid: 'aaaa3', usernickname: '임성훈부계', useremail: '임성훈', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa4', usernickname: '김준기부계', useremail: '김준기', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa5', usernickname: '김상백부계', useremail: '김상백', imageUrl: 'https://picsum.photos/200' },
-      { userid: 'aaaa6', usernickname: '문영현부계', useremail: '문영현', imageUrl: 'https://picsum.photos/200' },
-    ];
 
     const urlParams = new URLSearchParams(location.search);
     const newSearchCombo = urlParams.get('searchcombo');
@@ -297,12 +37,19 @@ const ListPage = () => {
     setSearchCombo(newSearchCombo);
     setSearchKeyword(newSearchKeyword);
 
-    const filteredData = dummyData.filter(item => {
+    const filteredData = dummyUser.filter(item => {
       if (!newSearchCombo || !newSearchKeyword) return true;
       return newSearchKeyword ? item.usernickname.toLowerCase().includes(newSearchKeyword.toLowerCase()) : true;
     });
 
     setSearchResults(filteredData);
+
+    if (!newSearchCombo || !newSearchKeyword) {
+      setIsValidQuery(false);
+      return; 
+    }
+    setIsValidQuery(true); 
+
   }, [location.search]);
 
   const paginatedResults = searchResults.slice(
@@ -315,10 +62,23 @@ const ListPage = () => {
     setCurrentPage(newPage);
   };
 
-  return (
-    <div className="list-page"  style={{border: "2px solid red"}} >
+  if (!isValidQuery) {
+    return (
+      <div className="list-page">
         <div className='list-search-keyword-header' >
-          <span className='list-search-combo'>{searchCombo}</span>로 선택하여 
+        <span className='list-search-keyword'>검색 keyword를 입력하여 주세요</span>
+        </div>
+      </div>
+    );
+  }
+   return (
+    <div className="list-page" >
+        <div className='list-search-keyword-header' >
+          <span className='list-search-combo'>'
+            {searchCombo === 'user' && '유저'}
+            {searchCombo === 'location' && '장소'}
+            {searchCombo === 'schedule' && '일정'}
+          '</span>(으)로 선택하여 
           <span className='list-search-keyword'> {searchKeyword}</span>를 검색한 결과입니다.</div>
         <div className='list-page-search-keyword-bar' >
           <div className="list-image-grid">
