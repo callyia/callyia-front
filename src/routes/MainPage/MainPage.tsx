@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 import axios from "axios";
 
@@ -21,10 +22,19 @@ interface MainPageProps {
 }
 
 const Main: React.FC<MainPageProps> = () => {
+  const navigate = useNavigate();
+
+  const [inputPlanValue, setInputPlanValue] = useState<string>(""); 
   const [tourData, setTourData] = useState<TourData[]>([]);
   const [currentPage, setCurrentPage] = useState(1); 
   const [totalPages, setTotalPages] = useState(1); 
   const [showTopButton, setShowTopButton] = useState(false);
+
+  const itemsPerPage = 12;
+  const numberOfPages = Math.ceil(tourData.length / itemsPerPage);
+  const pagesToShow = 10;
+  const startPage = Math.floor((currentPage - 1) / pagesToShow) * pagesToShow + 1;
+  const endPage = Math.min(startPage + pagesToShow - 1, totalPages);
 
   useEffect(() => {
     const fetchTourData = async () => {
@@ -57,68 +67,55 @@ const Main: React.FC<MainPageProps> = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handlePageChange = (newPage: number) => {
-    setCurrentPage(newPage);
+  const handlePlanInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputPlanValue(event.target.value);
+  }
+
+  const handlePlanClick = () => {
+    navigate(`/PlanningPage?title=${(inputPlanValue)}`)
+  }
+
+  const goToPage = (page: number) => {
+    setCurrentPage(Math.max(1, Math.min(totalPages, page)));
   };
 
   const renderPagination = () => {
     let pages = [];
-    for (let i = 1; i <= totalPages; i++) {
+
+    pages.push(
+      <button className="main-info-pagination-controls-key" key="page's first" onClick={() => goToPage(Math.ceil(currentPage/10)*10 - 10)} disabled={currentPage === 1}>
+        {'<<'}
+      </button>
+    );
+    pages.push(
+      <button className="main-info-pagination-controls-key" key="prev" onClick={() => goToPage(currentPage - 1)} disabled={currentPage === 1}>
+        {'<'}
+      </button>
+    );
+
+    // Page Number Buttons within the range
+    for (let i = startPage; i <= endPage; i++) {
       pages.push(
-        <button key={i} onClick={() => handlePageChange(i)} disabled={i === currentPage}>
+        <button key={i} onClick={() => goToPage(i)} disabled={i === currentPage}>
           {i}
         </button>
       );
     }
+
+    // Next and Last Page Buttons
+    pages.push(
+      <button className="main-info-pagination-controls-key" key="next" onClick={() => goToPage(currentPage + 1)} disabled={currentPage === totalPages}>
+        {'>'}
+      </button>
+    );
+    pages.push(
+      <button className="main-info-pagination-controls-key" key="page's last" onClick={() => goToPage(Math.ceil(currentPage/10)*10 + 1)} disabled={currentPage === totalPages}>
+        {'>>'}
+      </button>
+    );
+
     return pages;
-  };
-
-  // useEffect(() => {
-  //   const fetchTourData = async () => {
-  //     try {
-  //       const response = await fetch(`http://localhost:8080/Callyia/Tour/all?page=${currentPage}`);
-  //       if (!response.ok) {
-  //         throw new Error(`HTTP error! Status: ${response.status}`);
-  //       }
-  //       const data = await response.json();
-  //       setTourData(data.content);
-  //       setTotalPages(data.totalPages); // 서버로부터 받은 총 페이지 수 설정
-  //     } catch (error) {
-  //       console.error("Error fetching tour data:", error);
-  //     }
-  //   };
-
-  //   fetchTourData();
-
-  //   const handleScroll = () => {
-  //     if (window.scrollY > 1700) {
-  //       setShowTopButton(true);
-  //     } else {
-  //       setShowTopButton(false);
-  //     }
-  //   };
-
-  //   window.addEventListener("scroll", handleScroll);
-
-  //   return () => window.removeEventListener("scroll", handleScroll);
-  // }, [currentPage]);
-
-  // const handlePageChange = (newPage: number) => {
-  //   setCurrentPage(newPage);
-  // };
-
-  // // 페이지네이션 버튼 렌더링
-  // const renderPagination = () => {
-  //   let pages = [];
-  //   for (let i = 1; i <= totalPages; i++) {
-  //     pages.push(
-  //       <button key={i} onClick={() => handlePageChange(i)} disabled={i === currentPage}>
-  //         {i}
-  //       </button>
-  //     );
-  //   }
-  //   return pages;
-  // };
+    }
 
   return (
     <div className="main-container">
@@ -137,7 +134,7 @@ const Main: React.FC<MainPageProps> = () => {
             ))}
           </div>
             <div className="main-info-pagination-controls">
-                  {renderPagination()}
+              {renderPagination()}
             </div>
           </section>
           
@@ -232,9 +229,14 @@ const Main: React.FC<MainPageProps> = () => {
             <div></div>
             <input
               type="text"
-              className="trip-plan-input"
+              className="main-trip-plan-input"
               placeholder="여행 계획을 입력하세요!"
+              value={inputPlanValue}
+              onChange={handlePlanInputChange}
             />
+            <button type="button" className="main-trip-plan-button" onClick={handlePlanClick}>
+              검색
+            </button>
           </section>
         </div>
         <div className="main-section-container">
