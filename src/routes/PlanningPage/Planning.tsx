@@ -8,15 +8,15 @@ import toast, { Toaster } from "react-hot-toast";
 import { Modal, ModalContent } from "../../theme/daisyui/Modal";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
-const plans = [
-  {
-    id: 1,
-    lat: 35.14299044,
-    lng: 129.03409987,
-    name: "동의대",
-    content: "경사가 쌉에바",
-  },
-];
+const plans: Array<{
+  placeId: number;
+  placeName: string;
+  address: string;
+  image: string;
+  latitude: number;
+  longitude: number;
+  placeContent: string;
+}> = [];
 
 const placeCards2 = [
   { id: 5, lat: 35.14299044, lng: 129.03409987, name: "동의대" },
@@ -59,13 +59,14 @@ export default function Planning() {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const pnoParam = queryParams.get("pno");
+  const titleParam = queryParams.get("title");
   const navigate = useNavigate();
 
   const showBackgroundLine = (planData: any[]) => {
     if (backPolyline) backPolyline.setMap(null);
 
     backLinePosition = planData.map(
-      (plan) => new window.kakao.maps.LatLng(plan.lat, plan.lng)
+      (plan) => new window.kakao.maps.LatLng(plan.latitude, plan.longitude)
     );
     backPolyline = new window.kakao.maps.Polyline({
       path: backLinePosition, // 선을 구성하는 좌표배열 입니다
@@ -98,7 +99,10 @@ export default function Planning() {
         imageOption
       );
 
-      const markerPosition = new window.kakao.maps.LatLng(plan.lat, plan.lng);
+      const markerPosition = new window.kakao.maps.LatLng(
+        plan.latitude,
+        plan.longitude
+      );
       const marker = new window.kakao.maps.Marker({
         position: markerPosition,
         image: markerImage,
@@ -142,16 +146,16 @@ export default function Planning() {
     console.log(`index : ${index}`);
 
     if (index >= 1) {
-      console.log(planData[index - 1].name);
-      console.log(planData[index].name);
+      console.log(planData[index - 1].placeName);
+      console.log(planData[index].placeName);
 
       var beforePos = new window.kakao.maps.LatLng(
-        planData[index - 1].lat,
-        planData[index - 1].lng
+        planData[index - 1].latitude,
+        planData[index - 1].longitude
       );
       var currentPos = new window.kakao.maps.LatLng(
-        planData[index].lat,
-        planData[index].lng
+        planData[index].latitude,
+        planData[index].longitude
       );
       linePosition = [beforePos, currentPos];
       // console.log(linePosition[0]);
@@ -167,7 +171,7 @@ export default function Planning() {
       polyline.setMap(map);
 
       distance = Math.round(polyline.getLength());
-      distanceContent = getTimeHTML(distance, planData[index].name);
+      distanceContent = getTimeHTML(distance, planData[index].placeName);
       console.log(distance);
 
       showDistance(distanceContent, currentPos);
@@ -196,11 +200,13 @@ export default function Planning() {
         setPlanData([
           ...planData,
           {
-            id: placeId,
-            lat: latitude,
-            lng: longitude,
-            name: placeName,
-            content: placeContent,
+            placeId: placeId,
+            placeName: placeName,
+            address: address,
+            image: image,
+            latitude: latitude,
+            longitude: longitude,
+            placeContent: placeContent,
           },
         ]);
         updateMarker();
@@ -367,7 +373,7 @@ export default function Planning() {
       const requestBody = {
         planDetailDTOs: planData.map((plan, index) => ({
           pno: null,
-          placeId: plan.id,
+          placeId: plan.placeId,
           sequence: index,
         })),
         planDTO: {
@@ -412,7 +418,7 @@ export default function Planning() {
       const requestBody = {
         planDetailDTOs: planData.map((plan, index) => ({
           pno: pnoParam,
-          placeId: plan.id,
+          placeId: plan.placeId,
           sequence: index,
         })),
         planDTO: {
@@ -498,6 +504,72 @@ export default function Planning() {
       map.panTo(moveLatLon);
     }
   };
+
+  useEffect(() => {
+    const titleText = document.querySelector(
+      "#titleText"
+    ) as HTMLHeadingElement;
+
+    if (titleParam) {
+      titleText.textContent = titleParam;
+    }
+  });
+
+  useEffect(() => {
+    if (pnoParam) {
+      const planFromDB: any = null;
+
+      const url = `http://localhost:8080/Callyia/planning/getDB?pno=${pnoParam}`;
+
+      fetch(url)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(
+              `Network response was not ok: ${response.statusText}`
+            );
+          }
+          return response.json();
+        })
+        .then((data) => {
+          setPlanData(data);
+          console.log(data);
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (pnoParam) {
+      const planFromDB: any = null;
+
+      const url = `http://localhost:8080/Callyia/planning/getTitle?pno=${pnoParam}`;
+
+      fetch(url)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(
+              `Network response was not ok: ${response.statusText}`
+            );
+          }
+          return response.text();
+        })
+        .then((data) => {
+          const titleText = document.querySelector(
+            "#titleText"
+          ) as HTMLHeadingElement;
+
+          if (data) {
+            titleText.textContent = data;
+          }
+          console.log(data);
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
+    }
+  }, []);
 
   updateMarker();
   showBackgroundLine(planData);
@@ -611,7 +683,9 @@ export default function Planning() {
                       >
                         <Plan
                           plan={plan}
-                          onClick={() => Click(plan.lat, plan.lng, index)}
+                          onClick={() =>
+                            Click(plan.latitude, plan.longitude, index)
+                          }
                         />
                       </div>
                     )}

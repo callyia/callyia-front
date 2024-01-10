@@ -3,38 +3,45 @@ import React, { useEffect, useState } from "react";
 import "./Plan.css";
 
 export type IPlanProps = {
-  id: number;
-  lat: number;
-  lng: number;
-  name: string;
-  content: string;
+  placeId: number;
+  placeName: string;
+  address: string;
+  image: string;
+  latitude: number;
+  longitude: number;
+  placeContent: string;
 };
 
 export type PlanProps = {
   plan: IPlanProps;
-  onClick: (lat: number, lng: number) => void;
+  onClick: (latitude: number, longitude: number) => void;
 };
 
 const Plan: React.FC<PlanProps> = ({ plan, onClick }) => {
-  const { lat, lng, name, content } = plan;
+  const {
+    placeId,
+    placeName,
+    address,
+    image,
+    latitude,
+    longitude,
+    placeContent,
+  } = plan;
 
   const MapClick = () => {
-    onClick(lat, lng);
+    onClick(latitude, longitude);
   };
 
   return (
     <div className="plan-div" onClick={MapClick}>
-      <img
-        className="plan-image"
-        src="./dummyimages/samplePlaceImage.jpg"
-      ></img>
+      <img className="plan-image" src={image}></img>
       <div className="right-container">
         <div className="right-div-title">
           <div className="w-full h-6"></div>
-          <span className="text-lg plan-text">{name}</span>
+          <span className="text-lg plan-text">{placeName}</span>
         </div>
         <div className="right-div-detail">
-          <span className="plan-text">{content}</span>
+          <span className="plan-text">{placeContent}</span>
         </div>
       </div>
     </div>
