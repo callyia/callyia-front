@@ -132,7 +132,7 @@ const Main: React.FC<MainPageProps> = () => {
               </div>
             ))}
           </div>
-            <div className="main-info-pagination-controls">å
+            <div className="main-info-pagination-controls">
               {renderPagination()}
             </div>
           </section>
