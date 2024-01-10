@@ -11,7 +11,7 @@ export const dummyUser = [
     // { userid: 'aa9', usernickname: '임성훈', useremail: '임성훈@naver.com', imageUrl: 'https://picsum.photos/200', likesCount: 10, postCount: 110,userselfintroduction: '임성훈자기소개'},
     // { userid: 'aaa2', usernickname: '김상백', useremail: '김상백@naver.com', imageUrl: 'https://picsum.photos/200' , likesCount: 11, postCount: 111,userselfintroduction: '김상백자기소개'},
     // { userid: 'aaa3', usernickname: '문영현', useremail: '문영현@naver.com', imageUrl: 'https://picsum.photos/200' , likesCount: 12, postCount: 112,userselfintroduction: '문영현자기소개'},
-    { userid: 'aaa1', usernickname: '김준기', useremail: '1', imageUrl: 'https://picsum.photos/200' , likesCount: 1, postCount: 1, userselfintroduction: '1'},
+    { userid: 'aaa1', usernickname: '김준기', useremail: '1', imageUrl: 'https://picsum.photos/200' , likesCount: 1, postCount: 12223333, userselfintroduction: '1'},
     { userid: 'aaa1', usernickname: '김준기', useremail: '2', imageUrl: 'https://picsum.photos/200' , likesCount: 1, postCount: 1, userselfintroduction: '1'},
     { userid: 'aaa1', usernickname: '김준기', useremail: '3', imageUrl: 'https://picsum.photos/200' , likesCount: 1, postCount: 1, userselfintroduction: '1'},
     { userid: 'aaa1', usernickname: '김준기', useremail: '4', imageUrl: 'https://picsum.photos/200' , likesCount: 1, postCount: 1, userselfintroduction: '1'},

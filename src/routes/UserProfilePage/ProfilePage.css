@@ -105,7 +105,7 @@
   position: relative;
 }
 
-.user-profile-post-count, .user-profile-likes-count {
+.user-profile-post-count {
   display: flex;
   justify-content: center;
   align-items: center;  
@@ -125,6 +125,7 @@
   height: 70px;
   display: absolute;
   margin-right: 20px;
+  margin-top: 150px;
 }
 
 .user-profile-post-icon,.profile-likes-icon {
@@ -208,7 +209,7 @@
   object-fit: cover;
 }
 
-.user-profile-post-number, .user-profile-likes-number {
+.user-profile-post-number {
   position: flex;
   align-items: center;
   text-align: center;
@@ -216,6 +217,6 @@
   flex-grow: 1; 
   max-width: 50px;
   width: 50px;
-  margin: 0;
+  margin-top: 165px;
 }
 

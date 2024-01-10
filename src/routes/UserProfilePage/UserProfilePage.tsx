@@ -45,12 +45,6 @@ const UserProfile: React.FC = () => {
           </div>
             <span className='user-profile-post-number'>{formatNumber(user.postCount)}</span>
         </div>
-        <div className="user-profile-likes-count">
-          <div className="user-profile-icon-number-container">
-            <img src='./profile/profile_like_icon.png' alt="Like icon" className="user-profile-likes-icon" />
-          </div>
-            <span className='user-profile-likes-number'>{formatNumber(user.likesCount)}</span>
-        </div>
       </div>
       </div>
     </div>

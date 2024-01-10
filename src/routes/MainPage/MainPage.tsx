@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
 import axios from "axios";
 
 import "./MainPage.css";
@@ -133,7 +132,7 @@ const Main: React.FC<MainPageProps> = () => {
               </div>
             ))}
           </div>
-            <div className="main-info-pagination-controls">
+            <div className="main-info-pagination-controls">å
               {renderPagination()}
             </div>
           </section>
