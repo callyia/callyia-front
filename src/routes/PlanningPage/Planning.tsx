@@ -1,5 +1,6 @@
 import { useToggle } from "../../hooks";
 import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./Planning.css";
 import Plan from "../../components/Plan";
 import PlaceCard from "../../components/PlaceCard";
@@ -15,79 +16,6 @@ const plans = [
     name: "동의대",
     content: "경사가 쌉에바",
   },
-  {
-    id: 2,
-    lat: 35.147,
-    lng: 129.04,
-    name: "부드러운움직임",
-    content: "아따 부드럽다",
-  },
-  {
-    id: 3,
-    lat: 35.155735,
-    lng: 129.058165,
-    name: "서면시장",
-    content: "우마이",
-  },
-  {
-    id: 4,
-    lat: 35.154297,
-    lng: 129.05977,
-    name: "더조은",
-    content: "학원 ~",
-  },
-  {
-    id: 5,
-    lat: 35.150311,
-    lng: 129.037077,
-    name: "자취자취",
-    content: "자취 ~",
-  },
-  {
-    id: 6,
-    lat: 35.156638,
-    lng: 129.055955,
-    name: "롯데백화점",
-    content: "서면롯데백화점.",
-  },
-  {
-    id: 7,
-    lat: 35.157032,
-    lng: 129.06303,
-    name: "NC백화점",
-    content: "NC백화점 서면점",
-  },
-  {
-    id: 8,
-    lat: 35.15294,
-    lng: 129.059568,
-    name: "삼정타워",
-    content: "삼정타워",
-  },
-  {
-    id: 9,
-    lat: 35.16177,
-    lng: 129.062347,
-    name: "부전역",
-    content: "부전역",
-  },
-  {
-    id: 10,
-    lat: 35.154705,
-    lng: 129.060653,
-    name: "고베규카츠",
-    content: "맛없음",
-  },
-];
-
-const placeCards1 = [
-  { id: 1, lat: 33.306037, lng: 126.289577, name: "오설록" },
-  { id: 2, lat: 35.150311, lng: 129.037077, name: "자취자취" },
-  { id: 3, lat: 33.35, lng: 126.333, name: "여긴어디고" },
-  { id: 5, lat: 35.14299044, lng: 129.03409987, name: "동의대" },
-  { id: 4, lat: 35.147, lng: 129.04, name: "부드러운움직임" },
-  { id: 6, lat: 35.154297, lng: 129.05977, name: "더조은" },
-  { id: 2, lat: 35.150311, lng: 129.037077, name: "자취자취" },
 ];
 
 const placeCards2 = [
@@ -127,6 +55,11 @@ export default function Planning() {
   const [area1, toggleArea1] = useToggle();
   const [area2, toggleArea2] = useToggle();
   const [isModalOpen, setModalOpen] = useState(false);
+
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const pnoParam = queryParams.get("pno");
+  const navigate = useNavigate();
 
   const showBackgroundLine = (planData: any[]) => {
     if (backPolyline) backPolyline.setMap(null);
@@ -326,7 +259,7 @@ export default function Planning() {
 
     // 거리와 도보 시간, 자전거 시간을 가지고 HTML Content를 만들어 리턴합니다
     var content =
-      '<div style="width: 200px; height: 135px; background-color: white; border: 2px solid lightgray; border-radius: 5px;"><ul>';
+      '<div style="width: 200px; height: 135px; background-color: dimgray; border: 2px solid lightgray; border-radius: 5px;"><ul>';
 
     content += "    <li>";
     content +=
@@ -337,20 +270,20 @@ export default function Planning() {
 
     content += "    <li>";
     content +=
-      '        <span style="display: inline-block; width: 70px; padding: 5px;">총거리 </span><span style="color: red; font-weight: bold;">' +
+      '        <span style="display: inline-block; width: 70px; padding: 5px; color: white">총거리 </span><span style="color: red; font-weight: bold;">' +
       distance +
-      '</span><span style="font-weight: bold;">m</span>';
+      '</span><span style="font-weight: bold;color: white">m</span>';
     content += "    </li>";
     content += "    <li>";
     content +=
-      '        <span style="display: inline-block; width: 70px; padding: 5px;">도보 </span><span style="font-weight: bold;">' +
+      '        <span style="color: white; display: inline-block; width: 70px; padding: 5px;">도보 </span><span style="color: white; font-weight: bold;">' +
       walkHour +
       walkMin +
       "</span>";
     content += "    </li>";
     content += "    <li>";
     content +=
-      '        <span style="display: inline-block; width: 70px; padding: 5px;">자전거 </span><span style="font-weight: bold;">' +
+      '        <span style="color: white; display: inline-block; width: 70px; padding: 5px;">자전거 </span><span style="color: white; font-weight: bold;">' +
       bycicleHour +
       bycicleMin +
       "</span>";
@@ -419,25 +352,103 @@ export default function Planning() {
       const text = searchInput.value;
       if (text !== "") {
         fetchSearch(text);
-      }
+      } else toast.error("검색어를 입력해주세요.");
     }
   };
 
   const saveBtnClick = () => {
-    const titleText = document.querySelector(
-      "#titleText"
-    ) as HTMLHeadingElement;
+    if (!pnoParam) {
+      const titleText = document.querySelector(
+        "#titleText"
+      ) as HTMLHeadingElement;
 
-    // 여따가 나중에 백엔드에서 DB로 보내는 코드 작성할 것!
-    console.log("");
-    console.log("============저장을 시도합니다============");
-    console.log("타이틀 : " + titleText.textContent);
-    console.log("-----Plan Data-----");
-    console.log(planData);
-    console.log("=======================================");
-    console.log("");
-    // 저장 성공 시
-    toast.success("저장 성공!");
+      const url = `http://localhost:8080/Callyia/planning/save`;
+
+      const requestBody = {
+        planDetailDTOs: planData.map((plan, index) => ({
+          pno: null,
+          placeId: plan.id,
+          sequence: index,
+        })),
+        planDTO: {
+          title: titleText.textContent,
+          userId: "Hello UserID",
+        },
+      };
+
+      const options = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json", // 전송하는 데이터 타입 설정
+        },
+        body: JSON.stringify(requestBody), // 데이터를 JSON 문자열로 변환하여 전송
+      };
+
+      fetch(url, options)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(
+              `Network response was not ok: ${response.statusText}`
+            );
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log("data : " + data);
+          navigate("/PlanningPage?pno=" + data);
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
+
+      toast.success("저장 성공!");
+    } else {
+      const titleText = document.querySelector(
+        "#titleText"
+      ) as HTMLHeadingElement;
+
+      const url = `http://localhost:8080/Callyia/planning/update`;
+
+      const requestBody = {
+        planDetailDTOs: planData.map((plan, index) => ({
+          pno: pnoParam,
+          placeId: plan.id,
+          sequence: index,
+        })),
+        planDTO: {
+          pno: pnoParam,
+          title: titleText.textContent,
+          userId: "Hello UserID",
+        },
+      };
+
+      const options = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json", // 전송하는 데이터 타입 설정
+        },
+        body: JSON.stringify(requestBody), // 데이터를 JSON 문자열로 변환하여 전송
+      };
+
+      fetch(url, options)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(
+              `Network response was not ok: ${response.statusText}`
+            );
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log("data : " + data);
+          navigate("/PlanningPage?pno=" + data);
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
+
+      toast.success("저장 성공!");
+    }
   };
 
   const openModal = () => {
@@ -521,13 +532,6 @@ export default function Planning() {
             </button>
           </div>
           <div className="toggle-right-search-div3">
-            {/* {placeCards1.map((placeCard, index) => (
-              <PlaceCard
-                key={index}
-                placeCard={placeCard}
-                onClick={plusClick}
-              />
-            ))} */}
             {searchData.map((placeCard, index) => (
               <PlaceCard
                 key={index}
