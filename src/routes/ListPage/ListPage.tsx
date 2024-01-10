@@ -111,7 +111,7 @@ const ListPage = () => {
             >
               {page}
             </span>
-    ))}
+       ))}
     <button onClick={() => goToPage(currentPage + 1)} disabled={currentPage === numberOfPages}>
       {'>'}
     </button>
