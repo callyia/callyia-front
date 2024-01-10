@@ -3,12 +3,7 @@ import React, { useEffect, useState } from "react";
 import ScheduleCard, { ScheduleItem } from "../../components/ScheduleCard";
 import { Link } from "react-router-dom";
 import "./SchedulePosting.css";
-import {
-  DragDropContext,
-  Draggable,
-  Droppable,
-  DropResult,
-} from "react-beautiful-dnd";
+import ReactDOMServer from "react-dom/server";
 
 // ScheduleItem을 확장하며, 추가적으로 day, images, comments 속성들을 추가
 interface ExtendedScheduleItem extends ScheduleItem {
@@ -44,8 +39,8 @@ const scheduleData: ExtendedScheduleItem[] = [
     place: "광안대교",
     content: "4시쯤부터 드라이브",
     tip: "사진 찍기 좋은 장소",
-    lat: 35.1448993375342,
-    lng: 129.12800748092153,
+    lat: 35.13593328351958,
+    lng: 129.1115056192809,
     images: [
       "https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMzExMjdfMTQg%2FMDAxNzAxMDg1MjgyMTE3.MyaX_D172Q9xjtoktGL_noCQLjh9HLW3db3Nk1jFvlQg.p7omzLkm670F1jxuV3fsSdph96aC0Bjo9lNNVXVz23Ig.JPEG.jesuiseugene%2FKakaoTalk_20231127_203820194_03.jpg&type=a340",
     ],
@@ -168,8 +163,78 @@ export default function SchedulePosting() {
   const groupedSchedule = groupByDay(scheduleData);
 
   //Map -------------------------------------------------------------------------------
-  const Click = (lat: number, lng: number) => {
+
+  const linePath = scheduleData.map(
+    (place) => new window.kakao.maps.LatLng(place.lat, place.lng)
+  );
+
+  const Defaultpolyline = new window.kakao.maps.Polyline({
+    path: linePath,
+    strokeWeight: 5,
+    strokeColor: "gray",
+    strokeOpacity: 0.6,
+    strokeStyle: "solid",
+  });
+
+  var moreOverlay: any = null;
+  var previousOverlay: any = null;
+  const Click = (
+    lat: number,
+    lng: number,
+    place: String,
+    content: String,
+    tip: String,
+    images: String[]
+  ) => {
     panTo(lat, lng);
+
+    if (moreOverlay && previousOverlay === moreOverlay) {
+      moreOverlay.setMap(null);
+      moreOverlay = null;
+    } else if (!moreOverlay) {
+      const customOverlayOptions = {
+        position: new window.kakao.maps.LatLng(lat, lng),
+        content: getOverlayHTML(place, content, tip, images),
+        xAnchor: 0.3,
+        yAnchor: 0.91,
+      };
+      moreOverlay = new window.kakao.maps.CustomOverlay(customOverlayOptions);
+      moreOverlay.setMap(map);
+    }
+
+    previousOverlay = moreOverlay;
+  };
+
+  const getOverlayHTML = (
+    place: String,
+    content: String,
+    tip: String,
+    images: String[]
+  ) => {
+    var CustomOverlayContent =
+      "<div style=\"position:relative;width:100%;height:100%;background:url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/box_movie.png') no-repeat;padding:15px 10px;\">" +
+      "<div style=\"color:#fff;font-size:16px;font-weight:bold;background:url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/arrow_white.png') no-repeat right 120px center;margin-bottom:8px;\">" +
+      place +
+      "</div>" +
+      "<div style=\"position:relative;width:250px;height:140px;background:url('" +
+      images +
+      "') no-repeat;margin-bottom:8px;\">" +
+      "</div>" +
+      '<ul style="width:250px">' +
+      '<li style="width:250px;height:100%;position:relative;margin-bottom:2px;background:#2b2d36;padding:5px 10px;color:#aaabaf;line-height: 1; white-space: pre-line;">' +
+      '    <span style="max-width:250px">Content: ' +
+      content +
+      "</span>" +
+      "</li>" +
+      '<li style="position:relative;margin-bottom:2px;background:#2b2d36;padding:5px 10px;color:#aaabaf;line-height: 1;white-space: pre-line;">' +
+      "    <span>Tip: " +
+      tip +
+      "</span>" +
+      "</li>" +
+      "</ul>" +
+      "</div>";
+
+    return CustomOverlayContent;
   };
 
   useEffect(() => {
@@ -200,20 +265,8 @@ export default function SchedulePosting() {
       marker.setMap(newmap);
     });
 
-    const linePath = scheduleData.map(
-      (place) => new window.kakao.maps.LatLng(place.lat, place.lng)
-    );
-
-    const polyline = new window.kakao.maps.Polyline({
-      path: linePath,
-      strokeWeight: 5,
-      strokeColor: "red",
-      strokeOpacity: 0.7,
-      strokeStyle: "solid",
-    });
-
     if (newmap) {
-      polyline.setMap(newmap);
+      Defaultpolyline.setMap(newmap);
     }
   }, []);
 
@@ -224,13 +277,19 @@ export default function SchedulePosting() {
       map.panTo(moveLatLon);
     }
   };
-  //--------------------------------------------------------------------------------
 
+  //--------------------------------------------------------------------------------
+  const [cart, setCart] = useState<ExtendedScheduleItem[]>([]);
+
+  const handleAddToCart = (item: ExtendedScheduleItem) => {
+    setCart((prevCart) => [...prevCart, item]);
+  };
+
+  const handleRemoveFromCart = (itemId: number) => {
+    setCart((prevCart) => prevCart.filter((item) => item.id !== itemId));
+  };
   return (
-    <div
-      className="WholePage" // Adjust the class name as needed
-      style={{ display: "flex", height: "100%" }}
-    >
+    <div className="WholePage" style={{ display: "flex", height: "100%" }}>
       <div className="left">
         <div style={{ flex: 1 }}>
           {/* 왼쪽 상단 */}
@@ -258,9 +317,26 @@ export default function SchedulePosting() {
                 </div>
 
                 <div className="schedule-container">
-                  {/* 여기에 Draggable */}
                   {items.map((item, index) => (
-                    <ScheduleCard key={item.id} {...item} onClick={Click} />
+                    <ScheduleCard
+                      key={item.id}
+                      {...item}
+                      onClick={() =>
+                        Click(
+                          item.lat,
+                          item.lng,
+                          item.place,
+                          item.content,
+                          item.tip,
+                          item.images
+                        )
+                      }
+                      onAddToCart={() => handleAddToCart(item)}
+                      onRemoveFromCart={() => handleRemoveFromCart(item.id)}
+                      isInCart={cart.some(
+                        (cartItem) => cartItem.id === item.id
+                      )}
+                    />
                   ))}
                 </div>
               </div>
@@ -273,7 +349,7 @@ export default function SchedulePosting() {
         <div className="right-top">
           {/* 오른쪽 상단 */}
           {/* <Mymap /> */}
-          {/* 여기에 Droppable */}
+
           <div className="MapArea">
             <h2>지도</h2>
             <div id="map" style={{ width: "47vw", height: "50vh" }} />
@@ -282,10 +358,20 @@ export default function SchedulePosting() {
         {/* 오른쪽 하단 */}
         <div className="right-bottom">
           {/* <Cart /> */}
-          {/* 여기에 Droppable */}
+
           <div className={`cart  "hovered" : ""}`}>
             <h2>장바구니</h2>
-            <div>원하는 일정을 여기에 드래그 해주세요!</div>
+            {cart.map((item) => (
+              <div className="schedule-card-cart" key={item.id}>
+                <span className="schedule-number">{item.place}</span>
+                <h3>{item.content}</h3>
+
+                <p>TIP : {item.tip}</p>
+                <button onClick={() => handleRemoveFromCart(item.id)}>
+                  제거
+                </button>
+              </div>
+            ))}
           </div>
         </div>
       </div>

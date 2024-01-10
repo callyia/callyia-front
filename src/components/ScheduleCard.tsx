@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import "../routes/SchedulePage/SchedulePosting.css"; // Schedule.css 파일을 import
 import Swal from "sweetalert2"; //alert 디자인 임포트
+import { FaPlus } from "react-icons/fa";
 
 interface ScheduleItem {
   id: number;
@@ -16,11 +17,17 @@ interface ScheduleItem {
 }
 
 export interface ScheduleCardProps extends ScheduleItem {
-  onClick: (lat: number, lng: number) => void;
+  onClick: (lat: number, lng: number, id: number) => void;
+  onAddToCart: () => void;
+  onRemoveFromCart: () => void;
+  isInCart: boolean;
 }
 
 const ScheduleCard: React.FC<ScheduleCardProps> = ({
   onClick,
+  onAddToCart,
+  onRemoveFromCart,
+  isInCart,
   id,
   place,
   content,
@@ -38,7 +45,7 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
   const [cardHeight, setCardHeight] = useState<number | undefined>(undefined);
 
   const MapClick = () => {
-    onClick(lat, lng);
+    onClick(lat, lng, id);
   };
 
   //댓글 클릭 시 alert창으로 전체 내용 보여줌
@@ -92,11 +99,20 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
 
       <p>
         TIP : {tip}
-        <button onClick={handleToggleExpand}>
+        <button className="moreBtn" onClick={handleToggleExpand}>
           {expanded ? "간략히" : "더보기"}
         </button>
       </p>
-
+      <div className="card-buttons">
+        {isInCart ? (
+          <div></div>
+        ) : (
+          <button className="add-to-cart-btn" onClick={onAddToCart}>
+            <FaPlus />
+            장바구니에 추가
+          </button>
+        )}
+      </div>
       {showDetails && (
         <div className="details">
           {images.map((imageUrl, index) => (
