@@ -1,19 +1,35 @@
-import React, { useState, useRef} from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useState, useRef, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import UserProfile from './UserProfilePage';
 import { dummyUser } from './dummydata';
 
 export default function UserProfilePage() {
-  const [profileImage, setProfileImage] = useState<string>('./dummyimages/image1.jpeg'); // 기본 이미지
+  const [profileImage] = useState<string>('./dummyimages/image1.jpeg'); // 기본 이미지
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const location = useLocation();
+  const navigate = useNavigate();
 
   const urlParams = new URLSearchParams(location.search);
   const userid = urlParams.get('userid');
 
   const user = dummyUser.find(user => user.userid === userid) || dummyUser[0];
+
+  useEffect(() => {
+    if (!userid) {
+      navigate('/MyProfilePage'); 
+    }
+  }, [userid, navigate]);
+
+  if (!user) {
+    return (
+      <div style={{ padding: '20px', textAlign: 'center' }}>
+        <h2>No User Selected</h2>
+        <p>Please select a user profile to view.</p>
+      </div>
+    );
+  }
 
     return (
       <div style={{ flex: 1, display: "flex", flexDirection: 'column', height: '1000px'}}>
