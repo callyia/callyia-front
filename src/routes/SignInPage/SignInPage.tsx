@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { FormEvent, ChangeEvent } from "react";
 import "./SignInPage.css"; // Import your stylesheet
+import { useNavigate } from "react-router-dom";
+import axios, { AxiosResponse } from "axios";
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
   const loginForm = document.querySelector("#loginBtn") as HTMLFormElement;
 
   const isEmailValid = (email: string): boolean => {
@@ -13,8 +16,9 @@ const LoginPage: React.FC = () => {
     return emailRegex.test(email);
   };
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
+
     // 이메일 유효성 검사
     if (email === "") {
       alert("Email을 입력하세요.");
@@ -37,6 +41,21 @@ const LoginPage: React.FC = () => {
     }
     // Implement your sign-up logic here
     console.log("Signing up with:", email, password);
+
+    try {
+      const response: AxiosResponse = await axios.post(
+        "http://localhost:8080/Callyia/login",
+        {
+          username: email,
+          password,
+        }
+      );
+      localStorage.setItem("token", response.data.token);
+      navigate("/homepage");
+    } catch (error) {
+      console.error("로그인 실패", error);
+      alert("로그인에 실패하였습니다.");
+    }
   };
 
   return (
