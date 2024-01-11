@@ -208,7 +208,7 @@ const Main: React.FC<MainPageProps> = () => {
               <div key={tour.placeId}
               onClick={() => openDetailClicked(tour)}>
                 {tour.image && (
-                  <img src={tour.image} alt={tour.placeName} style={{width: "300px", justifyItems:"center"}}/>
+                  <img src={tour.image} className="main-tour-info-image" alt={tour.placeName}/>
                   )}
                   <h3 className="main-tour-info-text">{tour.placeName}</h3>
               </div>
