@@ -25,10 +25,10 @@ interface MainPageProps {
 const Main: React.FC<MainPageProps> = () => {
   const navigate = useNavigate();
 
-  const [inputPlanValue, setInputPlanValue] = useState<string>(""); 
+  const [inputPlanValue, setInputPlanValue] = useState<string>("");
   const [tourData, setTourData] = useState<TourData[]>([]);
-  const [currentPage, setCurrentPage] = useState(1); 
-  const [totalPages, setTotalPages] = useState(1); 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [showTopButton, setShowTopButton] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTour, setSelectedTour] = useState<TourData | null>(null);
@@ -41,7 +41,8 @@ const Main: React.FC<MainPageProps> = () => {
   const itemsPerPage = 12;
   const numberOfPages = Math.ceil(tourData.length / itemsPerPage);
   const pagesToShow = 10;
-  const startPage = Math.floor((currentPage - 1) / pagesToShow) * pagesToShow + 1;
+  const startPage =
+    Math.floor((currentPage - 1) / pagesToShow) * pagesToShow + 1;
   const endPage = Math.min(startPage + pagesToShow - 1, totalPages);
 
   // 상세페이지 열기
@@ -75,7 +76,9 @@ const Main: React.FC<MainPageProps> = () => {
   useEffect(() => {
     const fetchTourData = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/Callyia/Tour/all?page=${currentPage}`);
+        const response = await fetch(
+          `http://localhost:8080/Callyia/Tour/all?page=${currentPage}`
+        );
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -109,7 +112,7 @@ const Main: React.FC<MainPageProps> = () => {
     try {
       // 투어 정보를 데이터베이스에 저장
       const response = await axios.post(
-        "http://localhost:8080/Callyia/TourBasket",
+        "http://localhost:8080/Callyia/Basket",
         JSON.stringify({
           bno: null,
           placeId: selectedTour?.placeId,
@@ -135,14 +138,16 @@ const Main: React.FC<MainPageProps> = () => {
       }
     }
   };
-  
-  const handlePlanInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+
+  const handlePlanInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setInputPlanValue(event.target.value);
-  }
+  };
 
   const handlePlanClick = () => {
-    navigate(`/PlanningPage?title=${(inputPlanValue)}`)
-  }
+    navigate(`/PlanningPage?title=${inputPlanValue}`);
+  };
 
   const handleTourClick = (tour: TourData) => {
     setSelectedTour(tour);
@@ -163,20 +168,34 @@ const Main: React.FC<MainPageProps> = () => {
     let pages = [];
 
     pages.push(
-      <button className="main-info-pagination-controls-key" key="page's first" onClick={() => goToPage(Math.ceil(currentPage/10)*10 - 10)} disabled={currentPage === 1}>
-        {'<<'}
+      <button
+        className="main-info-pagination-controls-key"
+        key="page's first"
+        onClick={() => goToPage(Math.ceil(currentPage / 10) * 10 - 10)}
+        disabled={currentPage === 1}
+      >
+        {"<<"}
       </button>
     );
     pages.push(
-      <button className="main-info-pagination-controls-key" key="prev" onClick={() => goToPage(currentPage - 1)} disabled={currentPage === 1}>
-        {'<'}
+      <button
+        className="main-info-pagination-controls-key"
+        key="prev"
+        onClick={() => goToPage(currentPage - 1)}
+        disabled={currentPage === 1}
+      >
+        {"<"}
       </button>
     );
 
     // Page Number Buttons within the range
     for (let i = startPage; i <= endPage; i++) {
       pages.push(
-        <button key={i} onClick={() => goToPage(i)} disabled={i === currentPage}>
+        <button
+          key={i}
+          onClick={() => goToPage(i)}
+          disabled={i === currentPage}
+        >
           {i}
         </button>
       );
@@ -184,18 +203,28 @@ const Main: React.FC<MainPageProps> = () => {
 
     // Next and Last Page Buttons
     pages.push(
-      <button className="main-info-pagination-controls-key" key="next" onClick={() => goToPage(currentPage + 1)} disabled={currentPage === totalPages}>
-        {'>'}
+      <button
+        className="main-info-pagination-controls-key"
+        key="next"
+        onClick={() => goToPage(currentPage + 1)}
+        disabled={currentPage === totalPages}
+      >
+        {">"}
       </button>
     );
     pages.push(
-      <button className="main-info-pagination-controls-key" key="page's last" onClick={() => goToPage(Math.ceil(currentPage/10)*10 + 1)} disabled={currentPage === totalPages}>
-        {'>>'}
+      <button
+        className="main-info-pagination-controls-key"
+        key="page's last"
+        onClick={() => goToPage(Math.ceil(currentPage / 10) * 10 + 1)}
+        disabled={currentPage === totalPages}
+      >
+        {">>"}
       </button>
     );
 
     return pages;
-    }
+  };
 
   return (
     <div className="main-container">
@@ -204,161 +233,196 @@ const Main: React.FC<MainPageProps> = () => {
           <section className="main-section-div" style={{ marginRight: "13%" }}>
             <span className="main-section-span-title">여행 정보</span>
             <div className="main-tour-info-section">
-            {tourData.map((tour) => (
-              <div key={tour.placeId}
-              onClick={() => openDetailClicked(tour)}>
-                {tour.image && (
-                  <img src={tour.image} className="main-tour-info-image" alt={tour.placeName}/>
+              {tourData.map((tour) => (
+                <div key={tour.placeId} onClick={() => openDetailClicked(tour)}>
+                  {tour.image && (
+                    <img
+                      src={tour.image}
+                      className="main-tour-info-image"
+                      alt={tour.placeName}
+                    />
                   )}
                   <h3 className="main-tour-info-text">{tour.placeName}</h3>
-              </div>
-            ))}
-          </div>
-          <Modal className="" open={openDetail}>
-            <ModalContent
-              onCloseIconClicked={closeDetailClicked}
-              className="p-4 bg-white rounded-lg min-h-[500px] h-auto w-[800px] relative"
-            >
-              <div>
-                <h3 className="mb-8 text-center">상세페이지입니다.</h3>
-              </div>
-              {selectedTour && (
-                <div className="grid">
-                  <div className="flex items-center mb-2">
-                    <label className="mr-2">이름 : </label>
-                    <p className="flex-grow p-1 border rounded">
-                      {selectedTour.placeName}
-                    </p>
-                  </div>
-                  <div className="flex items-center mb-2">
-                    <label className="mr-2">지역 : </label>
-                    <p className="flex-grow p-1 border rounded">
-                      {selectedTour.address}
-                    </p>
-                  </div>
-                  <div className="flex items-center mb-2">
-                    <label className="mr-2">내용 : </label>
-                    <p className="flex-grow h-auto p-1 border rounded">
-                      {selectedTour.placeContent}
-                    </p>
-                  </div>
-                  <div className="w-full h-auto">
-                    <img
-                      src={selectedTour.image}
-                      className="w-auto h-auto max-h-[250px]"
-                    />
-                  </div>
                 </div>
-              )}
-              <div className="absolute bottom-4 right-4">
-                <ModalAction className="absolute bottom-0 right-0 flex flex-row">
-                  <Button
-                    className="w-24 normal-case btn-primary btn-sm"
-                    onClick={basketClicked}
-                  >
-                    Basket
-                  </Button>
-                  <Button
-                    className="w-24 normal-case btn-sm"
-                    onClick={closeDetailClicked}
-                  >
-                    Close
-                  </Button>
-                </ModalAction>
-              </div>
-            </ModalContent>
-          </Modal>
+              ))}
+            </div>
+            <Modal className="" open={openDetail}>
+              <ModalContent
+                onCloseIconClicked={closeDetailClicked}
+                className="p-4 bg-white rounded-lg min-h-[500px] h-auto w-[800px] relative"
+              >
+                <div>
+                  <h3 className="mb-8 text-center">상세페이지입니다.</h3>
+                </div>
+                {selectedTour && (
+                  <div className="grid">
+                    <div className="flex items-center mb-2">
+                      <label className="mr-2">이름 : </label>
+                      <p className="flex-grow p-1 border rounded">
+                        {selectedTour.placeName}
+                      </p>
+                    </div>
+                    <div className="flex items-center mb-2">
+                      <label className="mr-2">지역 : </label>
+                      <p className="flex-grow p-1 border rounded">
+                        {selectedTour.address}
+                      </p>
+                    </div>
+                    <div className="flex items-center mb-2">
+                      <label className="mr-2">내용 : </label>
+                      <p className="flex-grow h-auto p-1 border rounded">
+                        {selectedTour.placeContent}
+                      </p>
+                    </div>
+                    <div className="w-full h-auto">
+                      <img
+                        src={selectedTour.image}
+                        className="w-auto h-auto max-h-[250px]"
+                      />
+                    </div>
+                  </div>
+                )}
+                <div className="absolute bottom-4 right-4">
+                  <ModalAction className="absolute bottom-0 right-0 flex flex-row">
+                    <Button
+                      className="w-24 normal-case btn-primary btn-sm"
+                      onClick={basketClicked}
+                    >
+                      Basket
+                    </Button>
+                    <Button
+                      className="w-24 normal-case btn-sm"
+                      onClick={closeDetailClicked}
+                    >
+                      Close
+                    </Button>
+                  </ModalAction>
+                </div>
+              </ModalContent>
+            </Modal>
             <div className="main-info-pagination-controls">
               {renderPagination()}
             </div>
           </section>
-          
+
           <table style={{ paddingLeft: "-200px", paddingRight: "200px" }}>
-              <tr>
-                <td>
-                  <a href="/ListPage" style={{fontSize: "50px"}}>ListPage</a>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="/MyProfilePage" style={{fontSize: "50px"}}>MyProfilePage</a>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="/PlanningPage" style={{fontSize: "50px"}}>PlanningPage</a>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="/SchedulePage" style={{fontSize: "50px"}}>SchedulePage</a>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="/SignInPage" style={{fontSize: "50px"}}>SignInPage</a>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="/SignUpPage" style={{fontSize: "50px"}}>SignUpPage</a>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="/TourPage" style={{fontSize: "50px"}}>TourPage</a>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="/UserProfilePage" style={{fontSize: "50px"}}>UserProfilePage</a>
-                </td>
-              </tr>
-            </table>
+            <tr>
+              <td>
+                <a href="/ListPage" style={{ fontSize: "50px" }}>
+                  ListPage
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a href="/MyProfilePage" style={{ fontSize: "50px" }}>
+                  MyProfilePage
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a href="/PlanningPage" style={{ fontSize: "50px" }}>
+                  PlanningPage
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a href="/SchedulePage" style={{ fontSize: "50px" }}>
+                  SchedulePage
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a href="/SignInPage" style={{ fontSize: "50px" }}>
+                  SignInPage
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a href="/SignUpPage" style={{ fontSize: "50px" }}>
+                  SignUpPage
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a href="/TourPage" style={{ fontSize: "50px" }}>
+                  TourPage
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a href="/UserProfilePage" style={{ fontSize: "50px" }}>
+                  UserProfilePage
+                </a>
+              </td>
+            </tr>
+          </table>
         </div>
         <div className="main-section-container">
-        <table style={{ paddingLeft: "200px", paddingRight: "-200px" }}>
-              <tr>
-                <td>
-                  <a href="/ListPage" style={{fontSize: "50px"}}>ListPage</a>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="/MyProfilePage" style={{fontSize: "50px"}}>MyProfilePage</a>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="/PlanningPage" style={{fontSize: "50px"}}>PlanningPage</a>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="/SchedulePage" style={{fontSize: "50px"}}>SchedulePage</a>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="/SignInPage" style={{fontSize: "50px"}}>SignInPage</a>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="/SignUpPage" style={{fontSize: "50px"}}>SignUpPage</a>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="/TourPage" style={{fontSize: "50px"}}>TourPage</a>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="/UserProfilePage" style={{fontSize: "50px"}}>UserProfilePage</a>
-                </td>
-              </tr>
-            </table>
+          <table style={{ paddingLeft: "200px", paddingRight: "-200px" }}>
+            <tr>
+              <td>
+                <a href="/ListPage" style={{ fontSize: "50px" }}>
+                  ListPage
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a href="/MyProfilePage" style={{ fontSize: "50px" }}>
+                  MyProfilePage
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a href="/PlanningPage" style={{ fontSize: "50px" }}>
+                  PlanningPage
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a href="/SchedulePage" style={{ fontSize: "50px" }}>
+                  SchedulePage
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a href="/SignInPage" style={{ fontSize: "50px" }}>
+                  SignInPage
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a href="/SignUpPage" style={{ fontSize: "50px" }}>
+                  SignUpPage
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a href="/TourPage" style={{ fontSize: "50px" }}>
+                  TourPage
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a href="/UserProfilePage" style={{ fontSize: "50px" }}>
+                  UserProfilePage
+                </a>
+              </td>
+            </tr>
+          </table>
           <section className="main-section-div" style={{ marginLeft: "13%" }}>
             <span className="main-section-span-title">여행 계획</span>
             <div></div>
@@ -369,7 +433,11 @@ const Main: React.FC<MainPageProps> = () => {
               value={inputPlanValue}
               onChange={handlePlanInputChange}
             />
-            <button type="button" className="main-trip-plan-button" onClick={handlePlanClick}>
+            <button
+              type="button"
+              className="main-trip-plan-button"
+              onClick={handlePlanClick}
+            >
               검색
             </button>
           </section>
@@ -382,47 +450,63 @@ const Main: React.FC<MainPageProps> = () => {
             <img src="/topbar-logo.png" alt="Logo" className="header-logo" />
           </section>
           <table style={{ paddingLeft: "-200px", paddingRight: "200px" }}>
-              <tr>
-                <td>
-                  <a href="/ListPage" style={{fontSize: "50px"}}>ListPage</a>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="/MyProfilePage" style={{fontSize: "50px"}}>MyProfilePage</a>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="/PlanningPage" style={{fontSize: "50px"}}>PlanningPage</a>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="/SchedulePage" style={{fontSize: "50px"}}>SchedulePage</a>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="/SignInPage" style={{fontSize: "50px"}}>SignInPage</a>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="/SignUpPage" style={{fontSize: "50px"}}>SignUpPage</a>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="/TourPage" style={{fontSize: "50px"}}>TourPage</a>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="/UserProfilePage" style={{fontSize: "50px"}}>UserProfilePage</a>
-                </td>
-              </tr>
-            </table>
+            <tr>
+              <td>
+                <a href="/ListPage" style={{ fontSize: "50px" }}>
+                  ListPage
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a href="/MyProfilePage" style={{ fontSize: "50px" }}>
+                  MyProfilePage
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a href="/PlanningPage" style={{ fontSize: "50px" }}>
+                  PlanningPage
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a href="/SchedulePage" style={{ fontSize: "50px" }}>
+                  SchedulePage
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a href="/SignInPage" style={{ fontSize: "50px" }}>
+                  SignInPage
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a href="/SignUpPage" style={{ fontSize: "50px" }}>
+                  SignUpPage
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a href="/TourPage" style={{ fontSize: "50px" }}>
+                  TourPage
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a href="/UserProfilePage" style={{ fontSize: "50px" }}>
+                  UserProfilePage
+                </a>
+              </td>
+            </tr>
+          </table>
         </div>
       </main>
       <button
