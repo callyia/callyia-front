@@ -12,7 +12,7 @@
     "@types/react": "^18.2.37",
     "@types/react-beautiful-dnd": "^13.1.7",
     "@types/react-dom": "^18.2.15",
-    "axios": "^1.6.2",
+    "axios": "^1.6.5",
     "bootstrap": "^5.3.2",
     "chance": "^1.1.11",
     "ci": "^2.3.0",
@@ -36,6 +36,7 @@
     "swiper": "^11.0.5",
     "web-vitals": "^2.1.4"
   },
+  "proxy": "http://localhost:8080",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

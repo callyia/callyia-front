@@ -1,19 +1,13 @@
 //SchedulePosting.tsx
 import React, { useEffect, useState } from "react";
-import ScheduleCard, { ScheduleItem } from "../../components/ScheduleCard";
+import axios from "axios";
 import { Link } from "react-router-dom";
-import "./SchedulePosting.css";
-import ReactDOMServer from "react-dom/server";
 
-// ScheduleItem을 확장하며, 추가적으로 day, images, comments 속성들을 추가
-interface ExtendedScheduleItem extends ScheduleItem {
-  day: number;
-  images: string[];
-  comments: string[];
-}
+import ScheduleCard, { ScheduleItem } from "../../components/ScheduleCard";
+import "./SchedulePosting.css";
 
 // 세부 일정 내용들
-const scheduleData: ExtendedScheduleItem[] = [
+const scheduleData: ScheduleItem[] = [
   {
     id: 1,
     day: 1,
@@ -149,9 +143,11 @@ declare global {
 }
 
 export default function SchedulePosting() {
+  const [scheduleData, setScheduleData] = useState<ScheduleItem[]>([]);
+
   // ScheduleCard를 DAY별로 그룹화하는 함수------------------------------
-  const groupByDay = (schedule: ExtendedScheduleItem[]) => {
-    const grouped: { [day: number]: ExtendedScheduleItem[] } = {};
+  const groupByDay = (schedule: ScheduleItem[]) => {
+    const grouped: { [day: number]: ScheduleItem[] } = {};
     schedule.forEach((item) => {
       if (!grouped[item.day]) {
         grouped[item.day] = [];
@@ -238,6 +234,20 @@ export default function SchedulePosting() {
   };
 
   useEffect(() => {
+    // const fetchTourData = async () => {
+    //   try {
+    //     const response = await fetch(`http://localhost:8080/Callyia/Schedule/posting?sno=${}`);
+    //     if (!response.ok) {
+    //       throw new Error(`HTTP error! Status: ${response.status}`);
+    //     }
+    //     const data = await response.json();
+
+    //     setScheduleData(data.content);
+    //   } catch (error) {
+    //     console.error("Error fetching tour data:", error);
+    //   }
+    // };
+
     const container = document.getElementById("map"); //지도를 담을 영역의 DOM 레퍼런스
     const mainPosition = new window.kakao.maps.LatLng( //Default위치 설정
       scheduleData[0].lat,
@@ -279,9 +289,9 @@ export default function SchedulePosting() {
   };
 
   //--------------------------------------------------------------------------------
-  const [cart, setCart] = useState<ExtendedScheduleItem[]>([]);
+  const [cart, setCart] = useState<ScheduleItem[]>([]);
 
-  const handleAddToCart = (item: ExtendedScheduleItem) => {
+  const handleAddToCart = (item: ScheduleItem) => {
     setCart((prevCart) => [...prevCart, item]);
   };
 
