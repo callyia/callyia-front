@@ -30,16 +30,9 @@ const Main: React.FC<MainPageProps> = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [showTopButton, setShowTopButton] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTour, setSelectedTour] = useState<TourData | null>(null);
   const [openDetail, setOpenDetail] = useState(false);
-  const [openModal, setOpenModal] = useState(false); //등록페이지 열림 닫힘 상태
-  const [clearUploadImage, setClearUploadImage] = useState(false); //등록페이지 이미지 초기화
-  const [selectedPlace, setSelectedPlace] = useState<any>(null);
-  const [content, setContent] = useState<string>("");
-
-  const itemsPerPage = 12;
-  const numberOfPages = Math.ceil(tourData.length / itemsPerPage);
+  
   const pagesToShow = 10;
   const startPage =
     Math.floor((currentPage - 1) / pagesToShow) * pagesToShow + 1;
@@ -55,22 +48,6 @@ const Main: React.FC<MainPageProps> = () => {
   const closeDetailClicked = () => {
     setSelectedTour(null); // 선택된 관광지 정보 초기화
     setOpenDetail(false);
-  };
-
-  // 등록페이지 열기
-  const openClicked = () => {
-    setClearUploadImage(false);
-    setOpenModal(true); // 모달 열기
-  };
-
-  // 등록페이지 닫기
-  const closeClicked = () => {
-    // 등록이 완료되면 상태 초기화
-    setSelectedPlace(null);
-    setContent("");
-
-    setClearUploadImage(true);
-    setOpenModal(false);
   };
 
   useEffect(() => {
@@ -147,17 +124,6 @@ const Main: React.FC<MainPageProps> = () => {
 
   const handlePlanClick = () => {
     navigate(`/PlanningPage?title=${inputPlanValue}`);
-  };
-
-  const handleTourClick = (tour: TourData) => {
-    setSelectedTour(tour);
-    setIsModalOpen(true);
-  };
-
-  // Handler for closing the modal
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setSelectedTour(null);
   };
 
   const goToPage = (page: number) => {
@@ -278,6 +244,7 @@ const Main: React.FC<MainPageProps> = () => {
                       <img
                         src={selectedTour.image}
                         className="w-auto h-auto max-h-[250px]"
+                        alt={selectedTour.image}
                       />
                     </div>
                   </div>
