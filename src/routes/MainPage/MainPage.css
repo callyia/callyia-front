@@ -212,3 +212,11 @@ input[type="text"] {
   font-weight: bold;
   text-decoration: solid black 4px;
 }
+
+.main-tour-info-image {
+  width: 300px;
+  height: 200px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  justify-items: center;
+}
