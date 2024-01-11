@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { Button } from "../../theme/daisyui";
 
+import { Modal, ModalAction, ModalContent } from "./../TourPage/Modal";
 import "./MainPage.css";
 
 interface TourData {
@@ -28,12 +30,47 @@ const Main: React.FC<MainPageProps> = () => {
   const [currentPage, setCurrentPage] = useState(1); 
   const [totalPages, setTotalPages] = useState(1); 
   const [showTopButton, setShowTopButton] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedTour, setSelectedTour] = useState<TourData | null>(null);
+  const [openDetail, setOpenDetail] = useState(false);
+  const [openModal, setOpenModal] = useState(false); //등록페이지 열림 닫힘 상태
+  const [clearUploadImage, setClearUploadImage] = useState(false); //등록페이지 이미지 초기화
+  const [selectedPlace, setSelectedPlace] = useState<any>(null);
+  const [content, setContent] = useState<string>("");
 
   const itemsPerPage = 12;
   const numberOfPages = Math.ceil(tourData.length / itemsPerPage);
   const pagesToShow = 10;
   const startPage = Math.floor((currentPage - 1) / pagesToShow) * pagesToShow + 1;
   const endPage = Math.min(startPage + pagesToShow - 1, totalPages);
+
+  // 상세페이지 열기
+  const openDetailClicked = (selectedTour: TourData) => {
+    setSelectedTour(selectedTour); // 클릭된 관광지 정보 저장
+    setOpenDetail(true);
+  };
+
+  // 상세페이지 닫기
+  const closeDetailClicked = () => {
+    setSelectedTour(null); // 선택된 관광지 정보 초기화
+    setOpenDetail(false);
+  };
+
+  // 등록페이지 열기
+  const openClicked = () => {
+    setClearUploadImage(false);
+    setOpenModal(true); // 모달 열기
+  };
+
+  // 등록페이지 닫기
+  const closeClicked = () => {
+    // 등록이 완료되면 상태 초기화
+    setSelectedPlace(null);
+    setContent("");
+
+    setClearUploadImage(true);
+    setOpenModal(false);
+  };
 
   useEffect(() => {
     const fetchTourData = async () => {
@@ -66,6 +103,39 @@ const Main: React.FC<MainPageProps> = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // 장바구니 클릭 시 장바구니 등록
+  const basketClicked = async () => {
+    console.log("placeId to check:", selectedTour?.placeId);
+    try {
+      // 투어 정보를 데이터베이스에 저장
+      const response = await axios.post(
+        "http://localhost:8080/Callyia/TourBasket",
+        JSON.stringify({
+          bno: null,
+          placeId: selectedTour?.placeId,
+        }),
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.status !== 200) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const result = response.data;
+      console.log("결과:", result);
+
+      alert(`장바구니에 추가하였습니다. 내용: ${selectedTour?.placeId}`);
+    } catch (error: any) {
+      console.error("Error accepting data:", error.message);
+      if (error.message.includes("409")) {
+        alert("해당 파일은 이미 등록되어 있습니다.");
+      }
+    }
+  };
+  
   const handlePlanInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputPlanValue(event.target.value);
   }
@@ -73,6 +143,17 @@ const Main: React.FC<MainPageProps> = () => {
   const handlePlanClick = () => {
     navigate(`/PlanningPage?title=${(inputPlanValue)}`)
   }
+
+  const handleTourClick = (tour: TourData) => {
+    setSelectedTour(tour);
+    setIsModalOpen(true);
+  };
+
+  // Handler for closing the modal
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedTour(null);
+  };
 
   const goToPage = (page: number) => {
     setCurrentPage(Math.max(1, Math.min(totalPages, page)));
@@ -124,7 +205,8 @@ const Main: React.FC<MainPageProps> = () => {
             <span className="main-section-span-title">여행 정보</span>
             <div className="main-tour-info-section">
             {tourData.map((tour) => (
-              <div key={tour.placeId}>
+              <div key={tour.placeId}
+              onClick={() => openDetailClicked(tour)}>
                 {tour.image && (
                   <img src={tour.image} alt={tour.placeName} style={{width: "300px", justifyItems:"center"}}/>
                   )}
@@ -132,6 +214,60 @@ const Main: React.FC<MainPageProps> = () => {
               </div>
             ))}
           </div>
+          <Modal className="" open={openDetail}>
+            <ModalContent
+              onCloseIconClicked={closeDetailClicked}
+              className="p-4 bg-white rounded-lg min-h-[500px] h-auto w-[800px] relative"
+            >
+              <div>
+                <h3 className="mb-8 text-center">상세페이지입니다.</h3>
+              </div>
+              {selectedTour && (
+                <div className="grid">
+                  <div className="flex items-center mb-2">
+                    <label className="mr-2">이름 : </label>
+                    <p className="flex-grow p-1 border rounded">
+                      {selectedTour.placeName}
+                    </p>
+                  </div>
+                  <div className="flex items-center mb-2">
+                    <label className="mr-2">지역 : </label>
+                    <p className="flex-grow p-1 border rounded">
+                      {selectedTour.address}
+                    </p>
+                  </div>
+                  <div className="flex items-center mb-2">
+                    <label className="mr-2">내용 : </label>
+                    <p className="flex-grow h-auto p-1 border rounded">
+                      {selectedTour.placeContent}
+                    </p>
+                  </div>
+                  <div className="w-full h-auto">
+                    <img
+                      src={selectedTour.image}
+                      className="w-auto h-auto max-h-[250px]"
+                    />
+                  </div>
+                </div>
+              )}
+              <div className="absolute bottom-4 right-4">
+                <ModalAction className="absolute bottom-0 right-0 flex flex-row">
+                  <Button
+                    className="w-24 normal-case btn-primary btn-sm"
+                    onClick={basketClicked}
+                  >
+                    Basket
+                  </Button>
+                  <Button
+                    className="w-24 normal-case btn-sm"
+                    onClick={closeDetailClicked}
+                  >
+                    Close
+                  </Button>
+                </ModalAction>
+              </div>
+            </ModalContent>
+          </Modal>
             <div className="main-info-pagination-controls">
               {renderPagination()}
             </div>
