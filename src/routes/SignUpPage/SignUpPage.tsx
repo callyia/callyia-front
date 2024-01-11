@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from "react";
 import { FormEvent, ChangeEvent } from "react";
 import "./SignUpPage.css";
+import axios from "axios";
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
@@ -94,6 +95,33 @@ const SignUp = () => {
     }
     // Implement your sign-up logic here
     console.log("Signing up with:", email, password, tel2, tel3);
+
+    // 리액트 코드 예시
+    const memberData = {
+      id: "userId123",
+      password: "userPassword123",
+      gender: "male",
+      name: "John Doe",
+      nickname: "johnny",
+      phone: "123-456-7890",
+      email: "john.doe@example.com",
+      profileImage: "profile.jpg",
+      aboutMe: "Hello, I am John Doe.",
+      joinDate: "2022-01-01", // 예시로 지정한 필드, 실제 데이터에 맞게 수정
+      roleSet: ["ROLE_USER"],
+    };
+
+    // API 호출을 통해 서버로 데이터 전송
+    axios
+      .post("http://localhost:8080/Callyia/member", memberData)
+      .then((response: any) => {
+        // 성공적으로 처리된 경우
+        console.log(response.data);
+      })
+      .catch((error: any) => {
+        // 오류 발생 시 처리
+        console.error(error);
+      });
   };
 
   return (
