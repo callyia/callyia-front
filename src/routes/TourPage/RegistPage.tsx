@@ -82,7 +82,7 @@ const RegistPage = () => {
     try {
       // 투어 정보를 데이터베이스에 저장
       const response = await axios.post(
-        "http://localhost:8080/Callyia/TourBasket",
+        "http://localhost:8080/Callyia/Basket",
         JSON.stringify({
           bno: null,
           placeId: selectedTour?.placeId,
