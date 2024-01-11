@@ -48,6 +48,13 @@ const RegistPage = () => {
   const [selectedTour, setSelectedTour] = useState<TourData | null>(null); //List에 선택한 데이터 정보 저장 공간
   const [totalPages, setTotalPages] = useState<number>(1); //전체 페이지
 
+  const itemsPerPage = 12;
+  const numberOfPages = Math.ceil(searchResults.length / itemsPerPage);
+  const goToPage = (page: number) => {
+    const newPage = Math.max(1, Math.min(numberOfPages, page));
+    setCurrentPage(newPage);
+  };
+
   // 상세페이지 열기
   const openDetailClicked = (selectedTour: TourData) => {
     setSelectedTour(selectedTour); // 클릭된 관광지 정보 저장
@@ -82,7 +89,7 @@ const RegistPage = () => {
     try {
       // 투어 정보를 데이터베이스에 저장
       const response = await axios.post(
-        "http://localhost:8080/Callyia/TourBasket",
+        "http://localhost:8080/Callyia/Basket",
         JSON.stringify({
           bno: null,
           placeId: selectedTour?.placeId,
@@ -323,6 +330,7 @@ const RegistPage = () => {
       }
 
       const uploadResult = uploadResponse.data;
+      // const imagePath = uploadResult.imageUrl; // 이미지가 저장된 경로
       const imagePath = uploadResult.imagePath; // 이미지가 저장된 경로
 
       // 투어 정보를 데이터베이스에 저장
@@ -589,21 +597,29 @@ const RegistPage = () => {
         </div>
         <div className="ListPagenationWrapper">
           <button
-            className="moveToFirstPage"
-            onClick={() => {
-              firstPage();
-            }}
+            onClick={() => goToPage(Math.ceil(currentPage / 10) * 10 - 10)}
+            disabled={currentPage === 1}
           >
-            &lt;&lt;
+            {"<<"}
+          </button>
+          <button
+            onClick={() => goToPage(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            {"<"}
           </button>
           {renderPageNumbers()}
           <button
-            className="moveToLastPage"
-            onClick={() => {
-              lastPage();
-            }}
+            onClick={() => goToPage(currentPage + 1)}
+            disabled={currentPage === numberOfPages}
           >
-            &gt;&gt;
+            {">"}
+          </button>
+          <button
+            onClick={() => goToPage(Math.ceil(currentPage / 10) * 10 + 1)}
+            disabled={currentPage === numberOfPages}
+          >
+            {">>"}
           </button>
         </div>
       </section>
