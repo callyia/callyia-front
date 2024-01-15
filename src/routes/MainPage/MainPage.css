@@ -81,7 +81,7 @@ input[type="text"] {
 /* 수정 여행 계획 서치바 준기  css */
 .main-trip-plan-input {
   margin-top: 20px;
-  margin-left: 22%;
+  /* margin-left: 22%; */
   background-color: #ddd;
   border: 3px solid black;
   border-radius: 8px;
@@ -97,9 +97,14 @@ input[type="text"] {
   border: 3px solid black;
   border-radius: 8px;
   font-family: "GmarketSans500";
-  height: 4%;
+  height: 50px;
   width: 6%;
   color: #ddd;
+}
+
+.main-trip-plan-button:hover {
+  background-color: #ddd;
+  color: black;
 }
 
 .main-section-div {
@@ -220,3 +225,20 @@ input[type="text"] {
   margin-bottom: 10px;
   justify-items: center;
 }
+
+.main-combo-day-dropdown {
+  padding: 5px 10px;
+  margin-top: 30px;
+  height: 50px;
+  border: 3px solid black;
+  border-radius: 8px;
+  background-color: black;
+  font-size: 16px;
+  color: white;
+  box-sizing: border-box;
+  border-radius: 4px;
+  color: white;
+  margin-left: 22%;
+}
+
+

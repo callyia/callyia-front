@@ -15,11 +15,11 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchKeyword, setSearchKeyword, 
   const getPlaceholder = () => {
     switch (searchCombo) {
       case "user":
-        return "여행친구를 검색하세요!";
+        return "여행친구를 검색하시고 ENTER를 누르세요!";
       case "location":
-        return "가고 싶은 곳에 대한 정보를 드리겠습니다";
+        return "가고 싶은 곳에 대한 정보를 드리겠습니다. 검색어를 입력하고 ENTER를 누르세요!";
       case "schedule":
-        return "아름다운 여행 일정을 만들기 위해 참고하세요";
+        return "아름다운 여행 일정을 만들기 위해 참고하세요. 검색어를 입력하고 ENTER를 누르세요!";
     }
   };
 

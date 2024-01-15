@@ -1,13 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import './ProfilePage.css';
 import  SelfIntroduction  from './SelfIntroduction';
+import DefaultContent from './DefaultContent';
+import ScheduleContent from './ScheduleContent';
+import CartContent from './CartContent';
 
 interface MyProfileProps {
   isEditing: boolean;
   toggleIsEditing: () => void;
   profileImage: string;
   handleProfileImageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  currentContent: string;
+  // currentContent: (newContent: string) => void;
 }
 
 function formatNumber(num: number) {
@@ -21,9 +26,23 @@ function formatNumber(num: number) {
   return num.toString();
 }
 
-const MyProfile: React.FC<MyProfileProps> = ({isEditing, toggleIsEditing}) => {
-
+const MyProfile: React.FC<MyProfileProps> = ({isEditing, toggleIsEditing, profileImage, handleProfileImageChange, currentContent 
+}) => {
+  
   const likesCount = 12223243;
+
+  let contentToRender;
+  switch (currentContent) {
+    case "CartContent":
+      contentToRender = <CartContent />;
+      break;
+    case "ScheduleContent":
+      contentToRender = <ScheduleContent />;
+      break;
+    default:
+      contentToRender = <DefaultContent />;
+      break;  
+  }
 
   return (
     <div className="profile-container" >
@@ -52,36 +71,7 @@ const MyProfile: React.FC<MyProfileProps> = ({isEditing, toggleIsEditing}) => {
       </div>
       </div>
     </div>
-      <div className="profile-user-posts">
-        {/* 변경 */}
-        <div className='profile-post-img'>
-          <img src="./profile/profile_like_icon.png" alt="post i liked" />
-        </div><div className='profile-post-img'>
-          <img src="./profile/profile_like_icon.png" alt="post i liked" />
-        </div><div className='profile-post-img'>
-          <img src="./profile/profile_like_icon.png" alt="post i liked" />
-        </div><div className='profile-post-img'>
-          <img src="./profile/profile_like_icon.png" alt="post i liked" />
-        </div><div className='profile-post-img'>
-          <img src="./profile/profile_like_icon.png" alt="post i liked" />
-        </div><div className='profile-post-img'>
-          <img src="./profile/profile_like_icon.png" alt="post i liked" />
-        </div><div className='profile-post-img'>
-          <img src="./profile/profile_like_icon.png" alt="post i liked" />
-        </div><div className='profile-post-img'>
-          <img src="./profile/profile_like_icon.png" alt="post i liked" />
-        </div><div className='profile-post-img'>
-          <img src="./profile/profile_like_icon.png" alt="post i liked" />
-        </div><div className='profile-post-img'>
-          <img src="./profile/profile_like_icon.png" alt="post i liked" />
-        </div><div className='profile-post-img'>
-          <img src="./profile/profile_like_icon.png" alt="post i liked" />
-        </div><div className='profile-post-img'>
-          <img src="./profile/profile_like_icon.png" alt="post i liked" />
-        </div><div className='profile-post-img'>
-          <img src="./profile/profile_like_icon.png" alt="post i liked" />
-        </div>
-      </div>
+        {contentToRender}
     </div>
   );
 };

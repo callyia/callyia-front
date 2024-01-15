@@ -4,11 +4,16 @@ import { useNavigate } from 'react-router-dom';
 import MyProfile from './MyProfilePage';
 
 export default function MyProfilePage() { 
+  const navigate = useNavigate();
+  
   const [isEditing, setIsEditing] = useState(false); 
   const [profileImage, setProfileImage] = useState<string>('./dummyimages/image1.jpeg'); // 기본 이미지
   const fileInputRef = useRef<HTMLInputElement>(null);
   const userId = 'dummyUser'; 
-  const navigate = useNavigate();
+  const [currentContent, setCurrentContent] = useState('default');
+
+  const changeContent = (newContent: string) =>  setCurrentContent(newContent);
+  
 
   const handleProfileImageChange = (event:ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files ? event.target.files[0] : null;
@@ -93,11 +98,11 @@ export default function MyProfilePage() {
             >
               <div className="profile-actions">
                 <div className='profile-action-div'>
-                <button className="profile-action-button"><img src="./profile/profile_calender_icon.png" alt="my calender" /></button>
+                <button className="profile-action-button" onClick={() => changeContent("CartContent")}><img src="./profile/profile_calender_icon.png" alt="my calender" /></button>
                 <h3>나의 일정 바로가기</h3>
                 </div>
                 <div className='profile-action-div'>
-                <button className="profile-action-button"><img src="./profile/profile_shop_bag_basket_icon.png" alt="my scuedule cart" /></button>
+                <button className="profile-action-button"onClick={() => changeContent("ScheduleContent")}><img src="./profile/profile_shop_bag_basket_icon.png" alt="my scuedule cart" /></button>
                 <h3>나의 일정 장바구니</h3> 
                 {/* 클릭하면 SchedulePage로 가게 */}
                 </div>
@@ -125,7 +130,9 @@ export default function MyProfilePage() {
               isEditing={isEditing}
               toggleIsEditing={() => setIsEditing(!isEditing)}
               profileImage={profileImage} 
-              handleProfileImageChange={handleProfileImageChange}/>
+              handleProfileImageChange={handleProfileImageChange}
+              currentContent={currentContent}
+              />
             </div>
             
           </div>
