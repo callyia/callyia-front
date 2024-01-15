@@ -71,6 +71,29 @@ const ListPage = () => {
       </div>
     );
   }
+
+  if (searchResults.length === 0) {
+    return (
+      <div className="list-page">
+        <div className='list-search-keyword-header'>
+        <span className='list-search-combo'>'
+            {searchCombo === 'user' && '유저'}
+            {searchCombo === 'location' && '장소'}
+            {searchCombo === 'schedule' && '일정'}
+          '</span>(으)로 선택하여 
+          <span className='list-search-keyword'> {searchKeyword}</span>를 검색한 결과입니다.
+          <div></div>
+
+          <span className='list-search-keyword'>
+          {searchCombo === 'user' && '유저'}
+          {searchCombo === 'location' && '장소'}
+          {searchCombo === 'schedule' && '일정'}
+            (을)를 찾을 수 없습니다. 다시 한번 더 확인바랍니다.</span>
+        </div>
+      </div>
+    );
+  }
+  
    return (
     <div className="list-page" >
         <div className='list-search-keyword-header' >

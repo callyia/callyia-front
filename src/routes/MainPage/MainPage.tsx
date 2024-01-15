@@ -32,6 +32,7 @@ const Main: React.FC<MainPageProps> = () => {
   const [showTopButton, setShowTopButton] = useState(false);
   const [selectedTour, setSelectedTour] = useState<TourData | null>(null);
   const [openDetail, setOpenDetail] = useState(false);
+  const [selectedDay, setSelectedDay] = useState(1);
   
   const pagesToShow = 10;
   const startPage =
@@ -122,8 +123,13 @@ const Main: React.FC<MainPageProps> = () => {
     setInputPlanValue(event.target.value);
   };
 
+  const handleDayInputChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedDay(parseInt(event.target.value));
+  }
+
+  
   const handlePlanClick = () => {
-    navigate(`/PlanningPage?title=${inputPlanValue}`);
+    navigate(`/PlanningPage?title=${inputPlanValue}&day=${selectedDay}`);
   };
 
   const goToPage = (page: number) => {
@@ -392,21 +398,29 @@ const Main: React.FC<MainPageProps> = () => {
           </table>
           <section className="main-section-div" style={{ marginLeft: "13%" }}>
             <span className="main-section-span-title">여행 계획</span>
-            <div></div>
+            <div className="main-trip-plan-container">
+            <select value={selectedDay} onChange={handleDayInputChange} className="main-combo-day-dropdown">
+              {[1, 2, 3, 4, 5, 6, 7].map((number) => (
+                <option key={number} value={number}>
+                  {number}
+                </option>
+              ))}
+            </select>
             <input
               type="text"
               className="main-trip-plan-input"
-              placeholder="여행 계획을 입력하세요!"
+              placeholder="왼쪽에 몇일 계획인지 선택하시고, 여행 계획의 제목을 입력하세요!"
               value={inputPlanValue}
               onChange={handlePlanInputChange}
-            />
+              />
             <button
               type="button"
               className="main-trip-plan-button"
               onClick={handlePlanClick}
-            >
+              >
               검색
             </button>
+            </div>
           </section>
         </div>
         <div className="main-section-container">
