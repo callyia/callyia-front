@@ -29,6 +29,8 @@ const Plan: React.FC<PlanProps> = ({ plan, onClick }) => {
   } = plan;
 
   const MapClick = () => {
+    console.log("MAPCLICK");
+    console.log(placeName);
     onClick(latitude, longitude);
   };
 

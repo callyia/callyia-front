@@ -41,25 +41,35 @@ var backPolyline: any = null;
 
 // 2개의 좌표에 대한 라인의 생성 및 삭제를 위한 좌표 배열 변수
 var linePosition = [];
+var pd: any[] = [];
 // 2개의 좌표에 대한 라인의 생성 및 삭제를 담당하는 라인 변수
 var polyline: any = null;
 // 2개의 좌표에 대한 라인의 거리정보를 표시하기 위한 변수
 var distance;
-var distanceContent;
+var distanceContent: any;
 var distanceOverlay: any = null;
 
 export default function Planning() {
   const [map, setMap] = useState<Window["kakao"]["maps"]["Map"] | null>(null);
   const [planData, setPlanData] = useState(plans);
+  const [planData2, setPlanData2] = useState(plans);
+  const [planData3, setPlanData3] = useState(plans);
+  const [planData4, setPlanData4] = useState(plans);
+  const [planData5, setPlanData5] = useState(plans);
+  const [planData6, setPlanData6] = useState(plans);
+  const [planData7, setPlanData7] = useState(plans);
+
   const [searchData, setSearchData] = useState([]);
   const [area1, toggleArea1] = useToggle();
   const [area2, toggleArea2] = useToggle();
   const [isModalOpen, setModalOpen] = useState(false);
+  const [isPostModalOpen, setPostModalOpen] = useState(false);
 
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const pnoParam = queryParams.get("pno");
   const titleParam = queryParams.get("title");
+  const dayParam = queryParams.get("day");
   const navigate = useNavigate();
 
   const showBackgroundLine = (planData: any[]) => {
@@ -84,9 +94,20 @@ export default function Planning() {
       marker.setMap(null);
     });
 
+    pd = [
+      ...planData,
+      ...planData2,
+      ...planData3,
+      ...planData4,
+      ...planData5,
+      ...planData6,
+      ...planData7,
+    ];
+
     markers = [];
 
-    planData.forEach((plan, index) => {
+    // planData.forEach((plan, index) => {
+    pd.forEach((plan, index) => {
       const imageSrc =
           "../../../dummyimages/NumberImage/number" + (index + 1) + ".png", // 마커이미지의 주소입니다
         imageSize = new window.kakao.maps.Size(35, 70), // 마커이미지의 크기입니다
@@ -117,46 +138,169 @@ export default function Planning() {
 
   // 드래그 앤 드롭이 끝났을 때 호출되는 함수
   const onDragEnd = (result: any) => {
-    if (distanceOverlay) distanceOverlay.setMap(null);
-    if (polyline) polyline.setMap(null);
+    const { source, destination } = result;
 
-    if (!result.destination) {
-      // 리스트 외부로 드래그된 경우 처리
+    if (!destination) {
       return;
     }
 
-    const updatedPlans = Array.from(planData); // 현재 아이템 배열을 복사
-    const [movedPlan] = updatedPlans.splice(result.source.index, 1); // 드래그된 아이템을 소스 인덱스에서 제거
+    // 같은 droppable 영역에서의 이동
+    if (source.droppableId === destination.droppableId) {
+      const items = getPlanDataByDroppableId(source.droppableId);
+      const [movedItem] = items.splice(source.index, 1);
+      items.splice(destination.index, 0, movedItem);
 
-    console.log(result);
-    if (result.destination.droppableId != "droppable_trash")
-      updatedPlans.splice(result.destination.index, 0, movedPlan); // 목적지 인덱스에 드래그된 아이템 삽입
+      updatePlanDataByDroppableId(source.droppableId, items);
+    }
+    // 다른 droppable 영역으로 이동
+    else {
+      const sourceItems = getPlanDataByDroppableId(source.droppableId);
+      const destItems = getPlanDataByDroppableId(destination.droppableId);
 
-    setPlanData(updatedPlans); // 상태 업데이트
-    console.log(updatedPlans);
+      const [movedItem] = sourceItems.splice(source.index, 1);
+      destItems.splice(destination.index, 0, movedItem);
+
+      updatePlanDataByDroppableId(source.droppableId, sourceItems);
+      updatePlanDataByDroppableId(destination.droppableId, destItems);
+    }
 
     updateMarker();
-    console.log(`markers : ${markers}`);
+
+    if (polyline) polyline.setMap(null);
   };
 
-  const Click = (lat: number, lng: number, index: number) => {
+  const getPlanDataByDroppableId = (droppableId: any) => {
+    switch (droppableId) {
+      case "droppable1":
+        return planData.slice();
+      case "droppable2":
+        return planData2.slice();
+      case "droppable3":
+        return planData3.slice();
+      case "droppable4":
+        return planData4.slice();
+      case "droppable5":
+        return planData5.slice();
+      case "droppable6":
+        return planData6.slice();
+      case "droppable7":
+        return planData7.slice();
+      // Add more cases as needed for additional droppables
+      default:
+        return [];
+    }
+  };
+
+  const updatePlanDataByDroppableId = (droppableId: any, items: any) => {
+    switch (droppableId) {
+      case "droppable1":
+        setPlanData(items);
+        break;
+      case "droppable2":
+        setPlanData2(items);
+        break;
+      case "droppable3":
+        setPlanData3(items);
+        break;
+      case "droppable4":
+        setPlanData4(items);
+        break;
+      case "droppable5":
+        setPlanData5(items);
+        break;
+      case "droppable6":
+        setPlanData6(items);
+        break;
+      case "droppable7":
+        setPlanData7(items);
+        break;
+
+      // Add more cases as needed for additional droppables
+      default:
+        break;
+    }
+  };
+
+  const Click = (
+    lat: number,
+    lng: number,
+    index: number,
+    droppableIndex: number
+  ) => {
+    console.log("droppableIndex :" + droppableIndex);
+    const dropIndex = droppableIndex + 1;
+
     if (distanceOverlay) distanceOverlay.setMap(null);
     if (polyline) polyline.setMap(null);
     panTo(lat, lng);
     console.log(`index : ${index}`);
 
     if (index >= 1) {
-      console.log(planData[index - 1].placeName);
-      console.log(planData[index].placeName);
+      if (dropIndex == 1) {
+        var beforePos = new window.kakao.maps.LatLng(
+          planData[index - 1].latitude,
+          planData[index - 1].longitude
+        );
+        var currentPos = new window.kakao.maps.LatLng(
+          planData[index].latitude,
+          planData[index].longitude
+        );
+      } else if (dropIndex == 2) {
+        var beforePos = new window.kakao.maps.LatLng(
+          planData2[index - 1].latitude,
+          planData2[index - 1].longitude
+        );
+        var currentPos = new window.kakao.maps.LatLng(
+          planData2[index].latitude,
+          planData2[index].longitude
+        );
+      } else if (dropIndex == 3) {
+        var beforePos = new window.kakao.maps.LatLng(
+          planData3[index - 1].latitude,
+          planData3[index - 1].longitude
+        );
+        var currentPos = new window.kakao.maps.LatLng(
+          planData3[index].latitude,
+          planData3[index].longitude
+        );
+      } else if (dropIndex == 4) {
+        var beforePos = new window.kakao.maps.LatLng(
+          planData4[index - 1].latitude,
+          planData4[index - 1].longitude
+        );
+        var currentPos = new window.kakao.maps.LatLng(
+          planData4[index].latitude,
+          planData4[index].longitude
+        );
+      } else if (dropIndex == 5) {
+        var beforePos = new window.kakao.maps.LatLng(
+          planData5[index - 1].latitude,
+          planData5[index - 1].longitude
+        );
+        var currentPos = new window.kakao.maps.LatLng(
+          planData5[index].latitude,
+          planData5[index].longitude
+        );
+      } else if (dropIndex == 6) {
+        var beforePos = new window.kakao.maps.LatLng(
+          planData6[index - 1].latitude,
+          planData6[index - 1].longitude
+        );
+        var currentPos = new window.kakao.maps.LatLng(
+          planData6[index].latitude,
+          planData6[index].longitude
+        );
+      } else if (dropIndex == 7) {
+        var beforePos = new window.kakao.maps.LatLng(
+          planData7[index - 1].latitude,
+          planData7[index - 1].longitude
+        );
+        var currentPos = new window.kakao.maps.LatLng(
+          planData7[index].latitude,
+          planData7[index].longitude
+        );
+      }
 
-      var beforePos = new window.kakao.maps.LatLng(
-        planData[index - 1].latitude,
-        planData[index - 1].longitude
-      );
-      var currentPos = new window.kakao.maps.LatLng(
-        planData[index].latitude,
-        planData[index].longitude
-      );
       linePosition = [beforePos, currentPos];
       // console.log(linePosition[0]);
       // console.log(linePosition[1]);
@@ -171,10 +315,115 @@ export default function Planning() {
       polyline.setMap(map);
 
       distance = Math.round(polyline.getLength());
-      distanceContent = getTimeHTML(distance, planData[index].placeName);
+
+      if (dropIndex == 1)
+        distanceContent = getTimeHTML(distance, planData[index].placeName);
+      else if (dropIndex == 2)
+        distanceContent = getTimeHTML(distance, planData2[index].placeName);
+      else if (dropIndex == 3)
+        distanceContent = getTimeHTML(distance, planData3[index].placeName);
+      else if (dropIndex == 4)
+        distanceContent = getTimeHTML(distance, planData4[index].placeName);
+      else if (dropIndex == 5)
+        distanceContent = getTimeHTML(distance, planData5[index].placeName);
+      else if (dropIndex == 6)
+        distanceContent = getTimeHTML(distance, planData6[index].placeName);
+      else if (dropIndex == 7)
+        distanceContent = getTimeHTML(distance, planData7[index].placeName);
       console.log(distance);
 
       showDistance(distanceContent, currentPos);
+    } else if (index == 0) {
+      if (dropIndex != 1) {
+        if (dropIndex == 2) {
+          var beforePos = new window.kakao.maps.LatLng(
+            planData[planData.length - 1].latitude,
+            planData[planData.length - 1].longitude
+          );
+          var currentPos = new window.kakao.maps.LatLng(
+            planData2[index].latitude,
+            planData2[index].longitude
+          );
+        } else if (dropIndex == 3) {
+          var beforePos = new window.kakao.maps.LatLng(
+            planData2[planData2.length - 1].latitude,
+            planData2[planData2.length - 1].longitude
+          );
+          var currentPos = new window.kakao.maps.LatLng(
+            planData3[index].latitude,
+            planData3[index].longitude
+          );
+        } else if (dropIndex == 4) {
+          var beforePos = new window.kakao.maps.LatLng(
+            planData3[planData3.length - 1].latitude,
+            planData3[planData3.length - 1].longitude
+          );
+          var currentPos = new window.kakao.maps.LatLng(
+            planData4[index].latitude,
+            planData4[index].longitude
+          );
+        } else if (dropIndex == 5) {
+          var beforePos = new window.kakao.maps.LatLng(
+            planData4[planData4.length - 1].latitude,
+            planData4[planData4.length - 1].longitude
+          );
+          var currentPos = new window.kakao.maps.LatLng(
+            planData5[index].latitude,
+            planData5[index].longitude
+          );
+        } else if (dropIndex == 6) {
+          var beforePos = new window.kakao.maps.LatLng(
+            planData5[planData5.length - 1].latitude,
+            planData5[planData5.length - 1].longitude
+          );
+          var currentPos = new window.kakao.maps.LatLng(
+            planData6[index].latitude,
+            planData6[index].longitude
+          );
+        } else if (dropIndex == 7) {
+          var beforePos = new window.kakao.maps.LatLng(
+            planData6[planData6.length - 1].latitude,
+            planData6[planData6.length - 1].longitude
+          );
+          var currentPos = new window.kakao.maps.LatLng(
+            planData7[index].latitude,
+            planData7[index].longitude
+          );
+        }
+
+        linePosition = [beforePos, currentPos];
+        // console.log(linePosition[0]);
+        // console.log(linePosition[1]);
+
+        polyline = new window.kakao.maps.Polyline({
+          path: linePosition, // 선을 구성하는 좌표배열 입니다
+          strokeWeight: 5, // 선의 두께 입니다
+          strokeColor: "#f21818", // 선의 색깔입니다
+          strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+          strokeStyle: "solid", // 선의 스타일입니다
+        });
+        polyline.setMap(map);
+
+        distance = Math.round(polyline.getLength());
+
+        if (dropIndex == 1)
+          distanceContent = getTimeHTML(distance, planData[index].placeName);
+        else if (dropIndex == 2)
+          distanceContent = getTimeHTML(distance, planData2[index].placeName);
+        else if (dropIndex == 3)
+          distanceContent = getTimeHTML(distance, planData3[index].placeName);
+        else if (dropIndex == 4)
+          distanceContent = getTimeHTML(distance, planData4[index].placeName);
+        else if (dropIndex == 5)
+          distanceContent = getTimeHTML(distance, planData5[index].placeName);
+        else if (dropIndex == 6)
+          distanceContent = getTimeHTML(distance, planData6[index].placeName);
+        else if (dropIndex == 7)
+          distanceContent = getTimeHTML(distance, planData7[index].placeName);
+        console.log(distance);
+
+        showDistance(distanceContent, currentPos);
+      }
     }
   };
 
@@ -194,7 +443,7 @@ export default function Planning() {
     panTo(latitude, longitude);
     console.log(`id : ${placeId} / name : ${placeName}`);
     if (isBtnClick == true) {
-      if (planData.length >= 99)
+      if (pd.length >= 99)
         toast.error("플랜은 최대 99개까지 저장할 수 있어요!");
       else {
         setPlanData([
@@ -213,6 +462,47 @@ export default function Planning() {
       }
     }
   };
+
+  useEffect(() => {
+    const planDataArray = [
+      planData,
+      planData2,
+      planData3,
+      planData4,
+      planData5,
+      planData6,
+      planData7,
+    ];
+
+    const updatedDroppables = droppables.map((item, index) => {
+      return { ...item, data: planDataArray[index] };
+    });
+
+    setDroppables(updatedDroppables);
+
+    console.log("planData-------");
+    console.log(planData);
+    console.log("planData2-------");
+    console.log(planData2);
+    console.log("planData3-------");
+    console.log(planData3);
+    console.log("planData4-------");
+    console.log(planData4);
+    console.log("planData5-------");
+    console.log(planData5);
+    console.log("planData6-------");
+    console.log(planData6);
+    console.log("planData7-------");
+    console.log(planData7);
+  }, [
+    planData,
+    planData2,
+    planData3,
+    planData4,
+    planData5,
+    planData6,
+    planData7,
+  ]);
 
   const showDistance = (content: any, position: any) => {
     if (distanceOverlay) {
@@ -326,10 +616,6 @@ export default function Planning() {
       });
   };
 
-  useEffect(() => {
-    console.log(searchData);
-  }, [searchData]);
-
   const searchEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       const searchBtn = document.getElementById("searchBtn");
@@ -370,14 +656,50 @@ export default function Planning() {
 
       const url = `http://localhost:8080/Callyia/planning/save`;
 
+      const planData_day = planData.map((plan, index) => {
+        return { ...plan, day: 1 };
+      });
+      const planData2_day = planData2.map((plan, index) => {
+        return { ...plan, day: 2 };
+      });
+      const planData3_day = planData3.map((plan, index) => {
+        return { ...plan, day: 3 };
+      });
+      const planData4_day = planData4.map((plan, index) => {
+        return { ...plan, day: 4 };
+      });
+      const planData5_day = planData5.map((plan, index) => {
+        return { ...plan, day: 5 };
+      });
+      const planData6_day = planData6.map((plan, index) => {
+        return { ...plan, day: 6 };
+      });
+      const planData7_day = planData7.map((plan, index) => {
+        return { ...plan, day: 7 };
+      });
+
+      const planData_sum = [
+        ...planData_day,
+        ...planData2_day,
+        ...planData3_day,
+        ...planData4_day,
+        ...planData5_day,
+        ...planData6_day,
+        ...planData7_day,
+      ];
+
+      console.log(planData_sum);
+
       const requestBody = {
-        planDetailDTOs: planData.map((plan, index) => ({
+        planDetailDTOs: planData_sum.map((plan, index) => ({
           pno: null,
           placeId: plan.placeId,
+          day: plan.day,
           sequence: index,
         })),
         planDTO: {
           title: titleText.textContent,
+          day: dayParam ? dayParam : 1,
           userId: "Hello UserID",
         },
       };
@@ -415,15 +737,49 @@ export default function Planning() {
 
       const url = `http://localhost:8080/Callyia/planning/update`;
 
+      const planData_day = planData.map((plan, index) => {
+        return { ...plan, day: 1 };
+      });
+      const planData2_day = planData2.map((plan, index) => {
+        return { ...plan, day: 2 };
+      });
+      const planData3_day = planData3.map((plan, index) => {
+        return { ...plan, day: 3 };
+      });
+      const planData4_day = planData4.map((plan, index) => {
+        return { ...plan, day: 4 };
+      });
+      const planData5_day = planData5.map((plan, index) => {
+        return { ...plan, day: 5 };
+      });
+      const planData6_day = planData6.map((plan, index) => {
+        return { ...plan, day: 6 };
+      });
+      const planData7_day = planData7.map((plan, index) => {
+        return { ...plan, day: 7 };
+      });
+
+      const planData_sum = [
+        ...planData_day,
+        ...planData2_day,
+        ...planData3_day,
+        ...planData4_day,
+        ...planData5_day,
+        ...planData6_day,
+        ...planData7_day,
+      ];
+
       const requestBody = {
-        planDetailDTOs: planData.map((plan, index) => ({
+        planDetailDTOs: planData_sum.map((plan, index) => ({
           pno: pnoParam,
           placeId: plan.placeId,
+          day: plan.day,
           sequence: index,
         })),
         planDTO: {
           pno: pnoParam,
           title: titleText.textContent,
+          day: dayParam ? dayParam : 1,
           userId: "Hello UserID",
         },
       };
@@ -465,6 +821,14 @@ export default function Planning() {
     setModalOpen(false);
   };
 
+  const openPostModal = () => {
+    setPostModalOpen(true);
+  };
+
+  const closePostModal = () => {
+    setPostModalOpen(false);
+  };
+
   const updateTitle = () => {
     setModalOpen(false);
     const titleInput = document.querySelector(
@@ -473,6 +837,10 @@ export default function Planning() {
     const titleText = document.querySelector(
       "#titleText"
     ) as HTMLHeadingElement;
+    const updateButton = document.querySelector(
+      "#updateBtn"
+    ) as HTMLButtonElement;
+
     if (titleInput.value != "") {
       titleText.textContent = titleInput.value;
       toast.success("이름 변경 성공!");
@@ -480,6 +848,8 @@ export default function Planning() {
     } else {
       toast.error("제목을 입력하세요.");
     }
+    titleInput.blur();
+    updateButton.blur();
   };
 
   useEffect(() => {
@@ -505,6 +875,30 @@ export default function Planning() {
     }
   };
 
+  const setDay = (dayParam: number) => {
+    console.log("SETDAY");
+    const updatedDroppables = Array.from({ length: dayParam }, (_, index) => ({
+      id: `droppable${index + 1}`,
+      title: `Day ${index + 1}`,
+      data: getPlanDataByDroppableId(`droppable${index + 1}`),
+    }));
+
+    console.log(getPlanDataByDroppableId(`droppable1`));
+
+    return updatedDroppables;
+  };
+
+  const [droppables, setDroppables] = useState([
+    { id: "droppable1", title: "Day 1", data: planData },
+  ]);
+
+  useEffect(() => {
+    if (dayParam) {
+      const updatedDroppables = setDay(parseInt(dayParam, 10));
+      setDroppables(updatedDroppables);
+    }
+  }, []);
+
   useEffect(() => {
     const titleText = document.querySelector(
       "#titleText"
@@ -513,13 +907,71 @@ export default function Planning() {
     if (titleParam) {
       titleText.textContent = titleParam;
     }
-  });
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      var planData_tour;
+      var planData_day;
+      if (pnoParam) {
+        const url1 = `http://localhost:8080/Callyia/planning/getDB?pno=${pnoParam}`;
+        const url2 = `http://localhost:8080/Callyia/planning/getDay?pno=${pnoParam}`;
+
+        try {
+          const response1 = await fetch(url1);
+          if (!response1.ok) {
+            throw new Error(
+              `Network response was not ok: ${response1.statusText}`
+            );
+          }
+          const data1 = await response1.json();
+          console.log("get tour--------------------");
+          console.log(data1);
+          const response2 = await fetch(url2);
+          if (!response2.ok) {
+            throw new Error(
+              `Network response was not ok: ${response2.statusText}`
+            );
+          }
+          const data2 = await response2.json();
+          console.log("get day--------------------");
+          console.log(data2);
+
+          var newd1: typeof plans = [];
+          var newd2: typeof plans = [];
+          var newd3: typeof plans = [];
+          var newd4: typeof plans = [];
+          var newd5: typeof plans = [];
+          var newd6: typeof plans = [];
+          var newd7: typeof plans = [];
+
+          data1.map((data: any, index: any) => {
+            if (data2[index] == 1) newd1 = [...newd1, data];
+            else if (data2[index] == 2) newd2 = [...newd2, data];
+            else if (data2[index] == 3) newd3 = [...newd3, data];
+            else if (data2[index] == 4) newd4 = [...newd4, data];
+            else if (data2[index] == 5) newd5 = [...newd5, data];
+            else if (data2[index] == 6) newd6 = [...newd6, data];
+            else if (data2[index] == 7) newd7 = [...newd7, data];
+          });
+          setPlanData([...planData, ...newd1]);
+          setPlanData2([...planData, ...newd2]);
+          setPlanData3([...planData, ...newd3]);
+          setPlanData4([...planData, ...newd4]);
+          setPlanData5([...planData, ...newd5]);
+          setPlanData6([...planData, ...newd6]);
+          setPlanData7([...planData, ...newd7]);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      }
+    };
+    fetchData();
+  }, []);
 
   useEffect(() => {
     if (pnoParam) {
-      const planFromDB: any = null;
-
-      const url = `http://localhost:8080/Callyia/planning/getDB?pno=${pnoParam}`;
+      const url = `http://localhost:8080/Callyia/planning/getPlan?pno=${pnoParam}`;
 
       fetch(url)
         .then((response) => {
@@ -531,38 +983,19 @@ export default function Planning() {
           return response.json();
         })
         .then((data) => {
-          setPlanData(data);
-          console.log(data);
-        })
-        .catch((error) => {
-          console.error("Error fetching data:", error);
-        });
-    }
-  }, []);
-
-  useEffect(() => {
-    if (pnoParam) {
-      const planFromDB: any = null;
-
-      const url = `http://localhost:8080/Callyia/planning/getTitle?pno=${pnoParam}`;
-
-      fetch(url)
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(
-              `Network response was not ok: ${response.statusText}`
-            );
-          }
-          return response.text();
-        })
-        .then((data) => {
           const titleText = document.querySelector(
             "#titleText"
           ) as HTMLHeadingElement;
 
-          if (data) {
-            titleText.textContent = data;
+          if (data.title) {
+            titleText.textContent = data.title;
           }
+
+          if (data.day) {
+            setDroppables(setDay(data.day));
+            console.log(data.day);
+          }
+
           console.log(data);
         })
         .catch((error) => {
@@ -572,7 +1005,7 @@ export default function Planning() {
   }, []);
 
   updateMarker();
-  showBackgroundLine(planData);
+  showBackgroundLine(pd);
 
   return (
     <div className="div-container">
@@ -662,39 +1095,56 @@ export default function Planning() {
           <h1>Writer</h1>
         </div>
         <DragDropContext onDragEnd={onDragEnd}>
-          <Droppable droppableId="droppable">
-            {(provided) => (
-              <div
-                className="div-plan-list"
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-              >
-                {planData.map((plan, index) => (
-                  <Draggable
-                    key={`${index}`}
-                    draggableId={`${index}`}
-                    index={index}
+          <div className="div-plan-list">
+            {droppables.map((droppable, droppableIndex) => (
+              <Droppable key={droppable.id} droppableId={droppable.id}>
+                {(provided) => (
+                  <div
+                    className="day-plan-list"
+                    {...provided.droppableProps}
+                    ref={provided.innerRef}
                   >
-                    {(provided) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                      >
-                        <Plan
-                          plan={plan}
-                          onClick={() =>
-                            Click(plan.latitude, plan.longitude, index)
-                          }
-                        />
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
+                    <div className="day-plan-title">{droppable.title}</div>
+                    <div>
+                      {droppable.data.map((plan, index) => (
+                        <Draggable
+                          key={`${droppableIndex}-${index}`}
+                          draggableId={`${droppableIndex}-${index}`}
+                          index={index}
+                        >
+                          {(provided) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                            >
+                              <Plan
+                                plan={plan}
+                                onClick={() => {
+                                  if (plan && plan.placeName) {
+                                    console.log("Click");
+                                    Click(
+                                      plan.latitude,
+                                      plan.longitude,
+                                      index,
+                                      droppableIndex
+                                    );
+                                  } else {
+                                    console.log("error");
+                                  }
+                                }}
+                              />
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
+                    </div>
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            ))}
+          </div>
           <Droppable droppableId="droppable_trash">
             {(provided) => (
               <div
@@ -706,19 +1156,27 @@ export default function Planning() {
               </div>
             )}
           </Droppable>
+          <div className="div-plan-button">
+            <button className="float-right mt-1 mr-1 btn" onClick={openModal}>
+              여행 이름 변경
+            </button>
+            <button
+              className="float-right mt-1 mr-1 btn"
+              onClick={saveBtnClick}
+            >
+              저장
+            </button>
+            <button
+              className="float-right mt-1 mr-1 btn"
+              onClick={openPostModal}
+            >
+              포스팅
+            </button>
+          </div>
         </DragDropContext>
-        <div className="div-plan-button">
-          <button className="float-right m-1 btn" onClick={openModal}>
-            여행 이름 변경
-          </button>
-          <button className="float-right mt-1 btn" onClick={saveBtnClick}>
-            저장
-          </button>
-        </div>
       </div>
       <Toaster position="top-center" reverseOrder={false} />
       <Modal open={isModalOpen}>
-        asdasd
         <ModalContent>
           <h1>변경할 여행의 이름을 입력하세요.</h1>
           <div className="w-full h-6"></div>
@@ -738,6 +1196,17 @@ export default function Planning() {
             onClick={updateTitle}
           >
             Save
+          </button>
+        </ModalContent>
+      </Modal>
+
+      <Modal open={isPostModalOpen}>
+        <ModalContent>
+          <button
+            className="float-right btn btn-warning"
+            onClick={closePostModal}
+          >
+            Close
           </button>
         </ModalContent>
       </Modal>
