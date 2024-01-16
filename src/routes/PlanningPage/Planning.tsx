@@ -980,15 +980,33 @@ export default function Planning() {
       const newValues = [...prevValues];
       // Initialize the array for the specific day if not exists
       newValues[day - 1] = newValues[day - 1] || [];
-      const placeId = [
-        ...planData,
-        ...planData2,
-        ...planData3,
-        ...planData4,
-        ...planData5,
-        ...planData6,
-        ...planData7,
-      ][index].placeId;
+      // const placeId = [
+      //   ...planData,
+      //   ...planData2,
+      //   ...planData3,
+      //   ...planData4,
+      //   ...planData5,
+      //   ...planData6,
+      //   ...planData7,
+      // ][index].placeId;
+
+      var placeId;
+
+      if (day == 1) {
+        placeId = planData[index].placeId;
+      } else if (day == 2) {
+        placeId = planData2[index].placeId;
+      } else if (day == 3) {
+        placeId = planData3[index].placeId;
+      } else if (day == 4) {
+        placeId = planData4[index].placeId;
+      } else if (day == 5) {
+        placeId = planData5[index].placeId;
+      } else if (day == 6) {
+        placeId = planData6[index].placeId;
+      } else if (day == 7) {
+        placeId = planData7[index].placeId;
+      }
 
       // Update the value for the specific input
       newValues[day - 1][index] = newValues[day - 1][index] || {
@@ -1006,6 +1024,7 @@ export default function Planning() {
 
   const handleButtonClick = () => {
     const flattenedValues = inputValues.flatMap((dayValues) => dayValues || []);
+    console.log(flattenedValues);
 
     const planLength = [
       ...planData,
