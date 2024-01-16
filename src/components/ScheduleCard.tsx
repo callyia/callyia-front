@@ -5,15 +5,18 @@ import Swal from "sweetalert2"; //alert 디자인 임포트
 import { FaPlus } from "react-icons/fa";
 
 interface ScheduleItem {
-  place_id: number[];
-  day: number[];
-  place_name: string[];
-  place_content: string[];
-  tip: string[];
-  latitude: number[];
-  longitude: number[];
-  detailimages: string[];
-  replys: string[];
+  place_id: number;
+  day: number;
+  place_name: string;
+  place_content: string;
+  tip: string;
+  latitude: number;
+  longitude: number;
+  detailimages: string;
+  // replyContents: string;
+  replyContents: string[];
+  // replyer: string;
+  replyer: string[];
 }
 
 export interface ScheduleCardProps extends ScheduleItem {
@@ -35,28 +38,31 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
   latitude,
   longitude,
   detailimages,
-  replys,
+  replyContents,
+  replyer,
 }) => {
   const [expanded, setExpanded] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 3; // 페이지당 보여줄 댓글 수
-  const totalPages = Math.ceil(replys.length / itemsPerPage);
+  const totalPages = 3;
+  // Math.ceil(replyContents.length / itemsPerPage);
   const [cardHeight, setCardHeight] = useState<number | undefined>(undefined);
 
-  const MapClick = (index: number) => {
-    onClick(latitude[index], longitude[index], place_id[index]);
+  console.log(replyContents);
+
+  const MapClick = () => {
+    onClick(latitude, longitude, place_id);
   };
 
   //댓글 클릭 시 alert창으로 전체 내용 보여줌
-  const handlereplyClick = (reply: string) => {
+  const handlereplyClick = (replyContents: string) => {
     Swal.fire({
-      text: `${reply}`,
+      text: `${replyContents}`,
       showConfirmButton: false,
       showCancelButton: true,
       cancelButtonText: "닫기",
     });
-    //alert(`${reply}`);
   };
 
   const handleToggleExpand = () => {
@@ -72,9 +78,9 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
     if (expanded) {
       const startIdx = (currentPage - 1) * itemsPerPage;
       const endIdx = startIdx + itemsPerPage;
-      const visiblereplys = replys.slice(startIdx, endIdx);
-      const handlereplyClick = (reply: string) => {
-        alert(`reply: ${reply}`);
+      const visiblereplys = replyContents.slice(startIdx, endIdx);
+      const handlereplyClick = (replyContents: string) => {
+        alert(`replyContents: ${replyContents}`);
       };
       const replyHeight = visiblereplys.reduce((height, _) => height + 20, 0);
       const updatedCardHeight = 500 + replyHeight; // 적절한 값을 설정하세요
@@ -83,12 +89,12 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
     } else {
       setCardHeight(undefined);
     }
-  }, [expanded, currentPage, replys]);
+  }, [expanded, currentPage, replyContents]);
 
   return (
     <div
       className={`schedule-card ${expanded ? "expanded" : ""}`}
-      onClick={() => MapClick(1)}
+      onClick={() => MapClick()}
       style={{ height: cardHeight }}
     >
       <span className="schedule-number">{place_name}</span>
@@ -112,18 +118,16 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
       </div>
       {showDetails && (
         <div className="details">
-          {detailimages.map((imageUrl, index) => (
-            <img key={index} src={imageUrl} alt={`Image ${index}`} />
-          ))}
+          <img src={detailimages} />
           <ul>
-            {replys
+            {replyContents
               .slice(
                 (currentPage - 1) * itemsPerPage,
                 currentPage * itemsPerPage
               )
-              .map((reply, index) => (
-                <li key={index} onClick={() => handlereplyClick(reply)}>
-                  {reply}
+              .map((replyContents, index) => (
+                <li key={index} onClick={() => handlereplyClick(replyContents)}>
+                  {replyContents}
                 </li>
               ))}
           </ul>
