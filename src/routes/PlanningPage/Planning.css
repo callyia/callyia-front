@@ -187,3 +187,67 @@
   border-bottom: 2px dashed #d3d3d3;
   font-size: 20px;
 }
+
+.post-modal {
+  max-width: 850px;
+  min-width: 850px;
+  max-height: 720px;
+  min-height: 720px;
+}
+
+.post-modal-div {
+  max-width: 800px;
+  min-width: 800px;
+  max-height: 550px;
+  min-height: 550px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: auto;
+}
+
+.post-modal-day-div {
+  padding: 5px;
+  border-radius: 10px 10px 10px 10px;
+  margin-top: 10px;
+
+  width: 750px;
+  /* min-height: 100px; */
+  background-color: #bde0fe;
+}
+.post-modal-top {
+  max-width: 800px;
+  min-width: 800px;
+  max-height: 50px;
+  min-height: 50px;
+  text-align: center;
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.post-modal-bottom {
+  margin-top: 20px;
+  max-width: 800px;
+  min-width: 800px;
+  max-height: 50px;
+  min-height: 50px;
+}
+
+.post-modal-day-title {
+  background-color: #edf6f9;
+  padding: 5px;
+  height: 40px;
+  border-radius: 5px 5px 5px 5px;
+  margin-bottom: 10px;
+}
+
+.post-modal-day-title-text {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.post-modal-day-placeName {
+  font-weight: bold;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
