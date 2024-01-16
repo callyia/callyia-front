@@ -780,32 +780,6 @@ export default function Planning() {
     }
   };
 
-  const postPlan = () => {
-    const planList = [
-      ...planData,
-      ...planData2,
-      ...planData3,
-      ...planData4,
-      ...planData5,
-      ...planData6,
-      ...planData7,
-    ];
-
-    const planArray1 = planData.map((plan, index) => {
-      const image = document.querySelector(
-        `image-1-${index}`
-      ) as HTMLInputElement;
-      const tip = document.querySelector(`tip-1-${index}`) as HTMLInputElement;
-
-      console.log(image);
-      console.log(`image-1-${index}`);
-
-      return [plan.placeId, image.value, tip.value];
-    });
-
-    console.log(planArray1);
-  };
-
   const openModal = () => {
     setModalOpen(true);
   };
@@ -1024,7 +998,6 @@ export default function Planning() {
         place_id: placeId,
         dno: null,
         sno: null,
-        sequence: null,
       };
       newValues[day - 1][index][type] = value;
       return newValues;
@@ -1033,7 +1006,23 @@ export default function Planning() {
 
   const handleButtonClick = () => {
     const flattenedValues = inputValues.flatMap((dayValues) => dayValues || []);
-    console.log(flattenedValues);
+
+    const planLength = [
+      ...planData,
+      ...planData2,
+      ...planData3,
+      ...planData4,
+      ...planData5,
+      ...planData6,
+      ...planData7,
+    ].length;
+
+    if (planLength != flattenedValues.length) {
+      toast.error("각 계획별로 사진이나 팁을 남겨주세요!");
+      return;
+    }
+
+    console.log("AFTER");
 
     const titleText = document.querySelector(
       "#titleText"
@@ -1071,7 +1060,8 @@ export default function Planning() {
         return response.json();
       })
       .then((data) => {
-        // navigate("/PlanningPage?pno=" + data);
+        console.log(data);
+        navigate("/SchedulePage/" + data);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
