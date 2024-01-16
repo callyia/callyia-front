@@ -49,6 +49,8 @@ var distance;
 var distanceContent: any;
 var distanceOverlay: any = null;
 
+var planDay: any = null;
+
 export default function Planning() {
   const [map, setMap] = useState<Window["kakao"]["maps"]["Map"] | null>(null);
   const [planData, setPlanData] = useState(plans);
@@ -227,13 +229,11 @@ export default function Planning() {
     index: number,
     droppableIndex: number
   ) => {
-    console.log("droppableIndex :" + droppableIndex);
     const dropIndex = droppableIndex + 1;
 
     if (distanceOverlay) distanceOverlay.setMap(null);
     if (polyline) polyline.setMap(null);
     panTo(lat, lng);
-    console.log(`index : ${index}`);
 
     if (index >= 1) {
       if (dropIndex == 1) {
@@ -302,8 +302,6 @@ export default function Planning() {
       }
 
       linePosition = [beforePos, currentPos];
-      // console.log(linePosition[0]);
-      // console.log(linePosition[1]);
 
       polyline = new window.kakao.maps.Polyline({
         path: linePosition, // 선을 구성하는 좌표배열 입니다
@@ -330,7 +328,6 @@ export default function Planning() {
         distanceContent = getTimeHTML(distance, planData6[index].placeName);
       else if (dropIndex == 7)
         distanceContent = getTimeHTML(distance, planData7[index].placeName);
-      console.log(distance);
 
       showDistance(distanceContent, currentPos);
     } else if (index == 0) {
@@ -392,8 +389,6 @@ export default function Planning() {
         }
 
         linePosition = [beforePos, currentPos];
-        // console.log(linePosition[0]);
-        // console.log(linePosition[1]);
 
         polyline = new window.kakao.maps.Polyline({
           path: linePosition, // 선을 구성하는 좌표배열 입니다
@@ -420,7 +415,6 @@ export default function Planning() {
           distanceContent = getTimeHTML(distance, planData6[index].placeName);
         else if (dropIndex == 7)
           distanceContent = getTimeHTML(distance, planData7[index].placeName);
-        console.log(distance);
 
         showDistance(distanceContent, currentPos);
       }
@@ -441,7 +435,6 @@ export default function Planning() {
     if (polyline) polyline.setMap(null);
 
     panTo(latitude, longitude);
-    console.log(`id : ${placeId} / name : ${placeName}`);
     if (isBtnClick == true) {
       if (pd.length >= 99)
         toast.error("플랜은 최대 99개까지 저장할 수 있어요!");
@@ -479,21 +472,6 @@ export default function Planning() {
     });
 
     setDroppables(updatedDroppables);
-
-    console.log("planData-------");
-    console.log(planData);
-    console.log("planData2-------");
-    console.log(planData2);
-    console.log("planData3-------");
-    console.log(planData3);
-    console.log("planData4-------");
-    console.log(planData4);
-    console.log("planData5-------");
-    console.log(planData5);
-    console.log("planData6-------");
-    console.log(planData6);
-    console.log("planData7-------");
-    console.log(planData7);
   }, [
     planData,
     planData2,
@@ -590,12 +568,6 @@ export default function Planning() {
   };
 
   const fetchSearch = (searchKeyword: string) => {
-    // axios
-    //   .get("http://localhost:8080/Callyia/planning/search", {
-    //     params: { keyword: searchKeyword },
-    //   })
-    //   .then((response) => console.log(response));
-
     const url = `http://localhost:8080/Callyia/planning/search?keyword=${searchKeyword}`;
 
     fetch(url)
@@ -609,7 +581,6 @@ export default function Planning() {
       })
       .then((data) => {
         setSearchData(data);
-        console.log(data);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -688,8 +659,6 @@ export default function Planning() {
         ...planData7_day,
       ];
 
-      console.log(planData_sum);
-
       const requestBody = {
         planDetailDTOs: planData_sum.map((plan, index) => ({
           pno: null,
@@ -722,7 +691,6 @@ export default function Planning() {
           return response.json();
         })
         .then((data) => {
-          console.log("data : " + data);
           navigate("/PlanningPage?pno=" + data);
         })
         .catch((error) => {
@@ -802,7 +770,6 @@ export default function Planning() {
           return response.json();
         })
         .then((data) => {
-          console.log("data : " + data);
           navigate("/PlanningPage?pno=" + data);
         })
         .catch((error) => {
@@ -811,6 +778,32 @@ export default function Planning() {
 
       toast.success("저장 성공!");
     }
+  };
+
+  const postPlan = () => {
+    const planList = [
+      ...planData,
+      ...planData2,
+      ...planData3,
+      ...planData4,
+      ...planData5,
+      ...planData6,
+      ...planData7,
+    ];
+
+    const planArray1 = planData.map((plan, index) => {
+      const image = document.querySelector(
+        `image-1-${index}`
+      ) as HTMLInputElement;
+      const tip = document.querySelector(`tip-1-${index}`) as HTMLInputElement;
+
+      console.log(image);
+      console.log(`image-1-${index}`);
+
+      return [plan.placeId, image.value, tip.value];
+    });
+
+    console.log(planArray1);
   };
 
   const openModal = () => {
@@ -876,14 +869,11 @@ export default function Planning() {
   };
 
   const setDay = (dayParam: number) => {
-    console.log("SETDAY");
     const updatedDroppables = Array.from({ length: dayParam }, (_, index) => ({
       id: `droppable${index + 1}`,
       title: `Day ${index + 1}`,
       data: getPlanDataByDroppableId(`droppable${index + 1}`),
     }));
-
-    console.log(getPlanDataByDroppableId(`droppable1`));
 
     return updatedDroppables;
   };
@@ -895,8 +885,12 @@ export default function Planning() {
   useEffect(() => {
     if (dayParam) {
       const updatedDroppables = setDay(parseInt(dayParam, 10));
+      planDay = parseInt(dayParam, 10);
       setDroppables(updatedDroppables);
+    } else if (!dayParam && !pnoParam) {
+      planDay = 1;
     }
+    console.log(planDay);
   }, []);
 
   useEffect(() => {
@@ -992,17 +986,97 @@ export default function Planning() {
           }
 
           if (data.day) {
-            setDroppables(setDay(data.day));
-            console.log(data.day);
+            planDay = data.day;
+            setDroppables(setDay(planDay));
           }
-
-          console.log(data);
         })
         .catch((error) => {
           console.error("Error fetching data:", error);
         });
     }
   }, []);
+
+  const [inputValues, setInputValues] = useState<
+    Array<Array<{ [key: string]: string }>>
+  >([]);
+
+  const handleInputChange = (day: any, index: any, type: any, value: any) => {
+    setInputValues((prevValues) => {
+      // Copy the previous values
+      const newValues = [...prevValues];
+      // Initialize the array for the specific day if not exists
+      newValues[day - 1] = newValues[day - 1] || [];
+      const placeId = [
+        ...planData,
+        ...planData2,
+        ...planData3,
+        ...planData4,
+        ...planData5,
+        ...planData6,
+        ...planData7,
+      ][index].placeId;
+
+      // Update the value for the specific input
+      newValues[day - 1][index] = newValues[day - 1][index] || {
+        day,
+        detailImages: "",
+        tip: "",
+        place_id: placeId,
+        dno: null,
+        sno: null,
+        sequence: null,
+      };
+      newValues[day - 1][index][type] = value;
+      return newValues;
+    });
+  };
+
+  const handleButtonClick = () => {
+    const flattenedValues = inputValues.flatMap((dayValues) => dayValues || []);
+    console.log(flattenedValues);
+
+    const titleText = document.querySelector(
+      "#titleText"
+    ) as HTMLHeadingElement;
+
+    const url = `http://localhost:8080/Callyia/planning/post`;
+
+    const requestBody = {
+      detailScheduleDTOs: flattenedValues,
+      scheduleDTO: {
+        sno: null,
+        total_Day: planDay,
+        member_email: "Hello UserID",
+        sName: "Hello sName",
+      },
+    };
+
+    console.log(JSON.stringify(requestBody));
+
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json", // 전송하는 데이터 타입 설정
+      },
+      body: JSON.stringify(requestBody), // 데이터를 JSON 문자열로 변환하여 전송
+    };
+
+    fetch(url, options)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(
+            `Network response was not ok: ${response.statusText}`
+          );
+        }
+        return response.json();
+      })
+      .then((data) => {
+        // navigate("/PlanningPage?pno=" + data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  };
 
   updateMarker();
   showBackgroundLine(pd);
@@ -1120,19 +1194,14 @@ export default function Planning() {
                             >
                               <Plan
                                 plan={plan}
-                                onClick={() => {
-                                  if (plan && plan.placeName) {
-                                    console.log("Click");
-                                    Click(
-                                      plan.latitude,
-                                      plan.longitude,
-                                      index,
-                                      droppableIndex
-                                    );
-                                  } else {
-                                    console.log("error");
-                                  }
-                                }}
+                                onClick={() =>
+                                  Click(
+                                    plan.latitude,
+                                    plan.longitude,
+                                    index,
+                                    droppableIndex
+                                  )
+                                }
                               />
                             </div>
                           )}
@@ -1201,13 +1270,252 @@ export default function Planning() {
       </Modal>
 
       <Modal open={isPostModalOpen}>
-        <ModalContent>
-          <button
-            className="float-right btn btn-warning"
-            onClick={closePostModal}
-          >
-            Close
-          </button>
+        <ModalContent className="post-modal">
+          <div className="post-modal-top">
+            계획을 포스팅하여 사람들과 공유해보세요.
+          </div>
+          <div className="post-modal-div">
+            {Array.from({ length: planDay }, (_, index) => (
+              <div key={index} className="post-modal-day-div">
+                <div className="post-modal-day-title">
+                  <span className="post-modal-day-title-text">
+                    Day {index + 1}
+                  </span>
+                </div>
+                {index + 1 == 1 &&
+                  planData.map((plan, i) => (
+                    <div key={`${index}-${i}`}>
+                      <h1 className="post-modal-day-placeName">
+                        {plan.placeName}
+                      </h1>
+                      <span>Image :</span>
+                      <input
+                        onChange={(e) =>
+                          handleInputChange(
+                            index + 1,
+                            i,
+                            "detailImages",
+                            e.target.value
+                          )
+                        }
+                        id={`detailImages-${index + 1}-${i}`}
+                        className="ml-2"
+                        type="text"
+                      />
+                      <span className="ml-4">Tip :</span>
+                      <input
+                        onChange={(e) =>
+                          handleInputChange(index + 1, i, "tip", e.target.value)
+                        }
+                        id={`tip-${index + 1}-${i}`}
+                        className="ml-2 w-96"
+                        type="text"
+                      />
+                    </div>
+                  ))}
+                {index + 1 == 2 &&
+                  planData2.map((plan, i) => (
+                    <div key={`${index}-${i}`}>
+                      <h1 className="post-modal-day-placeName">
+                        {plan.placeName}
+                      </h1>
+                      <span>Image :</span>
+                      <input
+                        onChange={(e) =>
+                          handleInputChange(
+                            index + 1,
+                            i,
+                            "detailImages",
+                            e.target.value
+                          )
+                        }
+                        id={`detailImages-${index + 1}-${i}`}
+                        className="ml-2"
+                        type="text"
+                      />
+                      <span className="ml-4">Tip :</span>
+                      <input
+                        onChange={(e) =>
+                          handleInputChange(index + 1, i, "tip", e.target.value)
+                        }
+                        id={`tip-${index + 1}-${i}`}
+                        className="ml-2 w-96"
+                        type="text"
+                      />
+                    </div>
+                  ))}
+                {index + 1 == 3 &&
+                  planData3.map((plan, i) => (
+                    <div key={`${index}-${i}`}>
+                      <h1 className="post-modal-day-placeName">
+                        {plan.placeName}
+                      </h1>
+                      <span>Image :</span>
+                      <input
+                        onChange={(e) =>
+                          handleInputChange(
+                            index + 1,
+                            i,
+                            "detailImages",
+                            e.target.value
+                          )
+                        }
+                        id={`detailImages-${index + 1}-${i}`}
+                        className="ml-2"
+                        type="text"
+                      />
+                      <span className="ml-4">Tip :</span>
+                      <input
+                        onChange={(e) =>
+                          handleInputChange(index + 1, i, "tip", e.target.value)
+                        }
+                        id={`tip-${index + 1}-${i}`}
+                        className="ml-2 w-96"
+                        type="text"
+                      />
+                    </div>
+                  ))}
+                {index + 1 == 4 &&
+                  planData4.map((plan, i) => (
+                    <div key={`${index}-${i}`}>
+                      <h1 className="post-modal-day-placeName">
+                        {plan.placeName}
+                      </h1>
+                      <span>Image :</span>
+                      <input
+                        onChange={(e) =>
+                          handleInputChange(
+                            index + 1,
+                            i,
+                            "detailImages",
+                            e.target.value
+                          )
+                        }
+                        id={`detailImages-${index + 1}-${i}`}
+                        className="ml-2"
+                        type="text"
+                      />
+                      <span className="ml-4">Tip :</span>
+                      <input
+                        onChange={(e) =>
+                          handleInputChange(index + 1, i, "tip", e.target.value)
+                        }
+                        id={`tip-${index + 1}-${i}`}
+                        className="ml-2 w-96"
+                        type="text"
+                      />
+                    </div>
+                  ))}
+                {index + 1 == 5 &&
+                  planData5.map((plan, i) => (
+                    <div key={`${index}-${i}`}>
+                      <h1 className="post-modal-day-placeName">
+                        {plan.placeName}
+                      </h1>
+                      <span>Image :</span>
+                      <input
+                        onChange={(e) =>
+                          handleInputChange(
+                            index + 1,
+                            i,
+                            "detailImages",
+                            e.target.value
+                          )
+                        }
+                        id={`detailImages-${index + 1}-${i}`}
+                        className="ml-2"
+                        type="text"
+                      />
+                      <span className="ml-4">Tip :</span>
+                      <input
+                        onChange={(e) =>
+                          handleInputChange(index + 1, i, "tip", e.target.value)
+                        }
+                        id={`tip-${index + 1}-${i}`}
+                        className="ml-2 w-96"
+                        type="text"
+                      />
+                    </div>
+                  ))}
+                {index + 1 == 6 &&
+                  planData6.map((plan, i) => (
+                    <div key={`${index}-${i}`}>
+                      <h1 className="post-modal-day-placeName">
+                        {plan.placeName}
+                      </h1>
+                      <span>Image :</span>
+                      <input
+                        onChange={(e) =>
+                          handleInputChange(
+                            index + 1,
+                            i,
+                            "detailImages",
+                            e.target.value
+                          )
+                        }
+                        id={`detailImages-${index + 1}-${i}`}
+                        className="ml-2"
+                        type="text"
+                      />
+                      <span className="ml-4">Tip :</span>
+                      <input
+                        onChange={(e) =>
+                          handleInputChange(index + 1, i, "tip", e.target.value)
+                        }
+                        id={`tip-${index + 1}-${i}`}
+                        className="ml-2 w-96"
+                        type="text"
+                      />
+                    </div>
+                  ))}
+                {index + 1 == 7 &&
+                  planData7.map((plan, i) => (
+                    <div key={`${index}-${i}`}>
+                      <h1 className="post-modal-day-placeName">
+                        {plan.placeName}
+                      </h1>
+                      <span>Image :</span>
+                      <input
+                        onChange={(e) =>
+                          handleInputChange(
+                            index + 1,
+                            i,
+                            "detailImages",
+                            e.target.value
+                          )
+                        }
+                        id={`detailImages-${index + 1}-${i}`}
+                        className="ml-2"
+                        type="text"
+                      />
+                      <span className="ml-4">Tip :</span>
+                      <input
+                        onChange={(e) =>
+                          handleInputChange(index + 1, i, "tip", e.target.value)
+                        }
+                        id={`tip-${index + 1}-${i}`}
+                        className="ml-2 w-96"
+                        type="text"
+                      />
+                    </div>
+                  ))}
+              </div>
+            ))}
+          </div>
+          <div className="post-modal-bottom">
+            <button
+              className="float-right btn btn-warning"
+              onClick={closePostModal}
+            >
+              Close
+            </button>
+            <button
+              className="float-right mr-1 btn btn-primary"
+              onClick={handleButtonClick}
+            >
+              Post
+            </button>
+          </div>
         </ModalContent>
       </Modal>
 
