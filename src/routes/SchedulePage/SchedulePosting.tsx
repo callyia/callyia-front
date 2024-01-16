@@ -1,7 +1,7 @@
 //SchedulePosting.tsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 import ScheduleCard, { ScheduleItem } from "../../components/ScheduleCard";
 import "./SchedulePosting.css";
@@ -16,7 +16,7 @@ interface ScheduleDTO {
   sno: number;
   total_Day: number;
   member_email: string;
-  sname: string;
+  sName: string;
 }
 
 interface DetailScheduleItem {
@@ -26,7 +26,6 @@ interface DetailScheduleItem {
   day: number;
   sno: number;
   place_id: number;
-  sequence: number;
 }
 
 interface ReplyDTO {
@@ -56,12 +55,13 @@ interface ScheduleData {
 
 export default function SchedulePosting() {
   const [scheduleData, setScheduleData] = useState<ScheduleData>({
-      scheduleDTO: null, 
-      detailScheduleDTOList: [],
-      replyDTOList: [],
-      tourDTOList: []
+    scheduleDTO: null,
+    detailScheduleDTOList: [],
+    replyDTOList: [],
+    tourDTOList: [],
   });
-  const [sno, setSno] = useState(1);
+
+  const { sno } = useParams();
 
   useEffect(() => {
     const fetchScheduleData = async () => {
@@ -78,17 +78,14 @@ export default function SchedulePosting() {
           scheduleDTO: data.scheduleDTO,
           detailScheduleDTOList: data.detailScheduleDTOList,
           replyDTOList: data.replyDTOList,
-          tourDTOList: data.tourDTOList
+          tourDTOList: data.tourDTOList,
         });
-
-
-
       } catch (error) {
         console.log("Error fetching tour data:", error);
       }
     };
     fetchScheduleData();
-  }, []);
+  }, [sno]);
 
   // ScheduleCard를 DAY별로 그룹화하는 함수------------------------------
   const groupByDay = (schedule: DetailScheduleItem[]) => {
@@ -106,8 +103,9 @@ export default function SchedulePosting() {
   //Map -------------------------------------------------------------------------------
 
   const linePath = scheduleData.tourDTOList.map(
-    (place: TourDTO) => new window.kakao.maps.LatLng(place.latitude, place.longitude)
-  );  
+    (place: TourDTO) =>
+      new window.kakao.maps.LatLng(place.latitude, place.longitude)
+  );
 
   const Defaultpolyline = new window.kakao.maps.Polyline({
     path: linePath,
@@ -119,12 +117,13 @@ export default function SchedulePosting() {
 
   var moreOverlay: any = null;
   var previousOverlay: any = null;
+
   const Click = (
     latitude: number,
     longitude: number,
     place_name: String,
     tip: String,
-    detailimages: String
+    detail_images: String
   ) => {
     panTo(latitude, longitude);
 
@@ -134,7 +133,7 @@ export default function SchedulePosting() {
     } else if (!moreOverlay) {
       const customOverlayOptions = {
         position: new window.kakao.maps.LatLng(latitude, longitude),
-        tip: getOverlayHTML(place_name, tip, detailimages),
+        tip: getOverlayHTML(place_name, tip, detail_images),
         xAnchor: 0.3,
         yAnchor: 0.91,
       };
@@ -145,6 +144,7 @@ export default function SchedulePosting() {
     previousOverlay = moreOverlay;
   };
 
+  //수정해야함 구현안됨
   const getOverlayHTML = (place_name: String, tip: String, images: String) => {
     var CustomOverlayContent =
       "<div style=\"position:relative;width:100%;height:100%;background:url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/box_movie.png') no-repeat;padding:15px 10px;\">" +
@@ -167,17 +167,16 @@ export default function SchedulePosting() {
     return CustomOverlayContent;
   };
 
-  console.log(scheduleData);
-  
   useEffect(() => {
     const container = document.getElementById("map"); //지도를 담을 영역의 DOM 레퍼런스
 
-    const mainPosition = scheduleData.tourDTOList.length > 0
-    ? new window.kakao.maps.LatLng(
-        scheduleData.tourDTOList[0].latitude,
-        scheduleData.tourDTOList[0].longitude
-      )
-    : new window.kakao.maps.LatLng(33.450701, 126.570667);
+    const mainPosition =
+      scheduleData.tourDTOList.length > 0
+        ? new window.kakao.maps.LatLng(
+            scheduleData.tourDTOList[0].latitude,
+            scheduleData.tourDTOList[0].longitude
+          )
+        : new window.kakao.maps.LatLng(33.450701, 126.570667);
     const options = {
       //지도를 생성할 때 필요한 기본 옵션
       center: mainPosition, //지도의 중심좌표.
@@ -208,7 +207,7 @@ export default function SchedulePosting() {
     if (newmap) {
       Defaultpolyline.setMap(newmap);
     }
-  }, [scheduleData.tourDTOList]);
+  }, []);
 
   const [map, setMap] = useState<Window["kakao"]["maps"]["Map"] | null>(null);
   const panTo = (latitude: number, longitude: number) => {
@@ -229,11 +228,26 @@ export default function SchedulePosting() {
     setCart((prevCart) => prevCart.filter((item) => item.place_id !== itemId));
   };
 
-  const transformToScheduleItem = (detailItem: DetailScheduleItem, tourList: TourDTO[]): ScheduleItem => {
-    const tourItem = tourList.find(tour => tour.placeId === detailItem.place_id);
+  const transformToScheduleItem = (
+    detailItem: DetailScheduleItem,
+    tourList: TourDTO[]
+  ): ScheduleItem => {
+    const tourItem = tourList.find(
+      (tour) => tour.placeId === detailItem.place_id
+    );
     if (!tourItem) {
-      throw new Error(`Tour item with placeId ${detailItem.place_id} not found.`);
+      throw new Error(
+        `Tour item with placeId ${detailItem.place_id} not found.`
+      );
     }
+
+    const replyContents = scheduleData.replyDTOList
+      .filter((reply) => reply.dno === detailItem.dno)
+      .map((reply) => reply.replyContents);
+
+    const replyer = scheduleData.replyDTOList
+      .filter((reply) => reply.dno === detailItem.dno)
+      .map((reply) => reply.replyer);
 
     return {
       ...detailItem,
@@ -241,11 +255,9 @@ export default function SchedulePosting() {
       latitude: tourItem.latitude,
       longitude: tourItem.longitude,
       place_content: tourItem.placeContent,
-      detailimages: tourItem.image,
-      // replyContents: scheduleData.replyDTOList.map(reply => reply.replyContents).join(", "),
-      // replyer: scheduleData.replyDTOList.map(reply => reply.replyer).join(", ")
-      replyContents: scheduleData.replyDTOList.map(reply => reply.replyContents),
-      replyer: scheduleData.replyDTOList.map(reply => reply.replyer)
+      detail_images: detailItem.detailImages,
+      reply_contents: replyContents,
+      replyer: replyer,
     };
   };
 
@@ -264,10 +276,12 @@ export default function SchedulePosting() {
                       alt="프로필 이미지"
                     />
                   </Link>
-                  <p style={{ fontSize: "12px", color: "gray" }}>김준기</p>
+                  <p style={{ fontSize: "12px", color: "gray" }}>
+                    {scheduleData.scheduleDTO?.member_email}
+                  </p>
                 </div>
                 <div>
-                  <h2>부산 여행</h2>
+                  <h2>{scheduleData.scheduleDTO?.sName}</h2>
                 </div>
               </div>
             </div>
@@ -278,25 +292,34 @@ export default function SchedulePosting() {
                 </div>
 
                 <div className="schedule-container">
-                {items.map((item, index) => {
-                const transformedItem = transformToScheduleItem(item, scheduleData.tourDTOList);
-                return (
-                    <ScheduleCard
+                  {items.map((item, index) => {
+                    const transformedItem = transformToScheduleItem(
+                      item,
+                      scheduleData.tourDTOList
+                    );
+                    return (
+                      <ScheduleCard
                         key={transformedItem.place_id}
                         {...transformedItem}
-                        onClick={() => Click(
+                        onClick={() =>
+                          Click(
                             transformedItem.latitude,
                             transformedItem.longitude,
                             transformedItem.place_name,
                             transformedItem.tip,
-                            transformedItem.detailimages
+                            transformedItem.detail_images
+                          )
+                        }
+                        onAddToCart={() => handleAddToCart(transformedItem)}
+                        onRemoveFromCart={() =>
+                          handleRemoveFromCart(item.place_id)
+                        }
+                        isInCart={cart.some(
+                          (cartItem) => cartItem.place_id === item.place_id
                         )}
-                    onAddToCart={() => handleAddToCart(transformedItem)}
-                    onRemoveFromCart={() => handleRemoveFromCart(item.place_id)}
-                    isInCart={cart.some((cartItem) => cartItem.place_id === item.place_id)}
-                  />
-                );
-              })}
+                      />
+                    );
+                  })}
                 </div>
               </div>
             ))}
@@ -323,7 +346,8 @@ export default function SchedulePosting() {
             {cart.map((item, index) => (
               <div className="schedule-card-cart" key={item.place_id}>
                 <span className="schedule-number">{item.place_name}</span>
-                <h3>{item.tip}</h3>
+                <h3>{item.place_name}</h3>
+                <h3>Tip : {item.tip}</h3>
 
                 <button onClick={() => handleRemoveFromCart(item.place_id)}>
                   제거

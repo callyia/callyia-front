@@ -36,7 +36,7 @@ export default function RoutesSetup() {
         <Route index element={<ListPage />} />
         <Route path="*" element={<NoMatch />} />
       </Route>
-      <Route path="/SchedulePage" element={<Layout />}>
+      <Route path="/SchedulePage/:sno" element={<Layout />}>
         <Route index element={<SchedulePosting />} />
         <Route path="*" element={<NoMatch />} />
       </Route>

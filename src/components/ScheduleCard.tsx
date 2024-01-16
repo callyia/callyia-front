@@ -12,10 +12,8 @@ interface ScheduleItem {
   tip: string;
   latitude: number;
   longitude: number;
-  detailimages: string;
-  // replyContents: string;
-  replyContents: string[];
-  // replyer: string;
+  detail_images: string;
+  reply_contents: string[];
   replyer: string[];
 }
 
@@ -29,7 +27,6 @@ export interface ScheduleCardProps extends ScheduleItem {
 const ScheduleCard: React.FC<ScheduleCardProps> = ({
   onClick,
   onAddToCart,
-  // onRemoveFromCart,
   isInCart,
   place_id,
   place_name,
@@ -37,8 +34,8 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
   tip,
   latitude,
   longitude,
-  detailimages,
-  replyContents,
+  detail_images,
+  reply_contents,
   replyer,
 }) => {
   const [expanded, setExpanded] = useState(false);
@@ -46,10 +43,8 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 3; // 페이지당 보여줄 댓글 수
   const totalPages = 3;
-  // Math.ceil(replyContents.length / itemsPerPage);
   const [cardHeight, setCardHeight] = useState<number | undefined>(undefined);
-
-  console.log(replyContents);
+  // const [reply, setReply] = useState("");
 
   const MapClick = () => {
     onClick(latitude, longitude, place_id);
@@ -78,7 +73,7 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
     if (expanded) {
       const startIdx = (currentPage - 1) * itemsPerPage;
       const endIdx = startIdx + itemsPerPage;
-      const visiblereplys = replyContents.slice(startIdx, endIdx);
+      const visiblereplys = reply_contents.slice(startIdx, endIdx);
       const handlereplyClick = (replyContents: string) => {
         alert(`replyContents: ${replyContents}`);
       };
@@ -89,7 +84,7 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
     } else {
       setCardHeight(undefined);
     }
-  }, [expanded, currentPage, replyContents]);
+  }, [expanded, currentPage, reply_contents]);
 
   return (
     <div
@@ -118,16 +113,20 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
       </div>
       {showDetails && (
         <div className="details">
-          <img src={detailimages} />
+          <img src={detail_images} />
+          <p>{detail_images}</p>
           <ul>
-            {replyContents
+            {reply_contents
               .slice(
                 (currentPage - 1) * itemsPerPage,
                 currentPage * itemsPerPage
               )
-              .map((replyContents, index) => (
-                <li key={index} onClick={() => handlereplyClick(replyContents)}>
-                  {replyContents}
+              .map((reply_contents, index) => (
+                <li
+                  key={index}
+                  onClick={() => handlereplyClick(reply_contents)}
+                >
+                  {reply_contents} - {replyer[index]}
                 </li>
               ))}
           </ul>
