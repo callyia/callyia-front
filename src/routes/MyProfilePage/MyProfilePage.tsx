@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 
 import './ProfilePage.css';
-import  SelfIntroduction  from './SelfIntroduction';
-import DefaultContent from './DefaultContent';
-import ScheduleContent from './ScheduleContent';
+import SelfIntroduction  from './SelfIntroduction';
 import CartContent from './CartContent';
+import ScheduleContent from './ScheduleContent';
+import PlanContent from './PlanContent';
+import DefaultContent from './DefaultContent';
 
 interface MyProfileProps {
   isEditing: boolean;
@@ -33,15 +34,18 @@ const MyProfile: React.FC<MyProfileProps> = ({isEditing, toggleIsEditing, profil
 
   let contentToRender;
   switch (currentContent) {
-    case "CartContent":
-      contentToRender = <CartContent />;
-      break;
     case "ScheduleContent":
       contentToRender = <ScheduleContent />;
       break;
+    case "CartContent":
+      contentToRender = <CartContent />;
+      break;  
+    case "PlanContent":
+      contentToRender = <PlanContent />;
+      break;
     default:
       contentToRender = <DefaultContent />;
-      break;  
+      break;
   }
 
   return (

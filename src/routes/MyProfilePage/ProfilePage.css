@@ -265,3 +265,33 @@
   margin-top: 95px;
 }
 
+.profile-plan-div {
+  border: 2px solid gray;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  cursor: pointer
+}
+
+.profile-edited-plan {
+  grid-gap: 10px;
+  grid-column: 1/3;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); 
+  max-height: 450px; 
+  overflow-y: auto; 
+  padding: 10px;
+  -ms-overflow-style: none; 
+  scrollbar-width: none;
+}
+
+.profile-edited-plan::-webkit-scrollbar {
+  display: none !important;
+}
+
+.profile-plan-id, .profile-plan-pno, .profile-plan-day, .profile-plan-title {
+  font-family: "GmarketSans700";
+  font-size: 20px;
+}

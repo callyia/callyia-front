@@ -34,10 +34,6 @@ export default function MyProfilePage() {
     }
   };
 
-  const handleEditScheduleClick = () => {
-    navigate(`/PlanningPage?id=${userId}`);
-  };
-
     return (
         <div style={{ flex:1, display: 'flex', height: '1200px'}}>
           <div
@@ -102,12 +98,12 @@ export default function MyProfilePage() {
                 <h3>나의 일정 바로가기</h3>
                 </div>
                 <div className='profile-action-div'>
-                <button className="profile-action-button"onClick={() => changeContent("ScheduleContent")}><img src="./profile/profile_shop_bag_basket_icon.png" alt="my scuedule cart" /></button>
+                <button className="profile-action-button" onClick={() => changeContent("ScheduleContent")}><img src="./profile/profile_shop_bag_basket_icon.png" alt="my scuedule cart" /></button>
                 <h3>나의 일정 장바구니</h3> 
                 {/* 클릭하면 SchedulePage로 가게 */}
                 </div>
                 <div className='profile-action-div'>
-                <button className="profile-action-button-post" onClick={handleEditScheduleClick}><img src="./profile/profile_post_icon.png" alt="schedule being edited" /></button>
+                <button className="profile-action-button-post" onClick={() => changeContent("PlanContent")}><img src="./profile/profile_post_icon.png" alt="schedule being edited" /></button>
                 <h3>편집 중인 일정</h3>
                 </div>
               </div>
