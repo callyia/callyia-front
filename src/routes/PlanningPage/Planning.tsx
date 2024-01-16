@@ -1036,7 +1036,7 @@ export default function Planning() {
         sno: null,
         total_Day: planDay,
         member_email: "Hello UserID",
-        sName: "Hello sName",
+        sName: titleText.textContent,
       },
     };
 
