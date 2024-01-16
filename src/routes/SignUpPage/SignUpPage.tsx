@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { FormEvent, ChangeEvent } from "react";
+import { useNavigate } from "react-router-dom";
 import "./SignUpPage.css";
 import axios from "axios";
 
@@ -8,6 +9,14 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [name, setName] = useState("");
+  const [nickName, setNickName] = useState("");
+  const [aboutMe, setAboutMe] = useState("");
+  const [gender, setGender] = useState("female");
+  const [profileImage, setProfileImage] = useState<string>(
+    "./dummyimages/image1.jpeg"
+  );
+  const navigate = useNavigate();
+
   const [tel1, setTel1] = useState("");
   const [tel2, setTel2] = useState("");
   const [tel3, setTel3] = useState("");
@@ -25,6 +34,19 @@ const SignUp = () => {
     // 정규식을 사용하여 숫자 4자리로 제한
     const value = e.target.value.replace(/\D/g, "");
     setTel3(value);
+  };
+  const handleProfileImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (reader.result) {
+          setProfileImage(reader.result as string);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const isEmailValid = (email: string): boolean => {
@@ -51,7 +73,7 @@ const SignUp = () => {
     );
   };
 
-  const handleSignUp = (e: React.FormEvent) => {
+  const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     // 이메일 유효성 검사
     if (email === "") {
@@ -93,42 +115,100 @@ const SignUp = () => {
       alert("전화번호를 입력해주세요");
       return;
     }
+
+    // 전화번호 생성
+    const phone = `${tel1}-${tel2}-${tel3}`;
+
+    // 현재 날짜 생성
+    const currentDate = new Date();
+
+    // joinDate을 현재 날짜로 설정 (YYYY-MM-DD 형식으로 변환)
+    const joinDate = `${currentDate.getFullYear()}-${(
+      currentDate.getMonth() + 1
+    )
+      .toString()
+      .padStart(2, "0")}-${currentDate.getDate().toString().padStart(2, "0")}`;
+
     // Implement your sign-up logic here
-    console.log("Signing up with:", email, password, tel2, tel3);
+    console.log(
+      "Signing up with:",
+      email,
+      password,
+      gender,
+      name,
+      phone,
+      joinDate
+    );
 
-    // 리액트 코드 예시
-    const memberData = {
-      id: "userId123",
-      password: "userPassword123",
-      gender: "male",
-      name: "John Doe",
-      nickname: "johnny",
-      phone: "123-456-7890",
-      email: "john.doe@example.com",
-      profileImage: "profile.jpg",
-      aboutMe: "Hello, I am John Doe.",
-      joinDate: "2022-01-01", // 예시로 지정한 필드, 실제 데이터에 맞게 수정
-      roleSet: ["ROLE_USER"],
-    };
+    try {
+      const imageFormData = new FormData();
+      if (profileImage) {
+        const blob = await fetch(profileImage).then((res) => res.blob());
+        imageFormData.append("profileImage", blob);
+      }
+      console.log(imageFormData);
+      console.log(profileImage);
 
-    // API 호출을 통해 서버로 데이터 전송
-    axios
-      .post("http://localhost:8080/Callyia/member", memberData)
-      .then((response: any) => {
-        // 성공적으로 처리된 경우
-        console.log(response.data);
-      })
-      .catch((error: any) => {
-        // 오류 발생 시 처리
-        console.error(error);
-      });
+      const imageUploadResponse = await axios.post(
+        "http://localhost:8080/Callyia/member/upload",
+        imageFormData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      const uploadResult = imageUploadResponse.data;
+      const imagePath = uploadResult.imagePath;
+
+      console.log(imagePath);
+
+      // API 호출을 통해 서버로 데이터 전송
+      const response = await axios.post(
+        "http://localhost:8080/Callyia/member/auth",
+        JSON.stringify({
+          email: email,
+          password: password,
+          gender: gender,
+          name: name,
+          nickname: nickName,
+          phone: phone,
+          profileImage: imagePath,
+          aboutMe: aboutMe,
+          joinDate: joinDate, // 현재 날짜로 설정한 joinDate
+        }),
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      navigate("/"); // 원하는 경로로 변경
+    } catch (error: any) {
+      if (error.response && error.response.status === 409) {
+        alert("해당 Email은 이미 있는 Email입니다.");
+      } else {
+        console.error("Error accepting data:", error.message);
+      }
+    }
   };
 
   return (
     <div className="page-container">
       <div className="shadow SignUp-form-container">
         <div className="SignUp-form-right-side">
-          <div className="top-logo-wrap"></div>
+          <div className="top-logo-wrap">
+            <div className="profile-image-preview">
+              {profileImage && <img src={profileImage} alt="Profile Preview" />}
+            </div>
+          </div>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleProfileImageChange}
+          />
           <h1>콜이야 트립</h1>
         </div>
         <div className="SignUp-form-left-side">
@@ -173,6 +253,28 @@ const SignUp = () => {
                   placeholder="Name"
                 />
               </div>
+
+              <div className="SignUp-input-wrap input-nickName">
+                <input
+                  type="text"
+                  value={nickName}
+                  id="nickName"
+                  onChange={(e) => setNickName(e.target.value)}
+                  style={{ backgroundColor: "white", color: "black" }}
+                  placeholder="NickName"
+                />
+              </div>
+
+              <div className="SignUp-input-wrap input-aboutMe">
+                <input
+                  type="text"
+                  value={aboutMe}
+                  id="aboutMe"
+                  onChange={(e) => setAboutMe(e.target.value)}
+                  style={{ backgroundColor: "white", color: "black" }}
+                  placeholder="자기소개"
+                />
+              </div>
             </div>
             <div className="SignUp-input-choice" id="choice">
               <span id="ch1">
@@ -182,12 +284,20 @@ const SignUp = () => {
                   name="gender"
                   id="rd1"
                   value="여성"
-                  checked
+                  checked={gender === "female"}
+                  onChange={() => setGender("female")}
                 />
               </span>
               <span id="ch2">
                 Male
-                <input type="radio" name="gender" id="rd2" value="남성" />
+                <input
+                  type="radio"
+                  name="gender"
+                  id="rd2"
+                  value="남성"
+                  checked={gender === "male"}
+                  onChange={() => setGender("male")}
+                />
               </span>
             </div>
             <div className="SignUp-input-phone">
