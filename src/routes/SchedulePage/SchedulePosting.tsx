@@ -12,30 +12,102 @@ declare global {
     kakao: any;
   }
 }
+interface ScheduleDTO {
+  sno: number;
+  total_Day: number;
+  member_email: string;
+  sname: string;
+}
+
+interface DetailScheduleItem {
+  dno: number;
+  tip: string;
+  detailImages: string;
+  day: number;
+  sno: number;
+  place_id: number;
+  sequence: number;
+}
+
+interface ReplyDTO {
+  rno: number;
+  replyContents: string;
+  dno: number;
+  replyer: string;
+}
+
+interface TourDTO {
+  placeId: number;
+  placeName: string;
+  address: string;
+  latitude: number;
+  longitude: number;
+  placeContent: string;
+  checkColumn: string;
+  image: string;
+}
+
+interface ScheduleData {
+  scheduleDTO: ScheduleDTO | null;
+  detailScheduleDTOList: DetailScheduleItem[];
+  replyDTOList: ReplyDTO[];
+  tourDTOList: TourDTO[];
+}
 
 export default function SchedulePosting() {
-  const [scheduleData, setScheduleData] = useState<ScheduleItem[]>([]);
+  const [scheduleData, setScheduleData] = useState<ScheduleData>({
+      scheduleDTO: null, 
+      detailScheduleDTOList: [],
+      replyDTOList: [],
+      tourDTOList: []
+  });
+  const [sno, setSno] = useState(1);
+
+  useEffect(() => {
+    const fetchScheduleData = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:8080/Callyia/Schedule/posting?sno=${sno}`
+        );
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+
+        setScheduleData({
+          scheduleDTO: data.scheduleDTO,
+          detailScheduleDTOList: data.detailScheduleDTOList,
+          replyDTOList: data.replyDTOList,
+          tourDTOList: data.tourDTOList
+        });
+
+
+
+      } catch (error) {
+        console.log("Error fetching tour data:", error);
+      }
+    };
+    fetchScheduleData();
+  }, []);
 
   // ScheduleCard를 DAY별로 그룹화하는 함수------------------------------
-  const groupByDay = (schedule: ScheduleItem[]) => {
-    const grouped: { [day: number]: ScheduleItem[] } = {};
+  const groupByDay = (schedule: DetailScheduleItem[]) => {
+    const grouped: { [day: number]: DetailScheduleItem[] } = {};
     schedule.forEach((item) => {
-      item.day.forEach((day) => {
-        if (!grouped[day]) {
-          grouped[day] = [];
-        }
-        grouped[day].push(item);
-      });
+      if (!grouped[item.day]) {
+        grouped[item.day] = [];
+      }
+      grouped[item.day].push(item);
     });
     return grouped;
   };
-  const groupedSchedule = groupByDay(scheduleData);
+  const groupedSchedule = groupByDay(scheduleData.detailScheduleDTOList);
 
   //Map -------------------------------------------------------------------------------
 
-  const linePath = scheduleData.map(
-    (place) => new window.kakao.maps.LatLng(place.latitude, place.longitude)
-  );
+  const linePath = scheduleData.tourDTOList.map(
+    (place: TourDTO) => new window.kakao.maps.LatLng(place.latitude, place.longitude)
+  );  
 
   const Defaultpolyline = new window.kakao.maps.Polyline({
     path: linePath,
@@ -52,7 +124,7 @@ export default function SchedulePosting() {
     longitude: number,
     place_name: String,
     tip: String,
-    images: String[]
+    detailimages: String
   ) => {
     panTo(latitude, longitude);
 
@@ -62,7 +134,7 @@ export default function SchedulePosting() {
     } else if (!moreOverlay) {
       const customOverlayOptions = {
         position: new window.kakao.maps.LatLng(latitude, longitude),
-        tip: getOverlayHTML(place_name, tip, images),
+        tip: getOverlayHTML(place_name, tip, detailimages),
         xAnchor: 0.3,
         yAnchor: 0.91,
       };
@@ -73,11 +145,7 @@ export default function SchedulePosting() {
     previousOverlay = moreOverlay;
   };
 
-  const getOverlayHTML = (
-    place_name: String,
-    tip: String,
-    images: String[]
-  ) => {
+  const getOverlayHTML = (place_name: String, tip: String, images: String) => {
     var CustomOverlayContent =
       "<div style=\"position:relative;width:100%;height:100%;background:url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/box_movie.png') no-repeat;padding:15px 10px;\">" +
       "<div style=\"color:#fff;font-size:16px;font-weight:bold;background:url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/arrow_white.png') no-repeat right 120px center;margin-bottom:8px;\">" +
@@ -99,28 +167,17 @@ export default function SchedulePosting() {
     return CustomOverlayContent;
   };
 
+  console.log(scheduleData);
+  
   useEffect(() => {
-    const fetchScheduleData = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:8080/Callyia/Schedule/posting?sno=1`
-        );
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const data = await response.json();
-        setScheduleData(data.detailScheduleDTOList);
-      } catch (error) {
-        console.error("Error fetching tour data:", error);
-      }
-    };
-
     const container = document.getElementById("map"); //지도를 담을 영역의 DOM 레퍼런스
-    const mainPosition = new window.kakao.maps.LatLng( //Default위치 설정
-      scheduleData[0].latitude[0],
-      scheduleData[0].longitude[0]
-    );
 
+    const mainPosition = scheduleData.tourDTOList.length > 0
+    ? new window.kakao.maps.LatLng(
+        scheduleData.tourDTOList[0].latitude,
+        scheduleData.tourDTOList[0].longitude
+      )
+    : new window.kakao.maps.LatLng(33.450701, 126.570667);
     const options = {
       //지도를 생성할 때 필요한 기본 옵션
       center: mainPosition, //지도의 중심좌표.
@@ -131,7 +188,7 @@ export default function SchedulePosting() {
     setMap(newmap);
 
     // ScheduleData에 있는 각 장소에 대한 마커 생성
-    scheduleData.forEach((place) => {
+    scheduleData.tourDTOList.forEach((place: TourDTO) => {
       if (place.latitude && place.longitude) {
         // lat과 lng가 존재하는 경우에만 처리
         const markerPosition = new window.kakao.maps.LatLng(
@@ -141,7 +198,7 @@ export default function SchedulePosting() {
 
         const marker = new window.kakao.maps.Marker({
           position: markerPosition,
-          title: place.place_name,
+          title: place.placeName,
         });
 
         marker.setMap(newmap);
@@ -151,9 +208,7 @@ export default function SchedulePosting() {
     if (newmap) {
       Defaultpolyline.setMap(newmap);
     }
-
-    fetchScheduleData();
-  }, []);
+  }, [scheduleData.tourDTOList]);
 
   const [map, setMap] = useState<Window["kakao"]["maps"]["Map"] | null>(null);
   const panTo = (latitude: number, longitude: number) => {
@@ -171,9 +226,27 @@ export default function SchedulePosting() {
   };
 
   const handleRemoveFromCart = (itemId: number) => {
-    setCart((prevCart) =>
-      prevCart.filter((item) => item.place_id[itemId] !== itemId)
-    );
+    setCart((prevCart) => prevCart.filter((item) => item.place_id !== itemId));
+  };
+
+  const transformToScheduleItem = (detailItem: DetailScheduleItem, tourList: TourDTO[]): ScheduleItem => {
+    const tourItem = tourList.find(tour => tour.placeId === detailItem.place_id);
+    if (!tourItem) {
+      throw new Error(`Tour item with placeId ${detailItem.place_id} not found.`);
+    }
+
+    return {
+      ...detailItem,
+      place_name: tourItem.placeName,
+      latitude: tourItem.latitude,
+      longitude: tourItem.longitude,
+      place_content: tourItem.placeContent,
+      detailimages: tourItem.image,
+      // replyContents: scheduleData.replyDTOList.map(reply => reply.replyContents).join(", "),
+      // replyer: scheduleData.replyDTOList.map(reply => reply.replyer).join(", ")
+      replyContents: scheduleData.replyDTOList.map(reply => reply.replyContents),
+      replyer: scheduleData.replyDTOList.map(reply => reply.replyer)
+    };
   };
 
   return (
@@ -205,28 +278,25 @@ export default function SchedulePosting() {
                 </div>
 
                 <div className="schedule-container">
-                  {items.map((item, index) => (
+                {items.map((item, index) => {
+                const transformedItem = transformToScheduleItem(item, scheduleData.tourDTOList);
+                return (
                     <ScheduleCard
-                      key={item.place_id[index]}
-                      {...item}
-                      onClick={() =>
-                        Click(
-                          item.latitude[index],
-                          item.longitude[index],
-                          item.place_name[index],
-                          item.tip[index],
-                          item.detailimages
-                        )
-                      }
-                      onAddToCart={() => handleAddToCart(item)}
-                      onRemoveFromCart={() =>
-                        handleRemoveFromCart(item.place_id[index])
-                      }
-                      isInCart={cart.some(
-                        (cartItem) => cartItem.place_id === item.place_id
-                      )}
-                    />
-                  ))}
+                        key={transformedItem.place_id}
+                        {...transformedItem}
+                        onClick={() => Click(
+                            transformedItem.latitude,
+                            transformedItem.longitude,
+                            transformedItem.place_name,
+                            transformedItem.tip,
+                            transformedItem.detailimages
+                        )}
+                    onAddToCart={() => handleAddToCart(transformedItem)}
+                    onRemoveFromCart={() => handleRemoveFromCart(item.place_id)}
+                    isInCart={cart.some((cartItem) => cartItem.place_id === item.place_id)}
+                  />
+                );
+              })}
                 </div>
               </div>
             ))}
@@ -251,15 +321,11 @@ export default function SchedulePosting() {
           <div className={`cart  "hovered" : ""}`}>
             <h2>장바구니</h2>
             {cart.map((item, index) => (
-              <div className="schedule-card-cart" key={item.place_id[index]}>
-                <span className="schedule-number">
-                  {item.place_name[index]}
-                </span>
-                <h3>{item.tip[index]}</h3>
+              <div className="schedule-card-cart" key={item.place_id}>
+                <span className="schedule-number">{item.place_name}</span>
+                <h3>{item.tip}</h3>
 
-                <button
-                  onClick={() => handleRemoveFromCart(item.place_id[index])}
-                >
+                <button onClick={() => handleRemoveFromCart(item.place_id)}>
                   제거
                 </button>
               </div>
