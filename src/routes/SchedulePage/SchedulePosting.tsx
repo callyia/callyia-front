@@ -249,6 +249,10 @@ export default function SchedulePosting() {
       .filter((reply) => reply.dno === detailItem.dno)
       .map((reply) => reply.replyer);
 
+    const rno = scheduleData.replyDTOList
+      .filter((reply) => reply.dno === detailItem.dno)
+      .map((reply) => reply.rno);
+
     return {
       ...detailItem,
       place_name: tourItem.placeName,
@@ -258,6 +262,7 @@ export default function SchedulePosting() {
       detail_images: detailItem.detailImages,
       reply_contents: replyContents,
       replyer: replyer,
+      rno: rno,
     };
   };
 
