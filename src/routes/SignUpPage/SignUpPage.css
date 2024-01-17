@@ -45,7 +45,7 @@
 .SignUp-form-container {
   background: #f5f5f5;
   width: 860px;
-  height: 650px;
+  height: 800px;
   display: flex;
   flex-direction: row;
   box-shadow: 10px black;
@@ -144,7 +144,7 @@
   padding: 0;
   margin-left: 10px;
   /* margin-left: 90px; */
-  margin-top: 160px;
+  margin-top: 320px;
 }
 .SignUp-input-container .SignUp-input-choice span {
   display: inline-block;
@@ -227,4 +227,18 @@
   .SignUp-form-left-side {
     width: auto;
   }
+}
+
+.profile-image-preview {
+  width: 100px; /* Adjust the size as needed */
+  height: 100px; /* Adjust the size as needed */
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: #ccc; /* Gray background color */
+}
+
+.profile-image-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Maintain aspect ratio and cover the container */
 }

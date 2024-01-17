@@ -44,10 +44,10 @@ const LoginPage: React.FC = () => {
 
     try {
       const response: AxiosResponse = await axios.post(
-        "http://localhost:8080/Callyia/login",
+        `http://localhost:8080/Callyia/login?email=${email}&password=${password}`,
         {
           username: email,
-          password,
+          password: password,
         }
       );
       localStorage.setItem("token", response.data.token);
