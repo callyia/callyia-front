@@ -8,7 +8,7 @@ const LoginPage: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const loginForm = document.querySelector("#loginBtn") as HTMLFormElement;
+  const loginForm = document.querySelector("#loginForm") as HTMLFormElement;
 
   const isEmailValid = (email: string): boolean => {
     // 이메일 유효성 검사 정규식
@@ -41,10 +41,11 @@ const LoginPage: React.FC = () => {
     }
     // Implement your sign-up logic here
     console.log("Signing up with:", email, password);
+    console.log(loginForm);
 
     try {
       const response: AxiosResponse = await axios.post(
-        `http://localhost:8080/Callyia/login?email=${email}&password=${password}`,
+        `http://localhost:8080/Callyia/auth/login?email=${email}&password=${password}`,
         {
           username: email,
           password: password,
@@ -95,7 +96,7 @@ const LoginPage: React.FC = () => {
             </div>
           </div>
           <div className="login-btn-wrap">
-            <form onSubmit={handleLogin}>
+            <form id="loginForm" onSubmit={handleLogin}>
               <input
                 type="submit"
                 className="login-btn"
