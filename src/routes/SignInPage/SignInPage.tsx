@@ -8,7 +8,7 @@ const LoginPage: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const loginForm = document.querySelector("#loginBtn") as HTMLFormElement;
+  const loginForm = document.querySelector("#loginForm") as HTMLFormElement;
 
   const isEmailValid = (email: string): boolean => {
     // 이메일 유효성 검사 정규식
@@ -37,21 +37,28 @@ const LoginPage: React.FC = () => {
       return;
     }
     if (loginForm) {
-      loginForm.submit();
+      // loginForm.submit();
     }
     // Implement your sign-up logic here
     console.log("Signing up with:", email, password);
 
     try {
       const response: AxiosResponse = await axios.post(
-        `http://localhost:8080/Callyia/login?email=${email}&password=${password}`,
+        "http://localhost:8080/Callyia/auth/login",
+        JSON.stringify({
+          email,
+          password,
+        }),
         {
-          username: email,
-          password: password,
+          headers: {
+            "Content-Type": "application/json", // 전송하는 데이터 타입 설정
+          },
         }
       );
-      localStorage.setItem("token", response.data.token);
-      navigate("/homepage");
+      localStorage.setItem("token", response.data);
+      console.log(response.data);
+
+      navigate("/");
     } catch (error) {
       console.error("로그인 실패", error);
       alert("로그인에 실패하였습니다.");
