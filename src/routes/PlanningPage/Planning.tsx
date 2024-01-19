@@ -7,6 +7,7 @@ import PlaceCard from "../../components/PlaceCard";
 import toast, { Toaster } from "react-hot-toast";
 import { Modal, ModalContent } from "../../theme/daisyui/Modal";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import axios from "axios";
 
 const plans: Array<{
   placeId: number;
@@ -567,6 +568,25 @@ export default function Planning() {
     return content;
   };
 
+  const fetchByPno = async (pno: number) => {
+    const token = localStorage.getItem("token");
+    console.log(token);
+
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/Callyia/access/resource-by-pno/${pno}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(response.data);
+    } catch (error) {
+      console.error("ERROR : ", error);
+    }
+  };
+
   const fetchSearch = (searchKeyword: string) => {
     const url = `http://localhost:8080/Callyia/planning/search?keyword=${searchKeyword}`;
 
@@ -882,6 +902,8 @@ export default function Planning() {
       var planData_tour;
       var planData_day;
       if (pnoParam) {
+        fetchByPno(parseInt(pnoParam, 10));
+
         const url1 = `http://localhost:8080/Callyia/planning/getDB?pno=${pnoParam}`;
         const url2 = `http://localhost:8080/Callyia/planning/getDay?pno=${pnoParam}`;
 
@@ -893,8 +915,7 @@ export default function Planning() {
             );
           }
           const data1 = await response1.json();
-          console.log("get tour--------------------");
-          console.log(data1);
+
           const response2 = await fetch(url2);
           if (!response2.ok) {
             throw new Error(
@@ -902,8 +923,6 @@ export default function Planning() {
             );
           }
           const data2 = await response2.json();
-          console.log("get day--------------------");
-          console.log(data2);
 
           var newd1: typeof plans = [];
           var newd2: typeof plans = [];
@@ -1087,6 +1106,20 @@ export default function Planning() {
       });
   };
 
+  const dndListStyle = (isDraggingOver: any) => ({
+    background: isDraggingOver ? "#fbfbf2" : "white",
+  });
+
+  const dndTrashStyle = (isDraggingOver: any) => ({
+    backgroundColor: isDraggingOver ? "#343a40" : "#e9ecef",
+    backgroundImage: isDraggingOver
+      ? `url("../../../dummyimages/trash_white.png")`
+      : `url("../../../dummyimages/trash_black.png")`,
+    backgroundSize: "auto 100%",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
+  });
+
   updateMarker();
   showBackgroundLine(pd);
 
@@ -1181,11 +1214,12 @@ export default function Planning() {
           <div className="div-plan-list">
             {droppables.map((droppable, droppableIndex) => (
               <Droppable key={droppable.id} droppableId={droppable.id}>
-                {(provided) => (
+                {(provided, snapshot) => (
                   <div
                     className="day-plan-list"
                     {...provided.droppableProps}
                     ref={provided.innerRef}
+                    style={dndListStyle(snapshot.isDraggingOver)}
                   >
                     <div className="day-plan-title">{droppable.title}</div>
                     <div>
@@ -1224,11 +1258,12 @@ export default function Planning() {
             ))}
           </div>
           <Droppable droppableId="droppable_trash">
-            {(provided) => (
+            {(provided, snapshot) => (
               <div
                 className="div-plan-trash"
                 {...provided.droppableProps}
                 ref={provided.innerRef}
+                style={dndTrashStyle(snapshot.isDraggingOver)}
               >
                 {provided.placeholder}
               </div>
