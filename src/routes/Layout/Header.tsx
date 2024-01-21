@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect  } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 import SearchBar from "./SearchBar";
@@ -11,6 +11,12 @@ export default function Header() {
   const [searchCombo, setSearchCombo] = useState("user");
 
 
+  // 의존성으로 navigate를 넣긴했는데 token의 유무 변화에 따라 useEffect가 실행되도록 작성해야한다.
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setLoggedIn(!!token);
+  }, [navigate]);
+  
   const goToLogout = () => {
     setSearchKeyword("");
     localStorage.removeItem('token');
@@ -36,17 +42,8 @@ export default function Header() {
     navigate("/UserProfilePage");
   };
 
-  const toggleBtn = () => {
-    setLoggedIn((prevLoggedIn) => !prevLoggedIn);
-  };
+  // token이 있으면 로그아웃과 myprofile이 나오고 token이 없으면 sign in 버튼이 나오도록 하기
 
-  const handleProfileButtonClick = () => {
-    if (isLoggedIn) {
-      goToMyProfilePage();
-    } else {
-      goToSignInPage();
-    }
-  };
 
   const handleSearchKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter" && searchKeyword.trim() !== "") {
@@ -83,20 +80,27 @@ export default function Header() {
         {renderSearchBar()}
         <div></div>
       </div>
-      <button className={getButtonClassName("header-action-button-1 header-action-button")} onClick={toggleBtn}>
-        toggle btn
-      </button>
-      <button className={getButtonClassName("header-action-button-2 header-action-button")} onClick={handleProfileButtonClick}>
-      {isLoggedIn ? "Profile" : "Sign In"}
-      </button>
+
+      {isLoggedIn ? (
+        <>
+          <button className={getButtonClassName("header-action-button-2 header-action-button")} onClick={goToMyProfilePage}>
+            My Profile
+          </button>
+          <button className={getButtonClassName("header-action-button-5 header-action-button")} onClick={goToLogout}>
+            Logout
+          </button>
+        </>
+      ) : (
+        <button className={getButtonClassName("header-action-button-2 header-action-button")} onClick={goToSignInPage}>
+          Sign In
+        </button>
+      )}
+      
       <button className={getButtonClassName("header-action-button-3 header-action-button")} onClick={goToUserProfilePage}>
         User Profile
       </button>
       <button className={getButtonClassName("header-action-button-4 header-action-button")} onClick={goToSignUpPage}>
         Sign Up
-      </button>
-      <button className={getButtonClassName("header-action-button-5 header-action-button")} onClick={goToLogout}>
-        Logout
       </button>
     </header>
   );
