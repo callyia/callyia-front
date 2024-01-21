@@ -10,6 +10,12 @@ export default function Header() {
   const [searchKeyword, setSearchKeyword] = useState("");
   const [searchCombo, setSearchCombo] = useState("user");
 
+
+  const goToLogout = () => {
+    setSearchKeyword("");
+    localStorage.removeItem('token');
+    navigate("/SignInPage");
+  }
   const goToSignInPage = () => {
     setSearchKeyword("");
     navigate("/SignInPage");
@@ -88,6 +94,9 @@ export default function Header() {
       </button>
       <button className={getButtonClassName("header-action-button-4 header-action-button")} onClick={goToSignUpPage}>
         Sign Up
+      </button>
+      <button className={getButtonClassName("header-action-button-5 header-action-button")} onClick={goToLogout}>
+        Logout
       </button>
     </header>
   );
