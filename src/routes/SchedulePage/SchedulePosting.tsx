@@ -1,6 +1,5 @@
 //SchedulePosting.tsx
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 
 import ScheduleCard, { ScheduleItem } from "../../components/ScheduleCard";
@@ -12,6 +11,7 @@ declare global {
     kakao: any;
   }
 }
+
 interface ScheduleDTO {
   sno: number;
   total_Day: number;
@@ -63,31 +63,33 @@ export default function SchedulePosting() {
 
   const { sno } = useParams();
 
-  useEffect(() => {
-    const fetchScheduleData = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:8080/Callyia/Schedule/posting?sno=${sno}`
-        );
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const data = await response.json();
-
-        setScheduleData({
-          scheduleDTO: data.scheduleDTO,
-          detailScheduleDTOList: data.detailScheduleDTOList,
-          replyDTOList: data.replyDTOList,
-          tourDTOList: data.tourDTOList,
-        });
-      } catch (error) {
-        console.log("Error fetching tour data:", error);
+  const fetchScheduleData = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/Callyia/Schedule/posting?sno=${sno}`
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
       }
-    };
+      const data = await response.json();
+
+      setScheduleData({
+        scheduleDTO: data.scheduleDTO,
+        detailScheduleDTOList: data.detailScheduleDTOList,
+        replyDTOList: data.replyDTOList,
+        tourDTOList: data.tourDTOList,
+      });
+    } catch (error) {
+      console.log("Error fetching tour data:", error);
+    }
+  };
+
+  //GET
+  useEffect(() => {
     fetchScheduleData();
   }, [sno]);
 
-  // ScheduleCard를 DAY별로 그룹화하는 함수------------------------------
+  // ScheduleCard를 DAY별로 그룹화하는 함수
   const groupByDay = (schedule: DetailScheduleItem[]) => {
     const grouped: { [day: number]: DetailScheduleItem[] } = {};
     schedule.forEach((item) => {
@@ -101,6 +103,8 @@ export default function SchedulePosting() {
   const groupedSchedule = groupByDay(scheduleData.detailScheduleDTOList);
 
   //Map -------------------------------------------------------------------------------
+  var moreOverlay: any = null;
+  var previousOverlay: any = null;
 
   const linePath = scheduleData.tourDTOList.map(
     (place: TourDTO) =>
@@ -115,10 +119,8 @@ export default function SchedulePosting() {
     strokeStyle: "solid",
   });
 
-  var moreOverlay: any = null;
-  var previousOverlay: any = null;
-
-  const Click = (
+  //Map Click
+  const DivClick = (
     latitude: number,
     longitude: number,
     place_name: String,
@@ -167,6 +169,25 @@ export default function SchedulePosting() {
     return CustomOverlayContent;
   };
 
+  // 마커 이미지를 저장할 배열
+  const markerImages = Array.from(
+    { length: scheduleData.tourDTOList.length },
+    (_, index) => {
+      const imageSrc = `../../../dummyimages/NumberImage/number${
+        index + 1
+      }.png`;
+      const imageSize = new window.kakao.maps.Size(35, 70);
+      const imageOption = { offset: new window.kakao.maps.Point(18, 48) };
+
+      return new window.kakao.maps.MarkerImage(
+        imageSrc,
+        imageSize,
+        imageOption
+      );
+    }
+  );
+
+  //Map, Marker load
   useEffect(() => {
     const container = document.getElementById("map"); //지도를 담을 영역의 DOM 레퍼런스
 
@@ -186,28 +207,36 @@ export default function SchedulePosting() {
     const newmap = new window.kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
     setMap(newmap);
 
-    // ScheduleData에 있는 각 장소에 대한 마커 생성
-    scheduleData.tourDTOList.forEach((place: TourDTO) => {
-      if (place.latitude && place.longitude) {
-        // lat과 lng가 존재하는 경우에만 처리
-        const markerPosition = new window.kakao.maps.LatLng(
-          place.latitude,
-          place.longitude
-        );
+    // 지도가 로드될 때까지 기다리는 이벤트 리스너
+    const waitForMapToLoad = () => {
+      if (newmap) {
+        scheduleData.tourDTOList.forEach((place: TourDTO, index: number) => {
+          if (place.latitude && place.longitude) {
+            const markerPosition = new window.kakao.maps.LatLng(
+              place.latitude,
+              place.longitude
+            );
 
-        const marker = new window.kakao.maps.Marker({
-          position: markerPosition,
-          title: place.placeName,
+            const marker = new window.kakao.maps.Marker({
+              position: markerPosition,
+              title: place.placeName,
+              image: markerImages[index], // 적절한 마커 이미지 사용
+            });
+
+            marker.setMap(newmap);
+          }
         });
 
-        marker.setMap(newmap);
+        Defaultpolyline.setMap(newmap);
+      } else {
+        // 아직 지도가 로드되지 않았으면 재시도
+        setTimeout(waitForMapToLoad, 100);
       }
-    });
+    };
 
-    if (newmap) {
-      Defaultpolyline.setMap(newmap);
-    }
-  }, []);
+    // tilesloaded 이벤트 대신 로드가 완료될 때까지 대기
+    waitForMapToLoad();
+  }, [scheduleData.tourDTOList]);
 
   const [map, setMap] = useState<Window["kakao"]["maps"]["Map"] | null>(null);
   const panTo = (latitude: number, longitude: number) => {
@@ -217,7 +246,7 @@ export default function SchedulePosting() {
     }
   };
 
-  //--------------------------------------------------------------------------------
+  // Cart --------------------------------------------------------------------------------
   const [cart, setCart] = useState<ScheduleItem[]>([]);
 
   const handleAddToCart = (item: ScheduleItem) => {
@@ -307,7 +336,7 @@ export default function SchedulePosting() {
                         key={transformedItem.place_id}
                         {...transformedItem}
                         onClick={() =>
-                          Click(
+                          DivClick(
                             transformedItem.latitude,
                             transformedItem.longitude,
                             transformedItem.place_name,

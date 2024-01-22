@@ -134,14 +134,14 @@
   justify-content: space-between;
 }
 .schedule-card p button {
-  background-color: white; /* 배경색 설정 */
-  color: black; /* 글자색 설정 */
+  background-color: white;
+  color: black;
   padding: 10px 15px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
-  transition: background-color 0.3s ease; /* 배경색 전환 효과 */
+  transition: background-color 0.3s ease;
 }
 
 .schedule-card p button:hover {
@@ -209,25 +209,25 @@
   margin-bottom: 10px;
 }
 .details button {
-  background-color: white; /* 배경색 설정 */
-  color: black; /* 글자색 설정 */
+  background-color: white;
+  color: black;
   padding: 10px 15px;
   border: none;
   border-radius: 5px;
   margin-right: 5px;
   cursor: pointer;
   font-size: 16px;
-  transition: background-color 0.3s ease; /* 배경색 전환 효과 */
+  transition: background-color 0.3s ease;
 }
 .details button:hover {
   transform: scale(1.025);
 }
-.comment {
+.reply {
   margin: 10px;
   display: flex;
   align-items: center;
 }
-.comment button {
+.reply button {
   padding: 10px 15px;
   background-color: gray;
   color: white;
@@ -265,4 +265,8 @@
 .card-buttons button svg {
   fill: white;
   margin-right: 5px;
+}
+
+.Modal-delete-button {
+  background-color: #fe2e2e;
 }
