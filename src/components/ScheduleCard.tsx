@@ -1,7 +1,7 @@
 //ScheduleCard.tsx
 import React, { useState, useEffect } from "react";
 import "../routes/SchedulePage/SchedulePosting.css"; // Schedule.css 파일을 import
-import Swal from "sweetalert2"; //alert 디자인 임포트
+import swal from "sweetalert";
 import { FaPlus } from "react-icons/fa";
 
 interface ScheduleItem {
@@ -17,6 +17,18 @@ interface ScheduleItem {
   replyer: string[];
   dno: number;
   rno: number[];
+  sno: number;
+}
+
+interface ReplyDTO {
+  rno: number;
+  replyContents: string;
+  dno: number;
+  replyer: string;
+}
+
+interface UpdateData {
+  replyDTOList: ReplyDTO[];
 }
 
 export interface ScheduleCardProps extends ScheduleItem {
@@ -41,22 +53,78 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
   replyer,
   dno,
   rno,
+  sno,
 }) => {
   const [expanded, setExpanded] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 3; // 페이지당 보여줄 댓글 수
-  const totalPages = 3;
   const [cardHeight, setCardHeight] = useState<number | undefined>(undefined);
-
   const [inputData, setInputData] = useState("");
+  const [reply, setReply] = useState<string[]>(reply_contents);
+  const [replyWriter, setReplyWriter] = useState<string[]>(replyer);
 
-  const [comments, setComments] = useState<string[]>([]);
   const user = "sh@naver.com";
-  const [editableCommentIndex, setEditableCommentIndex] = useState<
-    number | null
-  >(null);
-  const [editableComment, setEditableComment] = useState<string>("");
+  const [loading, setLoading] = useState(false); // 댓글을 로드 중인지 여부
+  const [hasMore, setHasMore] = useState(true); // 불러올 댓글이 남아 있는지 여부
+
+  const handleScroll = () => {
+    // 스크롤 이벤트 핸들러
+    if (
+      window.innerHeight + document.documentElement.scrollTop + 10 >=
+      document.documentElement.offsetHeight
+    ) {
+      // 스크롤이 페이지 맨 아래에 도달하면 새로운 댓글을 로드합니다.
+      loadMoreComments();
+    }
+  };
+
+  const loadMoreComments = async () => {
+    if (loading || !hasMore) {
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      // 더 불러올 댓글을 서버에서 가져옵니다.
+      const response = await fetch(
+        `http://localhost:8080/Callyia/Schedule/loadMoreComments?sno=${sno}&page=${currentPage}`
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      const newComments = data.replyDTOList;
+
+      // 더 불러올 댓글이 없으면 hasMore를 false로 설정합니다.
+      if (newComments.length === 0) {
+        setHasMore(false);
+        return;
+      }
+
+      // 기존 댓글에 새로운 댓글을 추가합니다.
+      setReply((prevComments) => [...prevComments, ...newComments]);
+
+      // 현재 페이지를 증가시킵니다.
+      setCurrentPage((prevPage) => prevPage + 1);
+    } catch (error) {
+      console.error("Error loading more comments:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    // 스크롤 이벤트 리스너를 등록합니다.
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      // 컴포넌트가 언마운트될 때 이벤트 리스너를 해제합니다.
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   const handleReplyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputData(event.target.value); //사용자가 입력한 텍스트를 setReply
@@ -83,19 +151,20 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-      // 댓글이 성공적으로 저장되면 응답에서 얻은 데이터를 확인
-      const data = await response.json();
-      console.log("Response data:", data);
 
-      // const newComment = data.reply_contents;
-      // setComments([...comments, newComment]);
+      window.location.reload();
 
-      //댓글 입력 완료 모달 띄움
-      Swal.fire({
+      // 댓글 입력 완료 모달 띄움
+      swal({
         text: "댓글 입력 완료",
-        showConfirmButton: false,
-        showCancelButton: true,
-        cancelButtonText: "닫기",
+        buttons: {
+          confirm: {
+            text: "닫기",
+            value: true,
+            visible: true,
+          },
+        },
+        closeOnClickOutside: false,
       });
 
       setInputData(""); // 댓글 입력창 비우기
@@ -104,7 +173,7 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
     }
   };
 
-  const handleEditComment = async (index: number) => {
+  const handleEditComment = async (index: number, content: string) => {
     try {
       // 서버에 수정된 댓글을 전송
       const response = await fetch(
@@ -116,12 +185,14 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
           },
           body: JSON.stringify({
             rno: rno[index],
-            replyContents: editableComment,
+            replyContents: content,
             replyer: user,
             dno: dno,
           }),
         }
       );
+
+      window.location.reload();
 
       if (!response.ok) {
         const errorMessage = await response.text(); // 실패한 경우 응답 본문을 가져옴
@@ -129,16 +200,6 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
           `HTTP error! Status: ${response.status}, Message: ${errorMessage}`
         );
       }
-
-      console.log(editableComment);
-      // 수정이 성공하면 댓글을 업데이트
-      const updatedComments = [...comments];
-      updatedComments[index] = editableComment;
-      setComments(updatedComments);
-
-      // 수정 완료 후 상태 초기화
-      setEditableComment("");
-      setEditableCommentIndex(null);
     } catch (error) {
       console.error("Error editing comment:", error);
     }
@@ -146,53 +207,105 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
 
   const handleDeleteComment = async (rno: number) => {
     try {
-      // 서버에 댓글 삭제를 요청
-      const response = await fetch(
-        `http://localhost:8080/Callyia/Schedule/delete/${rno}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      // 댓글 삭제 여부를 묻는 모달 띄우기
+      const willDelete = await swal({
+        title: "삭제 확인",
+        text: "댓글을 삭제하시겠습니까?",
+        icon: "warning",
+        buttons: ["취소", "삭제"], // 취소 버튼 누르면 false, 삭제 버튼 누르면 true 반환
+        dangerMode: true,
+      });
 
-      if (!response.ok) {
-        const errorMessage = await response.text();
-        throw new Error(
-          `HTTP error! Status: ${response.status}, Message: ${errorMessage}`
+      if (willDelete) {
+        // 서버에 댓글 삭제를 요청
+        const response = await fetch(
+          `http://localhost:8080/Callyia/Schedule/delete/${rno}`,
+          {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
         );
-      }
 
-      // 댓글 삭제 후 UI 업데이트
-      const updatedComments = comments.filter(
-        (comment, index) => index !== rno
-      );
-      setComments(updatedComments);
+        window.location.reload();
+
+        if (!response.ok) {
+          const errorMessage = await response.text();
+          throw new Error(
+            `HTTP error! Status: ${response.status}, Message: ${errorMessage}`
+          );
+        }
+
+        // 삭제 완료 모달 띄우기
+        swal("댓글이 삭제되었습니다.", {
+          icon: "success",
+        });
+      }
     } catch (error) {
       console.error("Error deleting comment:", error);
     }
   };
 
-  //댓글 클릭 시 alert창으로 전체 내용 보여줌
+  // 댓글 클릭 시 alert창으로 전체 내용 보여줌
   const handlereplyClick = (replyContents: string, index: number) => {
     const isEditable = replyer[index] === user;
 
-    Swal.fire({
+    swal({
       text: isEditable ? `${replyContents} - 내가 쓴 댓글` : `${replyContents}`,
-      showConfirmButton: isEditable, // 수정 가능한 경우에만 확인 버튼 표시
-      showCancelButton: true,
-      cancelButtonText: "닫기",
-      confirmButtonText: "수정", // 수정 가능한 경우에만 수정 버튼 표시
-      confirmButtonColor: "#3085d6",
-    }).then((result) => {
-      if (result.isConfirmed && isEditable) {
-        // 수정 버튼을 눌렀고 수정 가능한 경우
-        setEditableComment(replyContents);
-        setEditableCommentIndex(index);
-      } else if (!isEditable && result.isConfirmed) {
-        // 삭제 버튼을 눌렀고, 삭제 가능한 경우
-        handleDeleteComment(rno[index]);
+      buttons: {
+        confirm: {
+          text: "수정",
+          value: "edit", // 수정 버튼에 "edit" 값을 할당
+          visible: isEditable,
+        },
+        delete: {
+          text: "삭제",
+          value: "delete", // 삭제 버튼에 "delete" 값을 할당
+          visible: isEditable, // 수정 불가능한 경우에만 삭제 버튼 표시
+          className: "Modal-delete-button",
+        },
+        cancel: {
+          text: "닫기",
+          value: "cancel", // 취소 버튼에 "cancel" 값을 할당
+          visible: true,
+        },
+      },
+      closeOnClickOutside: false,
+    }).then((value) => {
+      switch (value) {
+        case "edit":
+          if (isEditable) {
+            swal({
+              text: "댓글을 수정하세요:",
+              content: {
+                element: "input",
+                attributes: {
+                  placeholder: "댓글을 입력하세요",
+                },
+              },
+              buttons: {
+                confirm: {
+                  text: "완료",
+                  closeModal: false,
+                },
+              },
+            }).then(async (newValue) => {
+              handleEditComment(index, newValue);
+              swal(`수정된 댓글: ${newValue}`);
+            });
+          }
+          break;
+        case "delete":
+          if (isEditable) {
+            // 삭제 버튼을 눌렀고, 삭제 가능한 경우
+            handleDeleteComment(rno[index]);
+          }
+          break;
+
+        default:
+          // 닫기
+          break;
       }
     });
   };
@@ -202,27 +315,8 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
   };
 
   const handleToggleExpand = () => {
-    setExpanded(!expanded);
     setShowDetails(!showDetails);
   };
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
-
-  useEffect(() => {
-    if (expanded) {
-      const startIdx = (currentPage - 1) * itemsPerPage;
-      const endIdx = startIdx + itemsPerPage;
-      const visiblereplys = reply_contents.slice(startIdx, endIdx);
-      const replyHeight = visiblereplys.reduce((height, _) => height + 20, 0);
-      const updatedCardHeight = 500 + replyHeight; // 적절한 값을 설정하세요
-
-      setCardHeight(updatedCardHeight);
-    } else {
-      setCardHeight(undefined);
-    }
-  }, [expanded, currentPage, reply_contents]);
 
   return (
     <div
@@ -236,7 +330,7 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
       <p>
         TIP : {tip}
         <button className="moreBtn" onClick={handleToggleExpand}>
-          {expanded ? "간략히" : "더보기"}
+          {expanded ? "접기" : "더보기"}
         </button>
       </p>
       <div className="card-buttons">
@@ -252,69 +346,6 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
       {showDetails && (
         <div className="details">
           <img src={detail_images} />
-          <p>{detail_images}</p>
-          <ul>
-            {reply_contents
-              .slice(
-                (currentPage - 1) * itemsPerPage,
-                currentPage * itemsPerPage
-              )
-              .map((reply_contents, index) => (
-                <li
-                  key={index}
-                  onClick={() => handlereplyClick(reply_contents, index)}
-                >
-                  {editableCommentIndex === index ? (
-                    // 수정 중인 댓글의 경우
-                    <>
-                      <input
-                        type="text"
-                        value={editableComment}
-                        onChange={(e) => setEditableComment(e.target.value)}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                        }}
-                      />
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation(); // 상위 엘리먼트의 onClick 이벤트 전파 방지
-                          handleEditComment(index);
-                        }}
-                      >
-                        완료
-                      </button>
-                    </>
-                  ) : (
-                    // 수정 중이 아닌 댓글의 경우
-                    <>
-                      {reply_contents} - {replyer[index]}
-                      {replyer[index] === user && ( // 현재 사용자가 댓글 작성자인 경우에만 삭제 버튼 표시
-                        <button
-                          onClick={(e) => {
-                            handleDeleteComment(rno[index]);
-                            e.stopPropagation();
-                          }}
-                        >
-                          삭제
-                        </button>
-                      )}
-                    </>
-                  )}
-                </li>
-              ))}
-          </ul>
-          <button
-            disabled={currentPage === 1}
-            onClick={() => handlePageChange(currentPage - 1)}
-          >
-            이전
-          </button>
-          <button
-            disabled={currentPage === totalPages}
-            onClick={() => handlePageChange(currentPage + 1)}
-          >
-            다음
-          </button>
           <div className="reply">
             <input
               type="text"
@@ -324,6 +355,13 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
             />
             <button onClick={handleRegister}>입력</button>
           </div>
+          <ul>
+            {reply.map((reply, index) => (
+              <li key={index} onClick={() => handlereplyClick(reply, index)}>
+                {reply} - {replyWriter[index]}
+              </li>
+            ))}
+          </ul>
         </div>
       )}
     </div>
