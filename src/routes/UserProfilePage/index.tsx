@@ -1,29 +1,56 @@
-import { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import UserProfile from './UserProfilePage';
-import { dummyUser } from './dummydata';
+import UserSelfIntroduction from './UserSelfIntroduction';
+
+interface User {
+  email: string;
+  nickname: string;
+  profileImage: string;
+  aboutMe: string;
+  phone: string;
+  // postCount: number; // 어떻게 하실건가요?
+}
 
 export default function UserProfilePage() {
   const location = useLocation();
-
-  const [profileImage] = useState<string>('./dummyimages/image1.jpeg'); // 기본 이미지
   const fileInputRef = useRef<HTMLInputElement>(null);
-
   const urlParams = new URLSearchParams(location.search);
-  const userid = urlParams.get('userid');
+  const email = urlParams.get('userid');
 
-  const user = dummyUser.find(user => user.userid === userid) ;
+  const [user, setUser] = useState<any>(null); 
+  const [profileImage, setProfileImage] = useState<string>('./dummyimages/image1.jpeg'); // 기본 이미지
 
-  if (!user) {
-    return (
-      <div className="user-profile-page">
-        <div className='user-profile-search-keyword-header' >
-        <span className='user-profile-search-keyword'>USER를 찾을 수 없습니다. 다시 한번 더 확인바랍니다.</span>
-        </div>
-      </div>
-    );
-  }
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch(`http://localhost:8080/Callyia/member/user?email=${email}`);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const userData = await response.json();
+        setUser(userData);
+        setProfileImage(userData.profileImage || './dummyimages/image1.jpeg');
+      } catch (error) {
+        console.error('Fetch error:', error);
+      }
+    };
+
+    if (email) {
+      fetchUserData();
+    }
+  }, [email]);
+
+  // if (!user) {
+  //   return (
+  //     <div className="user-profile-page">
+  //       <div className='user-profile-search-keyword-header' >
+  //       <span className='user-profile-search-keyword'>USER를 찾을 수 없습니다. 다시 한번 더 확인바랍니다.</span>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
     return (
       <div style={{ flex: 1, display: "flex", flexDirection: 'column', height: '1000px'}}>
@@ -68,8 +95,8 @@ export default function UserProfilePage() {
                 color: "white"
               }}
             >
-              <div className = "user-profile-id">{user.userid}</div>
-              <div className = "user-profile-email">{user.useremail}</div>
+              <div className = "user-profile-nickname">{user?.nickname}</div>
+              <div className = "user-profile-email">{user?.email}</div>
             </div>
           </div>
     
@@ -85,6 +112,7 @@ export default function UserProfilePage() {
             >
               {/* 오른쪽 상단 */}
             <UserProfile />
+            {/* <UserProfile user={user} /> */}
           
             </div>
           </div>

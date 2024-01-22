@@ -9,7 +9,6 @@ export default function MyProfilePage() {
   const [isEditing, setIsEditing] = useState(false); 
   const [profileImage, setProfileImage] = useState<string>('./dummyimages/image1.jpeg'); // 기본 이미지
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const userId = 'dummyUser'; 
   const [currentContent, setCurrentContent] = useState('default');
 
   const changeContent = (newContent: string) =>  setCurrentContent(newContent);
