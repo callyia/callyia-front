@@ -2,33 +2,30 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import './ListPage.css';
-import { dummyUser } from './../UserProfilePage/dummydata';
-import { dummyLocation } from './../UserProfilePage/dummyLocation';
-import { dummySchedule } from './../UserProfilePage/dummySchedule';
 
 interface UserSearchResult {
-  userid: string;
-  usernickname: string,
-  useremail: string;
-  imageUrl: string;
-  postCount: number;
-  userselfintroduction?: string;
+  name: string;
+  nickname: string,
+  email: string;
+  profileImage: string;
+  aboutMe: string;
+  phone: string;
 }
 
 interface LocationSearchResult {
   latitude: number,
   longitude: number,
-  place_id: number,
+  placeId: number,
   address: string, 
-  check_column: string, 
+  checkColumn: string, 
   image: string, 
-  place_content: string, 
-  place_name: string
+  placeContent: string, 
+  placeName: string
 }
 
 interface ScheduleSearchResult {
   sno: number,
-  s_name: string,
+  sName: string,
   total_day: number,
   member_email: string
 }
@@ -37,7 +34,7 @@ const ListPage = () => {
   const location = useLocation();
   const [UserSearchResult, setUserSearchResult] = useState<UserSearchResult[]>([]);
   const [LocationSearchResult, setLocationSearchResult] = useState<LocationSearchResult[]>([]);
-  const [ScheduleSearchResult, setScheduleSearchResult] = useState<ScheduleSearchResult[]>([]);
+  const [ScheduleSearchResult, setScheduleSearchResult] = useState<ScheduleSearchResult[]>([]); // 페이지 처리
   const [searchCombo, setSearchCombo] = useState<string | null>(null);
   const [searchKeyword, setSearchKeyword] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -46,7 +43,7 @@ const ListPage = () => {
   const startPage = Math.floor((currentPage - 1) / pagesToShow) * pagesToShow + 1;
   const userNumberOfPages = Math.ceil(UserSearchResult.length / itemsPerPage);
   const locationNumberOfPages = Math.ceil(LocationSearchResult.length / itemsPerPage);
-  const scheduleNumberOfPages = Math.ceil(ScheduleSearchResult.length / itemsPerPage);
+  const scheduleNumberOfPages = Math.ceil(ScheduleSearchResult.length / itemsPerPage); // 페이지 처리 
   const userEndPage = Math.min(startPage + pagesToShow - 1, userNumberOfPages);
   const locationEndPage = Math.min(startPage + pagesToShow - 1, locationNumberOfPages);
   const scheduleEndPage = Math.min(startPage + pagesToShow - 1, scheduleNumberOfPages);
@@ -55,42 +52,64 @@ const ListPage = () => {
 
   useEffect(() => {
 
-    const urlParams = new URLSearchParams(location.search);
-    const newSearchCombo = urlParams.get('searchcombo');
-    const newSearchKeyword = urlParams.get('searchkeyword');
+    const fetchData = async () => {
+      try {
+        const urlParams = new URLSearchParams(location.search);
+        const newSearchCombo = urlParams.get('searchcombo');
+        const newSearchKeyword = urlParams.get('searchkeyword');
+        
+        setSearchCombo(newSearchCombo);
+        setSearchKeyword(newSearchKeyword);
 
-    if (newSearchCombo !== searchCombo || newSearchKeyword !== searchKeyword) {
-      setCurrentPage(1); 
-    }
+        if (!newSearchCombo || !newSearchKeyword) {
+          setIsValidQuery(false);
+          return; 
+        }
+        setIsValidQuery(true); 
+        
+        if (newSearchCombo !== searchCombo || newSearchKeyword !== searchKeyword) {
+          setCurrentPage(1); 
+        }
+    
+        let userResponse, locationResponse, scheduleResponse;
 
-    setSearchCombo(newSearchCombo);
-    setSearchKeyword(newSearchKeyword);
-
-    const userFilteredData = dummyUser.filter(item => {
-      if (!newSearchCombo || !newSearchKeyword) return true;
-      return newSearchKeyword ? item.usernickname.toLowerCase().includes(newSearchKeyword.toLowerCase()) : true;
-    });
-
-    const locationFilteredData = dummyLocation.filter(item => {
-      if (!newSearchCombo || !newSearchKeyword) return true;
-      return newSearchKeyword ? item.place_name.toLowerCase().includes(newSearchKeyword.toLowerCase()) : true;
-    });
-
-    const scheduleFilteredData = dummySchedule.filter(item => {
-      if (!newSearchCombo || !newSearchKeyword) return true;
-      return newSearchKeyword ? item.s_name.toLowerCase().includes(newSearchKeyword.toLowerCase()) : true;
-    });
-
-    setUserSearchResult(userFilteredData);
-    setLocationSearchResult(locationFilteredData);
-    setScheduleSearchResult(scheduleFilteredData);
-
-    if (!newSearchCombo || !newSearchKeyword) {
-      setIsValidQuery(false);
-      return; 
-    }
-    setIsValidQuery(true); 
-
+        if(newSearchCombo === 'location') {
+          locationResponse = await fetch(`http://localhost:8080/Callyia/Tour/all`);
+        } 
+  
+        else if(newSearchCombo === 'user') {
+          userResponse = await fetch(`http://localhost:8080/Callyia/member/getAll`);
+        } 
+  
+        else if(newSearchCombo === 'schedule') {
+          scheduleResponse = await fetch(`http://localhost:8080/Callyia/Schedule/getSchedule`);
+        } 
+  
+        if (userResponse) {
+          const JsonUserData = await userResponse.json();
+          const userData = JsonUserData.filter((user: UserSearchResult) => user.nickname.includes(newSearchKeyword));
+          console.log('User data:', userData);
+          setUserSearchResult(userData);
+        }
+        if (locationResponse) {
+          const JsonLocationData = await locationResponse.json();
+          const JsonLocationContent = JsonLocationData.content;
+          const locationData = JsonLocationContent.filter((location: LocationSearchResult) => location.placeName.includes(newSearchKeyword) || location.address.includes(newSearchKeyword));
+          console.log('locationData data:', locationData);
+          setLocationSearchResult(locationData);
+        }
+        if (scheduleResponse) {
+          const JsoncheduleData = await scheduleResponse.json();
+          const scheduleData = JsoncheduleData.filter((schedule: ScheduleSearchResult) => schedule.sName.includes(newSearchKeyword));
+          console.log('scheduleData data:', scheduleData);
+          setScheduleSearchResult(scheduleData);
+        }
+  
+        } catch (error) {
+          console.log("error >> ", error);
+        }
+      };
+    fetchData();
   }, [location.search, searchCombo, searchKeyword]);
 
   const userPaginatedResults = UserSearchResult.slice(
@@ -98,15 +117,36 @@ const ListPage = () => {
     currentPage * itemsPerPage
   );
 
+  // const userPaginatedResults = Array.isArray(UserSearchResult)
+  //   ? UserSearchResult.slice(
+  //       (currentPage - 1) * itemsPerPage,
+  //       currentPage * itemsPerPage
+  //     )
+  //   : [];
+
   const locationPaginatedResults = LocationSearchResult.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
 
+  // const locationPaginatedResults = Array.isArray(LocationSearchResult)
+  //   ? LocationSearchResult.slice(
+  //       (currentPage - 1) * itemsPerPage,
+  //       currentPage * itemsPerPage
+  //     )
+  //   : [];
+
   const schedulePaginatedResults = ScheduleSearchResult.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
+
+  // const schedulePaginatedResults = Array.isArray(ScheduleSearchResult)
+  //   ? ScheduleSearchResult.slice(
+  //       (currentPage - 1) * itemsPerPage,
+  //       currentPage * itemsPerPage
+  //     )
+  //   : [];
 
   const userGoToPage = (page: number) => {
     const newPage = Math.max(1, Math.min(userNumberOfPages, page));
@@ -168,43 +208,43 @@ const ListPage = () => {
         <div className='list-page-search-keyword-bar' >
           <div className="list-image-grid">
           {userPaginatedResults.map(result => (
-            <div key={result.userid} className="list-image-item">
-              <img src={result.imageUrl} alt={`${result.usernickname}의 profile`}/>
+            <div key={result.email} className="list-image-item">
+              <img src={result.profileImage} alt={`${result.nickname}의 profile`}/>
               <p>
-                <a className='list-user-nickname' href={`/UserProfilePage?userid=${result.userid}`}>{result.usernickname}</a>
+                <a className='list-user-nickname' href={`/UserProfilePage?userid=${result.email}`}>{result.nickname}</a>
               </p> 
               <p>
-                <span className='list-user-email'>{result.useremail}</span>
+                <span className='list-user-email'>{result.email}</span>
               </p>
             </div>
           ))} 
       </div>
       </div>
             {UserSearchResult.length > itemsPerPage && (
-  <div className="list-pagination-controls">
-    <button onClick={() => userGoToPage(Math.ceil(currentPage/10)*10 - 10)} disabled={currentPage === 1}>
-      {'<<'}
-    </button>
-    <button onClick={() => userGoToPage(currentPage - 1)} disabled={currentPage === 1}>
-      {'<'}
-    </button>
-      {Array.from({ length: userEndPage - startPage + 1 }, (_, i) => startPage + i).map(page => (
-            <span
-              key={page}
-              className={`list-page-number ${currentPage === page ? 'list-current-page' : ''}`}
-              onClick={() => userGoToPage(page)}
-            >
-              {page}
-            </span>
-       ))}
-    <button onClick={() => userGoToPage(currentPage + 1)} disabled={currentPage === userNumberOfPages}>
-      {'>'}
-    </button>
-    <button onClick={() => userGoToPage(Math.ceil(currentPage/10)*10 + 1)} disabled={currentPage === userNumberOfPages}>
-      {'>>'}
-    </button>
-  </div>
-)}
+      <div className="list-pagination-controls">
+        <button onClick={() => userGoToPage(Math.ceil(currentPage/10)*10 - 10)} disabled={currentPage === 1}>
+          {'<<'}
+        </button>
+        <button onClick={() => userGoToPage(currentPage - 1)} disabled={currentPage === 1}>
+          {'<'}
+        </button>
+          {Array.from({ length: userEndPage - startPage + 1 }, (_, i) => startPage + i).map(page => (
+                <span
+                  key={page}
+                  className={`list-page-number ${currentPage === page ? 'list-current-page' : ''}`}
+                  onClick={() => userGoToPage(page)}
+                >
+                  {page}
+                </span>
+          ))}
+        <button onClick={() => userGoToPage(currentPage + 1)} disabled={currentPage === userNumberOfPages}>
+          {'>'}
+        </button>
+        <button onClick={() => userGoToPage(Math.ceil(currentPage/10)*10 + 1)} disabled={currentPage === userNumberOfPages}>
+          {'>>'}
+        </button>
+      </div>
+    )}
 
     </div>
   );
@@ -222,10 +262,10 @@ if(searchCombo === 'location')
         <div className='list-page-search-keyword-bar' >
           <div className="list-image-grid">
           {locationPaginatedResults.map(result => (
-            <div key={result.place_id} className="list-image-item">
-            <img src={result.image} alt={`${result.place_name}의 location`}/>
+            <div key={result.placeId} className="list-image-item">
+            <img src={result.image} alt={`${result.placeName}의 location`}/>
             <p>
-              <a className='list-user-nickname' href={`/UserProfilePage?location=${result.place_name}`}>{result.place_name}</a>
+              <a className='list-user-nickname' href={`/UserProfilePage?location=${result.placeName}`}>{result.placeName}</a>
             </p> 
             <p>
               <span className='list-user-email'>{result.address}</span>
@@ -264,59 +304,59 @@ if(searchCombo === 'location')
   };
 
 
-if(searchCombo === 'schedule') 
-   { 
-    return (
-    <div className="list-page" >
-        <div className='list-search-keyword-header' >
-          <span className='list-search-combo'>'
-            {searchCombo === 'schedule' && '일정'}
-          '</span>(으)로 선택하여 
-          <span className='list-search-keyword'> {searchKeyword}</span>를 검색한 결과입니다.</div>
-        <div className='list-page-search-keyword-bar' >
-          <div className="list-image-grid">
-          {schedulePaginatedResults.map(result => (
-            <div key={result.sno} className="list-image-item">
-              <p>
-                <a className='list-user-nickname' href={`/UserProfilePage?sno=${result.sno}`}>{result.s_name}</a>
-              </p>
-            </div>
-          ))} 
-      </div>
-      </div>
-            {schedulePaginatedResults.length > itemsPerPage && (
-  <div className="list-pagination-controls">
-    <button onClick={() => scheduleGoToPage(Math.ceil(currentPage/10)*10 - 10)} disabled={currentPage === 1}>
-      {'<<'}
-    </button>
-    <button onClick={() => scheduleGoToPage(currentPage - 1)} disabled={currentPage === 1}>
-      {'<'}
-    </button>
-      {Array.from({ length: scheduleEndPage - startPage + 1 }, (_, i) => startPage + i).map(page => (
-            <span
-              key={page}
-              className={`list-page-number ${currentPage === page ? 'list-current-page' : ''}`}
-              onClick={() => scheduleGoToPage(page)}
-            >
-              {page}
-            </span>
-       ))}
-    <button onClick={() => scheduleGoToPage(currentPage + 1)} disabled={currentPage === scheduleNumberOfPages}>
-      {'>'}
-    </button>
-    <button onClick={() => scheduleGoToPage(Math.ceil(currentPage/10)*10 + 1)} disabled={currentPage === scheduleNumberOfPages}>
-      {'>>'}
-    </button>
-  </div>
-)}
-
+  if(searchCombo === 'schedule')
+    { 
+      return (
+      <div className="list-page" >
+          <div className='list-search-keyword-header' >
+            <span className='list-search-combo'>'
+              {searchCombo === 'schedule' && '일정'}
+            '</span>(으)로 선택하여 
+            <span className='list-search-keyword'> {searchKeyword}</span>를 검색한 결과입니다.</div>
+          <div className='list-page-search-keyword-bar' >
+            <div className="list-image-grid">
+          
+            {schedulePaginatedResults.map(result => (
+              <div key={result.sno} className="list-image-item">
+                <p>
+                  <a className='list-user-nickname' href={`/UserProfilePage?sno=${result.sno}`}>{result.sName}</a>
+                </p>
+              </div>
+            ))} 
+        </div>
+        </div>
+        {schedulePaginatedResults.length > itemsPerPage && (
+    <div className="list-pagination-controls">
+      <button onClick={() => scheduleGoToPage(Math.ceil(currentPage/10)*10 - 10)} disabled={currentPage === 1}>
+        {'<<'}
+      </button>
+      <button onClick={() => scheduleGoToPage(currentPage - 1)} disabled={currentPage === 1}>
+        {'<'}
+      </button>
+        {Array.from({ length: scheduleEndPage - startPage + 1 }, (_, i) => startPage + i).map(page => (
+              <span
+                key={page}
+                className={`list-page-number ${currentPage === page ? 'list-current-page' : ''}`}
+                onClick={() => scheduleGoToPage(page)}
+              >
+                {page}
+              </span>
+        ))}
+      <button onClick={() => scheduleGoToPage(currentPage + 1)} disabled={currentPage === scheduleNumberOfPages}>
+        {'>'}
+      </button>
+      <button onClick={() => scheduleGoToPage(Math.ceil(currentPage/10)*10 + 1)} disabled={currentPage === scheduleNumberOfPages}>
+        {'>>'}
+      </button>
     </div>
-  );
-  };
+    )}
 
+      </div>
+    );
+    };
 
-return (
-  <div></div>
-  )
+  return (
+    <div></div>
+    )
 }
 export default ListPage;
