@@ -36,9 +36,9 @@ const LoginPage: React.FC = () => {
       alert("비밀번호를 입력하세요.");
       return;
     }
-    if (loginForm) {
-      // loginForm.submit();
-    }
+    // if (loginForm) {
+    //   loginForm.submit();
+    // }
     // Implement your sign-up logic here
     console.log("Signing up with:", email, password);
 
@@ -51,14 +51,13 @@ const LoginPage: React.FC = () => {
         }),
         {
           headers: {
-            "Content-Type": "application/json", // 전송하는 데이터 타입 설정
+            "Content-Type": "application/json",
           },
         }
       );
       localStorage.setItem("token", response.data);
-      console.log(response.data);
-
       navigate("/");
+      console.log("실행되었습니다.");
     } catch (error) {
       console.error("로그인 실패", error);
       alert("로그인에 실패하였습니다.");
@@ -102,7 +101,7 @@ const LoginPage: React.FC = () => {
             </div>
           </div>
           <div className="login-btn-wrap">
-            <form onSubmit={handleLogin}>
+            <form id="loginForm" onSubmit={handleLogin}>
               <input
                 type="submit"
                 className="login-btn"

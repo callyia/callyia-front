@@ -50,10 +50,11 @@ const RegistPage = () => {
 
   const itemsPerPage = 12;
   const numberOfPages = Math.ceil(searchResults.length / itemsPerPage);
-  const goToPage = (page: number) => {
-    const newPage = Math.max(1, Math.min(numberOfPages, page));
-    setCurrentPage(newPage);
-  };
+
+  const pagesToShow = 10;
+  const startPage =
+    Math.floor((currentPage - 1) / pagesToShow) * pagesToShow + 1;
+  const endPage = Math.min(startPage + pagesToShow - 1, totalPages);
 
   // 상세페이지 열기
   const openDetailClicked = (selectedTour: TourData) => {
@@ -83,6 +84,8 @@ const RegistPage = () => {
     setOpenModal(false);
   };
 
+  const jwtToken = localStorage.getItem("token");
+
   // 장바구니 클릭 시 장바구니 등록
   const basketClicked = async () => {
     console.log("placeId to check:", selectedTour?.placeId);
@@ -96,6 +99,7 @@ const RegistPage = () => {
         }),
         {
           headers: {
+            Authorization: `Bearer ${jwtToken}`,
             "Content-Type": "application/json",
           },
         }
@@ -238,56 +242,6 @@ const RegistPage = () => {
     currentPageCheck();
   }, [currentPage]);
 
-  // 페이지 번호 렌더링
-  const renderPageNumbers = () => {
-    const pageNumbers = [];
-    for (let i = 1; i <= totalPages; i++) {
-      pageNumbers.push(
-        <button
-          key={i}
-          className={`pageBtn ${
-            currentPage === i ? "text-blue-700 font-bold" : ""
-          }`}
-          onMouseOver={(e) => {
-            const targetButton = e.currentTarget;
-
-            // 마우스 오버 시 위로 올라가는 애니메이션 클래스 추가
-            targetButton.classList.add("hoverAnimation");
-          }}
-          onMouseLeave={(e) => {
-            const targetButton = e.currentTarget;
-
-            // 마우스 떠날 때 아래로 내려가는 애니메이션 클래스 추가
-            targetButton.classList.add("leaveAnimation");
-
-            // 일정 시간 후 클래스 제거
-            setTimeout(() => {
-              targetButton.classList.remove("hoverAnimation", "leaveAnimation");
-            }, 300);
-          }}
-          onClick={() => handlePageChange(i)}
-        >
-          {i}
-        </button>
-      );
-    }
-    return pageNumbers;
-  };
-
-  // 첫 페이지로 이동
-  const firstPage = () => {
-    setCurrentPage(1);
-  };
-
-  // 마지막 페이지로 이동
-  const lastPage = () => {
-    setCurrentPage(totalPages);
-  };
-
-  // 페이지 변경을 위한 핸들러 함수
-  const handlePageChange = (newPage: number) => {
-    setCurrentPage(newPage);
-  };
 
   // 검색어 입력창의 placeholder 설정
   const getPlaceholder = () => {
@@ -315,12 +269,14 @@ const RegistPage = () => {
       }
 
       // 이미지를 서버에 업로드
+
       const uploadResponse = await axios.post(
         "http://localhost:8080/Callyia/Tour/upload",
         formData,
         {
           headers: {
             "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${jwtToken}`,
           },
         }
       );
@@ -350,6 +306,7 @@ const RegistPage = () => {
         {
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${jwtToken}`,
           },
         }
       );
@@ -397,6 +354,73 @@ const RegistPage = () => {
   // 선택된 장소 처리 함수
   const handlePlaceSelected = (place: any) => {
     setSelectedPlace(place);
+  };
+
+
+  const goToPage = (page: number) => {
+    setCurrentPage(Math.max(1, Math.min(totalPages, page)));
+  };
+
+  const renderPagination = () => {
+    let pages = [];
+
+    pages.push(
+      <button
+        className="main-info-pagination-controls-key"
+        key="page's first"
+        onClick={() => goToPage(Math.ceil(currentPage / 10) * 10 - 10)}
+        disabled={currentPage === 1}
+      >
+        {"<<"}
+      </button>
+    );
+    pages.push(
+      <button
+        className="main-info-pagination-controls-key"
+        key="prev"
+        onClick={() => goToPage(currentPage - 1)}
+        disabled={currentPage === 1}
+      >
+        {"<"}
+      </button>
+    );
+
+    // Page Number Buttons within the range
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(
+        <button
+          key={i}
+          onClick={() => goToPage(i)}
+          disabled={i === currentPage}
+        >
+          {i}
+        </button>
+      );
+    }
+
+    // Next and Last Page Buttons
+    pages.push(
+      <button
+        className="main-info-pagination-controls-key"
+        key="next"
+        onClick={() => goToPage(currentPage + 1)}
+        disabled={currentPage === totalPages}
+      >
+        {">"}
+      </button>
+    );
+    pages.push(
+      <button
+        className="main-info-pagination-controls-key"
+        key="page's last"
+        onClick={() => goToPage(Math.ceil(currentPage / 10) * 10 + 1)}
+        disabled={currentPage === totalPages}
+      >
+        {">>"}
+      </button>
+    );
+
+    return pages;
   };
 
   return (
@@ -595,32 +619,8 @@ const RegistPage = () => {
             </ModalContent>
           </Modal>
         </div>
-        <div className="ListPagenationWrapper">
-          <button
-            onClick={() => goToPage(Math.ceil(currentPage / 10) * 10 - 10)}
-            disabled={currentPage === 1}
-          >
-            {"<<"}
-          </button>
-          <button
-            onClick={() => goToPage(currentPage - 1)}
-            disabled={currentPage === 1}
-          >
-            {"<"}
-          </button>
-          {renderPageNumbers()}
-          <button
-            onClick={() => goToPage(currentPage + 1)}
-            disabled={currentPage === numberOfPages}
-          >
-            {">"}
-          </button>
-          <button
-            onClick={() => goToPage(Math.ceil(currentPage / 10) * 10 + 1)}
-            disabled={currentPage === numberOfPages}
-          >
-            {">>"}
-          </button>
+        <div className="main-info-pagination-controls">
+          {renderPagination()}
         </div>
       </section>
     </div>
