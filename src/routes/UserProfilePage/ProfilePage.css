@@ -54,12 +54,11 @@
   align-items: center;
 }
 
-
-.user-profile-id, .user-profile-email, .user-profile-self-introduction, .user-profile-stats, .user-profile-action-button {
+.user-profile-nickname, .user-profile-email, .user-profile-self-introduction, .user-profile-stats, .user-profile-action-button {
   text-align: center;
 }
 
-.user-profile-id {
+.user-profile-nickname {
   /* margin-top: 5px; */
   font-size: 30px;
 }
