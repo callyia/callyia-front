@@ -36,12 +36,6 @@ export default function Header() {
     setSearchKeyword("");
     navigate("/MyProfilePage");
   };
-
-  const goToUserProfilePage = () => {
-    setSearchKeyword("");
-    navigate("/UserProfilePage");
-  };
-
   // token이 있으면 로그아웃과 myprofile이 나오고 token이 없으면 sign in 버튼이 나오도록 하기
 
 
@@ -91,17 +85,16 @@ export default function Header() {
           </button>
         </>
       ) : (
+      <> 
         <button className={getButtonClassName("header-action-button-2 header-action-button")} onClick={goToSignInPage}>
           Sign In
         </button>
+        <button className={getButtonClassName("header-action-button-4 header-action-button")} onClick={goToSignUpPage}>
+          Sign Up
+        </button>
+      </>
       )}
       
-      <button className={getButtonClassName("header-action-button-3 header-action-button")} onClick={goToUserProfilePage}>
-        User Profile
-      </button>
-      <button className={getButtonClassName("header-action-button-4 header-action-button")} onClick={goToSignUpPage}>
-        Sign Up
-      </button>
     </header>
   );
 }
