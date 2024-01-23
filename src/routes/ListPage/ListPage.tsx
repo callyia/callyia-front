@@ -26,8 +26,8 @@ interface LocationSearchResult {
 interface ScheduleSearchResult {
   sno: number,
   sName: string,
-  total_day: number,
-  member_email: string
+  total_Day: number,
+  member_nickname: string
 }
 
 const ListPage = () => {
@@ -87,21 +87,21 @@ const ListPage = () => {
   
         if (userResponse) {
           const JsonUserData = await userResponse.json();
-          const userData = JsonUserData.filter((user: UserSearchResult) => user.nickname.includes(newSearchKeyword));
-          console.log('User data:', userData);
+          const userData = JsonUserData.filter((user: UserSearchResult) => user.nickname.toLowerCase().includes(newSearchKeyword.toLowerCase()));
+          // console.log('User data:', userData);
           setUserSearchResult(userData);
         }
         if (locationResponse) {
           const JsonLocationData = await locationResponse.json();
           const JsonLocationContent = JsonLocationData.content;
-          const locationData = JsonLocationContent.filter((location: LocationSearchResult) => location.placeName.includes(newSearchKeyword) || location.address.includes(newSearchKeyword));
-          console.log('locationData data:', locationData);
+          const locationData = JsonLocationContent.filter((location: LocationSearchResult) => location.placeName.toLowerCase().includes(newSearchKeyword.toLowerCase()) || location.address.includes(newSearchKeyword));
+          // console.log('locationData data:', locationData);
           setLocationSearchResult(locationData);
         }
         if (scheduleResponse) {
           const JsoncheduleData = await scheduleResponse.json();
-          const scheduleData = JsoncheduleData.filter((schedule: ScheduleSearchResult) => schedule.sName.includes(newSearchKeyword));
-          console.log('scheduleData data:', scheduleData);
+          const scheduleData = JsoncheduleData.filter((schedule: ScheduleSearchResult) => schedule.sName.toLowerCase().includes(newSearchKeyword.toLowerCase()));
+          // console.log('scheduleData data:', scheduleData);
           setScheduleSearchResult(scheduleData);
         }
   
@@ -117,36 +117,15 @@ const ListPage = () => {
     currentPage * itemsPerPage
   );
 
-  // const userPaginatedResults = Array.isArray(UserSearchResult)
-  //   ? UserSearchResult.slice(
-  //       (currentPage - 1) * itemsPerPage,
-  //       currentPage * itemsPerPage
-  //     )
-  //   : [];
-
   const locationPaginatedResults = LocationSearchResult.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
 
-  // const locationPaginatedResults = Array.isArray(LocationSearchResult)
-  //   ? LocationSearchResult.slice(
-  //       (currentPage - 1) * itemsPerPage,
-  //       currentPage * itemsPerPage
-  //     )
-  //   : [];
-
   const schedulePaginatedResults = ScheduleSearchResult.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
-
-  // const schedulePaginatedResults = Array.isArray(ScheduleSearchResult)
-  //   ? ScheduleSearchResult.slice(
-  //       (currentPage - 1) * itemsPerPage,
-  //       currentPage * itemsPerPage
-  //     )
-  //   : [];
 
   const userGoToPage = (page: number) => {
     const newPage = Math.max(1, Math.min(userNumberOfPages, page));
@@ -317,9 +296,15 @@ if(searchCombo === 'location')
             <div className="list-image-grid">
           
             {schedulePaginatedResults.map(result => (
-              <div key={result.sno} className="list-image-item">
+              <div key={result.sno} className="list-normal-item">
                 <p>
-                  <a className='list-user-nickname' href={`/UserProfilePage?sno=${result.sno}`}>{result.sName}</a>
+                  <a className='list-user-nickname' href={`/SchedulePage/${result.sno}`}>{result.sName}</a>
+                </p>
+                <p>
+                  <a className='list-total-day'> {result.total_Day}일 계획</a>
+                </p>
+                <p>
+                  <a className='list-total-day'> made by {result.member_nickname}</a> 
                 </p>
               </div>
             ))} 
