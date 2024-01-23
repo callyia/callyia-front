@@ -55,9 +55,16 @@ const LoginPage: React.FC = () => {
           },
         }
       );
-      localStorage.setItem("token", response.data);
+
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("email", response.data.email);
+      localStorage.setItem(
+        "authorities",
+        JSON.stringify(response.data.authorities)
+      );
       navigate("/");
       console.log("실행되었습니다.");
+      console.log(response.data);
     } catch (error) {
       console.error("로그인 실패", error);
       alert("로그인에 실패하였습니다.");
