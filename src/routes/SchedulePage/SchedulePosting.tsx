@@ -17,6 +17,7 @@ interface ScheduleDTO {
   total_Day: number;
   member_email: string;
   sName: string;
+  member_nickname: string;
 }
 
 interface DetailScheduleItem {
@@ -33,6 +34,7 @@ interface ReplyDTO {
   replyContents: string;
   dno: number;
   replyer: string;
+  replyer_nickname: string;
 }
 
 interface TourDTO {
@@ -46,16 +48,26 @@ interface TourDTO {
   image: string;
 }
 
+interface MemberDTO {
+  email: string;
+  name: string;
+  nickname: string;
+  profileImage: string;
+  aboutMe: string;
+}
+
 interface ScheduleData {
   scheduleDTO: ScheduleDTO | null;
   detailScheduleDTOList: DetailScheduleItem[];
   replyDTOList: ReplyDTO[];
   tourDTOList: TourDTO[];
+  memberDTO: MemberDTO | null;
 }
 
 export default function SchedulePosting() {
   const [scheduleData, setScheduleData] = useState<ScheduleData>({
     scheduleDTO: null,
+    memberDTO: null,
     detailScheduleDTOList: [],
     replyDTOList: [],
     tourDTOList: [],
@@ -78,6 +90,7 @@ export default function SchedulePosting() {
         detailScheduleDTOList: data.detailScheduleDTOList,
         replyDTOList: data.replyDTOList,
         tourDTOList: data.tourDTOList,
+        memberDTO: data.memberDTO,
       });
     } catch (error) {
       console.log("Error fetching tour data:", error);
@@ -278,6 +291,10 @@ export default function SchedulePosting() {
       .filter((reply) => reply.dno === detailItem.dno)
       .map((reply) => reply.replyer);
 
+    const replyerNickname = scheduleData.replyDTOList
+      .filter((reply) => reply.dno === detailItem.dno)
+      .map((reply) => reply.replyer_nickname);
+
     const rno = scheduleData.replyDTOList
       .filter((reply) => reply.dno === detailItem.dno)
       .map((reply) => reply.rno);
@@ -291,6 +308,7 @@ export default function SchedulePosting() {
       detail_images: detailItem.detailImages,
       reply_contents: replyContents,
       replyer: replyer,
+      replyer_nickname: replyerNickname,
       rno: rno,
     };
   };
@@ -306,12 +324,12 @@ export default function SchedulePosting() {
                 <div className="Schedule-profile-icon">
                   <Link to="/UserProfilePage">
                     <img
-                      src="https://search.pstatic.net/sunny/?src=https%3A%2F%2Fcdn2.ppomppu.co.kr%2Fzboard%2Fdata3%2F2022%2F0509%2F20220509173224_d9N4ZGtBVR.jpeg&type=sc960_832"
+                      src={scheduleData.memberDTO?.profileImage}
                       alt="프로필 이미지"
                     />
                   </Link>
-                  <p style={{ fontSize: "12px", color: "gray" }}>
-                    {scheduleData.scheduleDTO?.member_email}
+                  <p style={{ fontSize: "12px", color: "black" }}>
+                    {scheduleData.scheduleDTO?.member_nickname}
                   </p>
                 </div>
                 <div>
