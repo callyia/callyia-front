@@ -18,17 +18,7 @@ interface ScheduleItem {
   dno: number;
   rno: number[];
   sno: number;
-}
-
-interface ReplyDTO {
-  rno: number;
-  replyContents: string;
-  dno: number;
-  replyer: string;
-}
-
-interface UpdateData {
-  replyDTOList: ReplyDTO[];
+  replyer_nickname: string[];
 }
 
 export interface ScheduleCardProps extends ScheduleItem {
@@ -51,6 +41,7 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
   detail_images,
   reply_contents,
   replyer,
+  replyer_nickname,
   dno,
   rno,
   sno,
@@ -61,7 +52,6 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
   const [cardHeight, setCardHeight] = useState<number | undefined>(undefined);
   const [inputData, setInputData] = useState("");
   const [reply, setReply] = useState<string[]>(reply_contents);
-  const [replyWriter, setReplyWriter] = useState<string[]>(replyer);
 
   const user = "sh@naver.com";
   const [loading, setLoading] = useState(false); // 댓글을 로드 중인지 여부
@@ -152,8 +142,6 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
-      window.location.reload();
-
       // 댓글 입력 완료 모달 띄움
       swal({
         text: "댓글 입력 완료",
@@ -165,8 +153,9 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
           },
         },
         closeOnClickOutside: false,
+      }).then(() => {
+        window.location.reload();
       });
-
       setInputData(""); // 댓글 입력창 비우기
     } catch (error) {
       console.error("Error adding comment:", error);
@@ -191,8 +180,6 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
           }),
         }
       );
-
-      window.location.reload();
 
       if (!response.ok) {
         const errorMessage = await response.text(); // 실패한 경우 응답 본문을 가져옴
@@ -228,8 +215,6 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
           }
         );
 
-        window.location.reload();
-
         if (!response.ok) {
           const errorMessage = await response.text();
           throw new Error(
@@ -240,6 +225,8 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
         // 삭제 완료 모달 띄우기
         swal("댓글이 삭제되었습니다.", {
           icon: "success",
+        }).then(() => {
+          window.location.reload();
         });
       }
     } catch (error) {
@@ -252,7 +239,9 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
     const isEditable = replyer[index] === user;
 
     swal({
-      text: isEditable ? `${replyContents} - 내가 쓴 댓글` : `${replyContents}`,
+      text: isEditable
+        ? `${replyContents} - 내가 쓴 댓글`
+        : `${replyContents} - ${replyer[index]}`,
       buttons: {
         confirm: {
           text: "수정",
@@ -292,7 +281,9 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
               },
             }).then(async (newValue) => {
               handleEditComment(index, newValue);
-              swal(`수정된 댓글: ${newValue}`);
+              swal(`수정된 댓글: ${newValue}`).then(() => {
+                window.location.reload();
+              });
             });
           }
           break;
@@ -358,7 +349,11 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
           <ul>
             {reply.map((reply, index) => (
               <li key={index} onClick={() => handlereplyClick(reply, index)}>
-                {reply} - {replyWriter[index]}
+                <span style={{ fontWeight: "bold", fontSize: "1.1em" }}>
+                  {replyer_nickname[index]}
+                </span>
+                {"    "}
+                {reply}
               </li>
             ))}
           </ul>
