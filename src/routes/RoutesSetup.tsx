@@ -12,6 +12,7 @@ import UserProfilePage from "./UserProfilePage";
 import NoMatch from "./NoMatch";
 import TourPage from "./TourPage";
 import SignInPageFind from "./SignInPageFind";
+import PrivateRoute from "./AuthRoute/PrivateRoute";
 
 export default function RoutesSetup() {
   return (
@@ -40,14 +41,24 @@ export default function RoutesSetup() {
         <Route index element={<SchedulePosting />} />
         <Route path="*" element={<NoMatch />} />
       </Route>
-      <Route path="/PlanningPage" element={<Layout />}>
-        <Route index element={<PlanningPage />} />
-        <Route path="*" element={<NoMatch />} />
-      </Route>
-      <Route path="/MyProfilePage" element={<Layout />}>
-        <Route index element={<MyProfilePage />} />
-        <Route path="*" element={<NoMatch />} />
-      </Route>
+      <Route
+        path="/PlanningPage"
+        element={
+          <PrivateRoute element={<Layout />}>
+            <Route index element={<PlanningPage />} />
+            <Route path="*" element={<NoMatch />} />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/MyProfilePage"
+        element={
+          <PrivateRoute element={<Layout />}>
+            <Route index element={<MyProfilePage />} />
+            <Route path="*" element={<NoMatch />} />
+          </PrivateRoute>
+        }
+      />
       <Route path="/UserProfilePage" element={<Layout />}>
         <Route index element={<UserProfilePage />} />
         <Route path="*" element={<NoMatch />} />
