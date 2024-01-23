@@ -241,7 +241,7 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
     swal({
       text: isEditable
         ? `${replyContents} - 내가 쓴 댓글`
-        : `${replyContents} - ${replyer[index]}`,
+        : `${replyContents} - ${replyer_nickname[index]}`,
       buttons: {
         confirm: {
           text: "수정",
