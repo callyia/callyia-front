@@ -202,7 +202,7 @@ const Main: React.FC<MainPageProps> = () => {
     <div className="main-container">
       <main className="content">
         <div className="main-section-container">
-          <section className="main-section-div" style={{ marginRight: "13%" }}>
+          <section className="main-section-div" style={{ marginRight: "33%" }}>
             <span className="main-section-span-title">여행 정보</span>
             <div className="main-tour-info-section">
               {tourData.map((tour) => (
@@ -278,125 +278,10 @@ const Main: React.FC<MainPageProps> = () => {
             </div>
           </section>
 
-          <table style={{ paddingLeft: "-200px", paddingRight: "200px" }}>
-            <tr>
-              <td>
-                <a href="/ListPage" style={{ fontSize: "50px" }}>
-                  ListPage
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <a href="/MyProfilePage" style={{ fontSize: "50px" }}>
-                  MyProfilePage
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <a href="/PlanningPage" style={{ fontSize: "50px" }}>
-                  PlanningPage
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <a href="/SchedulePage" style={{ fontSize: "50px" }}>
-                  SchedulePage
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <a href="/SignInPage" style={{ fontSize: "50px" }}>
-                  SignInPage
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <a href="/SignUpPage" style={{ fontSize: "50px" }}>
-                  SignUpPage
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <a href="/TourPage" style={{ fontSize: "50px" }}>
-                  TourPage
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <a href="/UserProfilePage" style={{ fontSize: "50px" }}>
-                  UserProfilePage
-                </a>
-              </td>
-            </tr>
-          </table>
+          
         </div>
         <div className="main-section-container">
-          <table style={{ paddingLeft: "200px", paddingRight: "-200px" }}>
-            <tr>
-              <td>
-                <a href="/ListPage" style={{ fontSize: "50px" }}>
-                  ListPage
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <a href="/MyProfilePage" style={{ fontSize: "50px" }}>
-                  MyProfilePage
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <a href="/PlanningPage" style={{ fontSize: "50px" }}>
-                  PlanningPage
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <a href="/SchedulePage" style={{ fontSize: "50px" }}>
-                  SchedulePage
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <a href="/SignInPage" style={{ fontSize: "50px" }}>
-                  SignInPage
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <a href="/SignUpPage" style={{ fontSize: "50px" }}>
-                  SignUpPage
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <a href="/TourPage" style={{ fontSize: "50px" }}>
-                  TourPage
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <a href="/UserProfilePage" style={{ fontSize: "50px" }}>
-                  UserProfilePage
-                </a>
-              </td>
-            </tr>
-          </table>
-          <section className="main-section-div" style={{ marginLeft: "13%" }}>
+          <section className="main-section-div" style={{ marginLeft: "33%" }}>
             <span className="main-section-span-title">여행 계획</span>
             <div className="main-trip-plan-container">
             <select value={selectedDay} onChange={handleDayInputChange} className="main-combo-day-dropdown">
@@ -424,70 +309,12 @@ const Main: React.FC<MainPageProps> = () => {
           </section>
         </div>
         <div className="main-section-container">
-          <section className="main-section-div" style={{ marginRight: "13%" }}>
+          <section className="main-section-div" style={{ marginRight: "33%" }}>
             <span className="main-section-span-title">여행 공유 커뮤니티</span>
             <h3>Title : 여행 공유 커뮤니티1</h3>
             <h4>subTitle : subtitle</h4>
             <img src="/topbar-logo.png" alt="Logo" className="header-logo" />
           </section>
-          <table style={{ paddingLeft: "-200px", paddingRight: "200px" }}>
-            <tr>
-              <td>
-                <a href="/ListPage" style={{ fontSize: "50px" }}>
-                  ListPage
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <a href="/MyProfilePage" style={{ fontSize: "50px" }}>
-                  MyProfilePage
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <a href="/PlanningPage" style={{ fontSize: "50px" }}>
-                  PlanningPage
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <a href="/SchedulePage" style={{ fontSize: "50px" }}>
-                  SchedulePage
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <a href="/SignInPage" style={{ fontSize: "50px" }}>
-                  SignInPage
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <a href="/SignUpPage" style={{ fontSize: "50px" }}>
-                  SignUpPage
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <a href="/TourPage" style={{ fontSize: "50px" }}>
-                  TourPage
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <a href="/UserProfilePage" style={{ fontSize: "50px" }}>
-                  UserProfilePage
-                </a>
-              </td>
-            </tr>
-          </table>
         </div>
       </main>
       <button

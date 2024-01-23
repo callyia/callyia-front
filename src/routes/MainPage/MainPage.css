@@ -136,7 +136,7 @@ input[type="text"] {
 }
 
 .top-button:before {
-  content: "";
+  /* content: ""; */
   position: absolute;
   top: 50%;
   left: 50%;
@@ -168,10 +168,6 @@ input[type="text"] {
   scrollbar-width: none; 
   text-align: center;
 }
-
-.main-tour-info-section::-webkit-scrollbar {
-  display: none !important; 
-} 
 
 .main-tour-info-text {
   font-family: "GmarketSans500";
