@@ -282,8 +282,8 @@ const Main: React.FC<MainPageProps> = () => {
   };
 
   return (
-    <div className="main-trip-plan-container" >
-      <main className="main-frame" style={{border: "2px black solid"}}>
+    <div className="main-trip-plan-container">
+      <main className="main-frame">
         <div className="main-trip-plan-section-container">
           <section className="main-section-div-sm">
             <div className="main-trip-plan-section-div-title">
@@ -430,12 +430,6 @@ const Main: React.FC<MainPageProps> = () => {
                   className="list-card"
                   onClick={() => navigate(`/SchedulePage/${schedule.sno}`)}
                 >
-                  {matchingDetail && (
-                    <img
-                      src={matchingDetail.detailImages}
-                      alt={`Detail Image for ${schedule.sno}`}
-                    />
-                  )}
                   {/* 프로필 클릭 시 해당 유저페이지로 이동 */}
                   <span className="profile-info">
                     <img
