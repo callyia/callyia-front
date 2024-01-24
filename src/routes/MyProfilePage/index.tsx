@@ -37,9 +37,9 @@ export default function MyProfilePage() {
       },
     })
     .then(response => {
-      setUserInfo(response.data.memberDTO); // Updating state with user info
-      // You might want to update other states or perform other actions based on the fetched data
+      setUserInfo(response.data.memberDTO);
     })
+
     .catch(error => {
       console.error('Error fetching user info:', error);
     });
@@ -155,7 +155,7 @@ export default function MyProfilePage() {
               isEditing={isEditing}
               toggleIsEditing={() => setIsEditing(!isEditing)}
               profileImage={profileImage} 
-              aboutMeText={''}
+              aboutMeText={userInfo?.aboutMe || ''}
               handleProfileImageChange={handleProfileImageChange}
               // handleAboutMeChange={(newText) => userInfo && setUserInfo({ ...userInfo, aboutMe: newText })}
               // handleUpdateClick={handleUpdateClick}

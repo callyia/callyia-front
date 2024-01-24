@@ -9,7 +9,7 @@ import axios from 'axios';
 
 interface MyProfileProps {
   isEditing: boolean;
-  toggleIsEditing: () => void;
+  toggleIsEditing: (isEditing?: boolean) => void;
   profileImage: string;
   handleProfileImageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   aboutMeText: string;
@@ -65,6 +65,35 @@ const MyProfile: React.FC<MyProfileProps> = ({
       break;
   }
 
+  const handleUpdateClick = () => {
+    const token = localStorage.getItem('token');
+    const email = localStorage.getItem('email');
+    const profileImage = localStorage.getItem('profileImage');
+  
+    if (!token || !email) {
+      // Handle the error appropriately
+      console.error('No token or email found');
+      return;
+    }
+  
+    axios.put(`http://localhost:8080/Callyia/member/updateMember?email=${email}`, {
+      email: email,
+      aboutMe: text,
+      profileImage: profileImage
+    }, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    .then(response => {
+      toggleIsEditing(); 
+    })
+
+    .catch(error => {
+      console.error('Error updating user info:', error);
+    });
+  };
+  
   return (
     <div className="profile-container" >
           <div className ="profile-self-introduction-title">
@@ -76,8 +105,8 @@ const MyProfile: React.FC<MyProfileProps> = ({
         <div className="profile-left-section">
           <p className="profile-self-introduction"> 
            <SelfIntroduction isEditing = {isEditing} text={text} onTextChange={handleTextChange}/>
-            <button className="edit-save-btn"> 
-            {/* <button className="edit-save-btn" onClick={isEditing ? handleUpdateClick : toggleIsEditing} >  */}
+            {/* <button className="edit-save-btn">  */}
+            <button className="edit-save-btn" onClick={isEditing ? handleUpdateClick : () => toggleIsEditing()} > 
               {isEditing ? '저장' : '수정'}
             </button>
           </p>

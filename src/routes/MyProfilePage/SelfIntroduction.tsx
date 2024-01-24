@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-type UserAboutMe= {
-  aboutMe: string;
-}
-
 interface SelfIntroductionProps {
   isEditing: boolean;
   text: string;
@@ -13,7 +9,6 @@ interface SelfIntroductionProps {
 
 
 const SelfIntroduction:React.FC<SelfIntroductionProps> = ({isEditing, text, onTextChange}) => {
-  const [userAboutMe, setUserAboutMe] = useState<UserAboutMe | null>(null);
   const maxLength = 45;
 
   useEffect(() => {
@@ -31,7 +26,6 @@ const SelfIntroduction:React.FC<SelfIntroductionProps> = ({isEditing, text, onTe
     })
 
     .then(response => {
-      setUserAboutMe(response.data.memberDTO);
       onTextChange(response.data.memberDTO.aboutMe);
     })
 
@@ -40,15 +34,21 @@ const SelfIntroduction:React.FC<SelfIntroductionProps> = ({isEditing, text, onTe
     });
   }, []); 
 
-  const isMaxLengthReached = text.length === maxLength;
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const newText = e.target.value;
+    if (newText.length <= maxLength) {
+      onTextChange(newText);
+    }
+  }
+
+  const isMaxLengthReached = text.length >= maxLength;
 
   return (
     <div className="self-introduction-container">
         <textarea
           className="self-introduction-textarea"
-          // value={userAboutMe?.aboutMe}
           value={text}
-          onChange={(e) => onTextChange(e.target.value)}
+          onChange={handleInputChange}
           placeholder= {isEditing ? "자기소개를 입력하세요..." : ''}
           maxLength={maxLength}
           readOnly={!isEditing}
