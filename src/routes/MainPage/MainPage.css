@@ -90,27 +90,59 @@ input[type="text"] {
   margin-left: 42%;
 }
 
+/* 여행 계획 main container */
+.main-trip-plan-container {
+  display: flex;
+  justify-content: center;
+}
+
+.main-trip-plan-input-container {
+  display: flex;
+  flex-direction: row;
+  min-height: 50px;
+  width: 1100px;
+}
+
+/* 여행 계획 Section Styles */
+.main-trip-plan-section-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.main-trip-plan-section-span-title {
+  font-size: 37px;
+  font-weight: 700;
+  color: white;
+  font-family: "GmarketSans500";
+  margin-bottom: 20px;
+}
+
+.main-trip-plan-section-div-title {
+  margin-top: 150px;
+  text-align: center;
+}
+
 /* 수정 여행 계획 서치바 준기  css */
 .main-trip-plan-input {
-  margin-top: 20px;
   /* margin-left: 22%; */
   background-color: #ddd;
   border: 3px solid black;
   border-radius: 8px;
   font-family: "GmarketSans500";
-  width: 50%;
+  width: 900px;
+  height: 50px;
   color: white;
 }
 
 .main-trip-plan-button {
-  margin-top: 20px;
   /* margin-left: 4%; */
   background-color: black;
   border: 3px solid black;
   border-radius: 8px;
   font-family: "GmarketSans500";
   height: 50px;
-  width: 6%;
+  width: 130px;
   color: #ddd;
 }
 
@@ -145,15 +177,17 @@ input[type="text"] {
 }
 
 .main-section-div-sm {
-  height: 250px;
-  margin-bottom: 20px;
-  background-color: white;
-  border: 3px solid #abcdef;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-image: url("../../../public/dummyimages/seoul.jpg");
+  background-size: cover;
+  background-position: center center;
+  align-items: center;
+  height: 500px;
+  margin-bottom: 30px;
   padding: 10px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  min-height: 200px;
-  width: 70%;
+  width: 100%;
 }
 
 /* Top Button Styles */
@@ -261,8 +295,8 @@ input[type="text"] {
 }
 
 .main-combo-day-dropdown {
-  padding: 5px 10px;
-  margin-top: 30px;
+  padding: 0px 15px;
+  width: 70px;
   height: 50px;
   border: 3px solid black;
   border-radius: 8px;
@@ -272,7 +306,6 @@ input[type="text"] {
   box-sizing: border-box;
   border-radius: 4px;
   color: white;
-  margin-left: 22%;
 }
 
 .list-card {

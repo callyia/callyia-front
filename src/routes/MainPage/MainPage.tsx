@@ -283,8 +283,46 @@ const Main: React.FC<MainPageProps> = () => {
   };
 
   return (
-    <div className="main-container">
+    <div className="main-trip-plan-container">
       <main className="content">
+        <div className="main-trip-plan-section-container">
+          <section className="main-section-div-sm">
+            <div className="main-trip-plan-section-div-title">
+              <span className="main-trip-plan-section-span-title">
+                여행의 문이 열릴 때, 당신의 모험이 시작됩니다. 여행 계획을
+                펼쳐보세요.
+              </span>
+            </div>
+
+            <div className="main-trip-plan-input-container">
+              <select
+                value={selectedDay}
+                onChange={handleDayInputChange}
+                className="main-combo-day-dropdown"
+              >
+                {[1, 2, 3, 4, 5, 6, 7].map((number) => (
+                  <option key={number} value={number}>
+                    {number}
+                  </option>
+                ))}
+              </select>
+              <input
+                type="text"
+                className="main-trip-plan-input"
+                placeholder="여행 날짜와 여행 계획의 제목을 입력해주세요."
+                value={inputPlanValue}
+                onChange={handlePlanInputChange}
+              />
+              <button
+                type="button"
+                className="main-trip-plan-button"
+                onClick={handlePlanClick}
+              >
+                계획하러 가기
+              </button>
+            </div>
+          </section>
+        </div>
         <div className="main-section-container">
           <section className="main-section-div" style={{ marginRight: "10%" }}>
             <span className="main-section-span-title">여행 정보</span>
@@ -425,38 +463,6 @@ const Main: React.FC<MainPageProps> = () => {
                 </div>
               );
             })}
-          </section>
-        </div>
-        <div className="main-section-container">
-          <section className="main-section-div-sm">
-            <span className="main-section-span-title">여행 계획</span>
-            <div className="main-trip-plan-container">
-              <select
-                value={selectedDay}
-                onChange={handleDayInputChange}
-                className="main-combo-day-dropdown"
-              >
-                {[1, 2, 3, 4, 5, 6, 7].map((number) => (
-                  <option key={number} value={number}>
-                    {number}
-                  </option>
-                ))}
-              </select>
-              <input
-                type="text"
-                className="main-trip-plan-input"
-                placeholder="왼쪽에 몇일 계획인지 선택하시고, 여행 계획의 제목을 입력하세요!"
-                value={inputPlanValue}
-                onChange={handlePlanInputChange}
-              />
-              <button
-                type="button"
-                className="main-trip-plan-button"
-                onClick={handlePlanClick}
-              >
-                검색
-              </button>
-            </div>
           </section>
         </div>
       </main>
