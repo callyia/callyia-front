@@ -245,7 +245,6 @@ const Main: React.FC<MainPageProps> = () => {
       </button>
     );
 
-    // Page Number Buttons within the range
     for (let i = startPage; i <= endPage; i++) {
       pages.push(
         <button
@@ -258,7 +257,6 @@ const Main: React.FC<MainPageProps> = () => {
       );
     }
 
-    // Next and Last Page Buttons
     pages.push(
       <button
         className="main-info-pagination-controls-key"
@@ -284,8 +282,8 @@ const Main: React.FC<MainPageProps> = () => {
   };
 
   return (
-    <div className="main-trip-plan-container">
-      <main className="content">
+    <div className="main-trip-plan-container" >
+      <main className="main-frame" style={{border: "2px black solid"}}>
         <div className="main-trip-plan-section-container">
           <section className="main-section-div-sm">
             <div className="main-trip-plan-section-div-title">
