@@ -6,14 +6,16 @@ import UserProfile from "./UserProfilePage";
 export default function UserProfilePage() {
   const location = useLocation();
 
-  const [profileImage] = useState<string>("./dummyimages/image1.jpeg"); // 기본 이미지
+  const [profileImage, setProfileImage] = useState<string>(
+    "./dummyimages/image1.jpeg"
+  ); // 기본 이미지
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const urlParams = new URLSearchParams(location.search);
   const userid = urlParams.get("userid");
 
   const [user, setUser] = useState<any>();
-  const [scheduleDTOs, setScheduleDTOs] = useState<any>();
+  const [scheduleThumbnailDTOs, setScheduleThumbnailDTOs] = useState<any[]>();
 
   // var user;
   // var scheduleDTOs;
@@ -39,10 +41,11 @@ export default function UserProfilePage() {
         return response.json();
       })
       .then((data) => {
-        // user = data.memberDTO;
-        // scheduleDTOs = data.scheduleDTOs;
+        console.log(data.memberDTO);
+        console.log(data.scheduleThumbnailDTOs);
         setUser(data.memberDTO);
-        setScheduleDTOs(data.scheduleDTOs);
+        setProfileImage(data.memberDTO.profileImage);
+        setScheduleThumbnailDTOs(data.scheduleThumbnailDTOs);
 
         // console.log(user);
         // console.log(scheduleDTOs);
@@ -59,9 +62,9 @@ export default function UserProfilePage() {
   // useEffect(() => {
   //   console.log(user);
   // }, [user]);
-  // useEffect(() => {
-  //   console.log(scheduleDTOs);
-  // }, [scheduleDTOs]);
+  useEffect(() => {
+    console.log(scheduleThumbnailDTOs);
+  }, [scheduleThumbnailDTOs]);
 
   if (!user) {
     return (
@@ -169,7 +172,7 @@ export default function UserProfilePage() {
         </div>
         <div style={{ display: "grid", height: "702px", width: "100%" }}>
           <div className="user-profile-user-posts">
-            {scheduleDTOs.map((scheduleDTO: any, index: any) => (
+            {/* {scheduleDTOs.map((scheduleDTO: any, index: any) => (
               <div
                 className="border-2 user-profile-post-img"
                 onClick={() => scheduleClick({ sno: scheduleDTO.sno })}
@@ -177,7 +180,46 @@ export default function UserProfilePage() {
                 {scheduleDTO.sno} | {scheduleDTO.total_Day} |{" "}
                 {scheduleDTO.member_email} | {scheduleDTO.sName}
               </div>
-            ))}
+            ))} */}
+
+            {scheduleThumbnailDTOs &&
+              scheduleThumbnailDTOs.map(
+                (scheduleThumbnailDTO: any, index: any) => (
+                  <div
+                    className="flex-col justify-center border-2 user-profile-post-img"
+                    onClick={() =>
+                      scheduleClick({
+                        sno: scheduleThumbnailDTO.scheduleDTO.sno,
+                      })
+                    }
+                  >
+                    <img
+                      src={scheduleThumbnailDTO.image}
+                      alt="image"
+                      className="w-6 h-6"
+                    />
+                    <div className="mt-2 mb-2">
+                      <span className="mr-2 text-xl font-bold">
+                        {scheduleThumbnailDTO.scheduleDTO.sno}
+                      </span>
+                      <span className="text-xl text-slate-500">
+                        {scheduleThumbnailDTO.scheduleDTO.sName}
+                      </span>
+                    </div>
+                    <div>
+                      email : {scheduleThumbnailDTO.scheduleDTO.member_email}
+                    </div>
+                    <div>
+                      nickname :{" "}
+                      {scheduleThumbnailDTO.scheduleDTO.member_nickname}
+                    </div>
+                    <div>
+                      Day : {scheduleThumbnailDTO.scheduleDTO.total_Day}
+                    </div>
+                  </div>
+                )
+              )}
+
             {/* <div className="user-profile-post-img">
               <img src="./profile/profile_like_icon.png" alt="post i liked" />
             </div>

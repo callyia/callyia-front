@@ -568,24 +568,24 @@ export default function Planning() {
     return content;
   };
 
-  const fetchByPno = async (pno: number) => {
-    const token = localStorage.getItem("token");
-    console.log(token);
+  // const fetchByPno = async (pno: number) => {
+  //   const token = localStorage.getItem("token");
+  //   console.log(token);
 
-    try {
-      const response = await axios.get(
-        `http://localhost:8080/Callyia/access/resource-by-pno/${pno}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      console.log(response.data);
-    } catch (error) {
-      console.error("ERROR : ", error);
-    }
-  };
+  //   try {
+  //     const response = await axios.get(
+  //       `http://localhost:8080/Callyia/access/resource-by-pno/${pno}`,
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
+  //     console.log(response.data);
+  //   } catch (error) {
+  //     console.error("ERROR : ", error);
+  //   }
+  // };
 
   const fetchSearch = (searchKeyword: string) => {
     const url = `http://localhost:8080/Callyia/planning/search?keyword=${searchKeyword}`;
@@ -902,7 +902,7 @@ export default function Planning() {
       var planData_tour;
       var planData_day;
       if (pnoParam) {
-        fetchByPno(parseInt(pnoParam, 10));
+        // fetchByPno(parseInt(pnoParam, 10));
 
         const url1 = `http://localhost:8080/Callyia/planning/getDB?pno=${pnoParam}`;
         const url2 = `http://localhost:8080/Callyia/planning/getDay?pno=${pnoParam}`;
@@ -974,8 +974,18 @@ export default function Planning() {
             "#titleText"
           ) as HTMLHeadingElement;
 
+          const writerText = document.querySelector(
+            "#writerText"
+          ) as HTMLHeadingElement;
+
+          console.log(data);
+
           if (data.title) {
             titleText.textContent = data.title;
+          }
+
+          if (data.userId) {
+            writerText.textContent = data.userId;
           }
 
           if (data.day) {
@@ -1208,7 +1218,7 @@ export default function Planning() {
           <h2 id="titleText">초기 제목</h2>
         </div>
         <div className="div-left-writer">
-          <h1>Writer</h1>
+          <h1 id="writerText">Writer</h1>
         </div>
         <DragDropContext onDragEnd={onDragEnd}>
           <div className="div-plan-list">
