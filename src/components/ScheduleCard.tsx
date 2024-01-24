@@ -343,6 +343,7 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
               placeholder="댓글 입력"
               onChange={handleReplyChange}
               value={inputData}
+              style={{ backgroundColor: "white" }}
             />
             <button onClick={handleRegister}>입력</button>
           </div>
