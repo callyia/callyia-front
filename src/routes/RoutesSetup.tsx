@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 
 import Layout from "./Layout";
 import SchedulePosting from "./SchedulePage";
+import ScheduleList from "./ScheduleListPage";
 import SignInPage from "./SignInPage";
 import SignUpPage from "./SignUpPage";
 import MainPage from "./MainPage";
@@ -65,6 +66,10 @@ export default function RoutesSetup() {
       </Route>
       <Route path="/TourPage" element={<Layout />}>
         <Route index element={<TourPage />} />
+        <Route path="*" element={<NoMatch />} />
+      </Route>
+      <Route path="/ScheduleListPage" element={<Layout />}>
+        <Route index element={<ScheduleList />} />
         <Route path="*" element={<NoMatch />} />
       </Route>
     </Routes>
