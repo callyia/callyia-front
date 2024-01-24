@@ -57,7 +57,8 @@ const PlanContent = () => {
   }
 
   return (
-    <div className="profile-edited-plan" style={{border: "1px black solid"}}>
+    // <div className="profile-edited-plan" style={{border: "1px black solid"}}>
+      <div className="profile-common-posts">
         {planInfo?.map(plan => (
         <div key={plan.pno} className='profile-plan-div' onClick={() => handleClick(plan.pno)}>
           <div>
