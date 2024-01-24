@@ -328,7 +328,13 @@ export default function SchedulePosting() {
                       alt="프로필 이미지"
                     />
                   </Link>
-                  <p style={{ fontSize: "12px", color: "black" }}>
+                  <p
+                    style={{
+                      fontSize: "18px",
+                      color: "black",
+                      marginTop: "10px",
+                    }}
+                  >
                     {scheduleData.scheduleDTO?.member_nickname}
                   </p>
                 </div>
