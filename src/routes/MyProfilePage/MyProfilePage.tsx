@@ -71,7 +71,6 @@ const MyProfile: React.FC<MyProfileProps> = ({
     const profileImage = localStorage.getItem('profileImage');
   
     if (!token || !email) {
-      // Handle the error appropriately
       console.error('No token or email found');
       return;
     }

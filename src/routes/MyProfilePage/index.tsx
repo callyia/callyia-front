@@ -136,7 +136,6 @@ export default function MyProfilePage() {
                 <h3>편집 중인 일정</h3>
                 </div>
               </div>
-            {/* </div> */}
             </div>
           </div>
     

@@ -108,24 +108,6 @@
   margin-left: 20px;
 }
 
-.profile-user-posts {
-  grid-gap: 10px;
-  grid-column: 1/3;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr); 
-  max-height: 450px; 
-  overflow-y: auto; 
-  border-radius: 50px;
-  padding: 10px;
-  -ms-overflow-style: none; /* 인터넷 익스플로러에서 스크롤바 안보이게 */
-  scrollbar-width: none; /* 파이어폭스에서 스크롤바 안보이게 */
-}
-
-.profile-user-posts::-webkit-scrollbar {
-  display: none !important; /* 크롬, 사파리 등에서 스크롤바 안보이게 */
-}
-
-
 .profile-self-introduction-title {
   margin-top: 90px; 
   padding: 10px;
@@ -276,6 +258,8 @@
 }
 
 .profile-edited-plan {
+  border: 2px solid gray;
+  margin-top: -8%;
   grid-gap: 10px;
   grid-column: 1/3;
   display: grid;
@@ -294,4 +278,95 @@
 .profile-plan-id, .profile-plan-pno, .profile-plan-day, .profile-plan-title {
   font-family: "GmarketSans700";
   font-size: 20px;
+}
+
+.profile-edited-cart {
+  margin-top: -4%;
+  margin-left: -4%;
+  grid-gap: 20px;
+  grid-column: 1/3;
+  display: grid;
+  padding-bottom: 50px;
+  grid-template-columns: repeat(3, 1fr); 
+  max-height: 120%; 
+  max-width: 100%;
+  min-height: 120%; 
+  min-width: 100%;
+  overflow-y: auto; 
+  /* padding: 10px; */
+  -ms-overflow-style: none; 
+  scrollbar-width: none;
+}
+
+.profile-edited-cart::-webkit-scrollbar {
+  display: none !important; /* 크롬, 사파리 등에서 스크롤바 안보이게 */
+}
+
+.profile-cart-text-style {
+  font-size: 18px;
+  font-weight: medium;
+  line-height: 20px;
+  color: #53a7ce;
+  margin-bottom: 4px;
+}
+
+.profile-cart-text-style-second {
+  margin-bottom: 4px;
+  font-size: 24px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow-wrap: break-word;
+  font-weight: bold;
+  line-height: 30px;
+  height: 59px;
+  overflow: hidden;
+}
+
+.proflie-cart-images {
+  /* inset: 0px;
+  object-fit: cover; */
+  max-width: 350;
+  max-height: 300px;
+  min-width: 350px;
+  min-height: 300px;
+}
+
+.profile-cart-container{
+  width: 100%;
+  height: 100%;
+}
+
+.profile-cart-text-container {
+  padding: 30px;
+  /* display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  width: 100%; */
+  height: 50px;
+}
+
+.profile-cart-posts {
+  border: 2px solid gray;
+  border-radius: 8px;
+  margin-top: -8%;
+  grid-gap: 10px;
+  grid-column: 1/3;
+  max-height: 600px; 
+  padding: 100px;
+}
+
+.profile-cart-posts::-webkit-scrollbar {
+  display: none !important;
+}
+
+.aaadddaaaddd {
+  min-width: 350px;
+  min-height: 400px;
+  display: grid;
+  justify-content: center;
+}
+
+.main-frame {
+  width: 100%;
 }
