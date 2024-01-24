@@ -344,7 +344,7 @@
   height: 50px;
 }
 
-.profile-cart-posts {
+.profile-common-posts {
   border: 2px solid gray;
   border-radius: 8px;
   margin-top: -8%;
@@ -356,7 +356,7 @@
   justify-content: center;
 }
 
-.profile-cart-posts::-webkit-scrollbar {
+.profile-common-posts::-webkit-scrollbar {
   display: none !important;
 }
 

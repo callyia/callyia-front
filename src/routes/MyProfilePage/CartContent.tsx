@@ -144,7 +144,7 @@ const CartContent = () => {
 
   
   return (
-    <div className='profile-cart-posts'>
+    <div className='profile-common-posts'>
       <div className="profile-edited-cart">{renderTourItems()}</div>
     </div>
   );
