@@ -25,6 +25,7 @@ interface ScheduleData {
   sName: string;
   member_nickname: string;
   member_profile_image: string;
+  regDate: Date;
 }
 
 interface DetailScheduleData {
@@ -323,8 +324,19 @@ const Main: React.FC<MainPageProps> = () => {
             </div>
           </section>
         </div>
+        <div className="middle-navigate">
+          <div className="place-navigate">
+            <span onClick={() => navigate(`/TourPage/`)}>Place</span>
+          </div>
+          <div className="restaurant-navigate">
+            <span>restaurant</span>
+          </div>
+          <div className="community-navigate">
+            <span>Community</span>
+          </div>
+        </div>
         <div className="main-section-container">
-          <section className="main-section-div" style={{ marginRight: "10%" }}>
+          <section className="main-section-div" style={{ marginRight: "33%" }}>
             <span className="main-section-span-title">여행 정보</span>
             <div className="main-tour-info-section">
               {tourData.map((tour) => (
@@ -399,22 +411,11 @@ const Main: React.FC<MainPageProps> = () => {
               {renderPagination()}
             </div>
           </section>
-          <CgArrowRightR
-            style={{
-              fontSize: "400px",
-              marginRight: "100px",
-            }}
-            onClick={() => navigate("/TourPage/")}
-          />
         </div>
         <div className="main-section-container">
-          <CgArrowLeftR
-            style={{ fontSize: "400px", marginLeft: "100px" }}
-            onClick={() => navigate("/ScheduleListPage/")}
-          />
           <section
             className="main-section-div-community"
-            style={{ marginLeft: "10%" }}
+            style={{ marginLeft: "33%" }}
           >
             <span className="main-section-span-title">여행 공유 커뮤니티</span>
 
@@ -438,7 +439,7 @@ const Main: React.FC<MainPageProps> = () => {
                     />
                   )}
                   {/* 프로필 클릭 시 해당 유저페이지로 이동 */}
-                  <div className="profile-info">
+                  <span className="profile-info">
                     <img
                       className="profile-image"
                       src={schedule.member_profile_image}
@@ -447,10 +448,11 @@ const Main: React.FC<MainPageProps> = () => {
                     <div className="profile-details">
                       <h1 style={{ fontSize: "20px", margin: 0 }}>
                         {schedule.member_nickname}
+                        {/* <p>{schedule.regDate.toDateString()}</p> */}
                       </h1>
                       {/* Add other details as needed */}
                     </div>
-                  </div>
+                  </span>
                   <h1
                     style={{
                       fontSize: "30px",
