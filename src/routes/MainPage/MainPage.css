@@ -364,6 +364,7 @@ input[type="text"] {
   text-align: center;
   background-color: white;
   color: #0080ff;
+  transition: background-color 0.5s ease-in-out, color 0.5s ease-in-out;
 }
 
 .place-navigate span:hover {
@@ -392,6 +393,7 @@ input[type="text"] {
   text-align: center;
   background-color: white;
   color: #0080ff;
+  transition: background-color 0.5s ease-in-out, color 0.5s ease-in-out;
 }
 
 .restaurant-navigate span:hover {
@@ -419,8 +421,12 @@ input[type="text"] {
   text-align: center;
   background-color: white;
   color: #0080ff;
+  transition: background-color 0.5s ease-in-out, color 0.5s ease-in-out;
 }
 .community-navigate span:hover {
   background-color: #0080ff;
   color: white;
+}
+.main-frame {
+  width: 100%;
 }
