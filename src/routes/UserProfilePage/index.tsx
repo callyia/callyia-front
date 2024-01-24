@@ -147,9 +147,7 @@ export default function UserProfilePage() {
                   color: "white",
                 }}
               >
-                {/* <div className="user-profile-id">{user.userid}</div>
-                <div className="user-profile-email">{user.useremail}</div> */}
-                <div className="user-profile-id">{user.nickname}</div>
+                <div className="user-profile-nickname">{user.nickname}</div>
                 <div className="user-profile-email">{user.email}</div>
               </div>
             </div>
