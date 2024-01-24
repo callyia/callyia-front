@@ -4,58 +4,61 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 import './ProfilePage.css';
-import { dummyPlan } from '../UserProfilePage/dummyPlan';
 
-type UserInfo = {
-  email: string;
-  nickname: string;
-  name: string;
-  profileImage: string;
-  aboutMe: string;
+type PlanInfo = {
+  pno: number;
+  user_id: string;
+  day: string;
+  title: string;
 }
 
-// onclick 설정
-// fetch 설정
-
 const PlanContent = () => {
+  const navigate = useNavigate();
+
+  const [planInfo, setPlanInfo] = useState<PlanInfo[]>([]);
+
   useEffect(() => {
     const token = localStorage.getItem('token');
-    // const email = localStorage.getItem('email');
-    const email = 'aaa@aaa.aaa'; // 임시로 넣어둠 수정해야 함
+    const email = localStorage.getItem('email');
   
     if (!token || !email) {
       return;
     }
-  
+
+    // Fetch user info
     axios.get(`http://localhost:8080/Callyia/member/getMember?email=${email}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: { Authorization: `Bearer ${token}` }
     })
-  
     .then(response => {
-      setUserInfo(response.data.memberDTO);
-      console.log(response.data.memberDTO.aboutMe);
-      console.log(response.data.memberDTO.email);
-      console.log(response.data.memberDTO.aboutMe);
+      fetchPlans(token, response.data.memberDTO.email);
     })
-  
     .catch(error => {
       console.error('Error fetching user info:', error);
     });
-  }, []); 
+  }, []);
 
-  const navigate = useNavigate();
+  const fetchPlans = (token: string, email:string) => {
+    
+    axios.get(`http://localhost:8080/plan?email=${email}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+    .then(response => {
+      setPlanInfo(response.data.plans); 
+    })
 
-  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
+    .catch(error => {
+      console.error('Error fetching plans:', error);
+    });
+  };
 
+  
   const handleClick = (pno:number) => {
     navigate(`/PlanningPage?pno=${pno}`);
   }
 
   return (
     <div className="profile-edited-plan">
-        {dummyPlan.map(plan => (
+        {planInfo?.map(plan => (
         <div key={plan.pno} className='profile-plan-div' onClick={() => handleClick(plan.pno)}>
           <div>
             <div className='profile-plan-id'>id : {plan.user_id} </div>
