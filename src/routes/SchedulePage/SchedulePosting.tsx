@@ -18,6 +18,7 @@ interface ScheduleDTO {
   member_email: string;
   sName: string;
   member_nickname: string;
+  // regDate: DateTime;
 }
 
 interface DetailScheduleItem {

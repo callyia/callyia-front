@@ -111,6 +111,7 @@ input[type="text"] {
 }
 
 .main-trip-plan-section-span-title {
+  text-shadow: -1px 0 #000, 0 1px #000, 1px 0 #000, 0 -1px #000;
   font-size: 37px;
   font-weight: 700;
   color: white;
@@ -309,10 +310,9 @@ input[type="text"] {
 }
 
 .list-card {
-  border: 1px solid #dddddd;
+  border: 0.5px solid #dddddd;
   padding: 16px;
   margin: 20px 80px 50px 80px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease-in-out;
 }
 
@@ -335,4 +335,92 @@ input[type="text"] {
   margin: 10px;
   display: flex;
   flex-direction: column;
+}
+
+.middle-navigate {
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  margin: 70px 0px 100px 0px;
+}
+
+.place-navigate {
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  width: 314px;
+  height: 260px;
+  background-image: url("https://static.wixstatic.com/media/5bfb6f_9f2519d5fc2d41f990a10dd92eb8658d.jpg/v1/fill/w_314,h_260,al_c,q_80,usm_0.66_1.00_0.01,enc_auto/5bfb6f_9f2519d5fc2d41f990a10dd92eb8658d.jpg");
+}
+
+.place-navigate span {
+  width: 150px;
+  height: 50px;
+  cursor: pointer;
+  font-size: 24px;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  text-align: center;
+  background-color: white;
+  color: #0080ff;
+}
+
+.place-navigate span:hover {
+  background-color: #0080ff;
+  color: white;
+}
+
+.restaurant-navigate {
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  width: 314px;
+  height: 260px;
+  background-image: url("https://static.wixstatic.com/media/5bfb6f_ea37f67cad544b348df9f3d0ff40f282.jpg/v1/fill/w_314,h_260,al_c,q_80,usm_0.66_1.00_0.01,enc_auto/5bfb6f_ea37f67cad544b348df9f3d0ff40f282.jpg");
+  margin: 0 20px 0 20px;
+}
+
+.restaurant-navigate span {
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  cursor: pointer;
+  font-size: 24px;
+  width: 150px;
+  height: 50px;
+  text-align: center;
+  background-color: white;
+  color: #0080ff;
+}
+
+.restaurant-navigate span:hover {
+  background-color: #0080ff;
+  color: white;
+}
+
+.community-navigate {
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  width: 314px;
+  height: 260px;
+  background-image: url("https://static.wixstatic.com/media/5bfb6f_c667d0c9bd634b1aa2b29311795f3c51.jpg/v1/fill/w_315,h_260,al_c,q_80,usm_0.66_1.00_0.01,enc_auto/5bfb6f_c667d0c9bd634b1aa2b29311795f3c51.jpg");
+}
+
+.community-navigate span {
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  cursor: pointer;
+  font-size: 24px;
+  width: 150px;
+  height: 50px;
+  text-align: center;
+  background-color: white;
+  color: #0080ff;
+}
+.community-navigate span:hover {
+  background-color: #0080ff;
+  color: white;
 }
