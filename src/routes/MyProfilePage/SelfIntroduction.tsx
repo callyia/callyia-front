@@ -1,19 +1,44 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
+type UserAboutMe= {
+  aboutMe: string;
+}
 
 interface SelfIntroductionProps {
   isEditing: boolean;
+  text: string;
+  onTextChange: (newText: string) => void;
 }
 
-const SelfIntroduction:React.FC<SelfIntroductionProps> = ({isEditing}) => {
-  const [text, setText] = useState('');
+
+const SelfIntroduction:React.FC<SelfIntroductionProps> = ({isEditing, text, onTextChange}) => {
+  const [userAboutMe, setUserAboutMe] = useState<UserAboutMe | null>(null);
   const maxLength = 45;
 
-  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const newText = event.target.value;
-    if (newText.length <= maxLength) {
-      setText(newText);
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const email = localStorage.getItem('email');
+
+    if (!token || !email) {
+      return;
     }
-  };
+
+    axios.get(`http://localhost:8080/Callyia/member/getMember?email=${email}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+
+    .then(response => {
+      setUserAboutMe(response.data.memberDTO);
+      onTextChange(response.data.memberDTO.aboutMe);
+    })
+
+    .catch(error => {
+      console.error('Error fetching user info:', error);
+    });
+  }, []); 
 
   const isMaxLengthReached = text.length === maxLength;
 
@@ -21,8 +46,9 @@ const SelfIntroduction:React.FC<SelfIntroductionProps> = ({isEditing}) => {
     <div className="self-introduction-container">
         <textarea
           className="self-introduction-textarea"
+          // value={userAboutMe?.aboutMe}
           value={text}
-          onChange={isEditing ? handleChange : undefined}
+          onChange={(e) => onTextChange(e.target.value)}
           placeholder= {isEditing ? "자기소개를 입력하세요..." : ''}
           maxLength={maxLength}
           readOnly={!isEditing}

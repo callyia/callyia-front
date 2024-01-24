@@ -1,7 +1,16 @@
-import React, { ChangeEvent, useState, useRef} from 'react';
+import React, { ChangeEvent, useState, useRef, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';  
 
 import MyProfile from './MyProfilePage';
+
+type UserInfo = {
+  email: string;
+  nickname: string;
+  name: string;
+  profileImage: string;
+  aboutMe: string;
+}
 
 export default function MyProfilePage() { 
   const navigate = useNavigate();
@@ -12,7 +21,29 @@ export default function MyProfilePage() {
   const [currentContent, setCurrentContent] = useState('default');
 
   const changeContent = (newContent: string) =>  setCurrentContent(newContent);
-  
+  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const email = localStorage.getItem('email');
+
+    if (!token || !email) {
+      return;
+    }
+
+    axios.get(`http://localhost:8080/Callyia/member/getMember?email=${email}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then(response => {
+      setUserInfo(response.data.memberDTO); // Updating state with user info
+      // You might want to update other states or perform other actions based on the fetched data
+    })
+    .catch(error => {
+      console.error('Error fetching user info:', error);
+    });
+  }, []);
 
   const handleProfileImageChange = (event:ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files ? event.target.files[0] : null;
@@ -75,8 +106,8 @@ export default function MyProfilePage() {
               }}
             >
               {/* 내 아이디 이메일 불러오기 */}
-              <div className = "profile-id">MYUSER</div>
-              <div className = "profile-email">MYUSER@EMAIL.COM</div>
+              <div className = "profile-id">{userInfo?.nickname}</div>
+              <div className = "profile-email">{userInfo?.email}</div>
             </div>
             <div
               style={{
@@ -93,13 +124,12 @@ export default function MyProfilePage() {
             >
               <div className="profile-actions">
                 <div className='profile-action-div'>
-                <button className="profile-action-button" onClick={() => changeContent("CartContent")}><img src="./profile/profile_calender_icon.png" alt="my calender" /></button>
+                <button className="profile-action-button" onClick={() => changeContent("ScheduleContent")}><img src="./profile/profile_calender_icon.png" alt="my calender" /></button>
                 <h3>나의 일정 바로가기</h3>
                 </div>
                 <div className='profile-action-div'>
-                <button className="profile-action-button" onClick={() => changeContent("ScheduleContent")}><img src="./profile/profile_shop_bag_basket_icon.png" alt="my scuedule cart" /></button>
+                <button className="profile-action-button" onClick={() => changeContent("CartContent")}><img src="./profile/profile_shop_bag_basket_icon.png" alt="my scuedule cart" /></button>
                 <h3>나의 일정 장바구니</h3> 
-                {/* 클릭하면 SchedulePage로 가게 */}
                 </div>
                 <div className='profile-action-div'>
                 <button className="profile-action-button-post" onClick={() => changeContent("PlanContent")}><img src="./profile/profile_post_icon.png" alt="schedule being edited" /></button>
@@ -125,7 +155,10 @@ export default function MyProfilePage() {
               isEditing={isEditing}
               toggleIsEditing={() => setIsEditing(!isEditing)}
               profileImage={profileImage} 
+              aboutMeText={''}
               handleProfileImageChange={handleProfileImageChange}
+              // handleAboutMeChange={(newText) => userInfo && setUserInfo({ ...userInfo, aboutMe: newText })}
+              // handleUpdateClick={handleUpdateClick}
               currentContent={currentContent}
               />
             </div>

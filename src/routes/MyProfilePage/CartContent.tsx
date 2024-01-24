@@ -5,6 +5,7 @@ import './ProfilePage.css';
 const CartContent = () => {
   return (
     <div className="profile-user-posts">
+      일정 장바구니
       <div className='profile-post-img'>
           <img src="./profile/profile_like_icon.png" alt="post i liked" />
         </div><div className='profile-post-img'>
