@@ -39,9 +39,10 @@ const PlanContent = () => {
 
   const fetchPlans = (token: string, email:string) => {
     
-    axios.get(`http://localhost:8080/plan?email=${email}`, {
+    axios.get(`http://localhost:8080/Callyia/plan?email=${email}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
+
     .then(response => {
       setPlanInfo(response.data.plans); 
     })
