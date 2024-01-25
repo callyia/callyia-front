@@ -324,10 +324,10 @@ const Main: React.FC<MainPageProps> = () => {
         </div>
         <div className="middle-navigate">
           <div className="place-navigate">
-            <span onClick={() => navigate(`/TourPage/`)}>Place</span>
+            <span onClick={() => navigate(`/TourPage/Tourist`)}>Place</span>
           </div>
           <div className="restaurant-navigate">
-            <span>restaurant</span>
+            <span onClick={() => navigate(`/TourPage/Food`)}>restaurant</span>
           </div>
           <div className="community-navigate">
             <span onClick={() => navigate(`/ScheduleListPage/`)}>
