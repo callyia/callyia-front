@@ -1,0 +1,142 @@
+/* 사용법 font-family: "GmarketSans500"; */
+
+@font-face {
+  font-family: "GmarketSans300";
+  font-weight: 300;
+  font-style: normal;
+  src: url("https://cdn.jsdelivr.net/gh/webfontworld/gmarket/GmarketSansLight.eot");
+  src: url("https://cdn.jsdelivr.net/gh/webfontworld/gmarket/GmarketSansLight.eot?#iefix")
+      format("embedded-opentype"),
+    url("https://cdn.jsdelivr.net/gh/webfontworld/gmarket/GmarketSansLight.woff2")
+      format("woff2"),
+    url("https://cdn.jsdelivr.net/gh/webfontworld/gmarket/GmarketSansLight.woff")
+      format("woff"),
+    url("https://cdn.jsdelivr.net/gh/webfontworld/gmarket/GmarketSansLight.ttf")
+      format("truetype");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "GmarketSans500";
+  font-weight: 500;
+  font-style: normal;
+  src: url("https://cdn.jsdelivr.net/gh/webfontworld/gmarket/GmarketSansMedium.eot");
+  src: url("https://cdn.jsdelivr.net/gh/webfontworld/gmarket/GmarketSansMedium.eot?#iefix")
+      format("embedded-opentype"),
+    url("https://cdn.jsdelivr.net/gh/webfontworld/gmarket/GmarketSansMedium.woff2")
+      format("woff2"),
+    url("https://cdn.jsdelivr.net/gh/webfontworld/gmarket/GmarketSansMedium.woff")
+      format("woff"),
+    url("https://cdn.jsdelivr.net/gh/webfontworld/gmarket/GmarketSansMedium.ttf")
+      format("truetype");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "GmarketSans700";
+  font-weight: 700;
+  font-style: normal;
+  src: url("https://cdn.jsdelivr.net/gh/webfontworld/gmarket/GmarketSansBold.eot");
+  src: url("https://cdn.jsdelivr.net/gh/webfontworld/gmarket/GmarketSansBold.eot?#iefix")
+      format("embedded-opentype"),
+    url("https://cdn.jsdelivr.net/gh/webfontworld/gmarket/GmarketSansBold.woff2")
+      format("woff2"),
+    url("https://cdn.jsdelivr.net/gh/webfontworld/gmarket/GmarketSansBold.woff")
+      format("woff"),
+    url("https://cdn.jsdelivr.net/gh/webfontworld/gmarket/GmarketSansBold.ttf")
+      format("truetype");
+  font-display: swap;
+}
+
+body {
+  color: #333;
+  background-color: white;
+}
+
+input[type="text"] {
+  padding: 10px;
+  border-radius: 4px;
+  color: black;
+  font-size: 16px;
+}
+
+/* Section Styles */
+.ScheduleList-section-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* overflow-y: auto; */
+}
+
+.ScheduleList-span-title {
+  font-size: 40px;
+  font-weight: 700;
+  font-family: "GmarketSans500";
+  margin-bottom: 20px;
+  margin-left: 42%;
+}
+.ScheduleList-subtitle {
+  font-family: "GmarketSans500";
+  display: flex;
+  justify-content: center;
+  margin: 30px 0 80px 0;
+}
+.ScheduleList-section-div-community {
+  height: 1250px;
+  margin-bottom: 20px;
+  background-color: white;
+  padding: 10px;
+  min-height: 200px;
+  width: 70%;
+}
+
+.ScheduleList-list-card {
+  border: 0.5px solid #dddddd;
+  padding: 16px;
+  margin: 20px 80px 50px 80px;
+  transition: transform 0.3s ease-in-out;
+}
+.ScheduleList-list-card:hover {
+  transform: scale(1.025);
+}
+
+.ScheduleList-profile-info {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #bdbdbd;
+}
+
+.ScheduleList-profile-image {
+  margin: 20px 10px 20px 30px;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+}
+.ScheduleList-profile-details {
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.LoadMore {
+  display: flex;
+  justify-content: center;
+}
+.LoadMore-button {
+  font-size: 30px;
+  font-family: "GmarketSans500";
+  margin: 0 0 40px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 88%;
+  height: 100px;
+  border-radius: 10px;
+  background-color: #d8d8d8;
+  transition: background-color 0.5s ease-in-out, color 0.5s ease-in-out;
+  cursor: pointer;
+}
+.LoadMore-button:hover {
+  background-color: #a4a4a4;
+  color: #f2f2f2;
+}

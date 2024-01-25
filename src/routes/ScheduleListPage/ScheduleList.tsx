@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "../MainPage/MainPage.css";
+import "./ScheduleList.css";
 
 interface ScheduleData {
   sno: number;
@@ -27,6 +27,8 @@ export default function ScheduleList() {
     DetailScheduleData[]
   >([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [cardsToShow, setCardsToShow] = useState(10);
+
   const navigate = useNavigate();
   //sno에 해당하는 detailImage중에서 첫 요소의 이미지
   const matchingDetailImages: any[] = [];
@@ -52,7 +54,7 @@ export default function ScheduleList() {
     const fetchScheduleData = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8080/Callyia/Schedule/getSchedule`
+          `http://localhost:8080/Callyia/Schedule/getAllSchedule`
         );
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -87,15 +89,20 @@ export default function ScheduleList() {
     fetchDetailScheduleData();
   }, [currentPage]);
 
-  return (
-    <div className="main-section-container">
-      <section
-        className="main-section-div-community"
-        style={{ marginLeft: "33%" }}
-      >
-        <span className="main-section-span-title">여행 공유 커뮤니티</span>
+  const handleLoadMore = () => {
+    // "더 보기" 버튼 클릭 시 추가로 10개의 카드를 보여줌
+    setCardsToShow((prevCards) => prevCards + 10);
+  };
 
-        {scheduleData.map((schedule) => {
+  return (
+    <div className="ScheduleList-section-container">
+      <section className="ScheduleList-section-div-community">
+        <span className="ScheduleList-span-title">Community</span>
+        <p className="ScheduleList-subtitle">
+          여행 플랜 목록에서 클릭하여 풍부한 여행 정보를 확인하고, 소중한 경험을
+          공유하며 다양한 이야기에 참여하세요!
+        </p>
+        {scheduleData.slice(0, cardsToShow).map((schedule) => {
           // schedule.sno에 해당하는 매칭 데이터 찾기
           const matchingDetail = matchingDetailImages.find(
             (detail) => detail.sno === schedule.sno
@@ -105,7 +112,7 @@ export default function ScheduleList() {
           return (
             <div
               key={schedule.sno}
-              className="list-card"
+              className="ScheduleList-list-card"
               onClick={() => navigate(`/SchedulePage/${schedule.sno}`)}
             >
               {matchingDetail && (
@@ -115,13 +122,13 @@ export default function ScheduleList() {
                 />
               )}
               {/* 프로필 클릭 시 해당 유저페이지로 이동 */}
-              <span className="profile-info">
+              <span className="ScheduleList-profile-info">
                 <img
-                  className="profile-image"
+                  className="ScheduleList-profile-image"
                   src={schedule.member_profile_image}
                   alt="Profile"
                 />
-                <div className="profile-details">
+                <div className="ScheduleList-profile-details">
                   <h1 style={{ fontSize: "20px", margin: 0 }}>
                     {schedule.member_nickname}
                     {/* <p>{schedule.regDate.toDateString()}</p> */}
@@ -141,6 +148,13 @@ export default function ScheduleList() {
             </div>
           );
         })}
+        <div className="LoadMore">
+          {cardsToShow < scheduleData.length && (
+            <div className="LoadMore-button" onClick={handleLoadMore}>
+              더 보기
+            </div>
+          )}
+        </div>
       </section>
     </div>
   );
