@@ -6,21 +6,14 @@ import UserProfile from "./UserProfilePage";
 export default function UserProfilePage() {
   const location = useLocation();
 
-  const [profileImage, setProfileImage] = useState<string>(
-    "./dummyimages/image1.jpeg"
-  ); // 기본 이미지
+  const [profileImage, setProfileImage] = useState<string>("./dummyimages/image1.jpeg"); // 기본 이미지
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const urlParams = new URLSearchParams(location.search);
-  const email = localStorage.getItem("email");
+  const email = urlParams.get("userid");
 
   const [user, setUser] = useState<any>();
   const [scheduleThumbnailDTOs, setScheduleThumbnailDTOs] = useState<any[]>();
-
-  // var user;
-  // var scheduleDTOs;
-
-  // const user = dummyUser.find((user) => user.userid === userid);
 
   const navigate = useNavigate();
 
@@ -54,9 +47,6 @@ export default function UserProfilePage() {
     fetchMember(email);
   }, []);
 
-  // useEffect(() => {
-  //   console.log(user);
-  // }, [user]);
   useEffect(() => {
     console.log(scheduleThumbnailDTOs);
   }, [scheduleThumbnailDTOs]);
@@ -212,55 +202,6 @@ export default function UserProfilePage() {
                   </div>
                 )
               )}
-
-            {/* <div className="user-profile-post-img">
-              <img src="./profile/profile_like_icon.png" alt="post i liked" />
-            </div>
-            <div className="user-profile-post-img">
-              <img src="./profile/profile_like_icon.png" alt="post i liked" />
-            </div>
-            <div className="user-profile-post-img">
-              <img src="./profile/profile_like_icon.png" alt="post i liked" />
-            </div>
-            <div className="user-profile-post-img">
-              <img src="./profile/profile_like_icon.png" alt="post i liked" />
-            </div>
-            <div className="user-profile-post-img">
-              <img src="./profile/profile_like_icon.png" alt="post i liked" />
-            </div>
-            <div className="user-profile-post-img">
-              <img src="./profile/profile_like_icon.png" alt="post i liked" />
-            </div>
-            <div className="user-profile-post-img">
-              <img src="./profile/profile_like_icon.png" alt="post i liked" />
-            </div>
-            <div className="user-profile-post-img">
-              <img src="./profile/profile_like_icon.png" alt="post i liked" />
-            </div>
-            <div className="user-profile-post-img">
-              <img src="./profile/profile_like_icon.png" alt="post i liked" />
-            </div>
-            <div className="user-profile-post-img">
-              <img src="./profile/profile_like_icon.png" alt="post i liked" />
-            </div>
-            <div className="user-profile-post-img">
-              <img src="./profile/profile_like_icon.png" alt="post i liked" />
-            </div>
-            <div className="user-profile-post-img">
-              <img src="./profile/profile_like_icon.png" alt="post i liked" />
-            </div>
-            <div className="user-profile-post-img">
-              <img src="./profile/profile_like_icon.png" alt="post i liked" />
-            </div>
-            <div className="user-profile-post-img">
-              <img src="./profile/profile_like_icon.png" alt="post i liked" />
-            </div>
-            <div className="user-profile-post-img">
-              <img src="./profile/profile_like_icon.png" alt="post i liked" />
-            </div>
-            <div className="user-profile-post-img">
-              <img src="./profile/profile_like_icon.png" alt="post i liked" />
-            </div> */}
           </div>
         </div>
       </div>
