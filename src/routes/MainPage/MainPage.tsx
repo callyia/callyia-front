@@ -120,7 +120,7 @@ const Main: React.FC<MainPageProps> = () => {
     const fetchScheduleData = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8080/Callyia/Schedule/getSchedule`
+          `http://localhost:8080/Callyia/Schedule/getAllSchedule`
         );
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -330,7 +330,9 @@ const Main: React.FC<MainPageProps> = () => {
             <span>restaurant</span>
           </div>
           <div className="community-navigate">
-            <span onClick={() => navigate(`/ScheduleList/`)}>Community</span>
+            <span onClick={() => navigate(`/ScheduleListPage/`)}>
+              Community
+            </span>
           </div>
         </div>
         <div className="main-section-container">
