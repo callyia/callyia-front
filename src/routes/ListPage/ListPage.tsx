@@ -82,7 +82,7 @@ const ListPage = () => {
         } 
   
         else if(newSearchCombo === 'schedule') {
-          scheduleResponse = await fetch(`http://localhost:8080/Callyia/Schedule/getSchedule`);
+          scheduleResponse = await fetch(`http://localhost:8080/Callyia/Schedule/getAllSchedule`);
         } 
   
         if (userResponse) {
