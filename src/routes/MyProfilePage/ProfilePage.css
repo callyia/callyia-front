@@ -355,14 +355,39 @@
   margin-top: -8%;
   grid-gap: 10px;
   grid-column: 1/3;
-  max-height: 600px;
+  /* max-height: 600px; */
+  height: 600px;
   padding: 100px;
   display: flex;
   justify-content: center;
 }
 
+.profile-schdule-posts {
+  flex-direction: column;
+  align-items: center;
+  max-height: 600px; 
+  overflow-y: auto; 
+  width: 100%; 
+  padding-bottom: 20px;
+}
+
 .profile-common-posts::-webkit-scrollbar {
   display: none !important;
+}
+
+.profile-list-card {
+  border: 0.5px solid #dddddd;
+  padding: 16px;
+  margin: 20px 80px 50px 80px;
+  transition: transform 0.3s ease-in-out;
+  color: gray;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.profile-list-card:hover {
+  transform: scale(1.025);
+  color: black;
 }
 
 .aaadddaaaddd {
@@ -370,4 +395,23 @@
   min-height: 400px;
   display: grid;
   justify-content: center;
+}
+
+.profile-schedule-info {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #bdbdbd;
+}
+
+.profile-schedule-image {
+  margin: 20px 10px 20px 30px;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+}
+
+.profile-schedule-details {
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
 }
