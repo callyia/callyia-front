@@ -19,14 +19,15 @@ const SelfIntroduction:React.FC<SelfIntroductionProps> = ({isEditing, text, onTe
       return;
     }
 
-    axios.get(`http://localhost:8080/Callyia/member/getMember?email=${email}`, {
+    axios.get(`http://localhost:8080/Callyia/member/user?email=${email}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
 
+    
     .then(response => {
-      onTextChange(response.data.memberDTO.aboutMe);
+      onTextChange(response.data.aboutMe);
     })
 
     .catch(error => {

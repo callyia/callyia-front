@@ -26,11 +26,11 @@ const PlanContent = () => {
     }
 
     // Fetch user info
-    axios.get(`http://localhost:8080/Callyia/member/getMember?email=${email}`, {
+    axios.get(`http://localhost:8080/Callyia/member/user?email=${email}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
     .then(response => {
-      fetchPlans(token, response.data.memberDTO.email);
+      fetchPlans(token, response.data.email);
     })
     .catch(error => {
       console.error('Error fetching user info:', error);
