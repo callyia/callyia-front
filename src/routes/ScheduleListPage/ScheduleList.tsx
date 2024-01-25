@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./ScheduleList.css";
 
+import { FaPlus } from "react-icons/fa";
+
 interface ScheduleData {
   sno: number;
   total_Day: number;
@@ -28,6 +30,7 @@ export default function ScheduleList() {
   >([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [cardsToShow, setCardsToShow] = useState(10);
+  const [showTopButton, setShowTopButton] = useState(false);
 
   const navigate = useNavigate();
   //sno에 해당하는 detailImage중에서 첫 요소의 이미지
@@ -94,6 +97,18 @@ export default function ScheduleList() {
     setCardsToShow((prevCards) => prevCards + 10);
   };
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 1700) {
+        setShowTopButton(true);
+      } else {
+        setShowTopButton(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
   return (
     <div className="ScheduleList-section-container">
       <section className="ScheduleList-section-div-community">
@@ -133,7 +148,6 @@ export default function ScheduleList() {
                     {schedule.member_nickname}
                     {/* <p>{schedule.regDate.toDateString()}</p> */}
                   </h1>
-                  {/* Add other details as needed */}
                 </div>
               </span>
               <h1
@@ -151,11 +165,17 @@ export default function ScheduleList() {
         <div className="LoadMore">
           {cardsToShow < scheduleData.length && (
             <div className="LoadMore-button" onClick={handleLoadMore}>
-              더 보기
+              <FaPlus />
             </div>
           )}
         </div>
       </section>
+      <button
+        type="button"
+        className="ScheduleList-top-button"
+        style={{ visibility: showTopButton ? "visible" : "hidden" }} // 스크롤이 조건이상 내려가면 보이게
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+      ></button>
     </div>
   );
 }

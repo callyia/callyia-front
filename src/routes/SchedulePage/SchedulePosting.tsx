@@ -76,10 +76,19 @@ export default function SchedulePosting() {
 
   const { sno } = useParams();
 
+  const token = localStorage.getItem("token");
+
   const fetchScheduleData = async () => {
     try {
       const response = await fetch(
-        `http://localhost:8080/Callyia/Schedule/posting?sno=${sno}`
+        `http://localhost:8080/Callyia/Schedule/posting?sno=${sno}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
       );
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
