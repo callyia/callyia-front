@@ -53,10 +53,11 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
   const [inputData, setInputData] = useState("");
   const [reply, setReply] = useState<string[]>(reply_contents);
 
-  const user = "sh@naver.com";
   const [loading, setLoading] = useState(false); // 댓글을 로드 중인지 여부
   const [hasMore, setHasMore] = useState(true); // 불러올 댓글이 남아 있는지 여부
 
+  const email = localStorage.getItem("email");
+  const token = localStorage.getItem("token");
   const handleScroll = () => {
     // 스크롤 이벤트 핸들러
     if (
@@ -128,11 +129,12 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
         {
           method: "POST",
           headers: {
+            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
             replyContents: inputData,
-            replyer: user, //임시 유저
+            replyer: email, //임시 유저
             dno: dno,
           }),
         }
@@ -170,12 +172,13 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
         {
           method: "PUT",
           headers: {
+            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
             rno: rno[index],
             replyContents: content,
-            replyer: user,
+            replyer: email,
             dno: dno,
           }),
         }
@@ -210,6 +213,7 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
           {
             method: "DELETE",
             headers: {
+              Authorization: `Bearer ${token}`,
               "Content-Type": "application/json",
             },
           }
@@ -236,7 +240,7 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
 
   // 댓글 클릭 시 alert창으로 전체 내용 보여줌
   const handlereplyClick = (replyContents: string, index: number) => {
-    const isEditable = replyer[index] === user;
+    const isEditable = replyer[index] === email;
 
     swal({
       text: isEditable
