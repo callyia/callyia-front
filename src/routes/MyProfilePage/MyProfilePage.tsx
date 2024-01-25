@@ -102,13 +102,13 @@ const MyProfile: React.FC<MyProfileProps> = ({
       <div className="profile-header">
       
         <div className="profile-left-section">
-          <p className="profile-self-introduction"> 
+          <div className="profile-self-introduction"> 
            <SelfIntroduction isEditing = {isEditing} text={text} onTextChange={handleTextChange}/>
             {/* <button className="edit-save-btn">  */}
             <button className="edit-save-btn" onClick={isEditing ? handleUpdateClick : () => toggleIsEditing()} > 
               {isEditing ? '저장' : '수정'}
             </button>
-          </p>
+          </div>
         </div>
         <div className="profile-right-section">
         <div className="profile-stats">

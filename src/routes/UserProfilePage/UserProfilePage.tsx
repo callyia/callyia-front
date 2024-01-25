@@ -29,9 +29,9 @@ const UserProfile: React.FC<UserProps> = ({ user }) => {
       <div className="user-profile-self-introduction-title">자기소개</div>
       <div className="user-profile-header">
         <div className="user-profile-left-section">
-          <p className="user-profile-self-introduction">
+          <div className="user-profile-self-introduction">
             <UserSelfIntroduction text={user.aboutMe || ""} />
-          </p>
+          </div>
         </div>
         <div className="user-profile-right-section">
           <div className="user-profile-stats">
