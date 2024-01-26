@@ -26,9 +26,13 @@ interface TourData {
   image: string;
 }
 
+interface RegistPageProps {
+  checkColumnData: string;
+}
+
 SwiperCore.use([Navigation, Pagination, Autoplay]);
 
-const RegistPage = () => {
+const RegistPage: React.FC<RegistPageProps> = ( {checkColumnData} ) => {
   // 상태 관리
   const [openModal, setOpenModal] = useState(false); //등록페이지 열림 닫힘 상태
   const [selectedPlace, setSelectedPlace] = useState<any>(null);
@@ -39,7 +43,7 @@ const RegistPage = () => {
   >();
   const [clearUploadImage, setClearUploadImage] = useState(false); //등록페이지 이미지 초기화
   const [selectedCheck, setSelectedCheck] = useState("관광지");
-  const [checkColumn, setCheckColumn] = useState<string>("전체"); //검색 옵션 지정
+  const [checkColumn, setCheckColumn] = useState<string>(checkColumnData || "전체"); //검색 옵션 지정
   const [keyword, setKeyword] = useState<string>(""); //검색 keyword 저장 공간
   const [searchResults, setSearchResults] = useState([]); //검색 결과 저장 공간
   const [tourData, setTourData] = useState<TourData[]>([]); //fetchTourData로 Tour의 전체 데이터 저장 공간
@@ -56,6 +60,8 @@ const RegistPage = () => {
     Math.floor((currentPage - 1) / pagesToShow) * pagesToShow + 1;
   const endPage = Math.min(startPage + pagesToShow - 1, totalPages);
 
+  console.log(checkColumn);
+  
   // 상세페이지 열기
   const openDetailClicked = (selectedTour: TourData) => {
     setSelectedTour(selectedTour); // 클릭된 관광지 정보 저장

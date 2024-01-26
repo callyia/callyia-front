@@ -65,9 +65,7 @@ export default function RoutesSetup() {
         <Route index element={<UserProfilePage />} />
         <Route path="*" element={<NoMatch />} />
       </Route>
-      <Route path="/TourPage" element={<Layout />}>
-        <Route index element={<TourPage />} />
-        <Route path="*" element={<NoMatch />} />
+      <Route path="/TourPage/*" element={<TourPage />}>
       </Route>
       <Route path="/ScheduleListPage" element={<Layout />}>
         <Route index element={<ScheduleList />} />

@@ -31,13 +31,13 @@ export default function MyProfilePage() {
       return;
     }
 
-    axios.get(`http://localhost:8080/Callyia/member/getMember?email=${email}`, {
+    axios.get(`http://localhost:8080/Callyia/member/user?email=${email}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
     .then(response => {
-      setUserInfo(response.data.memberDTO);
+      setUserInfo(response.data);
     })
 
     .catch(error => {

@@ -12,15 +12,10 @@ export default function UserProfilePage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const urlParams = new URLSearchParams(location.search);
-  const userid = urlParams.get("userid");
+  const email = urlParams.get("userid");
 
   const [user, setUser] = useState<any>();
   const [scheduleThumbnailDTOs, setScheduleThumbnailDTOs] = useState<any[]>();
-
-  // var user;
-  // var scheduleDTOs;
-
-  // const user = dummyUser.find((user) => user.userid === userid);
 
   const navigate = useNavigate();
 
@@ -29,7 +24,7 @@ export default function UserProfilePage() {
   };
 
   const fetchMember = async (email: any) => {
-    const url = `http://localhost:8080/Callyia/member/getMember?email=${userid}`;
+    const url = `http://localhost:8080/Callyia/member/user?email=${email}`;
 
     await fetch(url)
       .then((response) => {
@@ -41,14 +36,9 @@ export default function UserProfilePage() {
         return response.json();
       })
       .then((data) => {
-        console.log(data.memberDTO);
-        console.log(data.scheduleThumbnailDTOs);
-        setUser(data.memberDTO);
-        setProfileImage(data.memberDTO.profileImage);
+        setUser(data);
+        setProfileImage(data.profileImage);
         setScheduleThumbnailDTOs(data.scheduleThumbnailDTOs);
-
-        // console.log(user);
-        // console.log(scheduleDTOs);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -56,12 +46,9 @@ export default function UserProfilePage() {
   };
 
   useEffect(() => {
-    fetchMember(userid);
+    fetchMember(email);
   }, []);
 
-  // useEffect(() => {
-  //   console.log(user);
-  // }, [user]);
   useEffect(() => {
     console.log(scheduleThumbnailDTOs);
   }, [scheduleThumbnailDTOs]);
@@ -193,8 +180,8 @@ export default function UserProfilePage() {
                   >
                     <img
                       src={scheduleThumbnailDTO.image}
-                      alt="image"
-                      className="user-profile-thumbnail-image"
+                      alt="이미지"
+                      className="w-6 h-6"
                     />
                     <div className="mt-2 mb-2">
                       <span className="mr-2 text-xl font-bold">
