@@ -6,7 +6,9 @@ import UserProfile from "./UserProfilePage";
 export default function UserProfilePage() {
   const location = useLocation();
 
-  const [profileImage, setProfileImage] = useState<string>("./dummyimages/image1.jpeg"); // 기본 이미지
+  const [profileImage, setProfileImage] = useState<string>(
+    "./dummyimages/image1.jpeg"
+  ); // 기본 이미지
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const urlParams = new URLSearchParams(location.search);
@@ -169,7 +171,7 @@ export default function UserProfilePage() {
               scheduleThumbnailDTOs.map(
                 (scheduleThumbnailDTO: any, index: any) => (
                   <div
-                    className="flex-col justify-center border-2 user-profile-post-img"
+                    className="flex-col border-2 user-profile-post-img"
                     onClick={() =>
                       scheduleClick({
                         sno: scheduleThumbnailDTO.scheduleDTO.sno,
@@ -189,13 +191,13 @@ export default function UserProfilePage() {
                         {scheduleThumbnailDTO.scheduleDTO.sName}
                       </span>
                     </div>
-                    <div>
+                    {/* <div>
                       email : {scheduleThumbnailDTO.scheduleDTO.member_email}
                     </div>
                     <div>
                       nickname :{" "}
                       {scheduleThumbnailDTO.scheduleDTO.member_nickname}
-                    </div>
+                    </div> */}
                     <div>
                       Day : {scheduleThumbnailDTO.scheduleDTO.total_Day}
                     </div>
