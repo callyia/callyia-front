@@ -7,7 +7,7 @@
 
 .user-profile-search-keyword-header {
   margin-bottom: 20px;
-  font-size: 33px;  
+  font-size: 33px;
   text-align: center;
   align-items: center;
 }
@@ -15,19 +15,19 @@
 .user-profile-search-keyword {
   color: red;
   font-weight: 700;
-  font-family: 'GmarketSans700';
+  font-family: "GmarketSans700";
 }
 
 .user-profile-container {
   display: grid;
   grid-gap: 100px;
-  max-width: 100%; 
+  max-width: 100%;
   margin: auto;
   padding: 0 0 20px 10px;
 }
 
 .user-profile-picture {
-  width: 300px; 
+  width: 300px;
   height: 300px;
   border-radius: 50%;
 }
@@ -40,7 +40,7 @@
   margin-top: -70px;
   margin-bottom: 50px;
   gap: 10px;
-  position: relative; 
+  position: relative;
 }
 
 .user-profile-left-section {
@@ -54,7 +54,11 @@
   align-items: center;
 }
 
-.user-profile-nickname, .user-profile-email, .user-profile-self-introduction, .user-profile-stats, .user-profile-action-button {
+.user-profile-nickname,
+.user-profile-email,
+.user-profile-self-introduction,
+.user-profile-stats,
+.user-profile-action-button {
   text-align: center;
 }
 
@@ -74,7 +78,7 @@
   align-items: center;
   border-radius: 8px;
   transform: scale(1);
-  margin: auto; 
+  margin: auto;
   max-width: 480px;
   height: 100%;
   padding: 0.01%;
@@ -84,17 +88,17 @@
 
 .user-profile-stats > div {
   align-items: center;
-  justify-content: flex-end; 
-  width: 100%; 
+  justify-content: flex-end;
+  width: 100%;
 }
 
 .user-profile-user-posts {
   grid-gap: 10px;
   grid-column: 1/3;
   display: grid;
-  grid-template-columns: repeat(4, 1fr); 
-  max-height: 450px; 
-  overflow-y: auto; 
+  grid-template-columns: repeat(4, 1fr);
+  max-height: 450px;
+  overflow-y: auto;
   border-radius: 50px;
   padding: 10px;
   -ms-overflow-style: none; /* 인터넷 익스플로러에서 스크롤바 안보이게 */
@@ -105,11 +109,10 @@
   display: none !important; /* 크롬, 사파리 등에서 스크롤바 안보이게 */
 }
 
-
 .user-profile-self-introduction-title {
-  margin-top: 90px; 
+  margin-top: 90px;
   padding: 10px;
-  border-bottom: none; 
+  border-bottom: none;
   position: relative;
 }
 
@@ -127,11 +130,11 @@
 .user-profile-post-count {
   display: flex;
   justify-content: center;
-  align-items: center;  
+  align-items: center;
   text-align: center;
   margin: 10px;
-  padding: 20px; 
-  height: 120px; 
+  padding: 20px;
+  height: 120px;
   border-radius: 8px;
   line-height: right;
   font-size: 12px;
@@ -140,16 +143,17 @@
 
 .user-profile-icon-number-container {
   position: relative;
-  width: 70px; 
+  width: 70px;
   height: 70px;
   display: absolute;
   margin-right: 20px;
   margin-top: 150px;
 }
 
-.user-profile-post-icon,.profile-likes-icon {
-  width: 70px; 
-  height: 70px; 
+.user-profile-post-icon,
+.profile-likes-icon {
+  width: 70px;
+  height: 70px;
 }
 
 .user-self-introduction-container {
@@ -162,17 +166,17 @@
   background-color: white;
   width: 100%;
   height: 100%;
-  padding: 0; 
-  box-sizing: border-box; 
+  padding: 0;
+  box-sizing: border-box;
   resize: none;
 }
 
 .user-self-introduction-character-count {
   position: absolute;
-  bottom: 10px; 
+  bottom: 10px;
   right: 10px;
   font-size: 0.8rem;
-  color: #666; 
+  color: #666;
   padding: 5px;
 }
 
@@ -180,7 +184,7 @@
   color: black;
   position: absolute;
   font-size: 0.8rem;
-  bottom: 0px; 
+  bottom: 0px;
   left: 0;
   right: 0;
   text-align: center;
@@ -190,7 +194,7 @@
   color: red;
   position: absolute;
   font-size: 1.2rem;
-  bottom: 0px; 
+  bottom: 0px;
   left: 0;
   right: 0;
   text-align: center;
@@ -200,7 +204,7 @@
   position: absolute;
   width: 90px;
   height: 45px;
-  top: -47px; 
+  top: -47px;
   right: -3px;
   border-radius: 5px;
   cursor: pointer;
@@ -222,9 +226,9 @@
 }
 
 .user-profile-post-img img {
-  width: 100%; 
-  height: auto;
-  max-height: 100%; 
+  width: 100%;
+  height: 70%;
+  max-height: 100%;
   object-fit: cover;
 }
 
@@ -233,9 +237,8 @@
   align-items: center;
   text-align: center;
   justify-content: center;
-  flex-grow: 1; 
+  flex-grow: 1;
   max-width: 50px;
   width: 50px;
   margin-top: 165px;
 }
-

@@ -53,6 +53,10 @@ var distanceOverlay: any = null;
 var planDay: any = null;
 
 export default function Planning() {
+  const token = localStorage.getItem("token");
+  const email = localStorage.getItem("email");
+  const [viewable, setViewable] = useState<boolean>(true);
+
   const [map, setMap] = useState<Window["kakao"]["maps"]["Map"] | null>(null);
   const [planData, setPlanData] = useState(plans);
   const [planData2, setPlanData2] = useState(plans);
@@ -576,9 +580,9 @@ export default function Planning() {
   //     const response = await axios.get(
   //       `http://localhost:8080/Callyia/access/resource-by-pno/${pno}`,
   //       {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
+  // headers: {
+  //   Authorization: `Bearer ${token}`,
+  // },
   //       }
   //     );
   //     console.log(response.data);
@@ -590,7 +594,11 @@ export default function Planning() {
   const fetchSearch = (searchKeyword: string) => {
     const url = `http://localhost:8080/Callyia/planning/search?keyword=${searchKeyword}`;
 
-    fetch(url)
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
+
+    fetch(url, { headers })
       .then((response) => {
         if (!response.ok) {
           throw new Error(
@@ -689,13 +697,14 @@ export default function Planning() {
         planDTO: {
           title: titleText.textContent,
           day: dayParam ? dayParam : 1,
-          userId: "Hello UserID",
+          userId: email,
         },
       };
 
       const options = {
         method: "POST",
         headers: {
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json", // 전송하는 데이터 타입 설정
         },
         body: JSON.stringify(requestBody), // 데이터를 JSON 문자열로 변환하여 전송
@@ -715,6 +724,7 @@ export default function Planning() {
         })
         .catch((error) => {
           console.error("Error fetching data:", error);
+          console.log(options);
         });
 
       toast.success("저장 성공!");
@@ -775,6 +785,7 @@ export default function Planning() {
       const options = {
         method: "POST",
         headers: {
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json", // 전송하는 데이터 타입 설정
         },
         body: JSON.stringify(requestBody), // 데이터를 JSON 문자열로 변환하여 전송
@@ -904,11 +915,15 @@ export default function Planning() {
       if (pnoParam) {
         // fetchByPno(parseInt(pnoParam, 10));
 
+        const headers = {
+          Authorization: `Bearer ${token}`,
+        };
+
         const url1 = `http://localhost:8080/Callyia/planning/getDB?pno=${pnoParam}`;
         const url2 = `http://localhost:8080/Callyia/planning/getDay?pno=${pnoParam}`;
 
         try {
-          const response1 = await fetch(url1);
+          const response1 = await fetch(url1, { headers });
           if (!response1.ok) {
             throw new Error(
               `Network response was not ok: ${response1.statusText}`
@@ -916,7 +931,7 @@ export default function Planning() {
           }
           const data1 = await response1.json();
 
-          const response2 = await fetch(url2);
+          const response2 = await fetch(url2, { headers });
           if (!response2.ok) {
             throw new Error(
               `Network response was not ok: ${response2.statusText}`
@@ -957,10 +972,14 @@ export default function Planning() {
   }, []);
 
   useEffect(() => {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
+
     if (pnoParam) {
       const url = `http://localhost:8080/Callyia/planning/getPlan?pno=${pnoParam}`;
 
-      fetch(url)
+      fetch(url, { headers })
         .then((response) => {
           if (!response.ok) {
             throw new Error(
@@ -992,12 +1011,25 @@ export default function Planning() {
             planDay = data.day;
             setDroppables(setDay(planDay));
           }
+
+          if (data.userId) {
+            console.log("data.userId : " + data.userId);
+            console.log("email : " + email);
+            setViewable(data.userId === email);
+
+            console.log(viewable);
+          }
         })
         .catch((error) => {
           console.error("Error fetching data:", error);
         });
     }
   }, []);
+
+  useEffect(() => {
+    console.log(viewable);
+    if (!viewable) navigate("../UnAuthorized");
+  }, [viewable]);
 
   const [inputValues, setInputValues] = useState<
     Array<Array<{ [key: string]: string }>>
@@ -1093,6 +1125,7 @@ export default function Planning() {
     const options = {
       method: "POST",
       headers: {
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json", // 전송하는 데이터 타입 설정
       },
       body: JSON.stringify(requestBody), // 데이터를 JSON 문자열로 변환하여 전송
@@ -1135,7 +1168,6 @@ export default function Planning() {
 
   return (
     <div className="div-container">
-      {/* 토글 버튼 관련 컴포넌트 */}
       {area1 && (
         <div
           style={{ width: "800px", height: "350px" }}

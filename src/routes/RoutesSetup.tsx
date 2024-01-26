@@ -13,6 +13,7 @@ import UserProfilePage from "./UserProfilePage";
 import NoMatch from "./NoMatch";
 import TourPage from "./TourPage";
 import SignInPageFind from "./SignInPageFind";
+import UnAuthorized from "./UnAuthorized";
 import PrivateRoute from "./AuthRoute/PrivateRoute";
 
 export default function RoutesSetup() {
@@ -70,6 +71,10 @@ export default function RoutesSetup() {
       </Route>
       <Route path="/ScheduleListPage" element={<Layout />}>
         <Route index element={<ScheduleList />} />
+        <Route path="*" element={<NoMatch />} />
+      </Route>
+      <Route path="/UnAuthorized" element={<Layout />}>
+        <Route index element={<UnAuthorized />} />
         <Route path="*" element={<NoMatch />} />
       </Route>
     </Routes>

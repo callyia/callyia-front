@@ -184,7 +184,7 @@ export default function UserProfilePage() {
               scheduleThumbnailDTOs.map(
                 (scheduleThumbnailDTO: any, index: any) => (
                   <div
-                    className="flex-col justify-center border-2 user-profile-post-img"
+                    className="flex-col border-2 user-profile-post-img"
                     onClick={() =>
                       scheduleClick({
                         sno: scheduleThumbnailDTO.scheduleDTO.sno,
@@ -194,7 +194,7 @@ export default function UserProfilePage() {
                     <img
                       src={scheduleThumbnailDTO.image}
                       alt="image"
-                      className="w-6 h-6"
+                      className="user-profile-thumbnail-image"
                     />
                     <div className="mt-2 mb-2">
                       <span className="mr-2 text-xl font-bold">
@@ -204,68 +204,19 @@ export default function UserProfilePage() {
                         {scheduleThumbnailDTO.scheduleDTO.sName}
                       </span>
                     </div>
-                    <div>
+                    {/* <div>
                       email : {scheduleThumbnailDTO.scheduleDTO.member_email}
                     </div>
                     <div>
                       nickname :{" "}
                       {scheduleThumbnailDTO.scheduleDTO.member_nickname}
-                    </div>
+                    </div> */}
                     <div>
                       Day : {scheduleThumbnailDTO.scheduleDTO.total_Day}
                     </div>
                   </div>
                 )
               )}
-
-            {/* <div className="user-profile-post-img">
-              <img src="./profile/profile_like_icon.png" alt="post i liked" />
-            </div>
-            <div className="user-profile-post-img">
-              <img src="./profile/profile_like_icon.png" alt="post i liked" />
-            </div>
-            <div className="user-profile-post-img">
-              <img src="./profile/profile_like_icon.png" alt="post i liked" />
-            </div>
-            <div className="user-profile-post-img">
-              <img src="./profile/profile_like_icon.png" alt="post i liked" />
-            </div>
-            <div className="user-profile-post-img">
-              <img src="./profile/profile_like_icon.png" alt="post i liked" />
-            </div>
-            <div className="user-profile-post-img">
-              <img src="./profile/profile_like_icon.png" alt="post i liked" />
-            </div>
-            <div className="user-profile-post-img">
-              <img src="./profile/profile_like_icon.png" alt="post i liked" />
-            </div>
-            <div className="user-profile-post-img">
-              <img src="./profile/profile_like_icon.png" alt="post i liked" />
-            </div>
-            <div className="user-profile-post-img">
-              <img src="./profile/profile_like_icon.png" alt="post i liked" />
-            </div>
-            <div className="user-profile-post-img">
-              <img src="./profile/profile_like_icon.png" alt="post i liked" />
-            </div>
-            <div className="user-profile-post-img">
-              <img src="./profile/profile_like_icon.png" alt="post i liked" />
-            </div>
-            <div className="user-profile-post-img">
-              <img src="./profile/profile_like_icon.png" alt="post i liked" />
-            </div>
-            <div className="user-profile-post-img">
-              <img src="./profile/profile_like_icon.png" alt="post i liked" />
-            </div>
-            <div className="user-profile-post-img">
-              <img src="./profile/profile_like_icon.png" alt="post i liked" />
-            </div>
-            <div className="user-profile-post-img">
-              <img src="./profile/profile_like_icon.png" alt="post i liked" />
-            </div>
-            <div className="user-profile-post-img">
-              <img src="./profile/profile_like_icon.png" alt="post i liked" />
-            </div> */}
           </div>
         </div>
       </div>
