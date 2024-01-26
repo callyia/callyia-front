@@ -778,7 +778,7 @@ export default function Planning() {
           pno: pnoParam,
           title: titleText.textContent,
           day: dayParam ? dayParam : 1,
-          userId: "Hello UserID",
+          userId: email,
         },
       };
 
@@ -1115,7 +1115,7 @@ export default function Planning() {
       scheduleDTO: {
         sno: null,
         total_Day: planDay,
-        member_email: "Hello UserID",
+        member_email: email,
         sName: titleText.textContent,
       },
     };
