@@ -1,6 +1,7 @@
 .placeCard-div {
   width: 360px;
   height: 100px;
+  display: flex;
   background-color: #ffb703;
   border-radius: 15px 15px 15px 15px;
   margin: 10px;
@@ -20,12 +21,74 @@
   color: #ffffff;
 }
 
+.place-image-contaier {
+  width: 100px;
+  height: 100px;
+  /* background-color: #ffffff; */
+  border-radius: 15px 0 0 15px;
+}
+
+.place-text-container {
+  width: 220px;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  /* background-color: #1f1acd; */
+}
+
+.place-title-container {
+  /* background-color: #1a11df; */
+  width: 100%;
+  height: 30px;
+  margin-top: 10px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.place-content-container {
+  /* background-color: #444444; */
+  width: 100%;
+  height: 50px;
+  margin-bottom: 10px;
+  overflow: hidden;
+  /* white-space: nowrap; */
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+}
+
+.place-title-span {
+  /* background-color: #eeeeee; */
+  font-size: 18px;
+  font-weight: bold;
+  width: 100%;
+  height: 40px;
+  margin-bottom: 10px;
+}
+
+.place-content-span {
+  /* background-color: #eeeeee; */
+  font-size: 16px;
+  width: 100%;
+  height: 40px;
+  margin-bottom: 10px;
+}
+
+.place-btn-div {
+  width: 40px;
+  height: 40px;
+  margin-top: 60px;
+  /* background-color: #da2f21; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0px 0px 15px 0px;
+}
+
 .place-image {
   width: 80px;
   height: 80px;
-  background-color: #eedede;
+
   border-radius: 15px 0 0 15px;
-  float: left;
   margin: 10px;
   border-radius: 50%;
   border: 4px solid #ffffff;
@@ -33,11 +96,21 @@
 }
 
 .plus-btn {
-  position: relative;
   width: 30px;
   height: 30px;
-  right: -120px;
-  bottom: -5px;
   background-color: #eeeeee;
   border-radius: 50%;
+}
+
+.pline {
+  width: 95%;
+  height: 1px;
+  /* background-color: #555555; */
+}
+
+.pline-contaier {
+  width: 100%;
+  height: 3px;
+  display: flex;
+  justify-content: center;
 }
