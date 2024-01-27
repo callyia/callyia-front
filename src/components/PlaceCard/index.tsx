@@ -67,13 +67,23 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ placeCard, onClick }) => {
 
   return (
     <div className="placeCard-div" onClick={DivClick}>
-      <img src={image} alt="place_img" className="place-image" />
-      <div className="w-full h-2"></div>
-      <div className="w-full h-8">
-        <span className="ml-3 text-lg placeCard-text">{placeName}</span>
+      <div className="place-image-contaier">
+        <img src={image} alt="place_img" className="place-image" />
       </div>
-      <div className="w-full h-10">
-        <span className="ml-3 placeCard-text">{placeContent}</span>
+      <div className="place-text-container">
+        <div className="place-title-container">
+          <span className="place-title-span placeCard-text">{placeName}</span>
+        </div>
+        {/* <div className="pline-contaier">
+          <div className="pline"></div>
+        </div> */}
+        <div className="place-content-container">
+          <span className="place-content-span placeCard-text">
+            {placeContent}
+          </span>
+        </div>
+      </div>
+      <div className="place-btn-div">
         <button type="button" className="plus-btn" onClick={BtnClick}></button>
       </div>
     </div>
