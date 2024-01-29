@@ -112,7 +112,7 @@ input[type="text"] {
 
 .main-trip-plan-section-span-title {
   text-shadow: -1px 0 #000, 0 1px #000, 1px 0 #000, 0 -1px #000;
-  font-size: 37px;
+  font-size: 45px;
   font-weight: 700;
   color: white;
   font-family: "GmarketSans500";
@@ -164,17 +164,37 @@ input[type="text"] {
   width: 70%;
 }
 
-.main-section-div-community {
-  height: 1250px;
+.main-section-div-community-left {
+  width: 33%;
+  height: 670px;
   margin-bottom: 20px;
-  background-color: white;
-  border: 3px solid #abcdef;
+  padding: 30px;
+  word-break: keep-all;
+  background-image: url("../../../public/dummyimages/main-community-image3.jpg");
+  background-size: cover;
+  background-position: center center;
+}
+
+.main-section-div-community-right {
+  height: 670px;
+  margin-bottom: 20px;
+  background-color: #2f6690;
   padding: 10px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   min-height: 200px;
-  width: 70%;
-  overflow-y: auto;
+  width: 67%;
+}
+
+.main-section-div-community-top-right {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.main-section-div-community-grid-right {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 2px;
 }
 
 .main-section-div-sm {
@@ -310,10 +330,14 @@ input[type="text"] {
 }
 
 .list-card {
-  border: 0.5px solid #dddddd;
+  border: 1px solid #dddddd;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
   padding: 16px;
-  margin: 20px 80px 50px 80px;
+  width: 380px;
+  height: 270px;
+  margin: 15px;
   transition: transform 0.3s ease-in-out;
+  background-color: #fffdf7;
 }
 
 .list-card:hover {
@@ -429,4 +453,12 @@ input[type="text"] {
 }
 .main-frame {
   width: 100%;
+}
+
+.main-community-section-span-title {
+  font-size: 56px;
+  font-weight: 700;
+  font-family: "GmarketSans500";
+  color: white;
+  margin-bottom: 20px;
 }
