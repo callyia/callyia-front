@@ -1038,7 +1038,7 @@ export default function Planning() {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         setBasketData(data);
       })
       .catch((error) => {
