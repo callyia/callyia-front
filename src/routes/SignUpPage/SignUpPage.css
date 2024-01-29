@@ -182,6 +182,7 @@
 .SignUp-input-container .SignUp-input-wrap input:focus {
   outline: none;
 }
+
 .SignUp-btn-wrap {
   margin-top: 55px;
   display: flex;
