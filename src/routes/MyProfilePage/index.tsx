@@ -13,10 +13,11 @@ type UserInfo = {
 }
 
 export default function MyProfilePage() { 
-  const navigate = useNavigate();
+  // const navigate = useNavigate(); // 수정
   
   const [isEditing, setIsEditing] = useState(false); 
   const [profileImage, setProfileImage] = useState<string>('./dummyimages/image1.jpeg'); // 기본 이미지
+  const [updateProfileImage, setupdateProfileImage] = useState<string>(); // 기본 이미지
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [currentContent, setCurrentContent] = useState('default');
 
@@ -38,6 +39,7 @@ export default function MyProfilePage() {
     })
     .then(response => {
       setUserInfo(response.data);
+      setProfileImage(response.data.profileImage);
     })
 
     .catch(error => {
@@ -52,6 +54,7 @@ export default function MyProfilePage() {
       fileReader.onloadend = () => {
         if (typeof fileReader.result === 'string') {
           setProfileImage(fileReader.result);
+          setupdateProfileImage(fileReader.result);
         }
       };
       fileReader.readAsDataURL(file);
@@ -86,7 +89,7 @@ export default function MyProfilePage() {
             >
               <img src={profileImage} alt="Profile" className={`my-profile-picture ${isEditing ? 'my-profile-picture-hover' : ''}`} onClick={handleImageClick}
               style={{ cursor: 'pointer', textAlign: 'center', margin: 'auto', display: 'block' }}/>
-              <input type="file" ref={fileInputRef} onChange={handleProfileImageChange} accept="image/*"
+              <input type="file" src={updateProfileImage} ref={fileInputRef} onChange={handleProfileImageChange} accept="image/*"
               style={{ display: 'none' }} />
                 
             </div>
@@ -156,8 +159,6 @@ export default function MyProfilePage() {
               profileImage={profileImage} 
               aboutMeText={userInfo?.aboutMe || ''}
               handleProfileImageChange={handleProfileImageChange}
-              // handleAboutMeChange={(newText) => userInfo && setUserInfo({ ...userInfo, aboutMe: newText })}
-              // handleUpdateClick={handleUpdateClick}
               currentContent={currentContent}
               />
             </div>

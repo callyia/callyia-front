@@ -95,7 +95,7 @@ const CartContent = () => {
     // 검색 결과 유무에 따라 데이터 렌더링
     const dataToRender = userBasketResults.length > 0 ? userBasketResults : tourData;
     return dataToRender.map((tour) => (
-      <div key={tour.placeId} className="aaadddaaaddd">
+      <div key={tour.placeId} className="cart-card">
         <div
           className="ListContent shadowList"
           role="button"
