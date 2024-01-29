@@ -149,13 +149,13 @@ const SignUp = () => {
       console.log(imageFormData);
       console.log(profileImage);
 
-      const token = localStorage.getItem("token");
+      // const token = localStorage.getItem("token");
       const imageUploadResponse = await axios.post(
         "http://localhost:8080/Callyia/member/upload",
         imageFormData,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            // Authorization: `Bearer ${token}`,
             "Content-Type": "multipart/form-data",
           },
         }
@@ -182,7 +182,7 @@ const SignUp = () => {
         }),
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            // Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
         }
