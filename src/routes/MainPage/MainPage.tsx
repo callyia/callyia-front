@@ -120,7 +120,7 @@ const Main: React.FC<MainPageProps> = () => {
     const fetchScheduleData = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8080/Callyia/Schedule/getAllSchedule`
+          `http://localhost:8080/Callyia/Schedule/getRecentSchedule`
         );
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -336,6 +336,69 @@ const Main: React.FC<MainPageProps> = () => {
           </div>
         </div>
         <div className="main-section-container">
+          <section className="main-section-div-community-left">
+            <span className="main-community-section-span-title">
+              회원들이 공유한 특별한 여행 일정들을 만나보세요.
+            </span>
+          </section>
+          <section className="main-section-div-community-right">
+            <div className="main-section-div-community-top-right">
+              <span className="ml-4 text-xl font-semibold">
+                가장 최근에 공유된 여행 일정들입니다.
+              </span>
+              <button
+                className="mr-4 btn btn-sm"
+                onClick={() => navigate(`/ScheduleListPage/`)}
+              >
+                일정 공유 커뮤니티로 이동하기
+              </button>
+            </div>
+
+            <div className="main-section-div-community-grid-right">
+              {scheduleData.map((schedule) => {
+                // schedule.sno에 해당하는 매칭 데이터 찾기
+                const matchingDetail = matchingDetailImages.find(
+                  (detail) => detail.sno === schedule.sno
+                );
+
+                // 매칭 데이터가 있을 때 렌더링
+                return (
+                  <div
+                    key={schedule.sno}
+                    className="list-card"
+                    onClick={() => navigate(`/SchedulePage/${schedule.sno}`)}
+                  >
+                    {/* 프로필 클릭 시 해당 유저페이지로 이동 */}
+                    <span className="profile-info">
+                      <img
+                        className="profile-image"
+                        src={schedule.member_profile_image}
+                        alt="Profile"
+                      />
+                      <div className="profile-details">
+                        <h1 style={{ fontSize: "20px", margin: 0 }}>
+                          {schedule.member_nickname}
+                          {/* <p>{schedule.regDate.toDateString()}</p> */}
+                        </h1>
+                        {/* Add other details as needed */}
+                      </div>
+                    </span>
+                    <h1
+                      style={{
+                        fontSize: "30px",
+                        fontWeight: "bold",
+                        margin: "15px",
+                      }}
+                    >
+                      {schedule.sName}
+                    </h1>
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+        </div>
+        <div className="main-section-container">
           <section className="main-section-div" style={{ marginRight: "33%" }}>
             <span className="main-section-span-title">여행 정보</span>
             <div className="main-tour-info-section">
@@ -410,55 +473,6 @@ const Main: React.FC<MainPageProps> = () => {
             <div className="main-info-pagination-controls">
               {renderPagination()}
             </div>
-          </section>
-        </div>
-        <div className="main-section-container">
-          <section
-            className="main-section-div-community"
-            style={{ marginLeft: "33%" }}
-          >
-            <span className="main-section-span-title">여행 공유 커뮤니티</span>
-
-            {scheduleData.map((schedule) => {
-              // schedule.sno에 해당하는 매칭 데이터 찾기
-              const matchingDetail = matchingDetailImages.find(
-                (detail) => detail.sno === schedule.sno
-              );
-
-              // 매칭 데이터가 있을 때 렌더링
-              return (
-                <div
-                  key={schedule.sno}
-                  className="list-card"
-                  onClick={() => navigate(`/SchedulePage/${schedule.sno}`)}
-                >
-                  {/* 프로필 클릭 시 해당 유저페이지로 이동 */}
-                  <span className="profile-info">
-                    <img
-                      className="profile-image"
-                      src={schedule.member_profile_image}
-                      alt="Profile"
-                    />
-                    <div className="profile-details">
-                      <h1 style={{ fontSize: "20px", margin: 0 }}>
-                        {schedule.member_nickname}
-                        {/* <p>{schedule.regDate.toDateString()}</p> */}
-                      </h1>
-                      {/* Add other details as needed */}
-                    </div>
-                  </span>
-                  <h1
-                    style={{
-                      fontSize: "30px",
-                      fontWeight: "bold",
-                      margin: "15px",
-                    }}
-                  >
-                    {schedule.sName}
-                  </h1>
-                </div>
-              );
-            })}
           </section>
         </div>
       </main>
