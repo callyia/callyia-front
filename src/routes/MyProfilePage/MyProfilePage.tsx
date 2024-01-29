@@ -10,13 +10,10 @@ import axios from 'axios';
 interface MyProfileProps {
   isEditing: boolean;
   toggleIsEditing: (isEditing?: boolean) => void;
-  profileImage: string;
+  profileImage: String;
   handleProfileImageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   aboutMeText: string;
-  // handleAboutMeChange: (newText: string) => void;
-  // handleUpdateClick: () => void;
   currentContent: string;
-  // currentContent: (newContent: string) => void;
 }
 
 function formatNumber(num: number) {
@@ -36,14 +33,11 @@ const MyProfile: React.FC<MyProfileProps> = ({
   profileImage, 
   handleProfileImageChange, 
   aboutMeText, 
-  // handleAboutMeChange,
-  // handleUpdateClick,
   currentContent 
 }) => {
   const [text, setText] = useState('');
 
   const likesCount = 12223243;
-  const email = 'aaa@aaa.aaa';
 
   const handleTextChange = (newText: string) => {
     setText(newText);
@@ -68,8 +62,6 @@ const MyProfile: React.FC<MyProfileProps> = ({
   const handleUpdateClick = () => {
     const token = localStorage.getItem('token');
     const email = localStorage.getItem('email');
-    const profileImage = localStorage.getItem('profileImage');
-  
     if (!token || !email) {
       console.error('No token or email found');
       return;
@@ -78,7 +70,8 @@ const MyProfile: React.FC<MyProfileProps> = ({
     axios.put(`http://localhost:8080/Callyia/member/updateMember?email=${email}`, {
       email: email,
       aboutMe: text,
-      profileImage: profileImage
+      // profileImage: profileImage
+      profileImage: 'https://upload.wikimedia.org/wikipedia/commons/0/0c/Mount_Everest%2C_Himalayas.jpg'
     }, {
       headers: {
         Authorization: `Bearer ${token}`
@@ -86,6 +79,8 @@ const MyProfile: React.FC<MyProfileProps> = ({
     })
     .then(response => {
       toggleIsEditing(); 
+      // console.log(response.data);
+      window.location.reload();
     })
 
     .catch(error => {
