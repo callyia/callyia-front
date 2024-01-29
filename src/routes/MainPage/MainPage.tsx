@@ -327,7 +327,7 @@ const Main: React.FC<MainPageProps> = () => {
             <span onClick={() => navigate(`/TourPage/Tourist`)}>Place</span>
           </div>
           <div className="restaurant-navigate">
-            <span onClick={() => navigate(`/TourPage/Food`)}>restaurant</span>
+            <span onClick={() => navigate(`/TourPage/Food`)}>Restaurant</span>
           </div>
           <div className="community-navigate">
             <span onClick={() => navigate(`/ScheduleListPage/`)}>
