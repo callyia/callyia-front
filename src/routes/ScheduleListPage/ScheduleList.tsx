@@ -109,6 +109,7 @@ export default function ScheduleList() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
   return (
     <div className="ScheduleList-section-container">
       <section className="ScheduleList-section-div-community">
@@ -142,6 +143,12 @@ export default function ScheduleList() {
                   className="ScheduleList-profile-image"
                   src={schedule.member_profile_image}
                   alt="Profile"
+                  onClick={() => {
+                    // 클릭 시 UserProfilePage로 이동
+                    navigate(
+                      `/UserProfilePage?userid=${schedule.member_email}`
+                    );
+                  }}
                 />
                 <div className="ScheduleList-profile-details">
                   <h1 style={{ fontSize: "20px", margin: 0 }}>

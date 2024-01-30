@@ -1,8 +1,9 @@
 //ScheduleCard.tsx
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "../routes/SchedulePage/SchedulePosting.css"; // Schedule.css 파일을 import
 import swal from "sweetalert";
-import { FaPlus } from "react-icons/fa";
+import { TbBasketPlus } from "react-icons/tb";
 
 interface ScheduleItem {
   place_id: number;
@@ -19,6 +20,9 @@ interface ScheduleItem {
   rno: number[];
   sno: number;
   replyer_nickname: string[];
+  replyer_img: string[];
+  reply_regDate: Date[][];
+  reply_modDate: Date[][];
 }
 
 export interface ScheduleCardProps extends ScheduleItem {
@@ -42,80 +46,22 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
   reply_contents,
   replyer,
   replyer_nickname,
+  replyer_img,
   dno,
   rno,
-  sno,
+  // schedule_regdate,
+  // schedule_moddate,
+  reply_regDate,
+  reply_modDate,
 }) => {
+  const navigate = useNavigate();
   const [expanded, setExpanded] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
   const [cardHeight, setCardHeight] = useState<number | undefined>(undefined);
   const [inputData, setInputData] = useState("");
-  const [reply, setReply] = useState<string[]>(reply_contents);
-
-  const [loading, setLoading] = useState(false); // 댓글을 로드 중인지 여부
-  const [hasMore, setHasMore] = useState(true); // 불러올 댓글이 남아 있는지 여부
 
   const email = localStorage.getItem("email");
   const token = localStorage.getItem("token");
-  const handleScroll = () => {
-    // 스크롤 이벤트 핸들러
-    if (
-      window.innerHeight + document.documentElement.scrollTop + 10 >=
-      document.documentElement.offsetHeight
-    ) {
-      // 스크롤이 페이지 맨 아래에 도달하면 새로운 댓글을 로드합니다.
-      loadMoreComments();
-    }
-  };
-
-  const loadMoreComments = async () => {
-    if (loading || !hasMore) {
-      return;
-    }
-
-    try {
-      setLoading(true);
-
-      // 더 불러올 댓글을 서버에서 가져옵니다.
-      const response = await fetch(
-        `http://localhost:8080/Callyia/Schedule/loadMoreComments?sno=${sno}&page=${currentPage}`
-      );
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      const newComments = data.replyDTOList;
-
-      // 더 불러올 댓글이 없으면 hasMore를 false로 설정합니다.
-      if (newComments.length === 0) {
-        setHasMore(false);
-        return;
-      }
-
-      // 기존 댓글에 새로운 댓글을 추가합니다.
-      setReply((prevComments) => [...prevComments, ...newComments]);
-
-      // 현재 페이지를 증가시킵니다.
-      setCurrentPage((prevPage) => prevPage + 1);
-    } catch (error) {
-      console.error("Error loading more comments:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    // 스크롤 이벤트 리스너를 등록합니다.
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      // 컴포넌트가 언마운트될 때 이벤트 리스너를 해제합니다.
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
 
   const handleReplyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputData(event.target.value); //사용자가 입력한 텍스트를 setReply
@@ -311,6 +257,7 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
 
   const handleToggleExpand = () => {
     setShowDetails(!showDetails);
+    // setExpanded(!expanded);
   };
 
   return (
@@ -325,40 +272,111 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
       <p>
         TIP : {tip}
         <button className="moreBtn" onClick={handleToggleExpand}>
-          {expanded ? "접기" : "더보기"}
+          {showDetails ? "접기" : "더보기"}
         </button>
       </p>
-      <div className="card-buttons">
+      <div className="card-buttons" style={{ display: "flex" }}>
         {isInCart ? (
           <div></div>
         ) : (
-          <button className="add-to-cart-btn" onClick={onAddToCart}>
-            <FaPlus />
-            장바구니에 추가
+          <button
+            className="add-to-cart-btn"
+            onClick={onAddToCart}
+            style={{
+              width: "100px",
+              height: "100px",
+              justifyContent: "center",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <TbBasketPlus style={{ fontSize: "50px" }} />
           </button>
         )}
       </div>
       {showDetails && (
         <div className="details">
           <img src={detail_images} />
-          <div className="reply">
-            <input
-              type="text"
-              placeholder="댓글 입력"
-              onChange={handleReplyChange}
-              value={inputData}
-              style={{ backgroundColor: "white" }}
-            />
-            <button onClick={handleRegister}>입력</button>
-          </div>
+
           <ul>
-            {reply.map((reply, index) => (
+            <div className="reply">
+              <input
+                type="text"
+                placeholder="댓글 입력"
+                onChange={handleReplyChange}
+                value={inputData}
+                style={{ backgroundColor: "white", marginTop: "9px" }}
+              />
+              <button onClick={handleRegister}>입력</button>
+            </div>
+            {reply_contents.map((reply, index) => (
               <li key={index} onClick={() => handlereplyClick(reply, index)}>
-                <span style={{ fontWeight: "bold", fontSize: "1.1em" }}>
-                  {replyer_nickname[index]}
+                <span
+                  style={{
+                    fontSize: "1.1em",
+                    display: "flex",
+                    justifyContent: "space-between", // 좌우 정렬
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    <img
+                      src={replyer_img[index]}
+                      alt="프로필 이미지"
+                      onClick={(e) => {
+                        e.stopPropagation(); // 부모 태그로  이벤트 이벤트 전파 방지
+                        // 클릭 시 UserProfilePage로 이동
+                        navigate(`/UserProfilePage?userid=${replyer[index]}`);
+                      }}
+                      style={{
+                        cursor: "pointer",
+                        marginRight: "5px",
+                        borderRadius: "50%",
+                        width: "70px",
+                        height: "70px",
+                      }}
+                    />
+                    {replyer_nickname[index]}
+                  </div>
+                  <span className="reply-Date" style={{ float: "right" }}>
+                    {reply_regDate[index]
+                      ? reply_regDate[index][0].toString()
+                      : "No Date"}
+                    년{" "}
+                    {reply_regDate[index]
+                      ? reply_regDate[index][1].toString()
+                      : "No Date"}
+                    월{" "}
+                    {reply_regDate[index]
+                      ? reply_regDate[index][2].toString()
+                      : "No Date"}
+                    일{" "}
+                    {reply_regDate[index]
+                      ? reply_regDate[index][3].toString()
+                      : "No Date"}
+                    시{" "}
+                    {reply_regDate[index]
+                      ? reply_regDate[index][4].toString()
+                      : "No Date"}
+                    분
+                  </span>
                 </span>
+
                 {"    "}
-                {reply}
+                <div
+                  style={{
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {reply}
+                </div>
               </li>
             ))}
           </ul>

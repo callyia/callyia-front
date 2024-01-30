@@ -1,9 +1,10 @@
 //SchedulePosting.tsx
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 
 import ScheduleCard, { ScheduleItem } from "../../components/ScheduleCard";
 import "./SchedulePosting.css";
+import { TbBasket, TbBasketMinus, TbMapPin2 } from "react-icons/tb";
 
 // 지도
 declare global {
@@ -12,15 +13,18 @@ declare global {
   }
 }
 
+//back쪽 DTO에 있는 변수명이랑 완전 똑같이
 interface ScheduleDTO {
   sno: number;
   total_Day: number;
   member_email: string;
   sName: string;
   member_nickname: string;
-  // regDate: DateTime;
+  // regdate: Date;
+  // moddate: Date;
 }
 
+//back쪽 DTO에 있는 변수명이랑 완전 똑같이
 interface DetailScheduleItem {
   dno: number;
   tip: string;
@@ -30,14 +34,19 @@ interface DetailScheduleItem {
   place_id: number;
 }
 
+//back쪽 DTO에 있는 변수명이랑 완전 똑같이
 interface ReplyDTO {
   rno: number;
   replyContents: string;
   dno: number;
   replyer: string;
   replyer_nickname: string;
+  replyer_img: string;
+  reply_regDate: Date[];
+  reply_modDate: Date[];
 }
 
+//back쪽 DTO에 있는 변수명이랑 완전 똑같이
 interface TourDTO {
   placeId: number;
   placeName: string;
@@ -49,6 +58,7 @@ interface TourDTO {
   image: string;
 }
 
+//back쪽 DTO에 있는 변수명이랑 완전 똑같이
 interface MemberDTO {
   email: string;
   name: string;
@@ -73,7 +83,7 @@ export default function SchedulePosting() {
     replyDTOList: [],
     tourDTOList: [],
   });
-
+  const navigate = useNavigate();
   const { sno } = useParams();
 
   const token = localStorage.getItem("token");
@@ -305,9 +315,21 @@ export default function SchedulePosting() {
       .filter((reply) => reply.dno === detailItem.dno)
       .map((reply) => reply.replyer_nickname);
 
+    const replyerImg = scheduleData.replyDTOList
+      .filter((reply) => reply.dno === detailItem.dno)
+      .map((reply) => reply.replyer_img);
+
     const rno = scheduleData.replyDTOList
       .filter((reply) => reply.dno === detailItem.dno)
       .map((reply) => reply.rno);
+
+    const reply_regdate = scheduleData.replyDTOList
+      .filter((reply) => reply.dno === detailItem.dno)
+      .map((reply) => reply.reply_regDate);
+
+    const reply_moddate = scheduleData.replyDTOList
+      .filter((reply) => reply.dno === detailItem.dno)
+      .map((reply) => reply.reply_modDate);
 
     return {
       ...detailItem,
@@ -319,7 +341,10 @@ export default function SchedulePosting() {
       reply_contents: replyContents,
       replyer: replyer,
       replyer_nickname: replyerNickname,
+      replyer_img: replyerImg,
       rno: rno,
+      reply_modDate: reply_moddate,
+      reply_regDate: reply_regdate,
     };
   };
 
@@ -332,12 +357,18 @@ export default function SchedulePosting() {
             <div className="Schedule-header">
               <div className="Schedule-profile-info">
                 <div className="Schedule-profile-icon">
-                  <Link to="/UserProfilePage">
-                    <img
-                      src={scheduleData.memberDTO?.profileImage}
-                      alt="프로필 이미지"
-                    />
-                  </Link>
+                  <img
+                    src={scheduleData.memberDTO?.profileImage}
+                    alt="프로필 이미지"
+                    onClick={() => {
+                      // 클릭 시 UserProfilePage로 이동
+                      navigate(
+                        `/UserProfilePage?userid=${scheduleData.memberDTO?.email}`
+                      );
+                    }}
+                    style={{ cursor: "pointer" }}
+                  />
+
                   <p
                     style={{
                       fontSize: "18px",
@@ -367,7 +398,6 @@ export default function SchedulePosting() {
                     );
                     return (
                       <ScheduleCard
-                        key={transformedItem.place_id}
                         {...transformedItem}
                         onClick={() =>
                           DivClick(
@@ -401,7 +431,21 @@ export default function SchedulePosting() {
           {/* <Mymap /> */}
 
           <div className="MapArea">
-            <h2>지도</h2>
+            <h2
+              style={{
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <TbMapPin2
+                style={{
+                  fontSize: "50px",
+                  marginTop: "7px",
+                  marginRight: "5px",
+                }}
+              />
+              지도
+            </h2>
             <div id="map" style={{ width: "47vw", height: "50vh" }} />
           </div>
         </div>
@@ -410,16 +454,44 @@ export default function SchedulePosting() {
           {/* <Cart /> */}
 
           <div className={`cart  "hovered" : ""}`}>
-            <h2>장바구니</h2>
+            <h2
+              style={{
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <TbBasket
+                style={{
+                  fontSize: "50px",
+                  marginTop: "7px",
+                  marginRight: "5px",
+                }}
+              />
+              장바구니
+            </h2>
             {cart.map((item, index) => (
               <div className="schedule-card-cart" key={item.place_id}>
-                <span className="schedule-number">{item.place_name}</span>
-                <h3>{item.place_name}</h3>
-                <h3>Tip : {item.tip}</h3>
-
-                <button onClick={() => handleRemoveFromCart(item.place_id)}>
-                  제거
-                </button>
+                <div
+                  style={{ borderBottom: "1px solid #bdbdbd", height: "100px" }}
+                >
+                  <span className="schedule-number">{item.place_name}</span>
+                  <button
+                    onClick={() => handleRemoveFromCart(item.place_id)}
+                    style={{
+                      justifyContent: "center",
+                      display: "flex",
+                      alignItems: "center",
+                      float: "right",
+                    }}
+                  >
+                    <TbBasketMinus
+                      style={{
+                        fontSize: "50px",
+                      }}
+                    />
+                  </button>
+                </div>
+                <img src={item.detail_images} />
               </div>
             ))}
           </div>
