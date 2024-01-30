@@ -255,23 +255,35 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
     setShowDetails(!showDetails);
   };
 
-  // Date 객체를 받아서 "YYYY,MM,DD,HH,MM" 형식으로 포맷팅하는 함수
-  const formatDateTime = (date: Date): string => {
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1; // 월은 0부터 시작하므로 1을 더합니다.
-    const day = date.getDate();
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
+  // // Function to format a single Date object or an array of Date objects
+  // const formatDateTime = (dates: Date | Date[] | null): string | string[] => {
+  //   const formatDate = (date: Date): string => {
+  //     const year = date.getFullYear();
+  //     const month = date.getMonth() + 1;
+  //     const day = date.getDate();
+  //     const hours = date.getHours();
+  //     const minutes = date.getMinutes();
 
-    // 각 값을 두 자리 숫자로 포맷팅
-    const formattedMonth = month < 10 ? `0${month}` : `${month}`;
-    const formattedDay = day < 10 ? `0${day}` : `${day}`;
-    const formattedHours = hours < 10 ? `0${hours}` : `${hours}`;
-    const formattedMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
+  //     const formattedMonth = month < 10 ? `0${month}` : `${month}`;
+  //     const formattedDay = day < 10 ? `0${day}` : `${day}`;
+  //     const formattedHours = hours < 10 ? `0${hours}` : `${hours}`;
+  //     const formattedMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
 
-    // 포맷팅된 문자열 반환
-    return `${year},${formattedMonth},${formattedDay},${formattedHours},${formattedMinutes}`;
-  };
+  //     return `${year},${formattedMonth},${formattedDay},${formattedHours},${formattedMinutes}`;
+  //   };
+
+  //   if (dates === null) {
+  //     return "No Date";
+  //   } else if (Array.isArray(dates)) {
+  //     // Handle array of Date objects
+  //     return dates.map((date) => formatDate(date));
+  //   } else {
+  //     // Handle single Date object
+  //     return formatDate(dates);
+  //   }
+  // };
+
+  // console.log(reply_regDate.map(formatDateTime));
 
   return (
     <div
