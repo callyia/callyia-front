@@ -459,6 +459,7 @@ const RegistPage: React.FC<RegistPageProps> = ( {checkColumnData} ) => {
             <select
               className="w-1/5"
               value={checkColumn}
+              style={{ backgroundColor: "white" }}
               onChange={(e) => setCheckColumn(e.target.value)}
             >
               <option value="전체">전체</option>
@@ -470,6 +471,7 @@ const RegistPage: React.FC<RegistPageProps> = ( {checkColumnData} ) => {
               placeholder={getPlaceholder()}
               value={keyword}
               onChange={(e) => setKeyword(e.target.value)}
+              style={{ backgroundColor: "white" }}
               className="w-3/5 outline-none"
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
@@ -534,6 +536,7 @@ const RegistPage: React.FC<RegistPageProps> = ( {checkColumnData} ) => {
                     type="text"
                     name=""
                     id=""
+                    style={{ backgroundColor: "white" }}
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
                   />
