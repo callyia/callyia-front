@@ -1,6 +1,6 @@
 //SchedulePosting.tsx
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 
 import ScheduleCard, { ScheduleItem } from "../../components/ScheduleCard";
 import "./SchedulePosting.css";
@@ -18,7 +18,8 @@ interface ScheduleDTO {
   member_email: string;
   sName: string;
   member_nickname: string;
-  // regDate: DateTime;
+  // regdate: Date;
+  // moddate: Date;
 }
 
 interface DetailScheduleItem {
@@ -36,6 +37,8 @@ interface ReplyDTO {
   dno: number;
   replyer: string;
   replyer_nickname: string;
+  reply_regDate: Date[]; //back쪽 replyDTO에 있는 변수명이랑 완전 똑같이 해야 하네 씨발 삽질 존나했네
+  reply_modDate: Date[];
 }
 
 interface TourDTO {
@@ -73,7 +76,7 @@ export default function SchedulePosting() {
     replyDTOList: [],
     tourDTOList: [],
   });
-
+  const navigate = useNavigate();
   const { sno } = useParams();
 
   const token = localStorage.getItem("token");
@@ -309,6 +312,14 @@ export default function SchedulePosting() {
       .filter((reply) => reply.dno === detailItem.dno)
       .map((reply) => reply.rno);
 
+    const reply_regdate = scheduleData.replyDTOList
+      .filter((reply) => reply.dno === detailItem.dno)
+      .map((reply) => reply.reply_regDate);
+
+    const reply_moddate = scheduleData.replyDTOList
+      .filter((reply) => reply.dno === detailItem.dno)
+      .map((reply) => reply.reply_modDate);
+
     return {
       ...detailItem,
       place_name: tourItem.placeName,
@@ -320,6 +331,8 @@ export default function SchedulePosting() {
       replyer: replyer,
       replyer_nickname: replyerNickname,
       rno: rno,
+      reply_modDate: reply_moddate,
+      reply_regDate: reply_regdate,
     };
   };
 
@@ -332,12 +345,18 @@ export default function SchedulePosting() {
             <div className="Schedule-header">
               <div className="Schedule-profile-info">
                 <div className="Schedule-profile-icon">
-                  <Link to="/UserProfilePage">
-                    <img
-                      src={scheduleData.memberDTO?.profileImage}
-                      alt="프로필 이미지"
-                    />
-                  </Link>
+                  <img
+                    src={scheduleData.memberDTO?.profileImage}
+                    alt="프로필 이미지"
+                    onClick={() => {
+                      // 클릭 시 UserProfilePage로 이동
+                      navigate(
+                        `/UserProfilePage?userid=${scheduleData.memberDTO?.email}`
+                      );
+                    }}
+                    style={{ cursor: "pointer" }}
+                  />
+
                   <p
                     style={{
                       fontSize: "18px",
@@ -367,7 +386,6 @@ export default function SchedulePosting() {
                     );
                     return (
                       <ScheduleCard
-                        key={transformedItem.place_id}
                         {...transformedItem}
                         onClick={() =>
                           DivClick(

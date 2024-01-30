@@ -19,6 +19,8 @@ interface ScheduleItem {
   rno: number[];
   sno: number;
   replyer_nickname: string[];
+  reply_regDate: Date[][];
+  reply_modDate: Date[][];
 }
 
 export interface ScheduleCardProps extends ScheduleItem {
@@ -44,78 +46,18 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
   replyer_nickname,
   dno,
   rno,
-  sno,
+  // schedule_regdate,
+  // schedule_moddate,
+  reply_regDate,
+  reply_modDate,
 }) => {
   const [expanded, setExpanded] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
   const [cardHeight, setCardHeight] = useState<number | undefined>(undefined);
   const [inputData, setInputData] = useState("");
-  const [reply, setReply] = useState<string[]>(reply_contents);
-
-  const [loading, setLoading] = useState(false); // 댓글을 로드 중인지 여부
-  const [hasMore, setHasMore] = useState(true); // 불러올 댓글이 남아 있는지 여부
 
   const email = localStorage.getItem("email");
   const token = localStorage.getItem("token");
-  const handleScroll = () => {
-    // 스크롤 이벤트 핸들러
-    if (
-      window.innerHeight + document.documentElement.scrollTop + 10 >=
-      document.documentElement.offsetHeight
-    ) {
-      // 스크롤이 페이지 맨 아래에 도달하면 새로운 댓글을 로드합니다.
-      loadMoreComments();
-    }
-  };
-
-  const loadMoreComments = async () => {
-    if (loading || !hasMore) {
-      return;
-    }
-
-    try {
-      setLoading(true);
-
-      // 더 불러올 댓글을 서버에서 가져옵니다.
-      const response = await fetch(
-        `http://localhost:8080/Callyia/Schedule/loadMoreComments?sno=${sno}&page=${currentPage}`
-      );
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      const newComments = data.replyDTOList;
-
-      // 더 불러올 댓글이 없으면 hasMore를 false로 설정합니다.
-      if (newComments.length === 0) {
-        setHasMore(false);
-        return;
-      }
-
-      // 기존 댓글에 새로운 댓글을 추가합니다.
-      setReply((prevComments) => [...prevComments, ...newComments]);
-
-      // 현재 페이지를 증가시킵니다.
-      setCurrentPage((prevPage) => prevPage + 1);
-    } catch (error) {
-      console.error("Error loading more comments:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    // 스크롤 이벤트 리스너를 등록합니다.
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      // 컴포넌트가 언마운트될 때 이벤트 리스너를 해제합니다.
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
 
   const handleReplyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputData(event.target.value); //사용자가 입력한 텍스트를 setReply
@@ -313,6 +255,24 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
     setShowDetails(!showDetails);
   };
 
+  // Date 객체를 받아서 "YYYY,MM,DD,HH,MM" 형식으로 포맷팅하는 함수
+  const formatDateTime = (date: Date): string => {
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1; // 월은 0부터 시작하므로 1을 더합니다.
+    const day = date.getDate();
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+
+    // 각 값을 두 자리 숫자로 포맷팅
+    const formattedMonth = month < 10 ? `0${month}` : `${month}`;
+    const formattedDay = day < 10 ? `0${day}` : `${day}`;
+    const formattedHours = hours < 10 ? `0${hours}` : `${hours}`;
+    const formattedMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
+
+    // 포맷팅된 문자열 반환
+    return `${year},${formattedMonth},${formattedDay},${formattedHours},${formattedMinutes}`;
+  };
+
   return (
     <div
       className={`schedule-card ${expanded ? "expanded" : ""}`}
@@ -352,13 +312,20 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
             <button onClick={handleRegister}>입력</button>
           </div>
           <ul>
-            {reply.map((reply, index) => (
+            {reply_contents.map((reply, index) => (
               <li key={index} onClick={() => handlereplyClick(reply, index)}>
                 <span style={{ fontWeight: "bold", fontSize: "1.1em" }}>
                   {replyer_nickname[index]}
                 </span>
                 {"    "}
                 {reply}
+
+                <span className="reply-Date">
+                  {"    "}
+                  {reply_regDate[index]
+                    ? reply_regDate[index].toString()
+                    : "No Date"}
+                </span>
               </li>
             ))}
           </ul>
