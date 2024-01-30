@@ -20,6 +20,9 @@ export default function Header() {
   const goToLogout = () => {
     setSearchKeyword("");
     localStorage.removeItem('token');
+    localStorage.removeItem('email');
+    localStorage.removeItem('token');
+    localStorage.removeItem('authorities');
     navigate("/SignInPage");
   }
   const goToSignInPage = () => {

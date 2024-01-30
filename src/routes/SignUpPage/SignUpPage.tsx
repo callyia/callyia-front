@@ -149,11 +149,13 @@ const SignUp = () => {
       console.log(imageFormData);
       console.log(profileImage);
 
+      // const token = localStorage.getItem("token");
       const imageUploadResponse = await axios.post(
         "http://localhost:8080/Callyia/member/upload",
         imageFormData,
         {
           headers: {
+            // Authorization: `Bearer ${token}`,
             "Content-Type": "multipart/form-data",
           },
         }
@@ -180,6 +182,7 @@ const SignUp = () => {
         }),
         {
           headers: {
+            // Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
         }
@@ -302,7 +305,8 @@ const SignUp = () => {
             </div>
             <div className="SignUp-input-phone">
               <h4>Phone</h4>
-              <select id="tel1" value={tel1} onChange={handleTel1Change}>
+              <select id="tel1" value={tel1}
+                style={{ backgroundColor: "white", color: "black"}}  onChange={handleTel1Change}>
                 <option value="">Select</option>
                 <option value="010">010</option>
                 <option value="011">011</option>
@@ -314,6 +318,7 @@ const SignUp = () => {
                 onChange={handleTel2Change}
                 maxLength={4}
                 value={tel2}
+                style={{ backgroundColor: "white", color: "black"}}
               />
               -{" "}
               <input
@@ -322,6 +327,7 @@ const SignUp = () => {
                 onChange={handleTel3Change}
                 maxLength={4}
                 value={tel3}
+                style={{ backgroundColor: "white", color: "black"}}
               />
             </div>
           </div>

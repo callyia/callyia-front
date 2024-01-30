@@ -19,13 +19,6 @@ const plans: Array<{
   placeContent: string;
 }> = [];
 
-const placeCards2 = [
-  { id: 5, lat: 35.14299044, lng: 129.03409987, name: "동의대" },
-  { id: 2, lat: 35.147, lng: 129.04, name: "부드러운움직임" },
-  { id: 3, lat: 35.154297, lng: 129.05977, name: "더조은" },
-  { id: 4, lat: 35.150311, lng: 129.037077, name: "자취자취" },
-];
-
 declare global {
   interface Window {
     kakao: any;
@@ -67,6 +60,7 @@ export default function Planning() {
   const [planData7, setPlanData7] = useState(plans);
 
   const [searchData, setSearchData] = useState([]);
+  const [basketData, setBasketData] = useState([]);
   const [area1, toggleArea1] = useToggle();
   const [area2, toggleArea2] = useToggle();
   const [isModalOpen, setModalOpen] = useState(false);
@@ -609,6 +603,7 @@ export default function Planning() {
       })
       .then((data) => {
         setSearchData(data);
+        console.log(data);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -895,7 +890,7 @@ export default function Planning() {
     } else if (!dayParam && !pnoParam) {
       planDay = 1;
     }
-    console.log(planDay);
+    // console.log(planDay);
   }, []);
 
   useEffect(() => {
@@ -1027,7 +1022,32 @@ export default function Planning() {
   }, []);
 
   useEffect(() => {
-    console.log(viewable);
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
+
+    const url = `http://localhost:8080/Callyia/Basket/getBasket?email=${email}`;
+
+    fetch(url, { headers })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(
+            `Network response was not ok: ${response.statusText}`
+          );
+        }
+        return response.json();
+      })
+      .then((data) => {
+        // console.log(data);
+        setBasketData(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
+
+  useEffect(() => {
+    // console.log(viewable);
     if (!viewable) navigate("../UnAuthorized");
   }, [viewable]);
 
@@ -1219,13 +1239,13 @@ export default function Planning() {
           className="toggle-right-down toggle-div bg-slate-300"
         >
           <div className="toggle-right-basket-div1">
-            {/* {placeCards2.map((placeCard, index) => (
+            {basketData.map((placeCard, index) => (
               <PlaceCard
                 key={index}
                 placeCard={placeCard}
                 onClick={plusClick}
               />
-            ))} */}
+            ))}
           </div>
           <div className="toggle-right-basket-div2">
             <button

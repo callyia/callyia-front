@@ -36,8 +36,18 @@ const Plan: React.FC<PlanProps> = ({ plan, onClick }) => {
 
   return (
     <div className="plan-div" onClick={MapClick}>
-      <img className="plan-image" src={image}></img>
-      <div className="right-container">
+      <div className="plan-image-container">
+        <img className="plan-image" src={image} alt="place_img" />
+      </div>
+      <div className="plan-text-container">
+        <div className="plan-title-container">
+          <span className="plan-title-span plan-text">{placeName}</span>
+        </div>
+        <div className="plan-content-container">
+          <span className="plan-content-span plan-text">{placeContent}</span>
+        </div>
+      </div>
+      {/* <div className="right-container">
         <div className="right-div-title">
           <div className="w-full h-6"></div>
           <span className="text-lg plan-text">{placeName}</span>
@@ -45,7 +55,7 @@ const Plan: React.FC<PlanProps> = ({ plan, onClick }) => {
         <div className="right-div-detail">
           <span className="plan-text">{placeContent}</span>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

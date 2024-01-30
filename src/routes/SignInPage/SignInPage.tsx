@@ -93,6 +93,7 @@ const LoginPage: React.FC = () => {
                 type="email"
                 id="email"
                 value={email}
+                style={{ backgroundColor: "white", color: "black"}}
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
@@ -103,6 +104,7 @@ const LoginPage: React.FC = () => {
                 type="password"
                 id="pw"
                 value={password}
+                style={{ backgroundColor: "white", color: "black"}}
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>

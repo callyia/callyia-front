@@ -24,7 +24,7 @@ export default function UserProfilePage() {
   };
 
   const fetchMember = async (email: any) => {
-    const url = `http://localhost:8080/Callyia/member/user?email=${email}`;
+    const url = `http://localhost:8080/Callyia/member/getMember?email=${email}`;
 
     await fetch(url)
       .then((response) => {
@@ -36,9 +36,13 @@ export default function UserProfilePage() {
         return response.json();
       })
       .then((data) => {
-        setUser(data);
-        setProfileImage(data.profileImage);
+        setUser(data.memberDTO);
+        setProfileImage(data.memberDTO.profileImage);
         setScheduleThumbnailDTOs(data.scheduleThumbnailDTOs);
+
+        console.log(data);
+
+        console.log(data.scheduleThumbnailDTOs);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -155,7 +159,10 @@ export default function UserProfilePage() {
             </div>
           </div>
         </div>
-        <div style={{ display: "grid", height: "702px", width: "100%" }}>
+        <div
+          style={{ display: "grid", height: "702px", width: "100%" }}
+          key="1"
+        >
           <div className="user-profile-user-posts">
             {/* {scheduleDTOs.map((scheduleDTO: any, index: any) => (
               <div
