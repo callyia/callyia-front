@@ -322,11 +322,12 @@ const RegistMap = ({
                 type="text"
                 value={keyword}
                 onChange={(e) => setKeyword(e.target.value)}
-                size={15}
-                className="border"
+                size={17}
+                className="regist-map-input"
                 placeholder="키워드를 작성해주세요"
+                style={{ backgroundColor: "white", fontSize: "1rem"}}
               />
-              <button type="submit">검색</button>
+              <button type="submit" className="regist-map-button">검색</button>
             </form>
           </div>
         </div>
