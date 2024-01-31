@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import axios from "axios";
 
 import "./ProfilePage.css";
 import UserSelfIntroduction from "./UserSelfIntroduction";
@@ -22,6 +23,22 @@ interface UserProps {
 const UserProfile: React.FC<UserProps> = ({ user }) => {
   const location = useLocation();
 
+  const [postCount, setPostCount] = React.useState(0);
+
+  const urlParams = new URLSearchParams(location.search);
+  const email = urlParams.get("userid");
+
+  useEffect(() => {
+    if (email) {
+      axios.get(`http://localhost:8080/Callyia/Schedule/getPostCount?email=${email}`)
+        .then(response => {
+          setPostCount(response.data); 
+        })
+        .catch(error => {
+          console.error('Error fetching post count:', error);
+        });
+    }
+  }, [email]);
   // 쿼리로 담아온 친구의 정보
 
   return (
@@ -44,7 +61,7 @@ const UserProfile: React.FC<UserProps> = ({ user }) => {
                 />
               </div>
               <span className="user-profile-post-number">
-                {/* {formatNumber(user.postCount)} */}1234
+                {formatNumber(postCount)}
               </span>
             </div>
           </div>
