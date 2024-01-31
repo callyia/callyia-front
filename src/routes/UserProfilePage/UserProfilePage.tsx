@@ -30,7 +30,7 @@ const UserProfile: React.FC<UserProps> = ({ user }) => {
 
   useEffect(() => {
     if (email) {
-      axios.get(`http://localhost:8080/Callyia/Schedule/getPostCount?email=${email}`)
+      axios.get(`http://localhost:8080/Callyia/Schedule/getScheduleCount?email=${email}`)
         .then(response => {
           setPostCount(response.data); 
         })
