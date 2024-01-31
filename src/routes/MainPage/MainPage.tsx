@@ -447,6 +447,7 @@ const Main: React.FC<MainPageProps> = () => {
                       <img
                         src={selectedTour.image}
                         className="w-auto h-auto max-h-[250px]"
+                        // style={{ width: "400px", height: "250px"}}
                         alt={selectedTour.image}
                       />
                     </div>
