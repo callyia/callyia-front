@@ -5,57 +5,64 @@ import UserProfile from "./UserProfilePage";
 
 export default function UserProfilePage() {
   const location = useLocation();
+  const navigate = useNavigate();
 
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [profileImage, setProfileImage] = useState<string>(
     "./dummyimages/image1.jpeg"
   ); // 기본 이미지
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const urlParams = new URLSearchParams(location.search);
   const email = urlParams.get("userid");
 
+  const [dataFetched, setDataFetched] = useState(false);
   const [user, setUser] = useState<any>();
   const [scheduleThumbnailDTOs, setScheduleThumbnailDTOs] = useState<any[]>();
-
-  const navigate = useNavigate();
-
+  const [isLoading, setIsLoading] = useState(true);
   const scheduleClick = (sno: any) => {
     navigate(`../SchedulePage/${sno.sno}`);
   };
 
   const fetchMember = async (email: any) => {
-    const url = `http://localhost:8080/Callyia/member/getMember?email=${email}`;
-
-    await fetch(url)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(
-            `Network response was not ok: ${response.statusText}`
-          );
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setUser(data.memberDTO);
-        setProfileImage(data.memberDTO.profileImage);
-        setScheduleThumbnailDTOs(data.scheduleThumbnailDTOs);
-
-        console.log(data);
-
-        console.log(data.scheduleThumbnailDTOs);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
+    setIsLoading(true);
+    try {
+      const url = `http://localhost:8080/Callyia/member/getMember?email=${email}`;
+      const response = await fetch(url);
+      
+      if (!response.ok) {
+        throw new Error(`Network response was not ok: ${response.statusText}`);
+      }
+      
+      const data = await response.json();
+      setUser(data.memberDTO);
+      setProfileImage(data.memberDTO.profileImage);
+      setScheduleThumbnailDTOs(data.scheduleThumbnailDTOs);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setDataFetched(true); 
+    }
   };
 
   useEffect(() => {
-    fetchMember(email);
-  }, []);
+    if (email) {
+      fetchMember(email);
+    } else {
+      setDataFetched(true);
+    }
+  }, [email]);
 
   useEffect(() => {
     console.log(scheduleThumbnailDTOs);
   }, [scheduleThumbnailDTOs]);
+
+  useEffect(() => {
+    console.log("User object: ", user);
+  }, [user]);
+
+  if (!user && isLoading) {
+    return <div>사실 렌더링 중 ㅋ</div>;
+  }
 
   if (!user) {
     return (
@@ -198,13 +205,6 @@ export default function UserProfilePage() {
                         {scheduleThumbnailDTO.scheduleDTO.sName}
                       </span>
                     </div>
-                    {/* <div>
-                      email : {scheduleThumbnailDTO.scheduleDTO.member_email}
-                    </div>
-                    <div>
-                      nickname :{" "}
-                      {scheduleThumbnailDTO.scheduleDTO.member_nickname}
-                    </div> */}
                     <div>
                       Day : {scheduleThumbnailDTO.scheduleDTO.total_Day}
                     </div>
