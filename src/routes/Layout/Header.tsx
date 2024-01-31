@@ -50,7 +50,7 @@ export default function Header() {
 
   const renderSearchBar = () => {
     if (location.pathname === "/" || location.pathname === "/MyProfilePage" || location.pathname === "/UserProfilePage"
-    || location.pathname === "/ListPage") {
+    || location.pathname === "/ListPage" || location.pathname === "/ScheduleListPage") {
       return (
         <SearchBar
           searchKeyword={searchKeyword}
