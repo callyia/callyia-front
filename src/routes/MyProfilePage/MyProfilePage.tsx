@@ -58,7 +58,7 @@ const MyProfile: React.FC<MyProfileProps> = ({
 
   useEffect(() => {
     const email = localStorage.getItem('email');
-    axios.get(`http://localhost:8080/Callyia/Schedule/getPostCount?email=${email}`)
+    axios.get(`http://localhost:8080/Callyia/Schedule/getScheduleCount?email=${email}`)
         .then(response => {
             console.log(response.data);
             
