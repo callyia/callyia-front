@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import './ProfilePage.css';
 import SelfIntroduction  from './SelfIntroduction';
@@ -17,10 +17,6 @@ interface MyProfileProps {
 }
 
 function formatNumber(num: number) {
-  // if (num >= 100000000) {
-  //   return (Math.floor(num / 10000000) / 10).toFixed(1) + '억';
-  // }
-  
   if (num >= 10000) {
     return (Math.floor(num / 1000) / 10).toFixed(1) + '만';
   }
@@ -36,6 +32,7 @@ const MyProfile: React.FC<MyProfileProps> = ({
   currentContent 
 }) => {
   const [text, setText] = useState('');
+  const [postCount, setPostCount] = useState(0);
 
   const likesCount = 12223243;
 
@@ -58,6 +55,20 @@ const MyProfile: React.FC<MyProfileProps> = ({
       contentToRender = <ScheduleContent />;
       break;
   }
+
+  useEffect(() => {
+    const email = localStorage.getItem('email');
+    axios.get(`http://localhost:8080/Callyia/Schedule/getScheduleCount?email=${email}`)
+        .then(response => {
+            console.log(response.data);
+            
+            setPostCount(response.data); 
+        })
+        .catch(error => {
+            console.error('Error fetching post count:', error);
+        });
+    }, []);
+
 
   const handleUpdateClick = () => {
     const token = localStorage.getItem('token');
@@ -111,7 +122,7 @@ const MyProfile: React.FC<MyProfileProps> = ({
           <div className="profile-icon-number-container">
             <img src='./profile/profile_post_icon.png' alt="Post icon" className="profile-post-icon" />
           </div>
-            <span className='profile-post-number'>{formatNumber(likesCount)}</span>
+            <span className='profile-post-number'>{formatNumber(postCount)}</span>
         </div>
       </div>
       </div>

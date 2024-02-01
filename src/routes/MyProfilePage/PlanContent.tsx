@@ -6,7 +6,7 @@ import "./ProfilePage.css";
 
 type PlanInfo = {
   pno: number;
-  user_id: string;
+  userId: string;
   day: string;
   title: string;
 };
@@ -47,7 +47,7 @@ const PlanContent = () => {
       )
 
       .then((response) => {
-        // console.log(response.data);
+        console.log(response.data);
         setPlanInfo(response.data);
       })
 
@@ -60,20 +60,20 @@ const PlanContent = () => {
     navigate(`/PlanningPage?pno=${pno}`);
   };
 
+  const formatTitle = (title: string) => {
+    return title.length > 7 ? title.substring(0, 7) + "..." : title;  
+  }
   return (
-    // <div className="profile-edited-plan" style={{border: "1px black solid"}}>
-    <div className="profile-common-posts">
+    <div className="profile-plan-posts">
       {planInfo?.map((plan) => (
         <div
           key={plan.pno}
           className="profile-plan-div"
           onClick={() => handleClick(plan.pno)}
-        >
+        > 
           <div>
-            <div className="profile-plan-id">id : {plan.user_id} </div>
-            <div className="profile-plan-pno">pno : {plan.pno}</div>
-            <div className="profile-plan-day">day : {plan.day}</div>
-            <div className="profile-plan-title">title : {plan.title}</div>
+            <div className="profile-plan-title">{formatTitle(plan.title)}</div>
+            <div className="profile-plan-day"><span className="profile-plan-day-num">{plan.day}</span>일의 일정</div>
           </div>
         </div>
       ))}

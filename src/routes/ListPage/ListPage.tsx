@@ -30,8 +30,15 @@ interface ScheduleSearchResult {
   member_nickname: string
 }
 
+interface Tips {
+  user: string[];
+  location: string[];
+  schedule: string[];
+}
+
 const ListPage = () => {
   const location = useLocation();
+
   const [UserSearchResult, setUserSearchResult] = useState<UserSearchResult[]>([]);
   const [LocationSearchResult, setLocationSearchResult] = useState<LocationSearchResult[]>([]);
   const [ScheduleSearchResult, setScheduleSearchResult] = useState<ScheduleSearchResult[]>([]); // 페이지 처리
@@ -47,9 +54,17 @@ const ListPage = () => {
   const userEndPage = Math.min(startPage + pagesToShow - 1, userNumberOfPages);
   const locationEndPage = Math.min(startPage + pagesToShow - 1, locationNumberOfPages);
   const scheduleEndPage = Math.min(startPage + pagesToShow - 1, scheduleNumberOfPages);
-
+  const [dataFetched, setDataFetched] = useState(false);
+  const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+  
   const [isValidQuery, setIsValidQuery] = useState(true);
 
+  const tips: Tips = {
+    user: ["유저의 경우에는 닉네임을 기반으로 검색합니다.", "닉네임이 기억나지 않을 때는 올린 글을 참조해서 찾아보세요.", "해당 유저가 탈퇴한 경우는 찾을 수 없습니다."],
+    location: ["장소의 경우에는 이름과 주소를 기반으로 검색합니다.", "장소의 경우 카카오맵을 기반으로 하고 있습니다."],
+    schedule: ["일정의 경우에는 일정 이름을 기반으로 검색합니다.", "Schedule Tip 2", "Schedule Tip 3", "Schedule Tip 4"]
+  };
+  
   useEffect(() => {
 
     const fetchData = async () => {
@@ -88,23 +103,22 @@ const ListPage = () => {
         if (userResponse) {
           const JsonUserData = await userResponse.json();
           const userData = JsonUserData.filter((user: UserSearchResult) => user.nickname.toLowerCase().includes(newSearchKeyword.toLowerCase()));
-          // console.log('User data:', userData);
           setUserSearchResult(userData);
         }
         if (locationResponse) {
           const JsonLocationData = await locationResponse.json();
           const JsonLocationContent = JsonLocationData.content;
           const locationData = JsonLocationContent.filter((location: LocationSearchResult) => location.placeName.toLowerCase().includes(newSearchKeyword.toLowerCase()) || location.address.includes(newSearchKeyword));
-          // console.log('locationData data:', locationData);
           setLocationSearchResult(locationData);
         }
         if (scheduleResponse) {
           const JsoncheduleData = await scheduleResponse.json();
           const scheduleData = JsoncheduleData.filter((schedule: ScheduleSearchResult) => schedule.sName.toLowerCase().includes(newSearchKeyword.toLowerCase()));
-          // console.log('scheduleData data:', scheduleData);
           setScheduleSearchResult(scheduleData);
         }
   
+        setDataFetched(true);
+
         } catch (error) {
           console.log("error >> ", error);
         }
@@ -153,7 +167,11 @@ const ListPage = () => {
     );
   }
 
-  if (UserSearchResult.length === 0 && LocationSearchResult.length === 0 && ScheduleSearchResult.length === 0) {
+  if (!dataFetched) {
+    return <div>Loading...</div>;
+}
+
+  if (dataFetched && UserSearchResult.length === 0 && LocationSearchResult.length === 0 && ScheduleSearchResult.length === 0) {
     return (
       <div className="list-page">
         <div className='list-search-keyword-header'>
@@ -163,15 +181,35 @@ const ListPage = () => {
             {searchCombo === 'schedule' && '일정'}
           '</span>(으)로 선택하여 
           <span className='list-search-keyword'> {searchKeyword}</span>를 검색한 결과입니다.
-          <div></div>
-
-          <span className='list-search-keyword'>
+          <div className='list-page-search-keyword-bar' /> 
+          <span className='list-search-keyword'>해당하는{' '} 
           {searchCombo === 'user' && '유저'}
           {searchCombo === 'location' && '장소'}
           {searchCombo === 'schedule' && '일정'}
-            (을)를 찾을 수 없습니다. 다시 한번 더 확인바랍니다.</span>
+            (을)를 찾을 수 없습니다. 해당하는 TIP을 확인바랍니다.</span>
         </div>
-      </div>
+        <div className='list-tips-cards'>
+        {['user', 'location', 'schedule'].map((type, index) => (
+          <div 
+            className='list-tips-card' 
+            onMouseEnter={() => setHoveredCard(index)}
+            onMouseLeave={() => setHoveredCard(null)}
+            key={index}
+          >
+            <div className='list-tips-card-title'>{`${type === 'user' ? '유저' : type === 'location' ? '장소' : '일정'}에 관한 검색 TIP`}
+            <div className='list-tips-card-content'>앞에 선택하는 콤보박스와 오타를 확인하세요!</div>
+            {hoveredCard === index && (
+              <div className='list-tips-card-hover-content'>
+              {tips[type as keyof Tips].map((tip: string, tipIndex: number) => (
+                <p key={tipIndex}>{tip}</p>
+              ))}
+              </div>
+            )}
+          </div>
+          </div>
+        ))}
+        </div>
+        </div>
     );
   }
   
@@ -241,7 +279,7 @@ if(searchCombo === 'location')
         <div className='list-page-search-keyword-bar' >
           <div className="list-image-grid">
           {locationPaginatedResults.map(result => (
-            <div key={result.placeId} className="list-image-item">
+            <div key={result.placeId} className="list-image-item-square">
             <img src={result.image} alt={`${result.placeName}의 location`}/>
             <p>
               <a className='list-user-nickname' href={`/UserProfilePage?location=${result.placeName}`}>{result.placeName}</a>
@@ -301,10 +339,10 @@ if(searchCombo === 'location')
                   <a className='list-user-nickname' href={`/SchedulePage/${result.sno}`}>{result.sName}</a>
                 </p>
                 <p>
-                  <a className='list-total-day'> {result.total_Day}일 계획</a>
+                  <a className='list-total-day'  href={`/SchedulePage/${result.sno}`}> {result.total_Day}일 계획</a>
                 </p>
                 <p>
-                  <a className='list-total-day'> made by {result.member_nickname}</a> 
+                  <a className='list-total-day' href={`/SchedulePage/${result.sno}`}> made by {result.member_nickname}</a> 
                 </p>
               </div>
             ))} 

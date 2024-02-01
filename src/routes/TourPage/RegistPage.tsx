@@ -207,7 +207,7 @@ const RegistPage: React.FC<RegistPageProps> = ( {checkColumnData} ) => {
                 <img
                   src={tour.image} // 이미지 소스를 동적으로 변경해야 할 것 같습니다.
                   className="images"
-                  alt={`Image ${tour}`}
+                  alt={`img ${tour}`}
                 />
               )}
             </div>
@@ -459,6 +459,7 @@ const RegistPage: React.FC<RegistPageProps> = ( {checkColumnData} ) => {
             <select
               className="w-1/5"
               value={checkColumn}
+              style={{ backgroundColor: "white" }}
               onChange={(e) => setCheckColumn(e.target.value)}
             >
               <option value="전체">전체</option>
@@ -470,6 +471,7 @@ const RegistPage: React.FC<RegistPageProps> = ( {checkColumnData} ) => {
               placeholder={getPlaceholder()}
               value={keyword}
               onChange={(e) => setKeyword(e.target.value)}
+              style={{ backgroundColor: "white" }}
               className="w-3/5 outline-none"
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
@@ -503,14 +505,14 @@ const RegistPage: React.FC<RegistPageProps> = ( {checkColumnData} ) => {
               <div className="grid w-1/2">
                 <CheckBox onCheckChange={handleCheckBoxChange} />
                 <div className="flex items-center mb-2">
-                  <label className="mr-2">이름 :</label>
-                  <div className="flex-grow p-1 border rounded">
+                  <label className="mr-2 padd">이름 :</label>
+                  <div className="flex-grow p-1 border rounded"  style={{height: "30px"}}>
                     {selectedPlace?.place_name}
                   </div>
                 </div>
                 <div className="flex items-center mb-2">
                   <label className="mr-2">지역 :</label>
-                  <div className="flex-grow p-1 border rounded">
+                  <div className="flex-grow p-1 border rounded"  style={{height: "30px"}}>
                     {selectedPlace?.road_address_name ||
                       selectedPlace?.address_name}
                   </div>
@@ -534,6 +536,7 @@ const RegistPage: React.FC<RegistPageProps> = ( {checkColumnData} ) => {
                     type="text"
                     name=""
                     id=""
+                    style={{ backgroundColor: "white" }}
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
                   />
@@ -573,7 +576,7 @@ const RegistPage: React.FC<RegistPageProps> = ( {checkColumnData} ) => {
           <Modal className="" open={openDetail}>
             <ModalContent
               onCloseIconClicked={closeDetailClicked}
-              className="p-4 bg-white rounded-lg min-h-[500px] h-auto w-[800px] relative"
+              className="p-4 bg-white rounded-lg min-h-[500px] h-[auto] w-[800px] relative"
             >
               <div>
                 <h3 className="mb-8 text-center">상세페이지입니다.</h3>
@@ -601,7 +604,7 @@ const RegistPage: React.FC<RegistPageProps> = ( {checkColumnData} ) => {
                   <div className="w-full h-auto">
                     <img
                       src={selectedTour.image}
-                      className="w-auto h-auto max-h-[250px]"
+                      style={{ width: "400px", height: "250px"}}
                     />
                   </div>
                 </div>
