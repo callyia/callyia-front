@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../routes/SchedulePage/SchedulePosting.css"; // Schedule.css 파일을 import
 import swal from "sweetalert";
-import { TbBasketPlus } from "react-icons/tb";
+import { TbBasketPlus, TbBasketCheck } from "react-icons/tb";
 
 interface ScheduleItem {
   place_id: number;
@@ -28,7 +28,6 @@ interface ScheduleItem {
 export interface ScheduleCardProps extends ScheduleItem {
   onClick: (latitude: number, longitude: number, place_id: number) => void;
   onAddToCart: () => void;
-  onRemoveFromCart: () => void;
   isInCart: boolean;
 }
 
@@ -49,8 +48,6 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
   replyer_img,
   dno,
   rno,
-  // schedule_regdate,
-  // schedule_moddate,
   reply_regDate,
   reply_modDate,
 }) => {
@@ -69,6 +66,14 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
 
   const handleRegister = async () => {
     try {
+      if (inputData.trim() === "") {
+        // 입력된 내용이 없는 경우
+        swal("댓글 내용을 입력하세요.", {
+          icon: "warning",
+        });
+        return;
+      }
+
       // 댓글을 서버에 저장하는 API 호출
       const response = await fetch(
         "http://localhost:8080/Callyia/Schedule/register",
@@ -230,6 +235,13 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
                 },
               },
             }).then(async (newValue) => {
+              if (newValue.trim() === "") {
+                // 수정된 내용이 없는 경우
+                swal("댓글 내용을 입력하세요.", {
+                  icon: "warning",
+                });
+                return;
+              }
               handleEditComment(index, newValue);
               swal(`수정된 댓글: ${newValue}`).then(() => {
                 window.location.reload();
@@ -266,34 +278,50 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
       onClick={() => MapClick()}
       style={{ height: cardHeight }}
     >
-      <span className="schedule-number">{place_name}</span>
-      <h3>{place_content}</h3>
-
-      <p>
-        TIP : {tip}
-        <button className="moreBtn" onClick={handleToggleExpand}>
-          {showDetails ? "접기" : "더보기"}
-        </button>
-      </p>
-      <div className="card-buttons" style={{ display: "flex" }}>
-        {isInCart ? (
-          <div></div>
-        ) : (
-          <button
-            className="add-to-cart-btn"
-            onClick={onAddToCart}
-            style={{
-              width: "100px",
-              height: "100px",
-              justifyContent: "center",
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            <TbBasketPlus style={{ fontSize: "50px" }} />
+      <div className="before-card">
+        <div>
+          <span className="schedule-number">{place_name}</span>
+          <h3>{place_content}</h3>
+          <p>TIP : {tip}</p>
+        </div>
+        <div>
+          <div className="card-buttons" style={{ display: "flex" }}>
+            {isInCart ? (
+              <button
+                className="add-to-cart-btn"
+                style={{
+                  width: "100px",
+                  height: "100px",
+                  justifyContent: "center",
+                  display: "flex",
+                  alignItems: "center",
+                  backgroundColor: "#BCF5A9",
+                }}
+              >
+                <TbBasketCheck style={{ fontSize: "50px" }} />
+              </button>
+            ) : (
+              <button
+                className="add-to-cart-btn"
+                onClick={onAddToCart}
+                style={{
+                  width: "100px",
+                  height: "100px",
+                  justifyContent: "center",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <TbBasketPlus style={{ fontSize: "50px" }} />
+              </button>
+            )}
+          </div>
+          <button className="moreBtn" onClick={handleToggleExpand}>
+            {showDetails ? "접기" : "더보기"}
           </button>
-        )}
+        </div>
       </div>
+
       {showDetails && (
         <div className="details">
           <img src={detail_images} />
@@ -309,7 +337,7 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
               />
               <button onClick={handleRegister}>입력</button>
             </div>
-            {reply_contents.map((reply, index) => (
+            {reply_contents.reverse().map((reply, index) => (
               <li key={index} onClick={() => handlereplyClick(reply, index)}>
                 <span
                   style={{
