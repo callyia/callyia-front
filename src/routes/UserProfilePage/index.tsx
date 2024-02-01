@@ -28,11 +28,11 @@ export default function UserProfilePage() {
     try {
       const url = `http://localhost:8080/Callyia/member/getMember?email=${email}`;
       const response = await fetch(url);
-      
+
       if (!response.ok) {
         throw new Error(`Network response was not ok: ${response.statusText}`);
       }
-      
+
       const data = await response.json();
       setUser(data.memberDTO);
       setProfileImage(data.memberDTO.profileImage);
@@ -40,7 +40,7 @@ export default function UserProfilePage() {
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
-      setDataFetched(true); 
+      setDataFetched(true);
     }
   };
 
