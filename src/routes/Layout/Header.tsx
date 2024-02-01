@@ -1,7 +1,12 @@
 import React, { useState, useEffect  } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
+import { HiOutlineLogin, HiOutlineLogout } from "react-icons/hi";
+import { MdEditDocument } from "react-icons/md";
+import { FaRegUserCircle } from "react-icons/fa";
+
 import SearchBar from "./SearchBar";
+
 
 export default function Header() {
   const navigate = useNavigate();
@@ -39,9 +44,7 @@ export default function Header() {
     setSearchKeyword("");
     navigate("/MyProfilePage");
   };
-  // token이 있으면 로그아웃과 myprofile이 나오고 token이 없으면 sign in 버튼이 나오도록 하기
-
-
+  
   const handleSearchKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter" && searchKeyword.trim() !== "") {
       navigate(`/ListPage?searchcombo=${searchCombo}&searchkeyword=${searchKeyword}`);
@@ -49,10 +52,12 @@ export default function Header() {
     }
   };
 
-  const renderSearchBar = () => {
-    if (location.pathname === "/" || location.pathname === "/MyProfilePage" || location.pathname === "/UserProfilePage"
-    || location.pathname === "/ListPage" || location.pathname === "/ScheduleListPage") {
-      return (
+  const renderSearchBar = () => { 
+    const allowPath = ["/", "/MyProfilePage", "/UserProfilePage", "/ListPage", "/ScheduleListPage", 
+    "/TourPage/Food", "/TourPage/Tourist", "/SchedulePage/:sno", "/CartPage", "/PlanningPage"]; // 헤더바 검색창 허용 페이지
+
+      if(allowPath.includes(location.pathname)) {
+        return (
         <SearchBar
           searchKeyword={searchKeyword}
           setSearchKeyword={setSearchKeyword}
@@ -65,40 +70,40 @@ export default function Header() {
     return null;
   };
 
-  const getButtonClassName = (baseClass: string) => {
-    return location.pathname === "/PlanningPage" ? `${baseClass}-fixed` : baseClass ;
-  };
-
   return (
-    <header className="header">
-      <div className="header-top-bar">
-        <a href="/">
-          <img src="/topbar-logo.png" alt="Logo" className="header-logo" />
-        </a>
-        {renderSearchBar()}
-        <div></div>
-      </div>
+      <header className="header">
+        <div className="header-top-bar">
+          <a href="/">
+            <img src="/topbar-logo.png" alt="Logo" className="header-logo" />
+          </a>
+          {renderSearchBar()}
+          <div></div>
+        </div>
 
-      {isLoggedIn ? (
-        <>
-          <button className={getButtonClassName("header-action-button-2 header-action-button")} onClick={goToMyProfilePage}>
-            My Profile
-          </button>
-          <button className={getButtonClassName("header-action-button-5 header-action-button")} onClick={goToLogout}>
-            Logout
-          </button>
-        </>
-      ) : (
-      <> 
-        <button className={getButtonClassName("header-action-button-2 header-action-button")} onClick={goToSignInPage}>
-          Sign In
-        </button>
-        <button className={getButtonClassName("header-action-button-4 header-action-button")} onClick={goToSignUpPage}>
-          Sign Up
-        </button>
-      </>
-      )}
-      
-    </header>
+            { isLoggedIn ? (
+              <>
+                <div className="header-button-container" style={{cursor:"pointer"}} onClick={goToMyProfilePage}>
+                  <FaRegUserCircle className="header-button" />
+                  <span className="header-button-message">Profile</span>
+                </div>
+                <div className="header-button-container" style={{cursor:"pointer"}} onClick={goToLogout}>
+                  <HiOutlineLogout className="header-button" />
+                  <span className="header-button-message" >Logout</span>
+                </div>
+              </>
+                ) : (
+              <>
+                <div className="header-button-container" style={{cursor:"pointer"}} onClick={goToSignInPage}>
+                  <HiOutlineLogin className="header-button" />
+                  <span className="header-button-message">SignIn</span>
+                </div>
+                <div className="header-button-container" style={{cursor:"pointer"}} onClick={goToSignUpPage}>
+                  <MdEditDocument className="header-button" />
+                  <span className="header-button-message">SignUp</span>
+                </div>
+              </>)
+      }
+
+      </header>
   );
 }

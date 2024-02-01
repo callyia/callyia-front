@@ -3,30 +3,27 @@
     justify-content: space-between;
     align-items: center;
     padding: 5px;
-    width: 100%;
+    /* width: 100%; */
   }
 
-  /* button */
-  .header-action-button, .header-action-button-fixed {
-    background-color: #abcdef;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 16px;
-    width: 100px;
-    height: 68px;
+  .header-button {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px; 
+    font-size: 40px;
   }
 
-  .header-action-button-fixed {
-    position: fixed;
+  .header-button:hover {
+    transform: scale(1.1);
+    brightness: 0.5;
+    transition: transform 0.5s ease-in-out;
   }
 
-  .header-action-button:hover {
-    background-color: blue;
+  .header-button-message {
+    font-family: "GmarketSans300";
+    font-size: 14px;
   }
-
+  
   /* search-bar */
   .header-search-input {
     font-family: "GmarketSans500";
@@ -70,7 +67,6 @@
     color: white;
   }
   
-  /* logo */
   .header-logo {
     width: 100px;
     height: 50px;
@@ -79,22 +75,13 @@
     color: #abcdef;
   }
 
-  .header-action-button-1 {
-    margin-top: 5px;
-    right: 305px;
+  .header-button-container {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    margin-bottom: -8px;
+    padding: 0 20px;
+    /* margin-right: 10px; */
   }
   
-  .header-action-button-2 {
-    margin-top: 5px;
-    right: 205px;
-  }
-  
-  .header-action-button-3 {
-    margin-top: 5px;
-    right: 105px;
-  }
-  
-  .header-action-button-4 {
-    margin-top: 5px;
-    right: 5px;
-  }
