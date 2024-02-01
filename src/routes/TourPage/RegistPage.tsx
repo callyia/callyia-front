@@ -335,12 +335,13 @@ const RegistPage: React.FC<RegistPageProps> = ( {checkColumnData} ) => {
         default:
           throw new Error(`HTTP error! Status: ${response.status}`);
       }
+      window.location.reload();
     } catch (error: any) {
       console.error("Error accepting data:", error.message);
       if (error.message.includes("409")) {
         alert("해당 파일은 이미 등록되어 있습니다.");
       }
-    }
+    } 
   };
 
   // 체크박스 변경 시 처리 함수
