@@ -446,7 +446,7 @@ const Main: React.FC<MainPageProps> = () => {
                     <div className="w-full h-auto">
                       <img
                         src={selectedTour.image}
-                        style={{ width: "400px", height: "250px"}}
+                        style={{ width: "400px", height: "250px" }}
                         alt={selectedTour.image}
                       />
                     </div>
@@ -473,55 +473,6 @@ const Main: React.FC<MainPageProps> = () => {
             <div className="main-info-pagination-controls">
               {renderPagination()}
             </div>
-          </section>
-        </div>
-        <div className="main-section-container">
-          <section
-            className="main-section-div-community"
-            style={{ marginLeft: "33%" }}
-          >
-            <span className="main-section-span-title">여행 공유 커뮤니티</span>
-
-            {scheduleData.map((schedule) => {
-              // schedule.sno에 해당하는 매칭 데이터 찾기
-              const matchingDetail = matchingDetailImages.find(
-                (detail) => detail.sno === schedule.sno
-              );
-
-              // 매칭 데이터가 있을 때 렌더링
-              return (
-                <div
-                  key={schedule.sno}
-                  className="list-card"
-                  onClick={() => navigate(`/SchedulePage/${schedule.sno}`)}
-                >
-                  {/* 프로필 클릭 시 해당 유저페이지로 이동 */}
-                  <span className="profile-info">
-                    <img
-                      className="profile-image"
-                      src={schedule.member_profile_image}
-                      alt="Profile"
-                    />
-                    <div className="profile-details">
-                      <h1 style={{ fontSize: "20px", margin: 0 }}>
-                        {schedule.member_nickname}
-                        {/* <p>{schedule.regDate.toDateString()}</p> */}
-                      </h1>
-                      {/* Add other details as needed */}
-                    </div>
-                  </span>
-                  <h1
-                    style={{
-                      fontSize: "30px",
-                      fontWeight: "bold",
-                      margin: "15px",
-                    }}
-                  >
-                    {schedule.sName}
-                  </h1>
-                </div>
-              );
-            })}
           </section>
         </div>
       </main>
