@@ -49,7 +49,7 @@ const Upload: React.FC<UploadProps> = ({
             <div className="w-full h-auto">
               <img
                 src={selectedImage}
-                alt={`Image Preview`}
+                alt={`Preview`}
                 className="w-[250px] h-[250px]"
               />
             </div>

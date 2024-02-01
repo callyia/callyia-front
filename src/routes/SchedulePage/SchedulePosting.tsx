@@ -1,6 +1,6 @@
 //SchedulePosting.tsx
 import React, { useEffect, useState } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 import ScheduleCard, { ScheduleItem } from "../../components/ScheduleCard";
 import "./SchedulePosting.css";
@@ -491,7 +491,7 @@ export default function SchedulePosting() {
                     />
                   </button>
                 </div>
-                <img src={item.detail_images} />
+                <img src={item.detail_images} alt={"detail"} />
               </div>
             ))}
           </div>

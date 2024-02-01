@@ -12,13 +12,10 @@ const RegistMap = ({
 }: {
   onPlaceSelected: (place: any) => void;
 }) => {
-  const mapRef = useRef<HTMLDivElement | null>(null);
   const infowindow = useRef(new window.kakao.maps.InfoWindow({ zIndex: 1 }));
   const markers = useRef<any[]>([]);
   const [keyword, setKeyword] = useState("");
   const [searchClick, setSearchClick] = useState(false);
-  const [selectedPlace, setSelectedPlace] = useState<any>(null);
-  let map: any = null;
 
   useEffect(() => {
     let mapContainer = document.getElementById("map");
@@ -34,9 +31,6 @@ const RegistMap = ({
 
     if (mapContainer) {
       const map = new window.kakao.maps.Map(mapContainer, mapOption);
-
-      // 장소 검색 객체를 생성합니다
-      const ps = new window.kakao.maps.services.Places();
 
       // <지도에서 장소를 검색하기 위한 동작을 수행>
       const searchPlaces = () => {
@@ -165,8 +159,6 @@ const RegistMap = ({
 
             // 목록 아이템에 마우스 클릭 시, 이름 지역 설정
             itemEl.onclick = () => {
-              // 선택한 장소 정보 상태로 업데이트
-              setSelectedPlace(places[i]);
               // 외부로 정보 전달
               onPlaceSelected(places[i]);
             };
@@ -325,9 +317,11 @@ const RegistMap = ({
                 size={17}
                 className="regist-map-input"
                 placeholder="키워드를 작성해주세요"
-                style={{ backgroundColor: "white", fontSize: "1rem"}}
+                style={{ backgroundColor: "white", fontSize: "1rem" }}
               />
-              <button type="submit" className="regist-map-button">검색</button>
+              <button type="submit" className="regist-map-button">
+                검색
+              </button>
             </form>
           </div>
         </div>
