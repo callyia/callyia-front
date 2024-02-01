@@ -57,6 +57,7 @@ const Main: React.FC<MainPageProps> = () => {
   const [selectedTour, setSelectedTour] = useState<TourData | null>(null);
   const [openDetail, setOpenDetail] = useState(false);
   const [selectedDay, setSelectedDay] = useState(1);
+  const [tourCount, setTourCount] = useState<number>(0);
 
   const pagesToShow = 10;
   const startPage =
@@ -114,6 +115,25 @@ const Main: React.FC<MainPageProps> = () => {
 
     fetchTourData();
   }, [currentPage]);
+
+  useEffect(() => {
+    const fetchTourCount = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:8080/Callyia/Tour/getCount`
+        );
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        setTourCount(data);
+      } catch (error) {
+        console.error("Error fetching tour data:", error);
+      }
+    };
+
+    fetchTourCount();
+  }, []);
 
   // 모든 스케쥴 가져옴
   useEffect(() => {
@@ -445,7 +465,7 @@ const Main: React.FC<MainPageProps> = () => {
                     <div className="w-full h-auto">
                       <img
                         src={selectedTour.image}
-                        style={{ width: "400px", height: "250px"}}
+                        style={{ width: "400px", height: "250px" }}
                         alt={selectedTour.image}
                       />
                     </div>
@@ -475,61 +495,16 @@ const Main: React.FC<MainPageProps> = () => {
           </section>
           <section className="main-section-div-tour-right">
             <div>
+              <span className="main-tour-section-span-title-count">
+                {tourCount.toLocaleString()}
+              </span>
               <span className="main-tour-section-span-title">
-                100,000,000개의 멋진 장소가 여러분을 기다리고 있습니다.
+                개의 멋진 장소가 여러분을 기다리고 있습니다.
               </span>
             </div>
           </section>
         </div>
-        <div className="main-section-container">
-          <section
-            className="main-section-div-community"
-            style={{ marginLeft: "33%" }}
-          >
-            <span className="main-section-span-title">여행 공유 커뮤니티</span>
-
-            {scheduleData.map((schedule) => {
-              // schedule.sno에 해당하는 매칭 데이터 찾기
-              const matchingDetail = matchingDetailImages.find(
-                (detail) => detail.sno === schedule.sno
-              );
-
-              // 매칭 데이터가 있을 때 렌더링
-              return (
-                <div
-                  key={schedule.sno}
-                  className="list-card"
-                  onClick={() => navigate(`/SchedulePage/${schedule.sno}`)}
-                >
-                  {/* 프로필 클릭 시 해당 유저페이지로 이동 */}
-                  <span className="profile-info">
-                    <img
-                      className="profile-image"
-                      src={schedule.member_profile_image}
-                      alt="Profile"
-                    />
-                    <div className="profile-details">
-                      <h1 style={{ fontSize: "20px", margin: 0 }}>
-                        {schedule.member_nickname}
-                        {/* <p>{schedule.regDate.toDateString()}</p> */}
-                      </h1>
-                      {/* Add other details as needed */}
-                    </div>
-                  </span>
-                  <h1
-                    style={{
-                      fontSize: "30px",
-                      fontWeight: "bold",
-                      margin: "15px",
-                    }}
-                  >
-                    {schedule.sName}
-                  </h1>
-                </div>
-              );
-            })}
-          </section>
-        </div>
+        <div className="main-section-container"></div>
       </main>
       <button
         type="button"

@@ -317,7 +317,9 @@ input[type="text"] {
 .main-tour-info-image {
   width: 300px;
   height: 200px;
-  border-radius: 8px;
+  border: 4px solid white;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
   margin-bottom: 10px;
   justify-items: center;
 }
@@ -340,7 +342,6 @@ input[type="text"] {
   border: 1px solid #dddddd;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
   padding: 16px;
-  width: 380px;
   height: 270px;
   margin: 15px;
   transition: transform 0.3s ease-in-out;
@@ -379,9 +380,11 @@ input[type="text"] {
   align-items: center;
   justify-content: center;
   display: flex;
-  width: 314px;
-  height: 260px;
+  width: 346px;
+  height: 288px;
   background-image: url("https://static.wixstatic.com/media/5bfb6f_9f2519d5fc2d41f990a10dd92eb8658d.jpg/v1/fill/w_314,h_260,al_c,q_80,usm_0.66_1.00_0.01,enc_auto/5bfb6f_9f2519d5fc2d41f990a10dd92eb8658d.jpg");
+  background-size: cover;
+  background-position: center center;
 }
 
 .place-navigate span {
@@ -407,10 +410,12 @@ input[type="text"] {
   align-items: center;
   justify-content: center;
   display: flex;
-  width: 314px;
-  height: 260px;
+  width: 346px;
+  height: 288px;
   background-image: url("https://static.wixstatic.com/media/5bfb6f_ea37f67cad544b348df9f3d0ff40f282.jpg/v1/fill/w_314,h_260,al_c,q_80,usm_0.66_1.00_0.01,enc_auto/5bfb6f_ea37f67cad544b348df9f3d0ff40f282.jpg");
   margin: 0 20px 0 20px;
+  background-size: cover;
+  background-position: center center;
 }
 
 .restaurant-navigate span {
@@ -436,9 +441,11 @@ input[type="text"] {
   align-items: center;
   justify-content: center;
   display: flex;
-  width: 314px;
-  height: 260px;
+  width: 346px;
+  height: 288px;
   background-image: url("https://static.wixstatic.com/media/5bfb6f_c667d0c9bd634b1aa2b29311795f3c51.jpg/v1/fill/w_315,h_260,al_c,q_80,usm_0.66_1.00_0.01,enc_auto/5bfb6f_c667d0c9bd634b1aa2b29311795f3c51.jpg");
+  background-size: cover;
+  background-position: center center;
 }
 
 .community-navigate span {
@@ -460,6 +467,10 @@ input[type="text"] {
 }
 .main-frame {
   width: 100%;
+  min-width: 1150px;
+  background-image: url();
+  /* background-size: cover; */
+  /* background-position: center center; */
 }
 
 .main-community-section-span-title {
@@ -476,4 +487,13 @@ input[type="text"] {
   font-family: "GmarketSans500";
   color: white;
   margin-bottom: 20px;
+}
+
+.main-tour-section-span-title-count {
+  font-size: 40px;
+  font-weight: 700;
+  font-family: "GmarketSans500";
+  color: #fdc500;
+  margin-bottom: 20px;
+  margin-right: 4px;
 }
