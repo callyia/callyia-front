@@ -92,7 +92,7 @@ const ScheduleContent = () => {
     }, [currentPage]);
     
   return (
-    <div className="profile-common-posts profile-schdule-posts">
+    <div className="profile-schedule-posts">
       {scheduleData.map((schedule) => {
             // schedule.sno에 해당하는 매칭 데이터 찾기
         const matchingDetail = matchingDetailImages.find(
@@ -102,22 +102,14 @@ const ScheduleContent = () => {
         return (
           <div key={schedule.sno} className="profile-list-card"
             onClick={() => navigate(`/SchedulePage/${schedule.sno}`)} >
-            {/* 프로필 클릭 시 해당 유저페이지로 이동 */}
-            <span className="profile-schedule-info">
               <img
                 className="profile-schedule-image"
                 src={schedule.member_profile_image}
                 alt="Profile"
               />
-              <div className="profile-schedule-details">
-                <h1 style={{ fontSize: "20px", margin: 0 }}>
-                  {schedule.member_nickname}
-                </h1>
-              </div>
-            </span>
-            <h1 style={{ fontSize: "30px", fontWeight: "bold", margin: "15px", }} >
+            <div className="profile-schedule-details" style={{ fontSize: "30px", fontWeight: "bold" }} >
               {schedule.sName}
-            </h1>
+            </div>
           </div>
         );
         })}

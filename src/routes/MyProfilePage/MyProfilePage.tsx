@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import swal from 'sweetalert';
 
 import './ProfilePage.css';
 import SelfIntroduction  from './SelfIntroduction';
 import CartContent from './CartContent';
 import ScheduleContent from './ScheduleContent';
 import PlanContent from './PlanContent';
-import axios from 'axios';
 
 interface MyProfileProps {
   isEditing: boolean;
@@ -34,11 +35,44 @@ const MyProfile: React.FC<MyProfileProps> = ({
   const [text, setText] = useState('');
   const [postCount, setPostCount] = useState(0);
 
-  const likesCount = 12223243;
-
   const handleTextChange = (newText: string) => {
     setText(newText);
   }
+
+  const handleEditButtonClick = async () => {
+    
+    const willSave = await swal({
+      title: "프로필 변경", 
+      text: "이 내역들을 변경하시겠습니까?", 
+      icon: "warning", 
+      buttons: {
+        confirm: {
+          text: "변경", 
+          value: true, 
+          visible: true, 
+          className: "", 
+          closeModal: true, 
+        }, cancel: {
+          text: "취소",
+          value: false, 
+          visible: true, 
+          className: "", 
+          closeModal: true, 
+        }
+      },
+      dangerMode: true,
+    });
+    
+    if (willSave) {
+      swal({
+        text: "Change.",
+        icon: "success",
+        buttons: [false], 
+        timer: 500, 
+      });
+      setTimeout(handleUpdateClick, 500);
+    } 
+  };
 
   let contentToRender;
   switch (currentContent) {
@@ -110,8 +144,8 @@ const MyProfile: React.FC<MyProfileProps> = ({
         <div className="profile-left-section">
           <div className="profile-self-introduction"> 
            <SelfIntroduction isEditing = {isEditing} text={text} onTextChange={handleTextChange}/>
-            {/* <button className="edit-save-btn">  */}
-            <button className="edit-save-btn" onClick={isEditing ? handleUpdateClick : () => toggleIsEditing()} > 
+           <button className="edit-save-btn" onClick={isEditing ? handleEditButtonClick : () => toggleIsEditing()}>
+            {/* <button className="edit-save-btn"   onClick={isEditing ? handleUpdateClick : handleEditButtonClick}> */}
               {isEditing ? '저장' : '수정'}
             </button>
           </div>
