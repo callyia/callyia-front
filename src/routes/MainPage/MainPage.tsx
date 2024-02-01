@@ -350,7 +350,7 @@ const Main: React.FC<MainPageProps> = () => {
             <span onClick={() => navigate(`/TourPage/Food`)}>Restaurant</span>
           </div>
           <div className="community-navigate">
-            <span onClick={() => navigate(`/ScheduleListPage/`)}>
+            <span onClick={() => navigate(`/ScheduleListPage`)}>
               Community
             </span>
           </div>
