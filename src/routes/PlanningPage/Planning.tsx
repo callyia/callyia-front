@@ -7,7 +7,6 @@ import PlaceCard from "../../components/PlaceCard";
 import toast, { Toaster } from "react-hot-toast";
 import { Modal, ModalContent } from "../../theme/daisyui/Modal";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-import axios from "axios";
 
 const plans: Array<{
   placeId: number;
@@ -815,6 +814,20 @@ export default function Planning() {
   };
 
   const openPostModal = () => {
+    if (
+      planData.length +
+        planData2.length +
+        planData3.length +
+        planData4.length +
+        planData5.length +
+        planData6.length +
+        planData7.length ===
+      0
+    ) {
+      toast.error("상세 내용이 없어서 포스팅할 수 없어요!");
+      return;
+    }
+
     setPostModalOpen(true);
   };
 
@@ -1017,6 +1030,7 @@ export default function Planning() {
         })
         .catch((error) => {
           console.error("Error fetching data:", error);
+          navigate("../UnAuthorized");
         });
     }
   }, []);
@@ -1099,6 +1113,8 @@ export default function Planning() {
         sno: null,
       };
       newValues[day - 1][index][type] = value;
+      console.log(newValues[day - 1][index][type]);
+
       return newValues;
     });
   };

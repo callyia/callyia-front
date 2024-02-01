@@ -8,17 +8,17 @@ export default function UserProfilePage() {
   const navigate = useNavigate();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [profileImage, setProfileImage] = useState<string>(
-    "./dummyimages/image1.jpeg"
-  ); // 기본 이미지
+  const [profileImage, setProfileImage] = useState<string>("./dummyimages/image1.jpeg"); 
 
   const urlParams = new URLSearchParams(location.search);
   const email = urlParams.get("userid");
 
-  const [dataFetched, setDataFetched] = useState(false);
   const [user, setUser] = useState<any>();
   const [scheduleThumbnailDTOs, setScheduleThumbnailDTOs] = useState<any[]>();
   const [isLoading, setIsLoading] = useState(true);
+
+  const [redirectCountdown, setRedirectCountdown] = useState(2);
+
   const scheduleClick = (sno: any) => {
     navigate(`../SchedulePage/${sno.sno}`);
   };
@@ -40,41 +40,53 @@ export default function UserProfilePage() {
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
-      setDataFetched(true); 
+      setIsLoading(false);
     }
   };
-
+  
   useEffect(() => {
     if (email) {
       fetchMember(email);
-    } else {
-      setDataFetched(true);
     }
   }, [email]);
-
+  
   useEffect(() => {
-    console.log(scheduleThumbnailDTOs);
-  }, [scheduleThumbnailDTOs]);
-
+    if (!isLoading && !user) {
+      const timer = setInterval(() => {
+        setRedirectCountdown((prevCount) => (prevCount > 0 ? prevCount - 1 : 0));
+      }, 1000);
+  
+      return () => clearInterval(timer);
+    }
+  }, [isLoading, user]);
+  
   useEffect(() => {
-    console.log("User object: ", user);
-  }, [user]);
-
+    if (redirectCountdown === 0) {
+      navigate('/');
+    }
+  }, [redirectCountdown, navigate]);
+  
   if (!user && isLoading) {
-    return <div>사실 렌더링 중 ㅋ</div>;
+    return (<div className="user-profile-page">
+    </div>);
   }
-
+  
   if (!user) {
     return (
-      <div className="user-profile-page">
-        <div className="user-profile-search-keyword-header">
-          <span className="user-profile-search-keyword">
-            USER를 찾을 수 없습니다. 다시 한번 더 확인바랍니다.
+      <div className="user-from-list-page">
+        <div className='user-from-list-search-keyword-header'>
+          <span className='user-from-danger-message'>
+            잘못된 접근입니다. URL을 조작하지 마세요 
           </span>
+          <img src="./dummyimages/error.png" alt="error img" className="user-from-danger-image" />
+          <div className="user-danger-timeout-message">
+              <span style={{ color: "red", fontWeight: "bold"}}>{redirectCountdown}</span> 초후 메인페이지로 이동합니다.
+          </div>
         </div>
       </div>
     );
   }
+
 
   return (
     <div
@@ -168,19 +180,8 @@ export default function UserProfilePage() {
         </div>
         <div
           style={{ display: "grid", height: "702px", width: "100%" }}
-          key="1"
-        >
+          key="1">
           <div className="user-profile-user-posts">
-            {/* {scheduleDTOs.map((scheduleDTO: any, index: any) => (
-              <div
-                className="border-2 user-profile-post-img"
-                onClick={() => scheduleClick({ sno: scheduleDTO.sno })}
-              >
-                {scheduleDTO.sno} | {scheduleDTO.total_Day} |{" "}
-                {scheduleDTO.member_email} | {scheduleDTO.sName}
-              </div>
-            ))} */}
-
             {scheduleThumbnailDTOs &&
               scheduleThumbnailDTOs.map(
                 (scheduleThumbnailDTO: any, index: any) => (

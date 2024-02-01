@@ -17,7 +17,6 @@
 
 .list-search-keyword, .list-search-combo {
   color: red;
-  font-weight: 700;
   font-family: 'GmarketSans700';
 }
 
@@ -163,17 +162,18 @@
 }
 
 .list-tips-card {
-  background-color: white;
   border: 1px solid #ddd;
   border-radius: 50px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  transition: transform 0.3s ease;
+  transition: transform 0.5s ease;
   cursor: pointer;
   overflow: hidden;
 }
 
 .list-tips-card:hover {
-  transform: scale(1.2);
+  background-color: black;
+  color: white;
+  transform: scale(1.025);
   box-shadow: 0 8px 16px rgba(0,0,0,0.2); 
 }
 
@@ -185,6 +185,7 @@
   align-items: center;
   justify-content: center;
   height: 100%;
+  opacity: 1; 
 }
 
 .list-tips-card-title {
@@ -199,13 +200,21 @@
   display: none; 
   text-align: left;
   padding: 20px;
+  opacity: 0;
 }
 
-.list-tips-card:hover .list-tips-card-title,
+.list-tips-card-hover-content p {
+  font-size: 24px;
+  font-family: 'GmarketSans300' 
+}
+
 .list-tips-card:hover .list-tips-card-content {
+  opacity: 0;
   display: none;
 }
 
 .list-tips-card:hover .list-tips-card-hover-content {
+
   display: block;
+  opacity: 1;
 }

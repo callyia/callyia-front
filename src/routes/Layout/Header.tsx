@@ -45,6 +45,7 @@ export default function Header() {
   const handleSearchKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter" && searchKeyword.trim() !== "") {
       navigate(`/ListPage?searchcombo=${searchCombo}&searchkeyword=${searchKeyword}`);
+      window.location.reload();
     }
   };
 

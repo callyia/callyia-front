@@ -57,6 +57,7 @@ const Main: React.FC<MainPageProps> = () => {
   const [selectedTour, setSelectedTour] = useState<TourData | null>(null);
   const [openDetail, setOpenDetail] = useState(false);
   const [selectedDay, setSelectedDay] = useState(1);
+  const [tourCount, setTourCount] = useState<number>(0);
 
   const pagesToShow = 10;
   const startPage =
@@ -114,6 +115,25 @@ const Main: React.FC<MainPageProps> = () => {
 
     fetchTourData();
   }, [currentPage]);
+
+  useEffect(() => {
+    const fetchTourCount = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:8080/Callyia/Tour/getCount`
+        );
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        setTourCount(data);
+      } catch (error) {
+        console.error("Error fetching tour data:", error);
+      }
+    };
+
+    fetchTourCount();
+  }, []);
 
   // 모든 스케쥴 가져옴
   useEffect(() => {
@@ -399,8 +419,7 @@ const Main: React.FC<MainPageProps> = () => {
           </section>
         </div>
         <div className="main-section-container">
-          <section className="main-section-div" style={{ marginRight: "33%" }}>
-            <span className="main-section-span-title">여행 정보</span>
+          <section className="main-section-div-tour-left">
             <div className="main-tour-info-section">
               {tourData.map((tour) => (
                 <div key={tour.placeId} onClick={() => openDetailClicked(tour)}>
@@ -473,6 +492,55 @@ const Main: React.FC<MainPageProps> = () => {
             <div className="main-info-pagination-controls">
               {renderPagination()}
             </div>
+          </section>
+        </div>
+        <div className="main-section-container">
+          <section
+            className="main-section-div-community"
+            style={{ marginLeft: "33%" }}
+          >
+            <span className="main-section-span-title">여행 공유 커뮤니티</span>
+
+            {scheduleData.map((schedule) => {
+              // schedule.sno에 해당하는 매칭 데이터 찾기
+              const matchingDetail = matchingDetailImages.find(
+                (detail) => detail.sno === schedule.sno
+              );
+
+              // 매칭 데이터가 있을 때 렌더링
+              return (
+                <div
+                  key={schedule.sno}
+                  className="list-card"
+                  onClick={() => navigate(`/SchedulePage/${schedule.sno}`)}
+                >
+                  {/* 프로필 클릭 시 해당 유저페이지로 이동 */}
+                  <span className="profile-info">
+                    <img
+                      className="profile-image"
+                      src={schedule.member_profile_image}
+                      alt="Profile"
+                    />
+                    <div className="profile-details">
+                      <h1 style={{ fontSize: "20px", margin: 0 }}>
+                        {schedule.member_nickname}
+                        {/* <p>{schedule.regDate.toDateString()}</p> */}
+                      </h1>
+                      {/* Add other details as needed */}
+                    </div>
+                  </span>
+                  <h1
+                    style={{
+                      fontSize: "30px",
+                      fontWeight: "bold",
+                      margin: "15px",
+                    }}
+                  >
+                    {schedule.sName}
+                  </h1>
+                </div>
+              );
+            })}
           </section>
         </div>
       </main>
