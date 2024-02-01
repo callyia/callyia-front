@@ -110,12 +110,14 @@ const LoginPage: React.FC = () => {
           </div>
           <div className="login-btn-wrap">
             <form id="loginForm" onSubmit={handleLogin}>
-              <input
+              <button
                 type="submit"
                 className="login-btn"
                 id="loginBtn"
                 value="로그인"
-              ></input>
+              >
+                로그인
+              </button>
             </form>
             <a href="./findPW.tsx">비밀번호를 잊으셨습니까?</a>
           </div>
