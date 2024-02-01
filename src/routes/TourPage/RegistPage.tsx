@@ -275,7 +275,7 @@ const RegistPage: React.FC<RegistPageProps> = ({ checkColumnData }) => {
       // 이미지를 서버에 업로드
 
       const uploadResponse = await axios.post(
-        "http://localhost:8080/Callyia/Tour/upload",
+        "http://localhost:8080/Callyia/s3/upload",
         formData,
         {
           headers: {
@@ -300,8 +300,8 @@ const RegistPage: React.FC<RegistPageProps> = ({ checkColumnData }) => {
           placeName: selectedPlace?.place_name,
           address:
             selectedPlace?.road_address_name || selectedPlace?.address_name,
-          latitude: selectedPlace?.x,
-          longitude: selectedPlace?.y,
+          latitude: selectedPlace?.y,
+          longitude: selectedPlace?.x,
           placeContent: content,
           checkColumn: selectedCheck,
           image: imagePath, // 이미지가 저장된 경로를 전송
