@@ -430,7 +430,7 @@ export default function SchedulePosting() {
   };
 
   return (
-    <div className="WholePage" style={{ display: "flex", height: "100%" }}>
+    <div className="WholePage" style={{ display: "flex", height: "1050px" }}>
       <div className="left">
         <div style={{ flex: 1 }}>
           {/* 왼쪽 상단 */}
