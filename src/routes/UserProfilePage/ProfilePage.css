@@ -261,9 +261,23 @@
   align-items: center;
 }
 
-.user-from-list-search-user
+.user-from-list-search-user, .user-from-danger-message
 {
   color: red;
   font-family: 'GmarketSans700';
   font-size: 60px;
+}
+
+.user-danger-timeout-message
+{
+  font-family: 'GmarketSans700';
+  font-size: 80px;
+}
+
+.user-from-danger-image {
+  width: 400px;
+  height: 400px;
+  margin: 0 auto;
+  margin-top: 50px;
+  margin-bottom: 50px;
 }
