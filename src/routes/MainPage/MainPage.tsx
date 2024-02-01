@@ -399,8 +399,7 @@ const Main: React.FC<MainPageProps> = () => {
           </section>
         </div>
         <div className="main-section-container">
-          <section className="main-section-div" style={{ marginRight: "33%" }}>
-            <span className="main-section-span-title">여행 정보</span>
+          <section className="main-section-div-tour-left">
             <div className="main-tour-info-section">
               {tourData.map((tour) => (
                 <div key={tour.placeId} onClick={() => openDetailClicked(tour)}>
@@ -472,6 +471,13 @@ const Main: React.FC<MainPageProps> = () => {
             </Modal>
             <div className="main-info-pagination-controls">
               {renderPagination()}
+            </div>
+          </section>
+          <section className="main-section-div-tour-right">
+            <div>
+              <span className="main-tour-section-span-title">
+                100,000,000개의 멋진 장소가 여러분을 기다리고 있습니다.
+              </span>
             </div>
           </section>
         </div>
