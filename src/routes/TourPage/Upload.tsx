@@ -43,7 +43,6 @@ const Upload: React.FC<UploadProps> = ({
 
   return (
     <div>
-      <div>첨부파일</div>
       <div className="flex w-full border border-solid rounded font-sm">
         {selectedImage && (
           <div className="flex items-center justify-between p-1 font-normal bg-gray-100 border border-gray-300 border-solid rounded-md w-[350px]">
@@ -51,7 +50,7 @@ const Upload: React.FC<UploadProps> = ({
               <img
                 src={selectedImage}
                 alt={`Image Preview`}
-                className="w-auto h-auto max-h-[128px]"
+                className="w-[250px] h-[250px]"
               />
             </div>
             <button onClick={removeFile}>

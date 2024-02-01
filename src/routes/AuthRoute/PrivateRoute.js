@@ -18,7 +18,11 @@ const PrivateRoute = ({ element, children }) => {
   );
 
   if (
-    !userAuthorities.some((authority) => authority.authority === "ROLE_USER")
+    !userAuthorities.some(
+      (authority) =>
+        authority.authority === "ROLE_USER" ||
+        authority.authority === "ROLE_ADMIN"
+    )
   ) {
     // 권한이 없는 경우 SignInPage로 이동
     return <Navigate to="/SignInPage" />;
