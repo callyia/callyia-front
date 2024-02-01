@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import RegistPage from "./RegistPage";
 import Layout from "../Layout";
 import NoMatch from "../NoMatch";

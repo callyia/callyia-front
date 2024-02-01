@@ -54,9 +54,6 @@ const RegistPage: React.FC<RegistPageProps> = ({ checkColumnData }) => {
   const [selectedTour, setSelectedTour] = useState<TourData | null>(null); //List에 선택한 데이터 정보 저장 공간
   const [totalPages, setTotalPages] = useState<number>(1); //전체 페이지
 
-  const itemsPerPage = 12;
-  const numberOfPages = Math.ceil(searchResults.length / itemsPerPage);
-
   const pagesToShow = 10;
   const startPage =
     Math.floor((currentPage - 1) / pagesToShow) * pagesToShow + 1;
@@ -607,6 +604,7 @@ const RegistPage: React.FC<RegistPageProps> = ({ checkColumnData }) => {
                     <div className="w-full h-auto">
                       <img
                         src={selectedTour.image}
+                        alt={"그림"}
                         style={{ width: "250px", height: "250px" }}
                         className="shadow-md shadow-slate-500 rounded-2xl"
                       />
