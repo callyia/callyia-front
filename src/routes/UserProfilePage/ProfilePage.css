@@ -1,6 +1,5 @@
 .user-profile-page {
-  display: flex;
-  flex-direction: column;
+  height: 1000px;
   align-items: center;
   padding: 5%;
 }
@@ -241,4 +240,30 @@
   max-width: 50px;
   width: 50px;
   margin-top: 165px;
+}
+
+.user-from-list-page
+{
+  margin-top: -40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 5%;
+  min-height: 80vh;
+  height: 1200px;
+}
+
+.user-from-list-search-keyword-header
+{
+  margin-bottom: 20px;
+  font-size: 33px;  
+  text-align: center;
+  align-items: center;
+}
+
+.user-from-list-search-user
+{
+  color: red;
+  font-family: 'GmarketSans700';
+  font-size: 60px;
 }
