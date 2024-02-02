@@ -65,7 +65,7 @@ const MyProfile: React.FC<MyProfileProps> = ({
     
     if (willSave) {
       swal({
-        text: "Change.",
+        text: "변경 성공",
         icon: "success",
         buttons: [false], 
         timer: 500, 

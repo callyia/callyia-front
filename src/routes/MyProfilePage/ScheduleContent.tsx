@@ -101,10 +101,10 @@ const ScheduleContent = () => {
         // 매칭 데이터가 있을 때 렌더링
         return (
           <div key={schedule.sno} className="profile-list-card"
-            onClick={() => navigate(`/SchedulePage/${schedule.sno}`)} >
+            onClick={() => navigate(`/SchedulePage/${matchingDetail.sno}`)} >
               <img
                 className="profile-schedule-image"
-                src={schedule.member_profile_image}
+                src={matchingDetail.detailImages}
                 alt="Profile"
               />
             <div className="profile-schedule-details" style={{ fontSize: "30px", fontWeight: "bold" }} >
