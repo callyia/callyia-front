@@ -7,7 +7,7 @@
   flex: 1;
   display: flex;
   flexdirection: column;
-  borderright: 2px solid #abcdef;
+  border-right: 100px solid #dddddd;
   padding: 16px;
   margin: 8px;
 }
@@ -81,8 +81,13 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease-in-out;
   background-color: #beefff;
-  width: 800px;
+  width: 700px;
 }
+.before-card {
+  display: grid;
+  grid-template-columns: 6fr 1fr;
+}
+
 .schedule-card-cart {
   align-items: center;
   border: 1px solid #dddddd;
@@ -92,7 +97,7 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease-in-out;
   background-color: #beefff;
-  width: 100%;
+  width: 400px;
 }
 .schedule-card-cart button {
   background-color: #fe2e2e;
@@ -106,9 +111,9 @@
   height: 100px;
 }
 .schedule-card-cart img {
-  width: 300px;
+  width: 400px;
   height: 200px;
-  margin-top: 1px;
+  margin-bottom: 10px;
 }
 .schedule-card-cart button:hover {
   transform: scale(1.025);
@@ -142,9 +147,10 @@
 .schedule-card p {
   color: black;
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
 }
-.schedule-card p button {
+
+.moreBtn {
   background-color: white;
   color: black;
   padding: 10px 15px;
@@ -153,9 +159,11 @@
   cursor: pointer;
   font-size: 16px;
   transition: background-color 0.3s ease;
+  width: 100px;
+  height: 45px;
 }
 
-.schedule-card p button:hover {
+.moreBtn:hover {
   background-color: #f0f0f0;
   transform: scale(1.025);
 }
@@ -177,7 +185,10 @@
   font-size: 40px;
   font-weight: bold;
 }
-
+.cart-area {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
 .details {
   padding: 10px;
   margin-top: 10px;

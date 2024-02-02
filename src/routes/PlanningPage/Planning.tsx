@@ -7,7 +7,6 @@ import PlaceCard from "../../components/PlaceCard";
 import toast, { Toaster } from "react-hot-toast";
 import { Modal, ModalContent } from "../../theme/daisyui/Modal";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-import axios from "axios";
 
 const plans: Array<{
   placeId: number;

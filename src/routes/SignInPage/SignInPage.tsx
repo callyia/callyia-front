@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { FormEvent, ChangeEvent } from "react";
+import React, { useState } from "react";
+import { FormEvent } from "react";
 import "./SignInPage.css"; // Import your stylesheet
 import { useNavigate } from "react-router-dom";
 import axios, { AxiosResponse } from "axios";
@@ -8,7 +8,6 @@ const LoginPage: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const loginForm = document.querySelector("#loginForm") as HTMLFormElement;
 
   const isEmailValid = (email: string): boolean => {
     // 이메일 유효성 검사 정규식
@@ -93,7 +92,7 @@ const LoginPage: React.FC = () => {
                 type="email"
                 id="email"
                 value={email}
-                style={{ backgroundColor: "white", color: "black"}}
+                style={{ backgroundColor: "white", color: "black" }}
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
@@ -104,19 +103,21 @@ const LoginPage: React.FC = () => {
                 type="password"
                 id="pw"
                 value={password}
-                style={{ backgroundColor: "white", color: "black"}}
+                style={{ backgroundColor: "white", color: "black" }}
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
           </div>
           <div className="login-btn-wrap">
             <form id="loginForm" onSubmit={handleLogin}>
-              <input
+              <button
                 type="submit"
                 className="login-btn"
                 id="loginBtn"
                 value="로그인"
-              ></input>
+              >
+                로그인
+              </button>
             </form>
             <a href="./findPW.tsx">비밀번호를 잊으셨습니까?</a>
           </div>

@@ -1,5 +1,4 @@
-import React, { useState, useCallback } from "react";
-import { FormEvent, ChangeEvent } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./SignUpPage.css";
 import axios from "axios";
@@ -141,27 +140,29 @@ const SignUp = () => {
     );
 
     try {
-      const imageFormData = new FormData();
+      const profileFormData = new FormData();
       if (profileImage) {
         const blob = await fetch(profileImage).then((res) => res.blob());
-        imageFormData.append("profileImage", blob);
+        profileFormData.append("file", blob, "selectedImage.jpg");
       }
-      console.log(imageFormData);
+      console.log(profileFormData);
       console.log(profileImage);
 
       // const token = localStorage.getItem("token");
-      const imageUploadResponse = await axios.post(
-        "http://localhost:8080/Callyia/member/upload",
-        imageFormData,
+      const profileResponse = await axios.post(
+        "http://localhost:8080/Callyia/s3/profile",
+        profileFormData,
         {
           headers: {
-            // Authorization: `Bearer ${token}`,
             "Content-Type": "multipart/form-data",
           },
         }
       );
+      if (profileResponse.status !== 200) {
+        throw new Error(`HTTP error! Status: ${profileResponse.status}`);
+      }
 
-      const uploadResult = imageUploadResponse.data;
+      const uploadResult = profileResponse.data;
       const imagePath = uploadResult.imagePath;
 
       console.log(imagePath);
@@ -182,7 +183,6 @@ const SignUp = () => {
         }),
         {
           headers: {
-            // Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
         }
@@ -305,8 +305,12 @@ const SignUp = () => {
             </div>
             <div className="SignUp-input-phone">
               <h4>Phone</h4>
-              <select id="tel1" value={tel1}
-                style={{ backgroundColor: "white", color: "black"}}  onChange={handleTel1Change}>
+              <select
+                id="tel1"
+                value={tel1}
+                style={{ backgroundColor: "white", color: "black" }}
+                onChange={handleTel1Change}
+              >
                 <option value="">Select</option>
                 <option value="010">010</option>
                 <option value="011">011</option>
@@ -318,7 +322,7 @@ const SignUp = () => {
                 onChange={handleTel2Change}
                 maxLength={4}
                 value={tel2}
-                style={{ backgroundColor: "white", color: "black"}}
+                style={{ backgroundColor: "white", color: "black" }}
               />
               -{" "}
               <input
@@ -327,7 +331,7 @@ const SignUp = () => {
                 onChange={handleTel3Change}
                 maxLength={4}
                 value={tel3}
-                style={{ backgroundColor: "white", color: "black"}}
+                style={{ backgroundColor: "white", color: "black" }}
               />
             </div>
           </div>

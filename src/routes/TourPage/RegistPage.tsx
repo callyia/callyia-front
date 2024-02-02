@@ -32,7 +32,7 @@ interface RegistPageProps {
 
 SwiperCore.use([Navigation, Pagination, Autoplay]);
 
-const RegistPage: React.FC<RegistPageProps> = ( {checkColumnData} ) => {
+const RegistPage: React.FC<RegistPageProps> = ({ checkColumnData }) => {
   // 상태 관리
   const [openModal, setOpenModal] = useState(false); //등록페이지 열림 닫힘 상태
   const [selectedPlace, setSelectedPlace] = useState<any>(null);
@@ -43,7 +43,9 @@ const RegistPage: React.FC<RegistPageProps> = ( {checkColumnData} ) => {
   >();
   const [clearUploadImage, setClearUploadImage] = useState(false); //등록페이지 이미지 초기화
   const [selectedCheck, setSelectedCheck] = useState("관광지");
-  const [checkColumn, setCheckColumn] = useState<string>(checkColumnData || "전체"); //검색 옵션 지정
+  const [checkColumn, setCheckColumn] = useState<string>(
+    checkColumnData || "전체"
+  ); //검색 옵션 지정
   const [keyword, setKeyword] = useState<string>(""); //검색 keyword 저장 공간
   const [searchResults, setSearchResults] = useState([]); //검색 결과 저장 공간
   const [tourData, setTourData] = useState<TourData[]>([]); //fetchTourData로 Tour의 전체 데이터 저장 공간
@@ -52,16 +54,13 @@ const RegistPage: React.FC<RegistPageProps> = ( {checkColumnData} ) => {
   const [selectedTour, setSelectedTour] = useState<TourData | null>(null); //List에 선택한 데이터 정보 저장 공간
   const [totalPages, setTotalPages] = useState<number>(1); //전체 페이지
 
-  const itemsPerPage = 12;
-  const numberOfPages = Math.ceil(searchResults.length / itemsPerPage);
-
   const pagesToShow = 10;
   const startPage =
     Math.floor((currentPage - 1) / pagesToShow) * pagesToShow + 1;
   const endPage = Math.min(startPage + pagesToShow - 1, totalPages);
 
   console.log(checkColumn);
-  
+
   // 상세페이지 열기
   const openDetailClicked = (selectedTour: TourData) => {
     setSelectedTour(selectedTour); // 클릭된 관광지 정보 저장
@@ -248,7 +247,6 @@ const RegistPage: React.FC<RegistPageProps> = ( {checkColumnData} ) => {
     currentPageCheck();
   }, [currentPage]);
 
-
   // 검색어 입력창의 placeholder 설정
   const getPlaceholder = () => {
     switch (checkColumn) {
@@ -277,7 +275,7 @@ const RegistPage: React.FC<RegistPageProps> = ( {checkColumnData} ) => {
       // 이미지를 서버에 업로드
 
       const uploadResponse = await axios.post(
-        "http://localhost:8080/Callyia/Tour/upload",
+        "http://localhost:8080/Callyia/s3/upload",
         formData,
         {
           headers: {
@@ -292,7 +290,6 @@ const RegistPage: React.FC<RegistPageProps> = ( {checkColumnData} ) => {
       }
 
       const uploadResult = uploadResponse.data;
-      // const imagePath = uploadResult.imageUrl; // 이미지가 저장된 경로
       const imagePath = uploadResult.imagePath; // 이미지가 저장된 경로
 
       // 투어 정보를 데이터베이스에 저장
@@ -303,8 +300,8 @@ const RegistPage: React.FC<RegistPageProps> = ( {checkColumnData} ) => {
           placeName: selectedPlace?.place_name,
           address:
             selectedPlace?.road_address_name || selectedPlace?.address_name,
-          latitude: selectedPlace?.x,
-          longitude: selectedPlace?.y,
+          latitude: selectedPlace?.y,
+          longitude: selectedPlace?.x,
           placeContent: content,
           checkColumn: selectedCheck,
           image: imagePath, // 이미지가 저장된 경로를 전송
@@ -335,13 +332,12 @@ const RegistPage: React.FC<RegistPageProps> = ( {checkColumnData} ) => {
         default:
           throw new Error(`HTTP error! Status: ${response.status}`);
       }
-      window.location.reload();
     } catch (error: any) {
       console.error("Error accepting data:", error.message);
       if (error.message.includes("409")) {
         alert("해당 파일은 이미 등록되어 있습니다.");
       }
-    } 
+    }
   };
 
   // 체크박스 변경 시 처리 함수
@@ -362,7 +358,6 @@ const RegistPage: React.FC<RegistPageProps> = ( {checkColumnData} ) => {
   const handlePlaceSelected = (place: any) => {
     setSelectedPlace(place);
   };
-
 
   const goToPage = (page: number) => {
     setCurrentPage(Math.max(1, Math.min(totalPages, page)));
@@ -430,6 +425,29 @@ const RegistPage: React.FC<RegistPageProps> = ( {checkColumnData} ) => {
     return pages;
   };
 
+  const userRole = localStorage.getItem("authorities");
+
+  const userAuthorities = JSON.parse(userRole || "[]");
+
+  const isAdmin = userAuthorities.some(
+    (authority: any) => authority.authority === "ROLE_ADMIN"
+  );
+
+  const renderRegisterButton = () => {
+    if (isAdmin) {
+      return (
+        <button
+          type="button"
+          onClick={openClicked}
+          className="absolute text-orange-300 right-4 btn-lg"
+        >
+          등록
+        </button>
+      );
+    }
+    return null;
+  };
+
   return (
     <div>
       <div>
@@ -487,46 +505,46 @@ const RegistPage: React.FC<RegistPageProps> = ( {checkColumnData} ) => {
         </div>
       </div>
       <section>
-        <button
-          type="button"
-          onClick={openClicked}
-          className="absolute text-orange-300 right-4 btn-lg"
-        >
-          등록
-        </button>
+        {renderRegisterButton()}
         <Modal className="" open={openModal}>
           <ModalContent
             onCloseIconClicked={closeClicked}
-            className="p-4 bg-white rounded-lg h-[800px] w-[1400px] relative"
+            className="p-4 bg-white rounded-lg h-[700px] w-[1400px] relative"
           >
-            <div>
-              <h3 className="mb-8 text-center">등록페이지입니다.</h3>
-            </div>
-            <div className="flex flex-row h-[340px]">
+            <div className="flex flex-row h-[340px] mt-8">
               <div className="grid w-1/2">
                 <CheckBox onCheckChange={handleCheckBoxChange} />
                 <div className="flex items-center mb-2">
                   <label className="mr-2 padd">이름 :</label>
-                  <div className="flex-grow p-1 border rounded"  style={{height: "30px"}}>
+                  <div
+                    className="flex-grow p-1 border rounded"
+                    style={{ height: "30px" }}
+                  >
                     {selectedPlace?.place_name}
                   </div>
                 </div>
                 <div className="flex items-center mb-2">
                   <label className="mr-2">지역 :</label>
-                  <div className="flex-grow p-1 border rounded"  style={{height: "30px"}}>
+                  <div
+                    className="flex-grow p-1 border rounded"
+                    style={{ height: "30px" }}
+                  >
                     {selectedPlace?.road_address_name ||
                       selectedPlace?.address_name}
                   </div>
                 </div>
                 <div className="flex items-center mb-2">
                   <label className="mr-2">좌표 :</label>
-                  <div className="flex-grow p-1 border rounded">
+                  <div
+                    className="flex-grow p-1 border rounded"
+                    style={{ height: "30px" }}
+                  >
                     {selectedPlace?.x && selectedPlace?.y ? (
                       <>
                         위도: {selectedPlace.x}, 경도: {selectedPlace.y}
                       </>
                     ) : (
-                      "좌표 정보 없음"
+                      ""
                     )}
                   </div>
                 </div>
@@ -540,6 +558,7 @@ const RegistPage: React.FC<RegistPageProps> = ( {checkColumnData} ) => {
                     style={{ backgroundColor: "white" }}
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
+                    placeholder="내용을 작성해주세요"
                   />
                 </div>
                 <div>
@@ -577,52 +596,56 @@ const RegistPage: React.FC<RegistPageProps> = ( {checkColumnData} ) => {
           <Modal className="" open={openDetail}>
             <ModalContent
               onCloseIconClicked={closeDetailClicked}
-              className="p-4 bg-white rounded-lg min-h-[500px] h-[auto] w-[800px] relative"
+              className="p-4 bg-white rounded-lg min-h-[300px] h-[auto] w-[700px] relative"
             >
-              <div>
-                <h3 className="mb-8 text-center">상세페이지입니다.</h3>
-              </div>
-              {selectedTour && (
-                <div className="grid">
-                  <div className="flex items-center mb-2">
-                    <label className="mr-2">이름 : </label>
-                    <p className="flex-grow p-1 border rounded">
-                      {selectedTour.placeName}
-                    </p>
-                  </div>
-                  <div className="flex items-center mb-2">
-                    <label className="mr-2">지역 : </label>
-                    <p className="flex-grow p-1 border rounded">
-                      {selectedTour.address}
-                    </p>
-                  </div>
-                  <div className="flex items-center mb-2">
-                    <label className="mr-2">내용 : </label>
-                    <p className="flex-grow h-auto p-1 border rounded">
-                      {selectedTour.placeContent}
-                    </p>
-                  </div>
-                  <div className="w-full h-auto">
-                    <img
-                      src={selectedTour.image}
-                      style={{ width: "400px", height: "250px"}}
-                    />
-                  </div>
+              <div className="flex flex-row mt-3">
+                <div className="flex items-center justify-center flex-1">
+                  {selectedTour && (
+                    <div className="w-full h-auto">
+                      <img
+                        src={selectedTour.image}
+                        alt={"그림"}
+                        style={{ width: "250px", height: "250px" }}
+                        className="shadow-md shadow-slate-500 rounded-2xl"
+                      />
+                    </div>
+                  )}
                 </div>
-              )}
+                <div className="flex-1">
+                  {selectedTour && (
+                    <div>
+                      <div className="flex items-center mt-2">
+                        <p className="flex-grow p-1 text-style">
+                          {selectedTour.address}
+                        </p>
+                      </div>
+                      <div className="flex items-center">
+                        <p className="flex-grow p-1 text-style-second">
+                          {selectedTour.placeName}
+                        </p>
+                      </div>
+                      <div className="flex items-center">
+                        <p className="flex-grow h-auto p-1">
+                          {selectedTour.placeContent}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
               <div className="absolute bottom-4 right-4">
-                <ModalAction className="absolute bottom-0 right-0 flex flex-row">
+                <ModalAction className="flex flex-row">
                   <Button
-                    className="w-24 normal-case btn-primary btn-sm"
+                    className="w-24 mr-2 normal-case btn-primary btn-sm"
                     onClick={basketClicked}
                   >
-                    Basket
+                    장바구니
                   </Button>
                   <Button
                     className="w-24 normal-case btn-sm"
                     onClick={closeDetailClicked}
                   >
-                    Close
+                    취소
                   </Button>
                 </ModalAction>
               </div>

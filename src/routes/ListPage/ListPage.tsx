@@ -60,9 +60,9 @@ const ListPage = () => {
   const [isValidQuery, setIsValidQuery] = useState(true);
 
   const tips: Tips = {
-    user: ["유저의 경우에는 닉네임을 기반으로 검색합니다.", "닉네임이 기억나지 않을 때는 올린 글을 참조해서 찾아보세요.", "해당 유저가 탈퇴한 경우는 찾을 수 없습니다."],
-    location: ["장소의 경우에는 이름과 주소를 기반으로 검색합니다.", "장소의 경우 카카오맵을 기반으로 하고 있습니다."],
-    schedule: ["일정의 경우에는 일정 이름을 기반으로 검색합니다.", "Schedule Tip 2", "Schedule Tip 3", "Schedule Tip 4"]
+    user: ["- 유저의 경우에는 닉네임을 기반으로 검색합니다.", "- 닉네임이 기억나지 않을 때는 올린 글을 참조해서 찾아보세요.", "- 해당 유저가 탈퇴한 경우는 찾을 수 없습니다."],
+    location: ["- 장소의 경우에는 이름과 주소를 기반으로 검색합니다.", "- 장소의 경우 카카오맵을 기반으로 하고 있습니다."],
+    schedule: ["- 일정의 경우에는 일정 이름을 기반으로 검색합니다.", "- 일정 이름의 경우 유저가 변경했을 수도 있습니다."]
   };
   
   useEffect(() => {
@@ -167,9 +167,9 @@ const ListPage = () => {
     );
   }
 
-  if (!dataFetched) {
-    return <div>Loading...</div>;
-}
+//   if (!dataFetched) {
+//     return <div>Loading...</div>;
+// }
 
   if (dataFetched && UserSearchResult.length === 0 && LocationSearchResult.length === 0 && ScheduleSearchResult.length === 0) {
     return (
@@ -199,7 +199,7 @@ const ListPage = () => {
             <div className='list-tips-card-title'>{`${type === 'user' ? '유저' : type === 'location' ? '장소' : '일정'}에 관한 검색 TIP`}
             <div className='list-tips-card-content'>앞에 선택하는 콤보박스와 오타를 확인하세요!</div>
             {hoveredCard === index && (
-              <div className='list-tips-card-hover-content'>
+              <div className='list-tips-card-hover-content' >
               {tips[type as keyof Tips].map((tip: string, tipIndex: number) => (
                 <p key={tipIndex}>{tip}</p>
               ))}

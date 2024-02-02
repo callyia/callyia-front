@@ -67,6 +67,14 @@ interface MemberDTO {
   aboutMe: string;
 }
 
+interface BasketDTO {
+  bno: number;
+  placeId: number;
+  userId: string;
+  placeName: string;
+  image: string;
+}
+
 interface ScheduleData {
   scheduleDTO: ScheduleDTO | null;
   detailScheduleDTOList: DetailScheduleItem[];
@@ -83,11 +91,27 @@ export default function SchedulePosting() {
     replyDTOList: [],
     tourDTOList: [],
   });
+  const [cartData, setCartData] = useState<BasketDTO[]>([]); // 초기값을 배열로 설정
   const navigate = useNavigate();
   const { sno } = useParams();
 
+  const email = localStorage.getItem("email");
   const token = localStorage.getItem("token");
 
+  // ScheduleCard를 DAY별로 그룹화하는 함수
+  const groupByDay = (schedule: DetailScheduleItem[]) => {
+    const grouped: { [day: number]: DetailScheduleItem[] } = {};
+    schedule.forEach((item) => {
+      if (!grouped[item.day]) {
+        grouped[item.day] = [];
+      }
+      grouped[item.day].push(item);
+    });
+    return grouped;
+  };
+  const groupedSchedule = groupByDay(scheduleData.detailScheduleDTOList);
+
+  // Schedule GET
   const fetchScheduleData = async () => {
     try {
       const response = await fetch(
@@ -116,24 +140,9 @@ export default function SchedulePosting() {
       console.log("Error fetching tour data:", error);
     }
   };
-
-  //GET
   useEffect(() => {
     fetchScheduleData();
   }, [sno]);
-
-  // ScheduleCard를 DAY별로 그룹화하는 함수
-  const groupByDay = (schedule: DetailScheduleItem[]) => {
-    const grouped: { [day: number]: DetailScheduleItem[] } = {};
-    schedule.forEach((item) => {
-      if (!grouped[item.day]) {
-        grouped[item.day] = [];
-      }
-      grouped[item.day].push(item);
-    });
-    return grouped;
-  };
-  const groupedSchedule = groupByDay(scheduleData.detailScheduleDTOList);
 
   //Map -------------------------------------------------------------------------------
   var moreOverlay: any = null;
@@ -278,21 +287,93 @@ export default function SchedulePosting() {
       map.panTo(moveLatLon);
     }
   };
+  //--------------------------------------------------------------------------------------
 
   // Cart --------------------------------------------------------------------------------
-  const [cart, setCart] = useState<ScheduleItem[]>([]);
+  // cart GET
+  const fetchCartData = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/Callyia/Basket/getBasketPosting?email=${email}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const data = await response.json();
+      setCartData(data);
+    } catch (error) {
+      console.log("Error fetching tour data:", error);
+    }
+  };
+  useEffect(() => {
+    fetchCartData();
+  }, [email]);
+  // cartData
 
-  const handleAddToCart = (item: ScheduleItem) => {
-    setCart((prevCart) => [...prevCart, item]);
+  //장바구니에 추가
+  const registerCart = async (item: ScheduleItem) => {
+    try {
+      // 댓글을 서버에 저장하는 API 호출
+      const response = await fetch(
+        "http://localhost:8080/Callyia/Basket/register",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            placeId: item.place_id,
+            userId: email,
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      window.location.reload();
+    } catch (error) {
+      console.error("Error adding comment:", error);
+    }
   };
 
-  const handleRemoveFromCart = (itemId: number) => {
-    setCart((prevCart) => prevCart.filter((item) => item.place_id !== itemId));
+  // 장바구니에서 삭제
+  const removeCart = async (itemBno: number) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/Callyia/Basket/delete/${itemBno}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (!response.ok) {
+        const errorMessage = await response.text();
+        throw new Error(
+          `HTTP error! Status: ${response.status}, Message: ${errorMessage}`
+        );
+      }
+      window.location.reload();
+    } catch (error) {
+      console.error("Error deleting:", error);
+    }
   };
 
+  // --------------------------------------------------------------------------------------
   const transformToScheduleItem = (
     detailItem: DetailScheduleItem,
-    tourList: TourDTO[]
+    tourList: TourDTO[],
+    basketList: BasketDTO[]
   ): ScheduleItem => {
     const tourItem = tourList.find(
       (tour) => tour.placeId === detailItem.place_id
@@ -349,7 +430,7 @@ export default function SchedulePosting() {
   };
 
   return (
-    <div className="WholePage" style={{ display: "flex", height: "100%" }}>
+    <div className="WholePage" style={{ display: "flex", height: "1050px" }}>
       <div className="left">
         <div style={{ flex: 1 }}>
           {/* 왼쪽 상단 */}
@@ -394,7 +475,8 @@ export default function SchedulePosting() {
                   {items.map((item, index) => {
                     const transformedItem = transformToScheduleItem(
                       item,
-                      scheduleData.tourDTOList
+                      scheduleData.tourDTOList,
+                      cartData
                     );
                     return (
                       <ScheduleCard
@@ -408,12 +490,9 @@ export default function SchedulePosting() {
                             transformedItem.detail_images
                           )
                         }
-                        onAddToCart={() => handleAddToCart(transformedItem)}
-                        onRemoveFromCart={() =>
-                          handleRemoveFromCart(item.place_id)
-                        }
-                        isInCart={cart.some(
-                          (cartItem) => cartItem.place_id === item.place_id
+                        onAddToCart={() => registerCart(transformedItem)}
+                        isInCart={cartData.some(
+                          (cartItem) => cartItem.placeId === item.place_id
                         )}
                       />
                     );
@@ -452,7 +531,6 @@ export default function SchedulePosting() {
         {/* 오른쪽 하단 */}
         <div className="right-bottom">
           {/* <Cart /> */}
-
           <div className={`cart  "hovered" : ""}`}>
             <h2
               style={{
@@ -469,31 +547,31 @@ export default function SchedulePosting() {
               />
               장바구니
             </h2>
-            {cart.map((item, index) => (
-              <div className="schedule-card-cart" key={item.place_id}>
-                <div
-                  style={{ borderBottom: "1px solid #bdbdbd", height: "100px" }}
-                >
-                  <span className="schedule-number">{item.place_name}</span>
-                  <button
-                    onClick={() => handleRemoveFromCart(item.place_id)}
-                    style={{
-                      justifyContent: "center",
-                      display: "flex",
-                      alignItems: "center",
-                      float: "right",
-                    }}
-                  >
-                    <TbBasketMinus
+            <div className="cart-area">
+              {cartData.map((item, index) => (
+                <div className="schedule-card-cart">
+                  <img src={item.image} />
+                  <div style={{ height: "100px" }}>
+                    <span className="schedule-number">{item.placeName}</span>
+                    <button
+                      onClick={() => removeCart(item.bno)}
                       style={{
-                        fontSize: "50px",
+                        justifyContent: "center",
+                        display: "flex",
+                        alignItems: "center",
+                        float: "right",
                       }}
-                    />
-                  </button>
+                    >
+                      <TbBasketMinus
+                        style={{
+                          fontSize: "50px",
+                        }}
+                      />
+                    </button>
+                  </div>
                 </div>
-                <img src={item.detail_images} />
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </div>
