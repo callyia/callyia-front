@@ -63,6 +63,7 @@ export default function Planning() {
   const [basketData, setBasketData] = useState([]);
   const [area1, toggleArea1] = useToggle();
   const [area2, toggleArea2] = useToggle();
+  const [loading, toggleLoading] = useToggle();
   const [isModalOpen, setModalOpen] = useState(false);
   const [isPostModalOpen, setPostModalOpen] = useState(false);
 
@@ -1116,12 +1117,30 @@ export default function Planning() {
   };
 
   const handleButtonClick = async (formData: any) => {
+    toggleLoading();
     const flattenedValues = inputValues.flatMap((dayValues) => dayValues || []);
 
     const hasEmptyTip = flattenedValues.some((item) => item.tip === "");
 
     if (hasEmptyTip) {
-      toast.error("empty tip!");
+      toggleLoading();
+      toast.error("각 계획별로 사진이나 팁을 남겨주세요!");
+      return;
+    }
+
+    const planLength = [
+      ...planData,
+      ...planData2,
+      ...planData3,
+      ...planData4,
+      ...planData5,
+      ...planData6,
+      ...planData7,
+    ].length;
+
+    if (planLength != flattenedValues.length) {
+      toggleLoading();
+      toast.error("각 계획별로 사진이나 팁을 남겨주세요!");
       return;
     }
 
@@ -1136,29 +1155,22 @@ export default function Planning() {
     );
 
     if (response.status !== 200) {
+      toggleLoading();
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
     const data = response.data;
+    console.log(data);
+
+    if (data.length == 0) {
+      toggleLoading();
+      toast.error("각 계획별로 사진이나 팁을 남겨주세요!");
+      return;
+    }
 
     flattenedValues.map((item, index) => {
       item.detailImages = data[index];
     });
-
-    const planLength = [
-      ...planData,
-      ...planData2,
-      ...planData3,
-      ...planData4,
-      ...planData5,
-      ...planData6,
-      ...planData7,
-    ].length;
-
-    if (planLength != flattenedValues.length) {
-      toast.error("각 계획별로 사진이나 팁을 남겨주세요!");
-      return;
-    }
 
     const titleText = document.querySelector(
       "#titleText"
@@ -1197,10 +1209,11 @@ export default function Planning() {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
+        toggleLoading();
         navigate("/SchedulePage/" + data);
       })
       .catch((error) => {
+        toggleLoading();
         console.error("Error fetching data:", error);
       });
   };
@@ -1486,7 +1499,7 @@ export default function Planning() {
                             )
                           }
                           id={`tip-${index + 1}-${i}`}
-                          className="ml-2 w-96"
+                          className="ml-2 w-80"
                           type="text"
                         />
                       </div>
@@ -1523,7 +1536,7 @@ export default function Planning() {
                             )
                           }
                           id={`tip-${index + 1}-${i}`}
-                          className="ml-2 w-96"
+                          className="ml-2 w-80"
                           type="text"
                         />
                       </div>
@@ -1560,7 +1573,7 @@ export default function Planning() {
                             )
                           }
                           id={`tip-${index + 1}-${i}`}
-                          className="ml-2 w-96"
+                          className="ml-2 w-80"
                           type="text"
                         />
                       </div>
@@ -1597,7 +1610,7 @@ export default function Planning() {
                             )
                           }
                           id={`tip-${index + 1}-${i}`}
-                          className="ml-2 w-96"
+                          className="ml-2 w-80"
                           type="text"
                         />
                       </div>
@@ -1634,7 +1647,7 @@ export default function Planning() {
                             )
                           }
                           id={`tip-${index + 1}-${i}`}
-                          className="ml-2 w-96"
+                          className="ml-2 w-80"
                           type="text"
                         />
                       </div>
@@ -1671,7 +1684,7 @@ export default function Planning() {
                             )
                           }
                           id={`tip-${index + 1}-${i}`}
-                          className="ml-2 w-96"
+                          className="ml-2 w-80"
                           type="text"
                         />
                       </div>
@@ -1708,7 +1721,7 @@ export default function Planning() {
                             )
                           }
                           id={`tip-${index + 1}-${i}`}
-                          className="ml-2 w-96"
+                          className="ml-2 w-80"
                           type="text"
                         />
                       </div>
@@ -1742,6 +1755,15 @@ export default function Planning() {
       <div className="div-right">
         <div id="map" style={{ width: "100%", height: "100%" }} />
       </div>
+
+      <Modal open={loading}>
+        <ModalContent className="div-loading">
+          <div className="div-loading-content">
+            <div className="w-16 loading-dots loading" />
+            <span className="text-lg font-semibold">잠시만 기다려주세요.</span>
+          </div>
+        </ModalContent>
+      </Modal>
     </div>
   );
 }
