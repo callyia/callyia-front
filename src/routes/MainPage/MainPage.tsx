@@ -350,7 +350,7 @@ const Main: React.FC<MainPageProps> = () => {
             <span onClick={() => navigate(`/TourPage/Food`)}>Restaurant</span>
           </div>
           <div className="community-navigate">
-            <span onClick={() => navigate(`/ScheduleListPage`)}>
+            <span onClick={() => navigate(`/ScheduleListPage/`)}>
               Community
             </span>
           </div>
@@ -497,7 +497,18 @@ const Main: React.FC<MainPageProps> = () => {
               {renderPagination()}
             </div>
           </section>
+          <section className="main-section-div-tour-right">
+            <div>
+              <span className="main-tour-section-span-title-count">
+                {tourCount.toLocaleString()}
+              </span>
+              <span className="main-tour-section-span-title">
+                개의 멋진 장소가 여러분을 기다리고 있습니다.
+              </span>
+            </div>
+          </section>
         </div>
+        <div className="main-section-container"></div>
       </main>
       <button
         type="button"
