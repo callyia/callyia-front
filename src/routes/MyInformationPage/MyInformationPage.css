@@ -1,0 +1,121 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  min-width: 100%;
+  background-image: url("../../../public/dummyimages_second/9.jpg");
+}
+
+.info-container {
+  text-align: left;
+  min-width: 800px;
+  max-width: 800px;
+  padding: 120px;
+  background-color: rgba(
+    255,
+    255,
+    255,
+    0.9
+  ); /* White background for the section */
+  border-radius: 8px; /* Optional: Add border-radius for a rounded look */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle box shadow */
+}
+
+.info-container div {
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+}
+
+.title {
+  position: absolute;
+  transform: translate(-80%, -200%);
+  font-size: 24px;
+  font-weight: bold;
+  color: green;
+}
+
+.changeBtn {
+  position: absolute;
+  transform: translate(580%, 0);
+}
+
+.delBtn {
+  transform: translate(0, 100%);
+}
+
+.saveBtn {
+  transform: translate(10%, 100%);
+}
+
+.changeBtn {
+  transform: translate(20%, 100%);
+}
+
+.mylabel {
+  min-width: 80px;
+  max-width: 80px;
+  display: block;
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+.myinput {
+  min-width: 400px;
+  padding: 8px;
+  background-color: lightgray;
+  border: 1px solid gray;
+}
+
+.mybutton {
+  padding: 6px 12px;
+  background-color: green;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.myinput:focus {
+  outline: 2px solid blue;
+}
+
+.modal-content {
+  padding: 20px;
+  text-align: center;
+}
+
+.modal-content p {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.modal-content button {
+  cursor: pointer;
+  padding: 10px 20px;
+  margin-right: 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.modal-content button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.accessBtn {
+  background-color: #4caf50;
+  color: white;
+}
+
+.cancelBtn {
+  background-color: #f44336;
+  color: white;
+}
+
+.editModeButtonBackground {
+  background-color: hsla(50, 33%, 25%, 0.75); /* 수정 모드일 때의 버튼 배경색 */
+  color: white; /* 수정 모드일 때의 버튼 텍스트 색상 */
+}
