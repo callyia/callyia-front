@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./RegistMap.css";
+import toast, { Toaster } from "react-hot-toast";
 
 declare global {
   interface Window {
@@ -92,12 +93,12 @@ const RegistMap = ({
         }
         // 검색 결과가 없는 경우
         else if (status === window.kakao.maps.services.Status.ZERO_RESULT) {
-          alert("검색 결과가 존재하지 않습니다.");
+          toast.error("검색 결과가 존재하지 않습니다.");
           return;
         }
         // 검색 중 오류 발생 시
         else if (status === window.kakao.maps.services.Status.ERROR) {
-          alert("검색 결과 중 오류가 발생했습니다.");
+          toast.error("검색 결과 중 오류가 발생했습니다.");
           return;
         }
       };

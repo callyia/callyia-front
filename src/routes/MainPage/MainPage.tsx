@@ -441,53 +441,56 @@ const Main: React.FC<MainPageProps> = () => {
             <Modal className="" open={openDetail}>
               <ModalContent
                 onCloseIconClicked={closeDetailClicked}
-                className="p-4 bg-white rounded-lg min-h-[500px] h-auto w-[800px] relative"
+                className="p-4 bg-white rounded-lg min-h-[300px] h-[auto] w-[700px] relative"
               >
-                <div>
-                  <h3 className="mb-8 text-center">상세페이지입니다.</h3>
-                </div>
-                {selectedTour && (
-                  <div className="grid">
-                    <div className="flex items-center mb-2">
-                      <label className="mr-2">이름 : </label>
-                      <p className="flex-grow p-1 border rounded">
-                        {selectedTour.placeName}
-                      </p>
-                    </div>
-                    <div className="flex items-center mb-2">
-                      <label className="mr-2">지역 : </label>
-                      <p className="flex-grow p-1 border rounded">
-                        {selectedTour.address}
-                      </p>
-                    </div>
-                    <div className="flex items-center mb-2">
-                      <label className="mr-2">내용 : </label>
-                      <p className="flex-grow h-auto p-1 border rounded">
-                        {selectedTour.placeContent}
-                      </p>
-                    </div>
-                    <div className="w-full h-auto">
-                      <img
-                        src={selectedTour.image}
-                        style={{ width: "400px", height: "250px" }}
-                        alt={selectedTour.image}
-                      />
-                    </div>
+                <div className="flex flex-row mt-3">
+                  <div className="flex items-center justify-center flex-1">
+                    {selectedTour && (
+                      <div className="w-full h-auto">
+                        <img
+                          src={selectedTour.image}
+                          alt={"그림"}
+                          style={{ width: "250px", height: "250px" }}
+                          className="shadow-md shadow-slate-500 rounded-2xl"
+                        />
+                      </div>
+                    )}
                   </div>
-                )}
+                  <div className="flex-1">
+                    {selectedTour && (
+                      <div>
+                        <div className="flex items-center mt-2">
+                          <p className="flex-grow p-1 text-style">
+                            {selectedTour.address}
+                          </p>
+                        </div>
+                        <div className="flex items-center">
+                          <p className="flex-grow p-1 text-style-second">
+                            {selectedTour.placeName}
+                          </p>
+                        </div>
+                        <div className="flex items-center">
+                          <p className="flex-grow h-auto p-1">
+                            {selectedTour.placeContent}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
                 <div className="absolute bottom-4 right-4">
-                  <ModalAction className="absolute bottom-0 right-0 flex flex-row">
+                  <ModalAction className="flex flex-row">
                     <Button
-                      className="w-24 normal-case btn-primary btn-sm"
+                      className="w-24 mr-2 normal-case btn-primary btn-sm"
                       onClick={basketClicked}
                     >
-                      Basket
+                      장바구니
                     </Button>
                     <Button
                       className="w-24 normal-case btn-sm"
                       onClick={closeDetailClicked}
                     >
-                      Close
+                      취소
                     </Button>
                   </ModalAction>
                 </div>
