@@ -303,7 +303,7 @@ const Main: React.FC<MainPageProps> = () => {
 
   return (
     <div className="main-trip-plan-container">
-      <main className="main-frame">
+      <main className="main-frame ">
         <div className="main-trip-plan-section-container">
           <section className="main-section-div-sm">
             <div className="main-trip-plan-section-div-title">
@@ -422,7 +422,11 @@ const Main: React.FC<MainPageProps> = () => {
           <section className="main-section-div-tour-left">
             <div className="main-tour-info-section">
               {tourData.map((tour) => (
-                <div key={tour.placeId} onClick={() => openDetailClicked(tour)}>
+                <div
+                  className="main-tour-info-div"
+                  key={tour.placeId}
+                  onClick={() => openDetailClicked(tour)}
+                >
                   {tour.image && (
                     <img
                       src={tour.image}
