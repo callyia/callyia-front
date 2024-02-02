@@ -1115,8 +1115,31 @@ export default function Planning() {
     });
   };
 
-  const handleButtonClick = (data: any[]) => {
+  const handleButtonClick = async (formData: any) => {
     const flattenedValues = inputValues.flatMap((dayValues) => dayValues || []);
+
+    const hasEmptyTip = flattenedValues.some((item) => item.tip === "");
+
+    if (hasEmptyTip) {
+      toast.error("empty tip!");
+      return;
+    }
+
+    const response = await axios.post(
+      "http://localhost:8080/Callyia/s3/posting",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    if (response.status !== 200) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = response.data;
 
     flattenedValues.map((item, index) => {
       item.detailImages = data[index];
@@ -1131,13 +1154,6 @@ export default function Planning() {
       ...planData6,
       ...planData7,
     ].length;
-
-    const hasEmptyTip = flattenedValues.some((item) => item.tip === "");
-
-    if (hasEmptyTip) {
-      toast.error("empty tip!");
-      return;
-    }
 
     if (planLength != flattenedValues.length) {
       toast.error("각 계획별로 사진이나 팁을 남겨주세요!");
@@ -1407,24 +1423,24 @@ export default function Planning() {
               const form = event.target as HTMLFormElement;
               const formData = new FormData(form);
 
-              const response = await axios.post(
-                "http://localhost:8080/Callyia/s3/posting",
-                formData,
-                {
-                  headers: {
-                    "Content-Type": "multipart/form-data",
-                  },
-                }
-              );
+              // const response = await axios.post(
+              //   "http://localhost:8080/Callyia/s3/posting",
+              //   formData,
+              //   {
+              //     headers: {
+              //       "Content-Type": "multipart/form-data",
+              //     },
+              //   }
+              // );
 
-              if (response.status !== 200) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-              }
+              // if (response.status !== 200) {
+              //   throw new Error(`HTTP error! Status: ${response.status}`);
+              // }
 
-              const uploadedData = response.data;
-              console.log(uploadedData);
+              // const uploadedData = response.data;
+              // console.log(uploadedData);
 
-              handleButtonClick(uploadedData);
+              handleButtonClick(formData);
             }}
           >
             <div className="post-modal-top">
