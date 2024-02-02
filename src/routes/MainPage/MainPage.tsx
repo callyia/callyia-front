@@ -303,7 +303,7 @@ const Main: React.FC<MainPageProps> = () => {
 
   return (
     <div className="main-trip-plan-container">
-      <main className="main-frame">
+      <main className="main-frame ">
         <div className="main-trip-plan-section-container">
           <section className="main-section-div-sm">
             <div className="main-trip-plan-section-div-title">
@@ -350,7 +350,7 @@ const Main: React.FC<MainPageProps> = () => {
             <span onClick={() => navigate(`/TourPage/Food`)}>Restaurant</span>
           </div>
           <div className="community-navigate">
-            <span onClick={() => navigate(`/ScheduleListPage`)}>
+            <span onClick={() => navigate(`/ScheduleListPage/`)}>
               Community
             </span>
           </div>
@@ -422,7 +422,11 @@ const Main: React.FC<MainPageProps> = () => {
           <section className="main-section-div-tour-left">
             <div className="main-tour-info-section">
               {tourData.map((tour) => (
-                <div key={tour.placeId} onClick={() => openDetailClicked(tour)}>
+                <div
+                  className="main-tour-info-div"
+                  key={tour.placeId}
+                  onClick={() => openDetailClicked(tour)}
+                >
                   {tour.image && (
                     <img
                       src={tour.image}
@@ -493,7 +497,18 @@ const Main: React.FC<MainPageProps> = () => {
               {renderPagination()}
             </div>
           </section>
+          <section className="main-section-div-tour-right">
+            <div>
+              <span className="main-tour-section-span-title-count">
+                {tourCount.toLocaleString()}
+              </span>
+              <span className="main-tour-section-span-title">
+                개의 멋진 장소가 여러분을 기다리고 있습니다.
+              </span>
+            </div>
+          </section>
         </div>
+        <div className="main-section-container"></div>
       </main>
       <button
         type="button"
