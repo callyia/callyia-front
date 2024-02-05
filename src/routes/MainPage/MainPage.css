@@ -333,6 +333,8 @@ input[type="text"] {
   border-radius: 5px;
   margin-bottom: 10px;
   justify-items: center;
+  inset: 0px;
+  object-fit: cover;
 }
 
 .main-combo-day-dropdown {

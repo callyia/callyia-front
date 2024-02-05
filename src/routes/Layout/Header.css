@@ -3,7 +3,6 @@
     justify-content: space-between;
     align-items: center;
     padding: 5px;
-    /* width: 100%; */
   }
 
   .header-button {
@@ -40,10 +39,11 @@
 
   .header-search-bar {
     font-family: "GmarketSans500";
-    margin-left: -40%;
+    right: 20%;
     display: flex;
     align-items: center;
     width: 47%;
+    position: relative;
   }
 
   .header-top-bar {
@@ -82,6 +82,73 @@
     align-items: center;
     margin-bottom: -8px;
     padding: 0 20px;
-    /* margin-right: 10px; */
+  }
+  
+  .recent-searches-dropdown {
+    position: absolute;
+    top: 100%; 
+    left: 0;
+    right: 0;
+    background-color: rgba(255, 255, 255, 0.9); 
+    border: 1px solid #ccc; 
+    z-index: 10; 
+  }
+
+  .recent-search-item {
+    padding: 10px;
+    display: flex; 
+    justify-content: space-between; 
+    align-items: flex-start;
+  }
+
+  .recent-search-item:hover {
+    background-color: rgba(211, 211, 211, 0.9); 
+  }
+  
+  .recent-search-item:last-child {
+    border-bottom: none;
+  }
+
+  .recent-search-combo,
+  .recent-search-keyword,
+  .recent-search-date,
+  .recent-search-delete {
+    font-family: "GmarketSans300";
+  }
+
+  .recent-search-delete:hover {
+    font-family: "GmarketSans700";
+    font-size: 14px;
+  }
+
+  .recent-search-combo {
+    margin-left: 1%;
+  }
+
+  .recent-search-keyword {
+    font-size: 20px;
+    flex: 1;
+    margin-left: 6%;
+    padding: 0; 
+  }
+  
+  .recent-search-keyword-container {
+    flex: 1;
+  }
+  
+  .recent-search-date {
+    margin-right: 6%;
+  }
+  
+  .recent-search-all-delete {
+    font-family: "GmarketSans500";
+    font-size: 21px;
+    margin-left: 46.5%;
+  }
+  
+  .recent-search-all-delete:hover,
+  .recent-search-keyword:hover {
+    cursor: pointer;
+    font-family: "GmarketSans700";
   }
   
