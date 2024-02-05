@@ -136,12 +136,14 @@
 }
 
 .registerButton {
-  position: absolute;
-  color: #fbd38d;
-  riget: 1rem;
+  position: fixed;
+  color: #000;
+  bottom: 0.5rem;
+  right: 3rem;
   padding: 0.75rem 1.5rem;
   font-size: 1.25rem;
   line-height: 1.5;
+  font-weight: bold;
 }
 
 .swiper-container {
@@ -166,6 +168,7 @@
   background-color: #a3bffa;
   border-radius: 9999px;
   cursor: pointer;
+  right: 1rem;
   bottom: 1rem;
   transform: scale(1.1);
 }
@@ -236,7 +239,7 @@
   width: 6rem;
   text-transform: none;
   backgroud-color: #3490dc;
-  color: #ffffff;
+  color: #000;
   font-size: 0.75rem;
   padding: 0.375rem 0.75rem;
 }
@@ -245,6 +248,7 @@
   width: 6rem;
   text-transform: none;
   font-size: 0.75rem;
+  color: #000;
   padding: 0.375rem 0.75rem;
 }
 
