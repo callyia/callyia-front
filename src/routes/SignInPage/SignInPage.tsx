@@ -70,6 +70,11 @@ const LoginPage: React.FC = () => {
     }
   };
 
+  const activeEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleLogin(e);
+    }
+  };
   return (
     <div className="page-container">
       <div className="shadow login-form-container">
@@ -105,21 +110,25 @@ const LoginPage: React.FC = () => {
                 value={password}
                 style={{ backgroundColor: "white", color: "black" }}
                 onChange={(e) => setPassword(e.target.value)}
+                onKeyDown={(e) => activeEnter(e)}
               />
             </div>
           </div>
           <div className="login-btn-wrap">
-            <form id="loginForm" onSubmit={handleLogin}>
+            <form id="loginForm">
               <button
                 type="submit"
                 className="login-btn"
                 id="loginBtn"
                 value="로그인"
+                onClick={handleLogin}
               >
                 로그인
               </button>
             </form>
-            <a href="./findPW.tsx">비밀번호를 잊으셨습니까?</a>
+            <a href="http://localhost:3000/FindPasswordPage">
+              비밀번호를 잊으셨습니까?
+            </a>
           </div>
         </div>
       </div>

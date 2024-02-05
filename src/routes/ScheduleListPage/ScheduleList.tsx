@@ -137,14 +137,12 @@ export default function ScheduleList() {
                   alt={`Detail Image for ${schedule.sno}`}
                 />
               )}
-              {/* 프로필 클릭 시 해당 유저페이지로 이동 */}
               <span className="ScheduleList-profile-info">
                 <img
                   className="ScheduleList-profile-image"
                   src={schedule.member_profile_image}
                   alt="Profile"
                   onClick={() => {
-                    // 클릭 시 UserProfilePage로 이동
                     navigate(
                       `/UserProfilePage?userid=${schedule.member_email}`
                     );
@@ -153,7 +151,6 @@ export default function ScheduleList() {
                 <div className="ScheduleList-profile-details">
                   <h1 style={{ fontSize: "20px", margin: 0 }}>
                     {schedule.member_nickname}
-                    {/* <p>{schedule.regDate.toDateString()}</p> */}
                   </h1>
                 </div>
               </span>
