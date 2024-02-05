@@ -74,7 +74,7 @@ const SignUp = () => {
     try {
       const formattedPhone = `${tel1}-${tel2}-${tel3}`;
       const response = await axios.get(
-        `http://localhost:8080/Callyia/member/checkPhone?phone=${formattedPhone}`
+        `http://localhost:8080/Callyia/member/getPhone?phone=${formattedPhone}`
       );
 
       if (response.data !== true) {

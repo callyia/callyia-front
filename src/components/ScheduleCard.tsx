@@ -337,7 +337,7 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
               />
               <button onClick={handleRegister}>입력</button>
             </div>
-            {reply_contents.reverse().map((reply, index) => (
+            {reply_contents.map((reply, index) => (
               <li key={index} onClick={() => handlereplyClick(reply, index)}>
                 <span
                   style={{
