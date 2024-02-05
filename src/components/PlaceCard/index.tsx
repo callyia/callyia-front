@@ -1,6 +1,7 @@
 import type { FC } from "react";
 import React, { useEffect } from "react";
 import "./PlaceCard.css";
+import { IoAddCircle } from "react-icons/io5";
 
 export type IPlaceCardProps = {
   placeId: number;
@@ -84,7 +85,9 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ placeCard, onClick }) => {
         </div>
       </div>
       <div className="place-btn-div">
-        <button type="button" className="plus-btn" onClick={BtnClick}></button>
+        <button type="button" className="plus-btn" onClick={BtnClick}>
+          <IoAddCircle className="add-btn" />
+        </button>
       </div>
     </div>
   );

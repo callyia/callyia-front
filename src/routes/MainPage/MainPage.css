@@ -214,7 +214,6 @@ input[type="text"] {
   background-position: center center;
   align-items: center;
   height: 500px;
-  margin-bottom: 30px;
   padding: 10px;
   width: 100%;
 }
@@ -273,6 +272,7 @@ input[type="text"] {
   cursor: pointer;
   border-radius: 5px;
   transition: background-color 0.3s ease;
+  height: 235px;
 }
 
 .main-tour-info-div:hover {
@@ -352,18 +352,28 @@ input[type="text"] {
 }
 
 .list-card {
-  border: 1px solid #dddddd;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
   padding: 16px;
   height: 270px;
   margin: 15px;
-  transition: transform 0.3s ease-in-out;
-  background-color: #fffdf7;
   cursor: pointer;
+  letter-spacing: 0.2em;
+  color: rgba(223, 190, 106, 1);
+  transition: all 0.5s ease-out;
+  background: linear-gradient(
+    270deg,
+    rgba(223, 190, 106, 0.9),
+    rgba(223, 190, 106, 0.8),
+    rgba(255, 255, 255, 1),
+    rgba(255, 255, 255, 1)
+  );
+  background-position: 1% 50%;
+  background-size: 300% 300%;
 }
 
 .list-card:hover {
-  transform: scale(1.025);
+  color: #ffffff;
+  background-position: 99% 50%;
 }
 
 .profile-image {
@@ -387,7 +397,7 @@ input[type="text"] {
   align-items: center;
   justify-content: center;
   display: flex;
-  margin: 70px 0px 100px 0px;
+  margin: 70px 0px 70px 0px;
 
   background: repeating-linear-gradient(
     45deg,
