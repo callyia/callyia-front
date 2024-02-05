@@ -1486,6 +1486,7 @@ export default function Planning() {
                           id={`detailImages-${index + 1}-${i}`}
                           className="ml-2"
                           type="file"
+                          accept="image/*"
                           name="file"
                         />
                         <span className="ml-4">Tip :</span>
@@ -1523,6 +1524,7 @@ export default function Planning() {
                           id={`detailImages-${index + 1}-${i}`}
                           className="ml-2"
                           type="file"
+                          accept="image/*"
                           name="file"
                         />
                         <span className="ml-4">Tip :</span>
@@ -1560,6 +1562,7 @@ export default function Planning() {
                           id={`detailImages-${index + 1}-${i}`}
                           className="ml-2"
                           type="file"
+                          accept="image/*"
                           name="file"
                         />
                         <span className="ml-4">Tip :</span>
@@ -1597,6 +1600,7 @@ export default function Planning() {
                           id={`detailImages-${index + 1}-${i}`}
                           className="ml-2"
                           type="file"
+                          accept="image/*"
                           name="file"
                         />
                         <span className="ml-4">Tip :</span>
@@ -1634,6 +1638,7 @@ export default function Planning() {
                           id={`detailImages-${index + 1}-${i}`}
                           className="ml-2"
                           type="file"
+                          accept="image/*"
                           name="file"
                         />
                         <span className="ml-4">Tip :</span>
@@ -1671,6 +1676,7 @@ export default function Planning() {
                           id={`detailImages-${index + 1}-${i}`}
                           className="ml-2"
                           type="file"
+                          accept="image/*"
                           name="file"
                         />
                         <span className="ml-4">Tip :</span>
@@ -1708,6 +1714,7 @@ export default function Planning() {
                           id={`detailImages-${index + 1}-${i}`}
                           className="ml-2"
                           type="file"
+                          accept="image/*"
                           name="file"
                         />
                         <span className="ml-4">Tip :</span>
