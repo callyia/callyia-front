@@ -1,15 +1,8 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 
-import { Button } from "../../theme/daisyui";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { FaArrowUp } from "react-icons/fa"; // react-icons에서 사용할 아이콘을 import
-
-import { Modal, ModalAction, ModalContent } from "./../TourPage/Modal";
-import Upload from "../TourPage/Upload";
-import bglist from "./../TourPage/bglist";
+import { useToggle } from "../../hooks";
+import { Modal, ModalContent } from "../../theme/daisyui/Modal";
 import "./ProfilePage.css";
-import { Div } from "../../components";
 
 interface TourData {
   placeId: number;
@@ -23,67 +16,21 @@ interface TourData {
 }
 
 const CartContent = () => {
+  const [loading, toggleLoading] = useToggle();
+
   const [tourData, setTourData] = useState<TourData[]>([]);
-  const [selectedTour, setSelectedTour] = useState<TourData | null>(null);
-  const [userBasketResults, setUserBasketResults] = useState([]);
-  const [openDetail, setOpenDetail] = useState(false);
-  const [checkColumn, setCheckColumn] = useState<string>("전체");
-
-  const openDetailClicked = (selectedTour: TourData) => {
-    setSelectedTour(selectedTour);
-    setOpenDetail(true);
-  };
-
-  // 상세페이지 닫기
-  const closeDetailClicked = () => {
-    setSelectedTour(null);
-    setOpenDetail(false);
-  };
-
-  const basketClicked = async () => {
-    console.log("placeId to check:", selectedTour?.placeId);
-    try {
-      const token = localStorage.getItem("token");
-      const email = localStorage.getItem("email");
-      const response = await axios.post(
-        "http://localhost:8080/Callyia/Basket",
-        JSON.stringify({
-          bno: null, //bno 처리 어떻게 할건지
-          placeId: selectedTour?.placeId,
-          userId: email,
-        }),
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (response.status !== 200) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      const result = response.data;
-      console.log("결과:", result);
-
-      alert(`장바구니에 추가하였습니다. 내용: ${selectedTour?.placeId}`);
-    } catch (error: any) {
-      console.error("Error accepting data:", error.message);
-      if (error.message.includes("409")) {
-        alert("해당 파일은 이미 등록되어 있습니다.");
-      }
-    }
-  };
 
   useEffect(() => {
+    const email = localStorage.getItem("email");
     const fetchUserTourData = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/Callyia/Tour/all`); // 특정 유저만 받아오게
+        const response = await fetch(`http://localhost:8080/Callyia/Basket/getBasket?email=${email}`); // 특정 유저만 받아오게
         if (!response.ok) {
           throw new Error(`Http error! Status: ${response.status}`);
         }
         const data = await response.json();
-        setTourData(data.content);
+        console.log(data);
+        setTourData(data);
       } catch (error) {
         console.error("Error fetching user tour data: ", error);
       }
@@ -92,16 +39,27 @@ const CartContent = () => {
   }, []);
 
   const renderTourItems = () => {
-    // 검색 결과 유무에 따라 데이터 렌더링
-    const dataToRender =
-      userBasketResults.length > 0 ? userBasketResults : tourData;
-    return dataToRender.map((tour) => (
+    console.log(tourData);
+    if (!tourData) {
+      return (
+        <Modal open={loading}>
+        <ModalContent className="div-loading">
+          <div className="div-loading-content">
+            <div className="w-16 loading-dots loading" />
+            <span className="text-lg font-semibold">잠시만 기다려주세요.</span>
+          </div>
+        </ModalContent>
+      </Modal>
+      )
+    }
+    console.log(tourData);
+    
+    return tourData.map((tour, index) => (
       <div key={tour.placeId} className="cart-card">
         <div
           className="ListContent shadowList"
           role="button"
           tabIndex={0}
-          onClick={() => openDetailClicked(tour)}
           onMouseOver={(e) => {
             const targetContent = e.currentTarget;
 
