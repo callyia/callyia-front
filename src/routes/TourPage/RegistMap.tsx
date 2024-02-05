@@ -301,7 +301,7 @@ const RegistMap = ({
 
   return (
     <div className="map_wrap">
-      <div id="map" className="w-full h-full"></div>;
+      <div id="map" className="w-full h-full"></div>
       <div id="menu_wrap" className="bg_white">
         <div className="option">
           <div>

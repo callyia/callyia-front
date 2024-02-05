@@ -10,7 +10,7 @@ type UserInfo = {
   email: string;
   nickname: string;
   name: string;
-  phonenumber: string;
+  phone: string;
 };
 
 const MyInformation = () => {
@@ -57,7 +57,6 @@ const MyInformation = () => {
   };
 
   // 상태 업데이트 함수
-  const handleEmailChange = (newEmail: any) => setEmail(newEmail);
   const handleNameChange = (newName: any) => {
     setName(newName);
   };
@@ -81,15 +80,30 @@ const MyInformation = () => {
     openWithdrawalModal();
   };
 
-  const handleWithdrawalConfirmed = () => {
+  const handleWithdrawalConfirmed = async () => {
+    const token = localStorage.getItem("token");
+    axios
+      .delete(
+        `http://localhost:8080/Callyia/member/deleteMember?email=${email}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .catch((error) => {
+        console.error("Error fetching user withdrawal: ", error);
+      });
     closeWithdrawalModal();
     localStorage.removeItem("email");
     localStorage.removeItem("token");
     localStorage.removeItem("authorities");
+
     navigate("/");
   };
 
-  const handleSaveClick = () => {
+  const handleSaveClick = async () => {
+    const token = localStorage.getItem("token");
     if (!isValidName(name)) {
       toast.error("잘못된 이름 형식입니다.");
     } else if (!isValidNickname(nickName)) {
@@ -97,6 +111,24 @@ const MyInformation = () => {
     } else if (!isValidPhoneNumber(phoneNumber)) {
       toast.error("잘못된 폰번호 형식입니다.");
     } else {
+      axios
+        .put(
+          `http://localhost:8080/Callyia/member/modify?email=${email}`,
+          {
+            email: email,
+            nickname: nickName,
+            name: name,
+            phone: phoneNumber,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .catch((error) => {
+          console.error("Error fetching modify:", error);
+        });
       toast.success("저장");
       console.log("Save Clicked");
     }
@@ -127,11 +159,13 @@ const MyInformation = () => {
 
   useEffect(() => {
     // userInfo가 변경될 때마다 실행되는 로직
+    console.log(userInfo);
+
     if (userInfo) {
       setEmail(userInfo.email);
       setName(userInfo.name);
       setNickName(userInfo.nickname); // 속성 이름 수정
-      setPhoneNumber(userInfo.phonenumber); // 속성 이름 수정
+      setPhoneNumber(userInfo.phone); // 속성 이름 수정
     }
   }, [userInfo]);
 
@@ -144,7 +178,6 @@ const MyInformation = () => {
           <input
             type="text"
             value={email}
-            onChange={(e) => handleEmailChange(e.target.value)}
             readOnly={readOnly}
             className="myinput"
           />
@@ -152,7 +185,7 @@ const MyInformation = () => {
         <div>
           <label className="mylabel">닉네임</label>
           <input
-            type="nickName"
+            type="text"
             value={nickName}
             onChange={(e) => handleNickNameChange(e.target.value)}
             readOnly={readOnly}
@@ -179,20 +212,20 @@ const MyInformation = () => {
             className="myinput"
           />
         </div>
-        <button className="delBtn mybutton" onClick={handleWithdrawalClick}>
-          회원 탈퇴
-        </button>
-        <button className="saveBtn mybutton" onClick={handleSaveClick}>
-          변경 저장
-        </button>
-        <button
-          className={`changeBtn mybutton ${
-            readOnly ? "" : "editModeButtonBackground"
-          }`}
-          onClick={handleChangeClick}
-        >
-          수정 모드
-        </button>
+        <div className="flex translate-y-10">
+          <button className="btna" onClick={handleWithdrawalClick}>
+            회원 탈퇴
+          </button>
+          <button className="btna" onClick={handleSaveClick}>
+            변경 저장
+          </button>
+          <button
+            className={`btna ${readOnly ? "" : "editModeButtonBackground"}`}
+            onClick={handleChangeClick}
+          >
+            수정 모드
+          </button>
+        </div>
       </div>
       <Toaster position="top-center" reverseOrder={false} />
       <Modal open={isWithdrawalModalOpen}>

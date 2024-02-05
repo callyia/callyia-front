@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css?family=Amatic+SC");
+
 .container {
   display: flex;
   justify-content: center;
@@ -11,6 +13,8 @@
   text-align: left;
   min-width: 800px;
   max-width: 800px;
+  min-height: 500px;
+  max-height: 500px;
   padding: 120px;
   background-color: rgba(
     255,
@@ -118,4 +122,56 @@
 .editModeButtonBackground {
   background-color: hsla(50, 33%, 25%, 0.75); /* 수정 모드일 때의 버튼 배경색 */
   color: white; /* 수정 모드일 때의 버튼 텍스트 색상 */
+}
+
+.btna {
+  border: none;
+  display: block;
+  text-align: center;
+  cursor: pointer;
+  text-transform: uppercase;
+  outline: none;
+  overflow: hidden;
+  position: relative;
+  color: #fff;
+  font-weight: 700;
+  font-size: 15px;
+  background-color: #222;
+  padding: 10px 50px;
+  margin: 0 auto;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btna span {
+  position: relative;
+  z-index: 1;
+}
+
+.btna:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 490%;
+  width: 140%;
+  background: #78d283;
+  -webkit-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
+  -webkit-transform: translateX(-98%) translateY(-25%) rotate(45deg);
+  transform: translateX(-98%) translateY(-25%) rotate(45deg);
+}
+
+.btna:hover:after {
+  -webkit-transform: translateX(-9%) translateY(-25%) rotate(45deg);
+  transform: translateX(-9%) translateY(-25%) rotate(45deg);
+}
+
+.link {
+  font-size: 20px;
+  margin-top: 30px;
+}
+
+.link a {
+  color: #000;
+  font-size: 25px;
 }

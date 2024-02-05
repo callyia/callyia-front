@@ -163,7 +163,7 @@
   padding: 0.5rem;
   transition-property: transform;
   transform: none;
-  backgroud-color: #a3bffa;
+  background-color: #a3bffa;
   border-radius: 9999px;
   cursor: pointer;
   bottom: 1rem;
@@ -190,7 +190,7 @@
 
 .modalContent {
   padding: 1rem;
-  backgroud-color: #fff;
+  background-color: #fff;
   border-radius: 0.75rem;
   height: 43.75rem;
   width: 87.5rem;
@@ -218,7 +218,7 @@
   border-radius: 0.25rem;
 }
 
-.modal_sz {
+.modal_sz2 {
   position: absolute;
   bottom: 1rem;
   right: 1rem;

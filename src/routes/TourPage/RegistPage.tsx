@@ -556,7 +556,7 @@ const RegistPage: React.FC<RegistPageProps> = ({ checkColumnData }) => {
                     clearSelectedImage={clearUploadImage}
                   />
                 </div>
-                <div className="modal_sz">
+                <div className="modal_sz2">
                   <ModalAction className="modalAction">
                     <Button className="acceptBtn" onClick={acceptClicked}>
                       Accept
