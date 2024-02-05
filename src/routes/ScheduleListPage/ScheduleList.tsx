@@ -134,7 +134,7 @@ export default function ScheduleList() {
               {matchingDetail && (
                 <img
                   src={matchingDetail.detailImages}
-                  alt={`Detail Image for ${schedule.sno}`}
+                  alt={`Detail Img for ${schedule.sno}`}
                 />
               )}
               {/* 프로필 클릭 시 해당 유저페이지로 이동 */}
