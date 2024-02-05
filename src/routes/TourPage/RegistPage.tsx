@@ -13,6 +13,7 @@ import bglist from "./bglist";
 import "./RegistPage.css";
 import axios from "axios";
 import { IoSearchCircleOutline } from "react-icons/io5";
+import toast, { Toaster } from "react-hot-toast";
 
 // 관광지 데이터의 타입 정의
 interface TourData {
@@ -116,11 +117,13 @@ const RegistPage: React.FC<RegistPageProps> = ({ checkColumnData }) => {
       const result = response.data;
       console.log("결과:", result);
 
-      alert(`장바구니에 추가하였습니다. 내용: ${selectedTour?.placeId}`);
+      toast.success(
+        `장바구니에 추가하였습니다. 내용: ${selectedTour?.placeId}`
+      );
     } catch (error: any) {
       console.error("Error accepting data:", error.message);
       if (error.message.includes("409")) {
-        alert("해당 파일은 이미 등록되어 있습니다.");
+        toast.error("해당 파일은 이미 등록되어 있습니다.");
       }
     }
   };
@@ -173,7 +176,7 @@ const RegistPage: React.FC<RegistPageProps> = ({ checkColumnData }) => {
     const dataToRender = searchResults.length > 0 ? searchResults : tourData;
 
     return dataToRender.map((tour) => (
-      <div key={tour.placeId} className="flex-wrap mr-10 mb-4 w-[320px]">
+      <div key={tour.placeId} className="renderData">
         <div
           className="ListContent shadowList"
           role="button"
@@ -275,7 +278,7 @@ const RegistPage: React.FC<RegistPageProps> = ({ checkColumnData }) => {
       // 이미지를 서버에 업로드
 
       const uploadResponse = await axios.post(
-        "http://localhost:8080/Callyia/Tour/upload",
+        "http://localhost:8080/Callyia/s3/upload",
         formData,
         {
           headers: {
@@ -300,8 +303,8 @@ const RegistPage: React.FC<RegistPageProps> = ({ checkColumnData }) => {
           placeName: selectedPlace?.place_name,
           address:
             selectedPlace?.road_address_name || selectedPlace?.address_name,
-          latitude: selectedPlace?.x,
-          longitude: selectedPlace?.y,
+          latitude: selectedPlace?.y,
+          longitude: selectedPlace?.x,
           placeContent: content,
           checkColumn: selectedCheck,
           image: imagePath, // 이미지가 저장된 경로를 전송
@@ -319,7 +322,9 @@ const RegistPage: React.FC<RegistPageProps> = ({ checkColumnData }) => {
           const result = response.data;
           console.log("결과:", result);
           fetchTourData();
-          alert(`파일이 등록되었습니다. 내용: ${selectedPlace?.place_name}`);
+          toast.success(
+            `파일이 등록되었습니다. 내용: ${selectedPlace?.place_name}`
+          );
           // 등록이 완료되면 상태 초기화
           setSelectedPlace(null);
           setContent("");
@@ -327,7 +332,7 @@ const RegistPage: React.FC<RegistPageProps> = ({ checkColumnData }) => {
           setClearUploadImage(true);
           break;
         case 409:
-          alert("해당 파일은 이미 등록되어 있습니다.");
+          toast.error("해당 파일은 이미 등록되어 있습니다.");
           break;
         default:
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -335,7 +340,7 @@ const RegistPage: React.FC<RegistPageProps> = ({ checkColumnData }) => {
     } catch (error: any) {
       console.error("Error accepting data:", error.message);
       if (error.message.includes("409")) {
-        alert("해당 파일은 이미 등록되어 있습니다.");
+        toast.error("해당 파일은 이미 등록되어 있습니다.");
       }
     }
   };
@@ -436,11 +441,7 @@ const RegistPage: React.FC<RegistPageProps> = ({ checkColumnData }) => {
   const renderRegisterButton = () => {
     if (isAdmin) {
       return (
-        <button
-          type="button"
-          onClick={openClicked}
-          className="absolute text-orange-300 right-4 btn-lg"
-        >
+        <button type="button" onClick={openClicked} className="registerButton">
           등록
         </button>
       );
@@ -452,7 +453,7 @@ const RegistPage: React.FC<RegistPageProps> = ({ checkColumnData }) => {
     <div>
       <div>
         <div>
-          <div className="swiper-container h-[540px]">
+          <div className="swiper-container">
             <Swiper
               navigation
               pagination={{ clickable: true }}
@@ -462,19 +463,16 @@ const RegistPage: React.FC<RegistPageProps> = ({ checkColumnData }) => {
               {bglist.bg.map((item: any) => (
                 <SwiperSlide
                   key={item.id}
-                  className="flex flex-row justify-center bg-center bg-no-repeat bg-cover border-4"
+                  className="swiper-slide"
                   style={{ backgroundImage: `url('${item.bgimage}')` }}
                 ></SwiperSlide>
               ))}
             </Swiper>
-            <button
-              className="fixed p-2 transition-transform transform bg-blue-200 rounded-full cursor-pointer bottom-4 right-4 hover:scale-110"
-              onClick={() => window.scrollTo(0, 0)}
-            >
+            <button className="up-button" onClick={() => window.scrollTo(0, 0)}>
               <FaArrowUp size={20} color="#16578F" />
             </button>
           </div>
-          <div className="relative left-[720px] border border-t-0 border-b-2 border-x-0 w-[540px] mt-8">
+          <div className="searchBar">
             <select
               className="w-1/5"
               value={checkColumn}
@@ -498,7 +496,7 @@ const RegistPage: React.FC<RegistPageProps> = ({ checkColumnData }) => {
                 }
               }}
             />
-            <button className="relative w-1/5" onClick={searchBtnClick}>
+            <button className="searchBtn" onClick={searchBtnClick}>
               <IoSearchCircleOutline className="absolute text-2xl transform -translate-y-1/2 right-2 top-1/2" />
             </button>
           </div>
@@ -509,36 +507,27 @@ const RegistPage: React.FC<RegistPageProps> = ({ checkColumnData }) => {
         <Modal className="" open={openModal}>
           <ModalContent
             onCloseIconClicked={closeClicked}
-            className="p-4 bg-white rounded-lg h-[700px] w-[1400px] relative"
+            className="modalContent"
           >
-            <div className="flex flex-row h-[340px] mt-8">
+            <div className="modal_sz">
               <div className="grid w-1/2">
                 <CheckBox onCheckChange={handleCheckBoxChange} />
-                <div className="flex items-center mb-2">
+                <div className="modal_cn">
                   <label className="mr-2 padd">이름 :</label>
-                  <div
-                    className="flex-grow p-1 border rounded"
-                    style={{ height: "30px" }}
-                  >
+                  <div className="modal_cz" style={{ height: "30px" }}>
                     {selectedPlace?.place_name}
                   </div>
                 </div>
-                <div className="flex items-center mb-2">
+                <div className="modal_cn">
                   <label className="mr-2">지역 :</label>
-                  <div
-                    className="flex-grow p-1 border rounded"
-                    style={{ height: "30px" }}
-                  >
+                  <div className="modal_cz" style={{ height: "30px" }}>
                     {selectedPlace?.road_address_name ||
                       selectedPlace?.address_name}
                   </div>
                 </div>
-                <div className="flex items-center mb-2">
+                <div className="modal_cn">
                   <label className="mr-2">좌표 :</label>
-                  <div
-                    className="flex-grow p-1 border rounded"
-                    style={{ height: "30px" }}
-                  >
+                  <div className="modal_cz" style={{ height: "30px" }}>
                     {selectedPlace?.x && selectedPlace?.y ? (
                       <>
                         위도: {selectedPlace.x}, 경도: {selectedPlace.y}
@@ -548,10 +537,10 @@ const RegistPage: React.FC<RegistPageProps> = ({ checkColumnData }) => {
                     )}
                   </div>
                 </div>
-                <div className="flex items-center mb-2">
+                <div className="modal_cn">
                   <label className="mr-2">내용 :</label>
                   <input
-                    className="flex-grow p-1 border rounded"
+                    className="modal_cz"
                     type="text"
                     name=""
                     id=""
@@ -567,18 +556,12 @@ const RegistPage: React.FC<RegistPageProps> = ({ checkColumnData }) => {
                     clearSelectedImage={clearUploadImage}
                   />
                 </div>
-                <div className="absolute bottom-4 right-4">
-                  <ModalAction className="absolute bottom-0 right-0 flex flex-row">
-                    <Button
-                      className="w-24 normal-case btn-primary btn-sm"
-                      onClick={acceptClicked}
-                    >
+                <div className="modal_sz">
+                  <ModalAction className="modalAction">
+                    <Button className="acceptBtn" onClick={acceptClicked}>
                       Accept
                     </Button>
-                    <Button
-                      className="w-24 normal-case btn-sm"
-                      onClick={closeClicked}
-                    >
+                    <Button className="closeBtn" onClick={closeClicked}>
                       Close
                     </Button>
                   </ModalAction>
@@ -590,13 +573,13 @@ const RegistPage: React.FC<RegistPageProps> = ({ checkColumnData }) => {
         </Modal>
       </section>
       <section>
-        <div className="mx-[220px] my-[80px]">
-          <div className="mb-10 text-3xl font-bold underline">여행정보</div>
+        <div className="tour_sz">
+          <div className="sTitle">여행정보</div>
           <div className="flex flex-wrap">{renderTourItems()}</div>
           <Modal className="" open={openDetail}>
             <ModalContent
               onCloseIconClicked={closeDetailClicked}
-              className="p-4 bg-white rounded-lg min-h-[300px] h-[auto] w-[700px] relative"
+              className="modal_cc"
             >
               <div className="flex flex-row mt-3">
                 <div className="flex items-center justify-center flex-1">

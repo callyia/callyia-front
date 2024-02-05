@@ -6,6 +6,7 @@ import ScheduleList from "./ScheduleListPage";
 import SignInPage from "./SignInPage";
 import SignUpPage from "./SignUpPage";
 import MainPage from "./MainPage";
+import MyInformationPage from "./MyInformationPage";
 import ListPage from "./ListPage";
 import PlanningPage from "./PlanningPage";
 import MyProfilePage from "./MyProfilePage";
@@ -58,6 +59,15 @@ export default function RoutesSetup() {
         element={
           <PrivateRoute element={<Layout />}>
             <Route index element={<MyProfilePage />} />
+            <Route path="*" element={<NoMatch />} />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/MyInformationPage"
+        element={
+          <PrivateRoute element={<Layout />}>
+            <Route index element={<MyInformationPage />} />
             <Route path="*" element={<NoMatch />} />
           </PrivateRoute>
         }

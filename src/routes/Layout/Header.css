@@ -3,30 +3,26 @@
     justify-content: space-between;
     align-items: center;
     padding: 5px;
-    width: 100%;
   }
 
-  /* button */
-  .header-action-button, .header-action-button-fixed {
-    background-color: #abcdef;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 16px;
-    width: 100px;
-    height: 68px;
+  .header-button {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px; 
+    font-size: 40px;
   }
 
-  .header-action-button-fixed {
-    position: fixed;
+  .header-button:hover {
+    transform: scale(1.1);
+    brightness: 0.5;
+    transition: transform 0.5s ease-in-out;
   }
 
-  .header-action-button:hover {
-    background-color: blue;
+  .header-button-message {
+    font-family: "GmarketSans300";
+    font-size: 14px;
   }
-
+  
   /* search-bar */
   .header-search-input {
     font-family: "GmarketSans500";
@@ -43,10 +39,11 @@
 
   .header-search-bar {
     font-family: "GmarketSans500";
-    margin-left: -40%;
+    right: 20%;
     display: flex;
     align-items: center;
     width: 47%;
+    position: relative;
   }
 
   .header-top-bar {
@@ -70,7 +67,6 @@
     color: white;
   }
   
-  /* logo */
   .header-logo {
     width: 100px;
     height: 50px;
@@ -79,22 +75,80 @@
     color: #abcdef;
   }
 
-  .header-action-button-1 {
-    margin-top: 5px;
-    right: 305px;
+  .header-button-container {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    margin-bottom: -8px;
+    padding: 0 20px;
   }
   
-  .header-action-button-2 {
-    margin-top: 5px;
-    right: 205px;
+  .recent-searches-dropdown {
+    position: absolute;
+    top: 100%; 
+    left: 0;
+    right: 0;
+    background-color: rgba(255, 255, 255, 0.9); 
+    border: 1px solid #ccc; 
+    z-index: 10; 
+  }
+
+  .recent-search-item {
+    padding: 10px;
+    display: flex; 
+    justify-content: space-between; 
+    align-items: flex-start;
+  }
+
+  .recent-search-item:hover {
+    background-color: rgba(211, 211, 211, 0.9); 
   }
   
-  .header-action-button-3 {
-    margin-top: 5px;
-    right: 105px;
+  .recent-search-item:last-child {
+    border-bottom: none;
+  }
+
+  .recent-search-combo,
+  .recent-search-keyword,
+  .recent-search-date,
+  .recent-search-delete {
+    font-family: "GmarketSans300";
+  }
+
+  .recent-search-delete:hover {
+    font-family: "GmarketSans700";
+    font-size: 14px;
+  }
+
+  .recent-search-combo {
+    margin-left: 1%;
+  }
+
+  .recent-search-keyword {
+    font-size: 20px;
+    flex: 1;
+    margin-left: 6%;
+    padding: 0; 
   }
   
-  .header-action-button-4 {
-    margin-top: 5px;
-    right: 5px;
+  .recent-search-keyword-container {
+    flex: 1;
   }
+  
+  .recent-search-date {
+    margin-right: 6%;
+  }
+  
+  .recent-search-all-delete {
+    font-family: "GmarketSans500";
+    font-size: 21px;
+    margin-left: 46.5%;
+  }
+  
+  .recent-search-all-delete:hover,
+  .recent-search-keyword:hover {
+    cursor: pointer;
+    font-family: "GmarketSans700";
+  }
+  

@@ -1,6 +1,7 @@
 import React, { ChangeEvent, useState, useRef, useEffect} from 'react';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';  
+
+import Swal from 'sweetalert2';
 
 import MyProfile from './MyProfilePage';
 
@@ -13,7 +14,6 @@ type UserInfo = {
 }
 
 export default function MyProfilePage() { 
-  // const navigate = useNavigate(); // 수정
   
   const [isEditing, setIsEditing] = useState(false); 
   const [profileImage, setProfileImage] = useState<string>('./dummyimages/image1.jpeg'); // 기본 이미지
@@ -50,14 +50,40 @@ export default function MyProfilePage() {
   const handleProfileImageChange = (event:ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files ? event.target.files[0] : null;
     if (file) {
-      const fileReader = new FileReader();
-      fileReader.onloadend = () => {
-        if (typeof fileReader.result === 'string') {
-          setProfileImage(fileReader.result);
-          setupdateProfileImage(fileReader.result);
-        }
-      };
-      fileReader.readAsDataURL(file);
+
+      const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff', 'tif', 'webp'];
+      const fileExtension = file.name.split('.').pop()?.toLowerCase();
+      
+      if (!allowedExtensions.includes(fileExtension!)) {
+        Swal.fire({
+          title: '변경 불가',
+          text: '허용되는 파일은 jpg, jpeg, png, gif, bmp, tiff, tif, webp입니다.',
+          icon: 'error',
+          confirmButtonText: '닫기',
+          customClass: {
+            confirmButton: 'my-profile-swal-button' 
+          },
+          buttonsStyling: true, 
+        
+        });
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      axios.post("http://localhost:8080/Callyia/s3/profile", formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then(response => {
+        const imageUrl = response.data.imagePath;
+        setProfileImage(imageUrl);
+      })
+      .catch(error => {
+        console.error('Error uploading image:', error);
+      });
     }
   };
 

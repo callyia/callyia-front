@@ -65,7 +65,7 @@ const MyProfile: React.FC<MyProfileProps> = ({
     
     if (willSave) {
       swal({
-        text: "Change.",
+        text: "변경 성공",
         icon: "success",
         buttons: [false], 
         timer: 500, 
@@ -115,16 +115,14 @@ const MyProfile: React.FC<MyProfileProps> = ({
     axios.put(`http://localhost:8080/Callyia/member/updateMember?email=${email}`, {
       email: email,
       aboutMe: text,
-      // profileImage: profileImage
-      profileImage: 'https://upload.wikimedia.org/wikipedia/commons/0/0c/Mount_Everest%2C_Himalayas.jpg'
-    }, {
+      profileImage: profileImage
+      }, {
       headers: {
         Authorization: `Bearer ${token}`
       }
     })
     .then(response => {
       toggleIsEditing(); 
-      // console.log(response.data);
       window.location.reload();
     })
 

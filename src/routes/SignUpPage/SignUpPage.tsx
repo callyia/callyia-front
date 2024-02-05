@@ -192,27 +192,29 @@ const SignUp = () => {
     );
 
     try {
-      const imageFormData = new FormData();
+      const profileFormData = new FormData();
       if (profileImage) {
         const blob = await fetch(profileImage).then((res) => res.blob());
-        imageFormData.append("profileImage", blob);
+        profileFormData.append("file", blob, "selectedImage.jpg");
       }
-      console.log(imageFormData);
+      console.log(profileFormData);
       console.log(profileImage);
 
       // const token = localStorage.getItem("token");
-      const imageUploadResponse = await axios.post(
-        "http://localhost:8080/Callyia/member/upload",
-        imageFormData,
+      const profileResponse = await axios.post(
+        "http://localhost:8080/Callyia/s3/profile",
+        profileFormData,
         {
           headers: {
-            // Authorization: `Bearer ${token}`,
             "Content-Type": "multipart/form-data",
           },
         }
       );
+      if (profileResponse.status !== 200) {
+        throw new Error(`HTTP error! Status: ${profileResponse.status}`);
+      }
 
-      const uploadResult = imageUploadResponse.data;
+      const uploadResult = profileResponse.data;
       const imagePath = uploadResult.imagePath;
 
       console.log(imagePath);
@@ -233,7 +235,6 @@ const SignUp = () => {
         }),
         {
           headers: {
-            // Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
         }

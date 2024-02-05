@@ -127,3 +127,147 @@
   border-width: 2px;
   border-style: solid;
 }
+
+.renderData {
+  flex-wrap: wrap;
+  margin-right: 2.5rem;
+  margin-bottom: 1rem;
+  width: 320px;
+}
+
+.registerButton {
+  position: absolute;
+  color: #fbd38d;
+  riget: 1rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 1.25rem;
+  line-height: 1.5;
+}
+
+.swiper-container {
+  height: 540px;
+}
+
+.swiper-slide {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-width: 4px;
+}
+
+.up-button {
+  position: fixed;
+  padding: 0.5rem;
+  transition-property: transform;
+  transform: none;
+  backgroud-color: #a3bffa;
+  border-radius: 9999px;
+  cursor: pointer;
+  bottom: 1rem;
+  transform: scale(1.1);
+}
+
+.searchBar {
+  position: relative;
+  left: 45rem;
+  border-width: 1px;
+  border-style: solid;
+  border-top-width: 0;
+  border-bottom-width: 2px;
+  border-left-width: 0;
+  border-right-width: 0;
+  width: 33.75rem;
+  margin-top: 2rem;
+}
+
+.searchBtn {
+  position: relative;
+  width: 20%;
+}
+
+.modalContent {
+  padding: 1rem;
+  backgroud-color: #fff;
+  border-radius: 0.75rem;
+  height: 43.75rem;
+  width: 87.5rem;
+  position: relative;
+}
+
+.modal_sz {
+  display: flex;
+  flex-direction: row;
+  height: 21.25rem;
+  margin-top: 2rem;
+}
+
+.modal_cn {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.modal_cz {
+  flex-grow: 1;
+  padding: 0.25rem;
+  border-widtdh: 1px;
+  border-style: solid;
+  border-radius: 0.25rem;
+}
+
+.modal_sz {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+}
+
+.modalAction {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  flex-direction: row;
+}
+
+.acceptBtn {
+  width: 6rem;
+  text-transform: none;
+  backgroud-color: #3490dc;
+  color: #ffffff;
+  font-size: 0.75rem;
+  padding: 0.375rem 0.75rem;
+}
+
+.closeBtn {
+  width: 6rem;
+  text-transform: none;
+  font-size: 0.75rem;
+  padding: 0.375rem 0.75rem;
+}
+
+.tour_sz {
+  margin-left: 13.75rem;
+  margin-right: 13.75rem;
+  margin-top: 5rem;
+  margin-bottom: 5rem;
+}
+
+.sTitle {
+  margin-bottom: 2.5rem;
+  font-size: 1.875rem;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.modal_cc {
+  padding: 1rem;
+  background-color: #fff;
+  border-radius: 0.75rem;
+  min-height: 18.75rem;
+  height: auto;
+  width: 43.75rem;
+  position: relative;
+}

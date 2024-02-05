@@ -7,6 +7,7 @@ import PlaceCard from "../../components/PlaceCard";
 import toast, { Toaster } from "react-hot-toast";
 import { Modal, ModalContent } from "../../theme/daisyui/Modal";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import axios from "axios";
 
 const plans: Array<{
   placeId: number;
@@ -62,6 +63,7 @@ export default function Planning() {
   const [basketData, setBasketData] = useState([]);
   const [area1, toggleArea1] = useToggle();
   const [area2, toggleArea2] = useToggle();
+  const [loading, toggleLoading] = useToggle();
   const [isModalOpen, setModalOpen] = useState(false);
   const [isPostModalOpen, setPostModalOpen] = useState(false);
 
@@ -330,91 +332,95 @@ export default function Planning() {
       showDistance(distanceContent, currentPos);
     } else if (index == 0) {
       if (dropIndex != 1) {
-        if (dropIndex == 2) {
-          var beforePos = new window.kakao.maps.LatLng(
-            planData[planData.length - 1].latitude,
-            planData[planData.length - 1].longitude
-          );
-          var currentPos = new window.kakao.maps.LatLng(
-            planData2[index].latitude,
-            planData2[index].longitude
-          );
-        } else if (dropIndex == 3) {
-          var beforePos = new window.kakao.maps.LatLng(
-            planData2[planData2.length - 1].latitude,
-            planData2[planData2.length - 1].longitude
-          );
-          var currentPos = new window.kakao.maps.LatLng(
-            planData3[index].latitude,
-            planData3[index].longitude
-          );
-        } else if (dropIndex == 4) {
-          var beforePos = new window.kakao.maps.LatLng(
-            planData3[planData3.length - 1].latitude,
-            planData3[planData3.length - 1].longitude
-          );
-          var currentPos = new window.kakao.maps.LatLng(
-            planData4[index].latitude,
-            planData4[index].longitude
-          );
-        } else if (dropIndex == 5) {
-          var beforePos = new window.kakao.maps.LatLng(
-            planData4[planData4.length - 1].latitude,
-            planData4[planData4.length - 1].longitude
-          );
-          var currentPos = new window.kakao.maps.LatLng(
-            planData5[index].latitude,
-            planData5[index].longitude
-          );
-        } else if (dropIndex == 6) {
-          var beforePos = new window.kakao.maps.LatLng(
-            planData5[planData5.length - 1].latitude,
-            planData5[planData5.length - 1].longitude
-          );
-          var currentPos = new window.kakao.maps.LatLng(
-            planData6[index].latitude,
-            planData6[index].longitude
-          );
-        } else if (dropIndex == 7) {
-          var beforePos = new window.kakao.maps.LatLng(
-            planData6[planData6.length - 1].latitude,
-            planData6[planData6.length - 1].longitude
-          );
-          var currentPos = new window.kakao.maps.LatLng(
-            planData7[index].latitude,
-            planData7[index].longitude
-          );
+        try {
+          if (dropIndex == 2) {
+            var beforePos = new window.kakao.maps.LatLng(
+              planData[planData.length - 1].latitude,
+              planData[planData.length - 1].longitude
+            );
+            var currentPos = new window.kakao.maps.LatLng(
+              planData2[index].latitude,
+              planData2[index].longitude
+            );
+          } else if (dropIndex == 3) {
+            var beforePos = new window.kakao.maps.LatLng(
+              planData2[planData2.length - 1].latitude,
+              planData2[planData2.length - 1].longitude
+            );
+            var currentPos = new window.kakao.maps.LatLng(
+              planData3[index].latitude,
+              planData3[index].longitude
+            );
+          } else if (dropIndex == 4) {
+            var beforePos = new window.kakao.maps.LatLng(
+              planData3[planData3.length - 1].latitude,
+              planData3[planData3.length - 1].longitude
+            );
+            var currentPos = new window.kakao.maps.LatLng(
+              planData4[index].latitude,
+              planData4[index].longitude
+            );
+          } else if (dropIndex == 5) {
+            var beforePos = new window.kakao.maps.LatLng(
+              planData4[planData4.length - 1].latitude,
+              planData4[planData4.length - 1].longitude
+            );
+            var currentPos = new window.kakao.maps.LatLng(
+              planData5[index].latitude,
+              planData5[index].longitude
+            );
+          } else if (dropIndex == 6) {
+            var beforePos = new window.kakao.maps.LatLng(
+              planData5[planData5.length - 1].latitude,
+              planData5[planData5.length - 1].longitude
+            );
+            var currentPos = new window.kakao.maps.LatLng(
+              planData6[index].latitude,
+              planData6[index].longitude
+            );
+          } else if (dropIndex == 7) {
+            var beforePos = new window.kakao.maps.LatLng(
+              planData6[planData6.length - 1].latitude,
+              planData6[planData6.length - 1].longitude
+            );
+            var currentPos = new window.kakao.maps.LatLng(
+              planData7[index].latitude,
+              planData7[index].longitude
+            );
+          }
+
+          linePosition = [beforePos, currentPos];
+
+          polyline = new window.kakao.maps.Polyline({
+            path: linePosition, // 선을 구성하는 좌표배열 입니다
+            strokeWeight: 5, // 선의 두께 입니다
+            strokeColor: "#f21818", // 선의 색깔입니다
+            strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+            strokeStyle: "solid", // 선의 스타일입니다
+          });
+          polyline.setMap(map);
+
+          distance = Math.round(polyline.getLength());
+
+          if (dropIndex == 1)
+            distanceContent = getTimeHTML(distance, planData[index].placeName);
+          else if (dropIndex == 2)
+            distanceContent = getTimeHTML(distance, planData2[index].placeName);
+          else if (dropIndex == 3)
+            distanceContent = getTimeHTML(distance, planData3[index].placeName);
+          else if (dropIndex == 4)
+            distanceContent = getTimeHTML(distance, planData4[index].placeName);
+          else if (dropIndex == 5)
+            distanceContent = getTimeHTML(distance, planData5[index].placeName);
+          else if (dropIndex == 6)
+            distanceContent = getTimeHTML(distance, planData6[index].placeName);
+          else if (dropIndex == 7)
+            distanceContent = getTimeHTML(distance, planData7[index].placeName);
+
+          showDistance(distanceContent, currentPos);
+        } catch (error) {
+          toast.error("이전 날짜에 일정이 없어요, 일정을 넣어주세요!");
         }
-
-        linePosition = [beforePos, currentPos];
-
-        polyline = new window.kakao.maps.Polyline({
-          path: linePosition, // 선을 구성하는 좌표배열 입니다
-          strokeWeight: 5, // 선의 두께 입니다
-          strokeColor: "#f21818", // 선의 색깔입니다
-          strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
-          strokeStyle: "solid", // 선의 스타일입니다
-        });
-        polyline.setMap(map);
-
-        distance = Math.round(polyline.getLength());
-
-        if (dropIndex == 1)
-          distanceContent = getTimeHTML(distance, planData[index].placeName);
-        else if (dropIndex == 2)
-          distanceContent = getTimeHTML(distance, planData2[index].placeName);
-        else if (dropIndex == 3)
-          distanceContent = getTimeHTML(distance, planData3[index].placeName);
-        else if (dropIndex == 4)
-          distanceContent = getTimeHTML(distance, planData4[index].placeName);
-        else if (dropIndex == 5)
-          distanceContent = getTimeHTML(distance, planData5[index].placeName);
-        else if (dropIndex == 6)
-          distanceContent = getTimeHTML(distance, planData6[index].placeName);
-        else if (dropIndex == 7)
-          distanceContent = getTimeHTML(distance, planData7[index].placeName);
-
-        showDistance(distanceContent, currentPos);
       }
     }
   };
@@ -1075,15 +1081,6 @@ export default function Planning() {
       const newValues = [...prevValues];
       // Initialize the array for the specific day if not exists
       newValues[day - 1] = newValues[day - 1] || [];
-      // const placeId = [
-      //   ...planData,
-      //   ...planData2,
-      //   ...planData3,
-      //   ...planData4,
-      //   ...planData5,
-      //   ...planData6,
-      //   ...planData7,
-      // ][index].placeId;
 
       var placeId;
 
@@ -1113,15 +1110,23 @@ export default function Planning() {
         sno: null,
       };
       newValues[day - 1][index][type] = value;
-      console.log(newValues[day - 1][index][type]);
+      // console.log(newValues[day - 1][index][type]);
 
       return newValues;
     });
   };
 
-  const handleButtonClick = () => {
+  const handleButtonClick = async (formData: any) => {
+    toggleLoading();
     const flattenedValues = inputValues.flatMap((dayValues) => dayValues || []);
-    console.log(flattenedValues);
+
+    const hasEmptyTip = flattenedValues.some((item) => item.tip === "");
+
+    if (hasEmptyTip) {
+      toggleLoading();
+      toast.error("각 계획별로 사진이나 팁을 남겨주세요!");
+      return;
+    }
 
     const planLength = [
       ...planData,
@@ -1134,11 +1139,38 @@ export default function Planning() {
     ].length;
 
     if (planLength != flattenedValues.length) {
+      toggleLoading();
       toast.error("각 계획별로 사진이나 팁을 남겨주세요!");
       return;
     }
 
-    console.log("AFTER");
+    const response = await axios.post(
+      "http://localhost:8080/Callyia/s3/posting",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    if (response.status !== 200) {
+      toggleLoading();
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = response.data;
+    console.log(data);
+
+    if (data.length == 0) {
+      toggleLoading();
+      toast.error("각 계획별로 사진이나 팁을 남겨주세요!");
+      return;
+    }
+
+    flattenedValues.map((item, index) => {
+      item.detailImages = data[index];
+    });
 
     const titleText = document.querySelector(
       "#titleText"
@@ -1177,10 +1209,11 @@ export default function Planning() {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
+        toggleLoading();
         navigate("/SchedulePage/" + data);
       })
       .catch((error) => {
+        toggleLoading();
         console.error("Error fetching data:", error);
       });
   };
@@ -1212,7 +1245,10 @@ export default function Planning() {
           <div className="toggle-right-search-div1">
             <button
               className="toggle-right-up-X"
-              onClick={toggleArea1}
+              onClick={() => {
+                toggleArea1();
+                setSearchData([]);
+              }}
             ></button>
           </div>
           <div className="toggle-right-search-div2">
@@ -1393,251 +1429,332 @@ export default function Planning() {
 
       <Modal open={isPostModalOpen}>
         <ModalContent className="post-modal">
-          <div className="post-modal-top">
-            계획을 포스팅하여 사람들과 공유해보세요.
-          </div>
-          <div className="post-modal-div">
-            {Array.from({ length: planDay }, (_, index) => (
-              <div key={index} className="post-modal-day-div">
-                <div className="post-modal-day-title">
-                  <span className="post-modal-day-title-text">
-                    Day {index + 1}
-                  </span>
+          <form
+            onSubmit={async (event) => {
+              event.preventDefault();
+
+              const form = event.target as HTMLFormElement;
+              const formData = new FormData(form);
+
+              // const response = await axios.post(
+              //   "http://localhost:8080/Callyia/s3/posting",
+              //   formData,
+              //   {
+              //     headers: {
+              //       "Content-Type": "multipart/form-data",
+              //     },
+              //   }
+              // );
+
+              // if (response.status !== 200) {
+              //   throw new Error(`HTTP error! Status: ${response.status}`);
+              // }
+
+              // const uploadedData = response.data;
+              // console.log(uploadedData);
+
+              handleButtonClick(formData);
+            }}
+          >
+            <div className="post-modal-top">
+              계획을 포스팅하여 사람들과 공유해보세요.
+            </div>
+            <div className="post-modal-div">
+              {Array.from({ length: planDay }, (_, index) => (
+                <div key={index} className="post-modal-day-div">
+                  <div className="post-modal-day-title">
+                    <span className="post-modal-day-title-text">
+                      Day {index + 1}
+                    </span>
+                  </div>
+                  {index + 1 == 1 &&
+                    planData.map((plan, i) => (
+                      <div key={`${index}-${i}`}>
+                        <h1 className="post-modal-day-placeName">
+                          {plan.placeName}
+                        </h1>
+                        <span>Image :</span>
+                        <input
+                          // onChange={(e) =>
+                          //   handleInputChange(
+                          //     index + 1,
+                          //     i,
+                          //     "detailImages",
+                          //     e.target.value
+                          //   )
+                          // }
+                          id={`detailImages-${index + 1}-${i}`}
+                          className="ml-2"
+                          type="file"
+                          accept="image/*"
+                          name="file"
+                        />
+                        <span className="ml-4">Tip :</span>
+                        <input
+                          onChange={(e) =>
+                            handleInputChange(
+                              index + 1,
+                              i,
+                              "tip",
+                              e.target.value
+                            )
+                          }
+                          id={`tip-${index + 1}-${i}`}
+                          className="ml-2 w-80"
+                          type="text"
+                        />
+                      </div>
+                    ))}
+                  {index + 1 == 2 &&
+                    planData2.map((plan, i) => (
+                      <div key={`${index}-${i}`}>
+                        <h1 className="post-modal-day-placeName">
+                          {plan.placeName}
+                        </h1>
+                        <span>Image :</span>
+                        <input
+                          // onChange={(e) =>
+                          //   handleInputChange(
+                          //     index + 1,
+                          //     i,
+                          //     "detailImages",
+                          //     e.target.value
+                          //   )
+                          // }
+                          id={`detailImages-${index + 1}-${i}`}
+                          className="ml-2"
+                          type="file"
+                          accept="image/*"
+                          name="file"
+                        />
+                        <span className="ml-4">Tip :</span>
+                        <input
+                          onChange={(e) =>
+                            handleInputChange(
+                              index + 1,
+                              i,
+                              "tip",
+                              e.target.value
+                            )
+                          }
+                          id={`tip-${index + 1}-${i}`}
+                          className="ml-2 w-80"
+                          type="text"
+                        />
+                      </div>
+                    ))}
+                  {index + 1 == 3 &&
+                    planData3.map((plan, i) => (
+                      <div key={`${index}-${i}`}>
+                        <h1 className="post-modal-day-placeName">
+                          {plan.placeName}
+                        </h1>
+                        <span>Image :</span>
+                        <input
+                          // onChange={(e) =>
+                          //   handleInputChange(
+                          //     index + 1,
+                          //     i,
+                          //     "detailImages",
+                          //     e.target.value
+                          //   )
+                          // }
+                          id={`detailImages-${index + 1}-${i}`}
+                          className="ml-2"
+                          type="file"
+                          accept="image/*"
+                          name="file"
+                        />
+                        <span className="ml-4">Tip :</span>
+                        <input
+                          onChange={(e) =>
+                            handleInputChange(
+                              index + 1,
+                              i,
+                              "tip",
+                              e.target.value
+                            )
+                          }
+                          id={`tip-${index + 1}-${i}`}
+                          className="ml-2 w-80"
+                          type="text"
+                        />
+                      </div>
+                    ))}
+                  {index + 1 == 4 &&
+                    planData4.map((plan, i) => (
+                      <div key={`${index}-${i}`}>
+                        <h1 className="post-modal-day-placeName">
+                          {plan.placeName}
+                        </h1>
+                        <span>Image :</span>
+                        <input
+                          // onChange={(e) =>
+                          //   handleInputChange(
+                          //     index + 1,
+                          //     i,
+                          //     "detailImages",
+                          //     e.target.value
+                          //   )
+                          // }
+                          id={`detailImages-${index + 1}-${i}`}
+                          className="ml-2"
+                          type="file"
+                          accept="image/*"
+                          name="file"
+                        />
+                        <span className="ml-4">Tip :</span>
+                        <input
+                          onChange={(e) =>
+                            handleInputChange(
+                              index + 1,
+                              i,
+                              "tip",
+                              e.target.value
+                            )
+                          }
+                          id={`tip-${index + 1}-${i}`}
+                          className="ml-2 w-80"
+                          type="text"
+                        />
+                      </div>
+                    ))}
+                  {index + 1 == 5 &&
+                    planData5.map((plan, i) => (
+                      <div key={`${index}-${i}`}>
+                        <h1 className="post-modal-day-placeName">
+                          {plan.placeName}
+                        </h1>
+                        <span>Image :</span>
+                        <input
+                          // onChange={(e) =>
+                          //   handleInputChange(
+                          //     index + 1,
+                          //     i,
+                          //     "detailImages",
+                          //     e.target.value
+                          //   )
+                          // }
+                          id={`detailImages-${index + 1}-${i}`}
+                          className="ml-2"
+                          type="file"
+                          accept="image/*"
+                          name="file"
+                        />
+                        <span className="ml-4">Tip :</span>
+                        <input
+                          onChange={(e) =>
+                            handleInputChange(
+                              index + 1,
+                              i,
+                              "tip",
+                              e.target.value
+                            )
+                          }
+                          id={`tip-${index + 1}-${i}`}
+                          className="ml-2 w-80"
+                          type="text"
+                        />
+                      </div>
+                    ))}
+                  {index + 1 == 6 &&
+                    planData6.map((plan, i) => (
+                      <div key={`${index}-${i}`}>
+                        <h1 className="post-modal-day-placeName">
+                          {plan.placeName}
+                        </h1>
+                        <span>Image :</span>
+                        <input
+                          // onChange={(e) =>
+                          //   handleInputChange(
+                          //     index + 1,
+                          //     i,
+                          //     "detailImages",
+                          //     e.target.value
+                          //   )
+                          // }
+                          id={`detailImages-${index + 1}-${i}`}
+                          className="ml-2"
+                          type="file"
+                          accept="image/*"
+                          name="file"
+                        />
+                        <span className="ml-4">Tip :</span>
+                        <input
+                          onChange={(e) =>
+                            handleInputChange(
+                              index + 1,
+                              i,
+                              "tip",
+                              e.target.value
+                            )
+                          }
+                          id={`tip-${index + 1}-${i}`}
+                          className="ml-2 w-80"
+                          type="text"
+                        />
+                      </div>
+                    ))}
+                  {index + 1 == 7 &&
+                    planData7.map((plan, i) => (
+                      <div key={`${index}-${i}`}>
+                        <h1 className="post-modal-day-placeName">
+                          {plan.placeName}
+                        </h1>
+                        <span>Image :</span>
+                        <input
+                          onChange={(e) =>
+                            handleInputChange(
+                              index + 1,
+                              i,
+                              "detailImages",
+                              e.target.value
+                            )
+                          }
+                          id={`detailImages-${index + 1}-${i}`}
+                          className="ml-2"
+                          type="file"
+                          accept="image/*"
+                          name="file"
+                        />
+                        <span className="ml-4">Tip :</span>
+                        <input
+                          onChange={(e) =>
+                            handleInputChange(
+                              index + 1,
+                              i,
+                              "tip",
+                              e.target.value
+                            )
+                          }
+                          id={`tip-${index + 1}-${i}`}
+                          className="ml-2 w-80"
+                          type="text"
+                        />
+                      </div>
+                    ))}
                 </div>
-                {index + 1 == 1 &&
-                  planData.map((plan, i) => (
-                    <div key={`${index}-${i}`}>
-                      <h1 className="post-modal-day-placeName">
-                        {plan.placeName}
-                      </h1>
-                      <span>Image :</span>
-                      <input
-                        onChange={(e) =>
-                          handleInputChange(
-                            index + 1,
-                            i,
-                            "detailImages",
-                            e.target.value
-                          )
-                        }
-                        id={`detailImages-${index + 1}-${i}`}
-                        className="ml-2"
-                        type="text"
-                      />
-                      <span className="ml-4">Tip :</span>
-                      <input
-                        onChange={(e) =>
-                          handleInputChange(index + 1, i, "tip", e.target.value)
-                        }
-                        id={`tip-${index + 1}-${i}`}
-                        className="ml-2 w-96"
-                        type="text"
-                      />
-                    </div>
-                  ))}
-                {index + 1 == 2 &&
-                  planData2.map((plan, i) => (
-                    <div key={`${index}-${i}`}>
-                      <h1 className="post-modal-day-placeName">
-                        {plan.placeName}
-                      </h1>
-                      <span>Image :</span>
-                      <input
-                        onChange={(e) =>
-                          handleInputChange(
-                            index + 1,
-                            i,
-                            "detailImages",
-                            e.target.value
-                          )
-                        }
-                        id={`detailImages-${index + 1}-${i}`}
-                        className="ml-2"
-                        type="text"
-                      />
-                      <span className="ml-4">Tip :</span>
-                      <input
-                        onChange={(e) =>
-                          handleInputChange(index + 1, i, "tip", e.target.value)
-                        }
-                        id={`tip-${index + 1}-${i}`}
-                        className="ml-2 w-96"
-                        type="text"
-                      />
-                    </div>
-                  ))}
-                {index + 1 == 3 &&
-                  planData3.map((plan, i) => (
-                    <div key={`${index}-${i}`}>
-                      <h1 className="post-modal-day-placeName">
-                        {plan.placeName}
-                      </h1>
-                      <span>Image :</span>
-                      <input
-                        onChange={(e) =>
-                          handleInputChange(
-                            index + 1,
-                            i,
-                            "detailImages",
-                            e.target.value
-                          )
-                        }
-                        id={`detailImages-${index + 1}-${i}`}
-                        className="ml-2"
-                        type="text"
-                      />
-                      <span className="ml-4">Tip :</span>
-                      <input
-                        onChange={(e) =>
-                          handleInputChange(index + 1, i, "tip", e.target.value)
-                        }
-                        id={`tip-${index + 1}-${i}`}
-                        className="ml-2 w-96"
-                        type="text"
-                      />
-                    </div>
-                  ))}
-                {index + 1 == 4 &&
-                  planData4.map((plan, i) => (
-                    <div key={`${index}-${i}`}>
-                      <h1 className="post-modal-day-placeName">
-                        {plan.placeName}
-                      </h1>
-                      <span>Image :</span>
-                      <input
-                        onChange={(e) =>
-                          handleInputChange(
-                            index + 1,
-                            i,
-                            "detailImages",
-                            e.target.value
-                          )
-                        }
-                        id={`detailImages-${index + 1}-${i}`}
-                        className="ml-2"
-                        type="text"
-                      />
-                      <span className="ml-4">Tip :</span>
-                      <input
-                        onChange={(e) =>
-                          handleInputChange(index + 1, i, "tip", e.target.value)
-                        }
-                        id={`tip-${index + 1}-${i}`}
-                        className="ml-2 w-96"
-                        type="text"
-                      />
-                    </div>
-                  ))}
-                {index + 1 == 5 &&
-                  planData5.map((plan, i) => (
-                    <div key={`${index}-${i}`}>
-                      <h1 className="post-modal-day-placeName">
-                        {plan.placeName}
-                      </h1>
-                      <span>Image :</span>
-                      <input
-                        onChange={(e) =>
-                          handleInputChange(
-                            index + 1,
-                            i,
-                            "detailImages",
-                            e.target.value
-                          )
-                        }
-                        id={`detailImages-${index + 1}-${i}`}
-                        className="ml-2"
-                        type="text"
-                      />
-                      <span className="ml-4">Tip :</span>
-                      <input
-                        onChange={(e) =>
-                          handleInputChange(index + 1, i, "tip", e.target.value)
-                        }
-                        id={`tip-${index + 1}-${i}`}
-                        className="ml-2 w-96"
-                        type="text"
-                      />
-                    </div>
-                  ))}
-                {index + 1 == 6 &&
-                  planData6.map((plan, i) => (
-                    <div key={`${index}-${i}`}>
-                      <h1 className="post-modal-day-placeName">
-                        {plan.placeName}
-                      </h1>
-                      <span>Image :</span>
-                      <input
-                        onChange={(e) =>
-                          handleInputChange(
-                            index + 1,
-                            i,
-                            "detailImages",
-                            e.target.value
-                          )
-                        }
-                        id={`detailImages-${index + 1}-${i}`}
-                        className="ml-2"
-                        type="text"
-                      />
-                      <span className="ml-4">Tip :</span>
-                      <input
-                        onChange={(e) =>
-                          handleInputChange(index + 1, i, "tip", e.target.value)
-                        }
-                        id={`tip-${index + 1}-${i}`}
-                        className="ml-2 w-96"
-                        type="text"
-                      />
-                    </div>
-                  ))}
-                {index + 1 == 7 &&
-                  planData7.map((plan, i) => (
-                    <div key={`${index}-${i}`}>
-                      <h1 className="post-modal-day-placeName">
-                        {plan.placeName}
-                      </h1>
-                      <span>Image :</span>
-                      <input
-                        onChange={(e) =>
-                          handleInputChange(
-                            index + 1,
-                            i,
-                            "detailImages",
-                            e.target.value
-                          )
-                        }
-                        id={`detailImages-${index + 1}-${i}`}
-                        className="ml-2"
-                        type="text"
-                      />
-                      <span className="ml-4">Tip :</span>
-                      <input
-                        onChange={(e) =>
-                          handleInputChange(index + 1, i, "tip", e.target.value)
-                        }
-                        id={`tip-${index + 1}-${i}`}
-                        className="ml-2 w-96"
-                        type="text"
-                      />
-                    </div>
-                  ))}
-              </div>
-            ))}
-          </div>
-          <div className="post-modal-bottom">
-            <button
-              className="float-right btn btn-warning"
-              onClick={closePostModal}
-            >
-              Close
-            </button>
-            <button
-              className="float-right mr-1 btn btn-primary"
-              onClick={handleButtonClick}
-            >
-              Post
-            </button>
-          </div>
+              ))}
+            </div>
+
+            <div className="post-modal-bottom">
+              <button
+                className="float-right btn btn-warning"
+                onClick={(event) => {
+                  event.preventDefault();
+                  closePostModal();
+                }}
+              >
+                Close
+              </button>
+              <button
+                type="submit"
+                className="float-right mr-1 btn btn-primary"
+              >
+                Post
+              </button>
+            </div>
+          </form>
         </ModalContent>
       </Modal>
 
@@ -1645,6 +1762,15 @@ export default function Planning() {
       <div className="div-right">
         <div id="map" style={{ width: "100%", height: "100%" }} />
       </div>
+
+      <Modal open={loading}>
+        <ModalContent className="div-loading">
+          <div className="div-loading-content">
+            <div className="w-16 loading-dots loading" />
+            <span className="text-lg font-semibold">잠시만 기다려주세요.</span>
+          </div>
+        </ModalContent>
+      </Modal>
     </div>
   );
 }

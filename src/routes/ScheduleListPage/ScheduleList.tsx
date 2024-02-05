@@ -134,7 +134,7 @@ export default function ScheduleList() {
               {matchingDetail && (
                 <img
                   src={matchingDetail.detailImages}
-                  alt={`Detail Image for ${schedule.sno}`}
+                  alt={`Detail Img for ${schedule.sno}`}
                 />
               )}
               <span className="ScheduleList-profile-info">

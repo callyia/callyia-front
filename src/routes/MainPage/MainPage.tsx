@@ -303,7 +303,7 @@ const Main: React.FC<MainPageProps> = () => {
 
   return (
     <div className="main-trip-plan-container">
-      <main className="main-frame">
+      <main className="main-frame ">
         <div className="main-trip-plan-section-container">
           <section className="main-section-div-sm">
             <div className="main-trip-plan-section-div-title">
@@ -385,7 +385,7 @@ const Main: React.FC<MainPageProps> = () => {
                 return (
                   <div
                     key={schedule.sno}
-                    className="list-card"
+                    className="list-card test-btn"
                     onClick={() => navigate(`/SchedulePage/${schedule.sno}`)}
                   >
                     {/* 프로필 클릭 시 해당 유저페이지로 이동 */}
@@ -422,7 +422,11 @@ const Main: React.FC<MainPageProps> = () => {
           <section className="main-section-div-tour-left">
             <div className="main-tour-info-section">
               {tourData.map((tour) => (
-                <div key={tour.placeId} onClick={() => openDetailClicked(tour)}>
+                <div
+                  className="main-tour-info-div"
+                  key={tour.placeId}
+                  onClick={() => openDetailClicked(tour)}
+                >
                   {tour.image && (
                     <img
                       src={tour.image}
@@ -437,53 +441,56 @@ const Main: React.FC<MainPageProps> = () => {
             <Modal className="" open={openDetail}>
               <ModalContent
                 onCloseIconClicked={closeDetailClicked}
-                className="p-4 bg-white rounded-lg min-h-[500px] h-auto w-[800px] relative"
+                className="p-4 bg-white rounded-lg min-h-[300px] h-[auto] w-[700px] relative"
               >
-                <div>
-                  <h3 className="mb-8 text-center">상세페이지입니다.</h3>
-                </div>
-                {selectedTour && (
-                  <div className="grid">
-                    <div className="flex items-center mb-2">
-                      <label className="mr-2">이름 : </label>
-                      <p className="flex-grow p-1 border rounded">
-                        {selectedTour.placeName}
-                      </p>
-                    </div>
-                    <div className="flex items-center mb-2">
-                      <label className="mr-2">지역 : </label>
-                      <p className="flex-grow p-1 border rounded">
-                        {selectedTour.address}
-                      </p>
-                    </div>
-                    <div className="flex items-center mb-2">
-                      <label className="mr-2">내용 : </label>
-                      <p className="flex-grow h-auto p-1 border rounded">
-                        {selectedTour.placeContent}
-                      </p>
-                    </div>
-                    <div className="w-full h-auto">
-                      <img
-                        src={selectedTour.image}
-                        style={{ width: "400px", height: "250px" }}
-                        alt={selectedTour.image}
-                      />
-                    </div>
+                <div className="flex flex-row mt-3">
+                  <div className="flex items-center justify-center flex-1">
+                    {selectedTour && (
+                      <div className="w-full h-auto">
+                        <img
+                          src={selectedTour.image}
+                          alt={"그림"}
+                          style={{ width: "250px", height: "250px" }}
+                          className="shadow-md shadow-slate-500 rounded-2xl"
+                        />
+                      </div>
+                    )}
                   </div>
-                )}
+                  <div className="flex-1">
+                    {selectedTour && (
+                      <div>
+                        <div className="flex items-center mt-2">
+                          <p className="flex-grow p-1 text-style">
+                            {selectedTour.address}
+                          </p>
+                        </div>
+                        <div className="flex items-center">
+                          <p className="flex-grow p-1 text-style-second">
+                            {selectedTour.placeName}
+                          </p>
+                        </div>
+                        <div className="flex items-center">
+                          <p className="flex-grow h-auto p-1">
+                            {selectedTour.placeContent}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
                 <div className="absolute bottom-4 right-4">
-                  <ModalAction className="absolute bottom-0 right-0 flex flex-row">
+                  <ModalAction className="flex flex-row">
                     <Button
-                      className="w-24 normal-case btn-primary btn-sm"
+                      className="w-24 mr-2 normal-case btn-primary btn-sm"
                       onClick={basketClicked}
                     >
-                      Basket
+                      장바구니
                     </Button>
                     <Button
                       className="w-24 normal-case btn-sm"
                       onClick={closeDetailClicked}
                     >
-                      Close
+                      취소
                     </Button>
                   </ModalAction>
                 </div>
@@ -493,7 +500,18 @@ const Main: React.FC<MainPageProps> = () => {
               {renderPagination()}
             </div>
           </section>
+          <section className="main-section-div-tour-right">
+            <div>
+              <span className="main-tour-section-span-title-count">
+                {tourCount.toLocaleString()}
+              </span>
+              <span className="main-tour-section-span-title">
+                개의 멋진 장소가 여러분을 기다리고 있습니다.
+              </span>
+            </div>
+          </section>
         </div>
+        <div className="main-section-container"></div>
       </main>
       <button
         type="button"

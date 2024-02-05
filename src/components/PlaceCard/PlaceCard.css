@@ -98,8 +98,14 @@
 .plus-btn {
   width: 30px;
   height: 30px;
-  background-color: #eeeeee;
+  background-color: #cccccc;
   border-radius: 50%;
+}
+
+.add-btn {
+  width: 30px;
+  height: 30px;
+  color: white;
 }
 
 .pline {

@@ -214,7 +214,6 @@ input[type="text"] {
   background-position: center center;
   align-items: center;
   height: 500px;
-  margin-bottom: 30px;
   padding: 10px;
   width: 100%;
 }
@@ -262,10 +261,22 @@ input[type="text"] {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   padding: 2%;
+  height: 780px;
   margin-top: -1%;
   -ms-overflow-style: none;
   scrollbar-width: none;
   text-align: center;
+}
+
+.main-tour-info-div {
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+  height: 235px;
+}
+
+.main-tour-info-div:hover {
+  background-color: #ffffff;
 }
 
 .main-tour-info-text {
@@ -322,6 +333,8 @@ input[type="text"] {
   border-radius: 5px;
   margin-bottom: 10px;
   justify-items: center;
+  inset: 0px;
+  object-fit: cover;
 }
 
 .main-combo-day-dropdown {
@@ -339,17 +352,28 @@ input[type="text"] {
 }
 
 .list-card {
-  border: 1px solid #dddddd;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
   padding: 16px;
   height: 270px;
   margin: 15px;
-  transition: transform 0.3s ease-in-out;
-  background-color: #fffdf7;
+  cursor: pointer;
+  letter-spacing: 0.2em;
+  color: rgba(223, 190, 106, 1);
+  transition: all 0.5s ease-out;
+  background: linear-gradient(
+    270deg,
+    rgba(223, 190, 106, 0.9),
+    rgba(223, 190, 106, 0.8),
+    rgba(255, 255, 255, 1),
+    rgba(255, 255, 255, 1)
+  );
+  background-position: 1% 50%;
+  background-size: 300% 300%;
 }
 
 .list-card:hover {
-  transform: scale(1.025);
+  color: #ffffff;
+  background-position: 99% 50%;
 }
 
 .profile-image {
@@ -373,7 +397,17 @@ input[type="text"] {
   align-items: center;
   justify-content: center;
   display: flex;
-  margin: 70px 0px 100px 0px;
+  margin: 70px 0px 70px 0px;
+
+  background: repeating-linear-gradient(
+    45deg,
+    #606dbc,
+    #606dbc 5%,
+    #465298 5%,
+    #465298 10%
+  );
+  background-size: 100px 100px;
+  animation: move-it 2s linear infinite;
 }
 
 .place-navigate {
@@ -398,7 +432,7 @@ input[type="text"] {
   text-align: center;
   background-color: white;
   color: #0080ff;
-  transition: background-color 0.5s ease-in-out, color 0.5s ease-in-out;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
 }
 
 .place-navigate span:hover {
@@ -429,7 +463,7 @@ input[type="text"] {
   text-align: center;
   background-color: white;
   color: #0080ff;
-  transition: background-color 0.5s ease-in-out, color 0.5s ease-in-out;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
 }
 
 .restaurant-navigate span:hover {
@@ -459,7 +493,7 @@ input[type="text"] {
   text-align: center;
   background-color: white;
   color: #0080ff;
-  transition: background-color 0.5s ease-in-out, color 0.5s ease-in-out;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
 }
 .community-navigate span:hover {
   background-color: #0080ff;
@@ -496,4 +530,13 @@ input[type="text"] {
   color: #fdc500;
   margin-bottom: 20px;
   margin-right: 4px;
+}
+
+@keyframes move-it {
+  0% {
+    background-position: initial;
+  }
+  100% {
+    background-position: 100px 0px;
+  }
 }
