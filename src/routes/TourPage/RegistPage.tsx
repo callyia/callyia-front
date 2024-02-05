@@ -95,6 +95,7 @@ const RegistPage: React.FC<RegistPageProps> = ({ checkColumnData }) => {
   // 장바구니 클릭 시 장바구니 등록
   const basketClicked = async () => {
     console.log("placeId to check:", selectedTour?.placeId);
+    const email = localStorage.getItem("email");
     try {
       // 투어 정보를 데이터베이스에 저장
       const response = await axios.post(
@@ -102,6 +103,7 @@ const RegistPage: React.FC<RegistPageProps> = ({ checkColumnData }) => {
         JSON.stringify({
           bno: null,
           placeId: selectedTour?.placeId,
+          userId: email,
         }),
         {
           headers: {

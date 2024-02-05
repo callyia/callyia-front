@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 import { Button } from "../../theme/daisyui";
-import { Swiper, SwiperSlide } from 'swiper/react';
+import { Swiper, SwiperSlide } from "swiper/react";
 import { FaArrowUp } from "react-icons/fa"; // react-icons에서 사용할 아이콘을 import
 
 import { Modal, ModalAction, ModalContent } from "./../TourPage/Modal";
-import Upload from '../TourPage/Upload';
+import Upload from "../TourPage/Upload";
 import bglist from "./../TourPage/bglist";
-import './ProfilePage.css';
-import { Div } from '../../components';
+import "./ProfilePage.css";
+import { Div } from "../../components";
 
 interface TourData {
   placeId: number;
@@ -22,34 +22,35 @@ interface TourData {
   image: string;
 }
 
-
 const CartContent = () => {
   const [tourData, setTourData] = useState<TourData[]>([]);
   const [selectedTour, setSelectedTour] = useState<TourData | null>(null);
-  const [userBasketResults, setUserBasketResults] = useState([]); 
+  const [userBasketResults, setUserBasketResults] = useState([]);
   const [openDetail, setOpenDetail] = useState(false);
   const [checkColumn, setCheckColumn] = useState<string>("전체");
 
   const openDetailClicked = (selectedTour: TourData) => {
-    setSelectedTour(selectedTour); 
+    setSelectedTour(selectedTour);
     setOpenDetail(true);
   };
-  
+
   // 상세페이지 닫기
   const closeDetailClicked = () => {
-    setSelectedTour(null); 
+    setSelectedTour(null);
     setOpenDetail(false);
   };
-  
+
   const basketClicked = async () => {
     console.log("placeId to check:", selectedTour?.placeId);
     try {
       const token = localStorage.getItem("token");
+      const email = localStorage.getItem("email");
       const response = await axios.post(
         "http://localhost:8080/Callyia/Basket",
         JSON.stringify({
           bno: null, //bno 처리 어떻게 할건지
           placeId: selectedTour?.placeId,
+          userId: email,
         }),
         {
           headers: {
@@ -89,11 +90,11 @@ const CartContent = () => {
     };
     fetchUserTourData();
   }, []);
-  
 
   const renderTourItems = () => {
     // 검색 결과 유무에 따라 데이터 렌더링
-    const dataToRender = userBasketResults.length > 0 ? userBasketResults : tourData;
+    const dataToRender =
+      userBasketResults.length > 0 ? userBasketResults : tourData;
     return dataToRender.map((tour) => (
       <div key={tour.placeId} className="cart-card">
         <div
@@ -127,14 +128,16 @@ const CartContent = () => {
               {tour.image && (
                 <img
                   src={tour.image} // 이미지 소스를 동적으로 변경해야 할 것 같습니다.
-                  className="proflie-cart-images"  
+                  className="proflie-cart-images"
                   alt={`${tour} 이미지`}
                 />
               )}
             </div>
             <div className="profile-cart-text-container">
               <span className="profile-cart-text-style">{tour.address}</span>
-              <span className="profile-cart-text-style-second">{tour.placeName}</span>
+              <span className="profile-cart-text-style-second">
+                {tour.placeName}
+              </span>
             </div>
           </div>
         </div>
@@ -142,9 +145,8 @@ const CartContent = () => {
     ));
   };
 
-  
   return (
-    <div className='profile-common-posts'>
+    <div className="profile-common-posts">
       <div className="profile-edited-cart">{renderTourItems()}</div>
     </div>
   );

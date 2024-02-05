@@ -190,6 +190,8 @@ const Main: React.FC<MainPageProps> = () => {
 
   // 장바구니 클릭 시 장바구니 등록
   const basketClicked = async () => {
+    const token = localStorage.getItem("token");
+    const email = localStorage.getItem("email");
     console.log("placeId to check:", selectedTour?.placeId);
     try {
       // 투어 정보를 데이터베이스에 저장
@@ -198,9 +200,11 @@ const Main: React.FC<MainPageProps> = () => {
         JSON.stringify({
           bno: null,
           placeId: selectedTour?.placeId,
+          userId: email,
         }),
         {
           headers: {
+            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
         }
