@@ -96,15 +96,27 @@
 }
 
 .plus-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 30px;
   height: 30px;
-  background-color: #cccccc;
+  background-color: white;
   border-radius: 50%;
+  transition: background-color 0.3s ease;
 }
 
 .add-btn {
-  width: 30px;
-  height: 30px;
+  width: 24px;
+  height: 24px;
+  transition: color 0.3s ease;
+}
+
+.plus-btn:hover {
+  background-color: #353535;
+}
+
+.add-btn:hover {
   color: white;
 }
 

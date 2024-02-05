@@ -50,11 +50,19 @@
   width: 100%;
   height: 5%;
   background-color: #eeeeee;
-  background-image: url("../../../public/dummyimages/garbageIcon.png");
   background-size: auto 100%;
   background-position: center;
   background-repeat: no-repeat;
   padding-left: 10px;
+}
+
+.div-plan-trash-icon {
+  width: 34px;
+  height: 34px;
+  position: relative;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .div-plan-button {
@@ -81,24 +89,51 @@
 
 .toggle-right-up-X {
   position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   right: 5px;
   top: 5px;
   width: 30px;
   height: 30px;
   border-radius: 15px 15px 15px 15px;
   z-index: 50;
-  background-color: #b29393;
+  background-color: white;
+  transition: background-color 0.3s ease;
 }
 
 .toggle-right-down-X {
   position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   right: 5px;
   bottom: 5px;
   width: 30px;
   height: 30px;
   border-radius: 15px 15px 15px 15px;
   z-index: 50;
-  background-color: #b29393;
+
+  background-color: white;
+  transition: background-color 0.3s ease;
+}
+
+.toggle-close-btn {
+  width: 24px;
+  height: 24px;
+  transition: color 0.3s ease;
+}
+
+.toggle-right-up-X:hover {
+  background-color: #353535;
+}
+
+.toggle-right-down-X:hover {
+  background-color: #353535;
+}
+
+.toggle-close-btn:hover {
+  color: white;
 }
 
 .toggle-right-search-div1 {
@@ -144,10 +179,23 @@
 }
 
 .circle-btn {
-  height: 60px;
-  width: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  width: 50px;
   border-radius: 100px 100px 100px 100px;
   padding: 0px;
+  background-color: #9a8c98;
+  color: white;
+  transition: background-color 0.3s ease;
+  transition: color 0.3s ease;
+}
+
+.circle-btn:hover {
+  background-color: white;
+  color: #9a8c98;
+  border: 1px solid #9a8c98;
 }
 
 .toggle-div {
