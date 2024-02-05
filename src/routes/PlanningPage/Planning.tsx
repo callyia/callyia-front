@@ -9,6 +9,11 @@ import { Modal, ModalContent } from "../../theme/daisyui/Modal";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import axios from "axios";
 
+import { IoMdClose } from "react-icons/io";
+import { RiShoppingBasket2Line } from "react-icons/ri";
+import { IoSearch } from "react-icons/io5";
+import { FaTrashArrowUp } from "react-icons/fa6";
+
 const plans: Array<{
   placeId: number;
   placeName: string;
@@ -1224,9 +1229,7 @@ export default function Planning() {
 
   const dndTrashStyle = (isDraggingOver: any) => ({
     backgroundColor: isDraggingOver ? "#343a40" : "#e9ecef",
-    backgroundImage: isDraggingOver
-      ? `url("../../../dummyimages/trash_white.png")`
-      : `url("../../../dummyimages/trash_black.png")`,
+    color: isDraggingOver ? "#e9ecef" : "#343a40",
     backgroundSize: "auto 100%",
     backgroundPosition: "center",
     backgroundRepeat: "no-repeat",
@@ -1249,7 +1252,9 @@ export default function Planning() {
                 toggleArea1();
                 setSearchData([]);
               }}
-            ></button>
+            >
+              <IoMdClose className="toggle-close-btn" />
+            </button>
           </div>
           <div className="toggle-right-search-div2">
             <input
@@ -1278,11 +1283,8 @@ export default function Planning() {
         </div>
       )}
       {!area1 && (
-        <button
-          className="toggle-right-up btn circle-btn btn-primary"
-          onClick={toggleArea1}
-        >
-          click
+        <button className="toggle-right-up circle-btn" onClick={toggleArea1}>
+          <IoSearch className="w-8 h-8" />
         </button>
       )}
       {area2 && (
@@ -1300,19 +1302,15 @@ export default function Planning() {
             ))}
           </div>
           <div className="toggle-right-basket-div2">
-            <button
-              className="toggle-right-down-X"
-              onClick={toggleArea2}
-            ></button>
+            <button className="toggle-right-down-X" onClick={toggleArea2}>
+              <IoMdClose className="toggle-close-btn" />
+            </button>
           </div>
         </div>
       )}
       {!area2 && (
-        <button
-          className="toggle-right-down btn btn-primary circle-btn"
-          onClick={toggleArea2}
-        >
-          click
+        <button className="toggle-right-down circle-btn" onClick={toggleArea2}>
+          <RiShoppingBasket2Line className="w-8 h-8" />
         </button>
       )}
 
@@ -1379,6 +1377,7 @@ export default function Planning() {
                 ref={provided.innerRef}
                 style={dndTrashStyle(snapshot.isDraggingOver)}
               >
+                <FaTrashArrowUp className="div-plan-trash-icon" />
                 {provided.placeholder}
               </div>
             )}
