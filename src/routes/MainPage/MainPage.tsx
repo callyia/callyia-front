@@ -385,7 +385,7 @@ const Main: React.FC<MainPageProps> = () => {
                 return (
                   <div
                     key={schedule.sno}
-                    className="list-card"
+                    className="list-card test-btn"
                     onClick={() => navigate(`/SchedulePage/${schedule.sno}`)}
                   >
                     {/* 프로필 클릭 시 해당 유저페이지로 이동 */}
