@@ -186,7 +186,7 @@ export default function UserProfilePage() {
               scheduleThumbnailDTOs.map(
                 (scheduleThumbnailDTO: any, index: any) => (
                   <div
-                    className="flex-col border-2 user-profile-post-img"
+                    className="user-profile-post-img"
                     onClick={() =>
                       scheduleClick({
                         sno: scheduleThumbnailDTO.scheduleDTO.sno,
@@ -197,17 +197,15 @@ export default function UserProfilePage() {
                       src={scheduleThumbnailDTO.image}
                       alt="이미지"
                       className="w-6 h-6"
+                      style={{  borderRadius: "8px" }}
                     />
-                    <div className="mt-2 mb-2">
-                      <span className="mr-2 text-xl font-bold">
-                        {scheduleThumbnailDTO.scheduleDTO.sno}
-                      </span>
-                      <span className="text-xl text-slate-500">
+                    <div className="user-profile-sname">
+                      <span className="user-profile-sname-span">
                         {scheduleThumbnailDTO.scheduleDTO.sName}
                       </span>
                     </div>
-                    <div>
-                      Day : {scheduleThumbnailDTO.scheduleDTO.total_Day}
+                    <div style={{fontFamily: "GmarketSans500", fontSize: "16px"}}>
+                      <span style={{fontFamily: "GmarketSans700", color: "blue"}}>{scheduleThumbnailDTO.scheduleDTO.total_Day}</span>일의 일정
                     </div>
                   </div>
                 )
