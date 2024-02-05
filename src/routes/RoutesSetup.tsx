@@ -16,6 +16,7 @@ import TourPage from "./TourPage";
 import SignInPageFind from "./SignInPageFind";
 import UnAuthorized from "./UnAuthorized";
 import PrivateRoute from "./AuthRoute/PrivateRoute";
+import FindPassword from "./FindPasswordPage";
 
 export default function RoutesSetup() {
   return (
@@ -82,6 +83,10 @@ export default function RoutesSetup() {
       </Route>
       <Route path="/UnAuthorized" element={<Layout />}>
         <Route index element={<UnAuthorized />} />
+        <Route path="*" element={<NoMatch />} />
+      </Route>
+      <Route path="/FindPasswordPage" element={<Layout />}>
+        <Route index element={<FindPassword />} />
         <Route path="*" element={<NoMatch />} />
       </Route>
     </Routes>

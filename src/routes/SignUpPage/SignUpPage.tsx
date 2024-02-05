@@ -20,6 +20,10 @@ const SignUp = () => {
   const [tel2, setTel2] = useState("");
   const [tel3, setTel3] = useState("");
 
+  const [emailCheck, setEmailCheck] = useState(false);
+  const [nickNameCheck, setNickNameCheck] = useState(false);
+  const [phoneCheck, setPhoneCheck] = useState(false);
+
   const handleTel1Change = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setTel1(e.target.value);
   };
@@ -34,6 +38,54 @@ const SignUp = () => {
     const value = e.target.value.replace(/\D/g, "");
     setTel3(value);
   };
+
+  const handleEmailCheck = async () => {
+    // 이메일 중복 검사를 위한 API 호출
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/Callyia/member/user?email=${email}`
+      );
+
+      if (response.data !== true) {
+        alert("이미 사용 중인 이메일입니다.");
+        setEmailCheck(false);
+      }
+    } catch (error) {
+      console.error("Error checking email:", error);
+    }
+  };
+  const handleNickNameCheck = async () => {
+    // 닉네임 중복 검사를 위한 API 호출
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/Callyia/member/getNickname?nickname=${nickName}`
+      );
+
+      if (response.data !== true) {
+        alert("이미 사용 중인 닉네임입니다.");
+        setNickNameCheck(false);
+      }
+    } catch (error) {
+      console.error("Error checking nickname:", error);
+    }
+  };
+  const handlePhoneCheck = async () => {
+    // 전화번호 중복 검사를 위한 API 호출
+    try {
+      const formattedPhone = `${tel1}-${tel2}-${tel3}`;
+      const response = await axios.get(
+        `http://localhost:8080/Callyia/member/checkPhone?phone=${formattedPhone}`
+      );
+
+      if (response.data !== true) {
+        alert("이미 사용 중인 전화번호입니다.");
+        setPhoneCheck(false);
+      }
+    } catch (error) {
+      console.error("Error checking phone:", error);
+    }
+  };
+
   const handleProfileImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
 
@@ -110,8 +162,8 @@ const SignUp = () => {
       alert("전화번호 앞자리를 선택해주세요");
       return;
     }
-    if (tel2 === "" || tel3 === "") {
-      alert("전화번호를 입력해주세요");
+    if (tel2.length !== 4 || tel3.length !== 4) {
+      alert("전화번호를 올바르게 입력해주세요");
       return;
     }
 
@@ -191,7 +243,7 @@ const SignUp = () => {
       navigate("/"); // 원하는 경로로 변경
     } catch (error: any) {
       if (error.response && error.response.status === 409) {
-        alert("해당 Email은 이미 있는 Email입니다.");
+        alert("중복되는 값이 있습니다.");
       } else {
         console.error("Error accepting data:", error.message);
       }
@@ -226,6 +278,7 @@ const SignUp = () => {
                 style={{ backgroundColor: "white", color: "black" }}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Email"
+                onBlur={handleEmailCheck} // 포커스를 잃었을 때 이메일 중복 검사 수행
               />
             </form>
             <div className="SignUp-input-wrap input-password" id="pw">
@@ -265,6 +318,7 @@ const SignUp = () => {
                   onChange={(e) => setNickName(e.target.value)}
                   style={{ backgroundColor: "white", color: "black" }}
                   placeholder="NickName"
+                  onBlur={handleNickNameCheck} // 포커스를 잃었을 때 닉네임 중복 검사 수행
                 />
               </div>
 
@@ -332,6 +386,7 @@ const SignUp = () => {
                 maxLength={4}
                 value={tel3}
                 style={{ backgroundColor: "white", color: "black" }}
+                onBlur={handlePhoneCheck} // 포커스를 잃었을 때 닉네임 중복 검사 수행
               />
             </div>
           </div>

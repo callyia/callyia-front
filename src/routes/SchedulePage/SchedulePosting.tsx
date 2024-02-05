@@ -98,6 +98,8 @@ export default function SchedulePosting() {
   const email = localStorage.getItem("email");
   const token = localStorage.getItem("token");
 
+  const [redirectCountdown, setRedirectCountdown] = useState(2);
+
   // ScheduleCard를 DAY별로 그룹화하는 함수
   const groupByDay = (schedule: DetailScheduleItem[]) => {
     const grouped: { [day: number]: DetailScheduleItem[] } = {};
@@ -428,6 +430,30 @@ export default function SchedulePosting() {
       reply_regDate: reply_regdate,
     };
   };
+
+  //변경해야함
+  if (!sno) {
+    return (
+      <div className="user-from-list-page">
+        <div className="user-from-list-search-keyword-header">
+          <span className="user-from-danger-message">
+            잘못된 접근입니다. URL을 조작하지 마세요
+          </span>
+          <img
+            src="./dummyimages/error.png"
+            alt="error img"
+            className="user-from-danger-image"
+          />
+          <div className="user-danger-timeout-message">
+            <span style={{ color: "red", fontWeight: "bold" }}>
+              {redirectCountdown}
+            </span>{" "}
+            초후 메인페이지로 이동합니다.
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="WholePage" style={{ display: "flex", height: "1050px" }}>
