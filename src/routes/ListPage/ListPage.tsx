@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
-import axios from 'axios';
-import { Button } from "../../theme/daisyui";
-import toast, { Toaster } from "react-hot-toast";
-
-import { Modal, ModalAction, ModalContent } from "./../TourPage/Modal";
 import './ListPage.css';
 
 interface UserSearchResult {
@@ -43,7 +38,6 @@ interface Tips {
 
 const ListPage = () => {
   const location = useLocation();
-  const navigate = useNavigate();
 
   const [UserSearchResult, setUserSearchResult] = useState<UserSearchResult[]>([]);
   const [LocationSearchResult, setLocationSearchResult] = useState<LocationSearchResult[]>([]);
@@ -62,21 +56,7 @@ const ListPage = () => {
   const scheduleEndPage = Math.min(startPage + pagesToShow - 1, scheduleNumberOfPages);
   const [dataFetched, setDataFetched] = useState(false);
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
-  const [openDetail, setOpenDetail] = useState(false);
-  const [selectedTour, setSelectedTour] = useState<LocationSearchResult | null>(null);
-  const [tourData, setTourData] = useState<LocationSearchResult[]>([]); 
-
-  const openDetailClicked = (selectedTour: LocationSearchResult) => {
-    setSelectedTour(selectedTour); // 클릭된 관광지 정보 저장
-    setOpenDetail(true);
-  };
-
-  // 상세페이지 닫기
-  const closeDetailClicked = () => {
-    setSelectedTour(null);
-    setOpenDetail(false);
-  };
-
+  
   const [isValidQuery, setIsValidQuery] = useState(true);
 
   const tips: Tips = {
@@ -145,43 +125,6 @@ const ListPage = () => {
       };
     fetchData();
   }, [location.search, searchCombo, searchKeyword]);
-
-  const basketClicked = async () => {
-    const token = localStorage.getItem("token");
-    console.log("placeId to check:", selectedTour?.placeId);
-    try {
-      // 투어 정보를 데이터베이스에 저장
-      const response = await axios.post(
-        "http://localhost:8080/Callyia/Basket",
-        JSON.stringify({
-          bno: null,
-          placeId: selectedTour?.placeId,
-        }),
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (response.status !== 200) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      const result = response.data;
-      console.log("결과:", result);
-
-      toast.success(
-        `장바구니에 추가하였습니다. 내용: ${selectedTour?.placeId}`
-      );
-    } catch (error: any) {
-      console.error("Error accepting data:", error.message);
-      if (error.message.includes("409")) {
-        toast.error("해당 파일은 이미 등록되어 있습니다.");
-      }
-    }
-  };
-
 
   const userPaginatedResults = UserSearchResult.slice(
     (currentPage - 1) * itemsPerPage,
@@ -282,13 +225,13 @@ const ListPage = () => {
         <div className='list-page-search-keyword-bar' >
           <div className="list-image-grid">
           {userPaginatedResults.map(result => (
-            <div key={result.email} className="list-image-item" onClick={() => navigate(`/UserProfilePage?userid=${result.email}`)}>
+            <div key={result.email} className="list-image-item">
               <img src={result.profileImage} alt={`${result.nickname}의 profile`}/>
               <p>
-                <span className='list-user-email'>{result.email}</span>
+                <a className='list-user-nickname' href={`/UserProfilePage?userid=${result.email}`}>{result.nickname}</a>
               </p> 
               <p>
-                <span className='list-user-nickname'>{result.nickname}</span>
+                <span className='list-user-email'>{result.email}</span>
               </p>
             </div>
           ))} 
@@ -335,88 +278,11 @@ if(searchCombo === 'location')
           <span className='list-search-keyword'> {searchKeyword}</span>를 검색한 결과입니다.</div>
         <div className='list-page-search-keyword-bar' >
           <div className="list-image-grid">
-          {LocationSearchResult.map(result => (
-            <div key={result.placeId} className="list-image-item-square" onClick={() => openDetailClicked(result)}>
-              {/* 340 ~ 415 수정하시면 됩니다. 저번에 페이지 네이션 12 그거때문에 지금 안맞는 거 같은데, 안쓸 거 같은 거는 지우지 말고
-              주석처리만 해주세요 */}
-              {tourData.map((tour) => (
-                <div
-                  className="main-tour-info-div"
-                  key={tour.placeId}
-                  onClick={() => openDetailClicked(tour)}
-                >
-                  {tour.image && (
-                    <img
-                      src={tour.image}
-                      className="main-tour-info-image"
-                      alt={tour.placeName}
-                    />
-                  )}
-                  <h3 className="main-tour-info-text">{tour.placeName}</h3>
-                </div>
-              ))}
-              <Modal className="" open={openDetail}>
-              <ModalContent
-                onCloseIconClicked={closeDetailClicked}
-                className="p-4 bg-white rounded-lg min-h-[300px] h-[auto] w-[700px] relative"
-              >
-                <div className="flex flex-row mt-3">
-                  <div className="flex items-center justify-center flex-1">
-                    {selectedTour && (
-                      <div className="w-full h-auto">
-                        <img
-                          src={selectedTour.image}
-                          alt={"그림"}
-                          style={{ width: "2500px", height: "250px" }}
-                          className="shadow-md shadow-slate-500 rounded-2xl"
-                        />
-                      </div>
-                    )}
-                  </div>
-                  <div className="flex-1">
-                    {selectedTour && (
-                      <div>
-                        <div className="flex items-center mt-2">
-                          <p className="flex-grow p-1 text-style">
-                            {selectedTour.address}
-                          </p>
-                        </div>
-                        <div className="flex items-center">
-                          <p className="flex-grow p-1 text-style-second">
-                            {selectedTour.placeName}
-                          </p>
-                        </div>
-                        <div className="flex items-center">
-                          <p className="flex-grow h-auto p-1">
-                            {selectedTour.placeContent}
-                          </p>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-                <div className="absolute bottom-4 right-4">
-                  <ModalAction className="flex flex-row">
-                    <Button
-                      className="w-24 mr-2 normal-case btn-primary btn-sm"
-                      onClick={basketClicked}
-                    >
-                      장바구니
-                    </Button>
-                    <Button
-                      className="w-24 normal-case btn-sm"
-                      onClick={closeDetailClicked}
-                    >
-                      취소
-                    </Button>
-                  </ModalAction>
-                </div>
-              </ModalContent>
-            </Modal>
-              {/*  */}
+          {locationPaginatedResults.map(result => (
+            <div key={result.placeId} className="list-image-item-square">
             <img src={result.image} alt={`${result.placeName}의 location`}/>
             <p>
-              <span className='list-user-nickname'>{result.placeName}</span>
+              <a className='list-user-nickname' href={`/UserProfilePage?location=${result.placeName}`}>{result.placeName}</a>
             </p> 
             <p>
               <span className='list-user-email'>{result.address}</span>
@@ -426,33 +292,33 @@ if(searchCombo === 'location')
       </div>
       </div>
             {LocationSearchResult.length > itemsPerPage && (
-          <div className="list-pagination-controls">
-            <button onClick={() => locationGoToPage(Math.ceil(currentPage/10)*10 - 10)} disabled={currentPage === 1}>
-              {'<<'}
-            </button>
-            <button onClick={() => locationGoToPage(currentPage - 1)} disabled={currentPage === 1}>
-              {'<'}
-            </button>
-              {Array.from({ length: locationEndPage - startPage + 1 }, (_, i) => startPage + i).map(page => (
-                    <span
-                      key={page}
-                      className={`list-page-number ${currentPage === page ? 'list-current-page' : ''}`}
-                      onClick={() => locationGoToPage(page)}
-                    >
-                      {page}
-                    </span>
-              ))}
-            <button onClick={() => locationGoToPage(currentPage + 1)} disabled={currentPage === locationNumberOfPages}>
-              {'>'}
-            </button>
-            <button onClick={() => locationGoToPage(Math.ceil(currentPage/10)*10 + 1)} disabled={currentPage === locationNumberOfPages}>
-              {'>>'}
-            </button>
-            </div>
-          )}
-          </div>
-          );
-        };
+  <div className="list-pagination-controls">
+    <button onClick={() => locationGoToPage(Math.ceil(currentPage/10)*10 - 10)} disabled={currentPage === 1}>
+      {'<<'}
+    </button>
+    <button onClick={() => locationGoToPage(currentPage - 1)} disabled={currentPage === 1}>
+      {'<'}
+    </button>
+      {Array.from({ length: locationEndPage - startPage + 1 }, (_, i) => startPage + i).map(page => (
+            <span
+              key={page}
+              className={`list-page-number ${currentPage === page ? 'list-current-page' : ''}`}
+              onClick={() => locationGoToPage(page)}
+            >
+              {page}
+            </span>
+       ))}
+    <button onClick={() => locationGoToPage(currentPage + 1)} disabled={currentPage === locationNumberOfPages}>
+      {'>'}
+    </button>
+    <button onClick={() => locationGoToPage(Math.ceil(currentPage/10)*10 + 1)} disabled={currentPage === locationNumberOfPages}>
+      {'>>'}
+    </button>
+    </div>
+    )}
+    </div>
+    );
+  };
 
 
   if(searchCombo === 'schedule')
@@ -468,15 +334,15 @@ if(searchCombo === 'location')
             <div className="list-image-grid">
           
             {schedulePaginatedResults.map(result => (
-              <div key={result.sno} className="list-normal-item" onClick={() => navigate(`/SchedulePage/${result.sno}`)}>
+              <div key={result.sno} className="list-normal-item">
                 <p>
-                  <span className='list-user-sname'>{result.sName}</span>
+                  <a className='list-user-nickname' href={`/SchedulePage/${result.sno}`}>{result.sName}</a>
                 </p>
                 <p>
-                  <span className='list-total-day'> {result.total_Day}일 계획</span>
+                  <a className='list-total-day'  href={`/SchedulePage/${result.sno}`}> {result.total_Day}일 계획</a>
                 </p>
                 <p>
-                  <span className='list-user-nickname'> made by {result.member_nickname}</span> 
+                  <a className='list-total-day' href={`/SchedulePage/${result.sno}`}> made by {result.member_nickname}</a> 
                 </p>
               </div>
             ))} 

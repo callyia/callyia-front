@@ -78,12 +78,6 @@
   margin-bottom: 10px;
 }
 
-.list-image-item:hover,
-.list-image-item-square:hover {
-  cursor: pointer;
-  background-color: #ccc;
-}
-
 .list-normal-item{
   display: flex;
   place-content: center;
@@ -99,15 +93,13 @@
   align-items: center;  
 }
 
-.list-normal-item:hover {
-  cursor: pointer;
-  background-color: #ccc;
-}
-
-.list-user-sname {
+.list-user-nickname {
   font-family: 'GmarketSans500';
   font-size: 36px;
-  transition: font-size 0.3s ease;
+}
+
+.list-user-nickname:hover {
+  color: red;
 }
 
 .list-schedule-p {
@@ -115,26 +107,9 @@
   width: 400px;
 }
 
-.list-total-day {
+.list-user-email, .list-total-day {
   font-family: 'GmarketSans300';
   font-size: 22px;
-  transition: font-size 0.3s ease;
-}
-
-.list-user-email {
-  font-family: 'GmarketSans300';
-  font-size: 18px;
-}
-
-.list-user-nickname {
-  font-family: 'GmarketSans700';
-  font-size: 28px;
-  transition: font-size 0.3s ease;
-}
-
-.list-normal-item:hover .list-user-sname {
-  font-size: 40px;
-  transition: 0.3s;
 }
 
 .list-pagination-controls button {
@@ -239,6 +214,7 @@
 }
 
 .list-tips-card:hover .list-tips-card-hover-content {
+
   display: block;
   opacity: 1;
 }
