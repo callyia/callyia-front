@@ -337,76 +337,93 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
               />
               <button onClick={handleRegister}>입력</button>
             </div>
-            {reply_contents.map((reply, index) => (
-              <li key={index} onClick={() => handlereplyClick(reply, index)}>
-                <span
-                  style={{
-                    fontSize: "1.1em",
-                    display: "flex",
-                    justifyContent: "space-between", // 좌우 정렬
-                  }}
-                >
-                  <div
+            {reply_contents
+              .slice()
+              .reverse()
+              .map((reply, index) => (
+                <li key={index} onClick={() => handlereplyClick(reply, index)}>
+                  <span
                     style={{
+                      fontSize: "1.1em",
                       display: "flex",
-                      alignItems: "center",
-                      fontWeight: "bold",
+                      justifyContent: "space-between", // 좌우 정렬
                     }}
                   >
-                    <img
-                      src={replyer_img[index]}
-                      alt="프로필 이미지"
-                      onClick={(e) => {
-                        e.stopPropagation(); // 부모 태그로  이벤트 이벤트 전파 방지
-                        // 클릭 시 UserProfilePage로 이동
-                        navigate(`/UserProfilePage?userid=${replyer[index]}`);
-                      }}
+                    <div
                       style={{
-                        cursor: "pointer",
-                        marginRight: "5px",
-                        borderRadius: "50%",
-                        width: "70px",
-                        height: "70px",
+                        display: "flex",
+                        alignItems: "center",
+                        fontWeight: "bold",
                       }}
-                    />
-                    {replyer_nickname[index]}
-                  </div>
-                  <span className="reply-Date" style={{ float: "right" }}>
-                    {reply_regDate[index]
-                      ? reply_regDate[index][0].toString()
-                      : "No Date"}
-                    년{" "}
-                    {reply_regDate[index]
-                      ? reply_regDate[index][1].toString()
-                      : "No Date"}
-                    월{" "}
-                    {reply_regDate[index]
-                      ? reply_regDate[index][2].toString()
-                      : "No Date"}
-                    일{" "}
-                    {reply_regDate[index]
-                      ? reply_regDate[index][3].toString()
-                      : "No Date"}
-                    시{" "}
-                    {reply_regDate[index]
-                      ? reply_regDate[index][4].toString()
-                      : "No Date"}
-                    분
+                    >
+                      <img
+                        src={replyer_img[replyer_img.length - 1 - index]}
+                        alt="프로필 이미지"
+                        onClick={(e) => {
+                          e.stopPropagation(); // 부모 태그로  이벤트 이벤트 전파 방지
+                          // 클릭 시 UserProfilePage로 이동
+                          navigate(
+                            `/UserProfilePage?userid=${
+                              replyer[replyer.length - 1 - index]
+                            }`
+                          );
+                        }}
+                        style={{
+                          cursor: "pointer",
+                          marginRight: "5px",
+                          borderRadius: "50%",
+                          width: "70px",
+                          height: "70px",
+                        }}
+                      />
+                      {replyer_nickname[replyer_nickname.length - 1 - index]}
+                    </div>
+                    <span className="reply-Date" style={{ float: "right" }}>
+                      {reply_regDate[reply_regDate.length - 1 - index]
+                        ? reply_regDate[
+                            reply_regDate.length - 1 - index
+                          ][0].toString()
+                        : "No Date"}
+                      년{" "}
+                      {reply_regDate[reply_regDate.length - 1 - index]
+                        ? reply_regDate[
+                            reply_regDate.length - 1 - index
+                          ][1].toString()
+                        : "No Date"}
+                      월{" "}
+                      {reply_regDate[reply_regDate.length - 1 - index]
+                        ? reply_regDate[
+                            reply_regDate.length - 1 - index
+                          ][2].toString()
+                        : "No Date"}
+                      일{" "}
+                      {reply_regDate[reply_regDate.length - 1 - index]
+                        ? reply_regDate[
+                            reply_regDate.length - 1 - index
+                          ][3].toString()
+                        : "No Date"}
+                      시{" "}
+                      {reply_regDate[reply_regDate.length - 1 - index]
+                        ? reply_regDate[
+                            reply_regDate.length - 1 - index
+                          ][4].toString()
+                        : "No Date"}
+                      분
+                    </span>
                   </span>
-                </span>
 
-                {"    "}
-                <div
-                  style={{
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  {reply}
-                </div>
-              </li>
-            ))}
+                  {"    "}
+                  <div
+                    style={{
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {reply}
+                  </div>
+                </li>
+              ))}
           </ul>
         </div>
       )}
