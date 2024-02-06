@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Button } from "../../theme/daisyui";
 import { CgArrowRightR, CgArrowLeftR } from "react-icons/cg";
-
+import toast, { Toaster } from "react-hot-toast";
 import { Modal, ModalAction, ModalContent } from "./../TourPage/Modal";
 import "./MainPage.css";
 
@@ -42,6 +42,11 @@ interface MainPageProps {
   toggleLogin: () => void;
 }
 
+interface TipData {
+  sno: number;
+  tip: string;
+}
+
 const Main: React.FC<MainPageProps> = () => {
   const navigate = useNavigate();
 
@@ -51,8 +56,11 @@ const Main: React.FC<MainPageProps> = () => {
   const [detailScheduleData, setDetailScheduleData] = useState<
     DetailScheduleData[]
   >([]);
+  const [tipData, setTipData] = useState<TipData[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [tipCurrentPage, setTipCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [tipTotalPages, setTipTotalPages] = useState(1);
   const [showTopButton, setShowTopButton] = useState(false);
   const [selectedTour, setSelectedTour] = useState<TourData | null>(null);
   const [openDetail, setOpenDetail] = useState(false);
@@ -63,6 +71,10 @@ const Main: React.FC<MainPageProps> = () => {
   const startPage =
     Math.floor((currentPage - 1) / pagesToShow) * pagesToShow + 1;
   const endPage = Math.min(startPage + pagesToShow - 1, totalPages);
+
+  const startTipPage =
+    Math.floor((tipCurrentPage - 1) / pagesToShow) * pagesToShow + 1;
+  const endTipPage = Math.min(startTipPage + pagesToShow - 1, tipTotalPages);
 
   //sno에 해당하는 detailImage중에서 첫 요소의 이미지
   const matchingDetailImages: any[] = [];
@@ -216,14 +228,37 @@ const Main: React.FC<MainPageProps> = () => {
       const result = response.data;
       console.log("결과:", result);
 
-      alert(`장바구니에 추가하였습니다. 내용: ${selectedTour?.placeId}`);
+      toast.success(
+        `장바구니에 추가하였습니다. 내용: ${selectedTour?.placeId}`
+      );
     } catch (error: any) {
       console.error("Error accepting data:", error.message);
       if (error.message.includes("409")) {
-        alert("해당 파일은 이미 등록되어 있습니다.");
+        toast.error("해당 파일은 이미 등록되어 있습니다.");
       }
     }
   };
+
+  // 상세페이지의 관련 Tip 가져오기
+
+  useEffect(() => {
+    if (selectedTour) {
+      axios
+        .get(
+          `http://localhost:8080/Callyia/Schedule/getTip?placeId=${selectedTour?.placeId}&page=${tipCurrentPage}`
+        )
+        .then((response) => {
+          console.log(response.data);
+          console.log(">>>>>>>>", response.data.totalPages);
+
+          setTipData(response.data.content);
+          setTipTotalPages(response.data.totalPages);
+        })
+        .catch((error) => {
+          console.error("Error fetching get Tip:", error);
+        });
+    }
+  }, [selectedTour, tipCurrentPage]);
 
   const handlePlanInputChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -297,6 +332,70 @@ const Main: React.FC<MainPageProps> = () => {
         key="page's last"
         onClick={() => goToPage(Math.ceil(currentPage / 10) * 10 + 1)}
         disabled={currentPage === totalPages}
+      >
+        {">>"}
+      </button>
+    );
+
+    return pages;
+  };
+
+  const goToTipPage = (page: number) => {
+    setTipCurrentPage(Math.max(1, Math.min(tipTotalPages, page)));
+  };
+
+  const renderTipPagination = () => {
+    let pages = [];
+
+    pages.push(
+      <button
+        className="main-info-pagination-controls-key"
+        key="page's first"
+        onClick={() => goToTipPage(Math.ceil(tipCurrentPage / 10) * 10 - 10)}
+        disabled={tipCurrentPage === 1}
+      >
+        {"<<"}
+      </button>
+    );
+    pages.push(
+      <button
+        className="main-info-pagination-controls-key"
+        key="prev"
+        onClick={() => goToTipPage(tipCurrentPage - 1)}
+        disabled={tipCurrentPage === 1}
+      >
+        {"<"}
+      </button>
+    );
+
+    for (let i = startTipPage; i <= endTipPage; i++) {
+      pages.push(
+        <button
+          key={i}
+          onClick={() => goToTipPage(i)}
+          disabled={i === tipCurrentPage}
+        >
+          {i}
+        </button>
+      );
+    }
+
+    pages.push(
+      <button
+        className="main-info-pagination-controls-key"
+        key="next"
+        onClick={() => goToTipPage(tipCurrentPage + 1)}
+        disabled={tipCurrentPage === tipTotalPages}
+      >
+        {">"}
+      </button>
+    );
+    pages.push(
+      <button
+        className="main-info-pagination-controls-key"
+        key="page's last"
+        onClick={() => goToTipPage(Math.ceil(tipCurrentPage / 10) * 10 + 1)}
+        disabled={tipCurrentPage === tipTotalPages}
       >
         {">>"}
       </button>
@@ -442,10 +541,11 @@ const Main: React.FC<MainPageProps> = () => {
                 </div>
               ))}
             </div>
+            <Toaster position="top-center" reverseOrder={false} />
             <Modal className="" open={openDetail}>
               <ModalContent
                 onCloseIconClicked={closeDetailClicked}
-                className="p-4 bg-white rounded-lg min-h-[300px] h-[auto] w-[700px] relative"
+                className="p-4 bg-white rounded-lg  h-[auto] w-[700px] relative"
               >
                 <div className="flex flex-row mt-3">
                   <div className="flex items-center justify-center flex-1">
@@ -464,39 +564,56 @@ const Main: React.FC<MainPageProps> = () => {
                     {selectedTour && (
                       <div>
                         <div className="flex items-center mt-2">
-                          <p className="flex-grow p-1 text-style">
+                          <p className="flex-grow max-h-[28px] max-w-[334px] p-1 text-style">
                             {selectedTour.address}
                           </p>
                         </div>
                         <div className="flex items-center">
-                          <p className="flex-grow p-1 text-style-second">
+                          <p className="flex-grow max-h-[59px] max-w-[334px] p-1 text-style-second">
                             {selectedTour.placeName}
                           </p>
                         </div>
                         <div className="flex items-center">
-                          <p className="flex-grow h-auto p-1">
+                          <p className="flex-grow min-h-[150px] max-h-[150px] p-1">
                             {selectedTour.placeContent}
                           </p>
                         </div>
                       </div>
                     )}
+                    <div className="modalActionbtn">
+                      <ModalAction className="flex flex-row">
+                        <Button
+                          className="w-24 mr-2 normal-case btn-primary btn-sm"
+                          onClick={basketClicked}
+                        >
+                          장바구니
+                        </Button>
+                        <Button
+                          className="w-24 normal-case btn-sm"
+                          onClick={closeDetailClicked}
+                        >
+                          취소
+                        </Button>
+                      </ModalAction>
+                    </div>
                   </div>
                 </div>
-                <div className="absolute bottom-4 right-4">
-                  <ModalAction className="flex flex-row">
-                    <Button
-                      className="w-24 mr-2 normal-case btn-primary btn-sm"
-                      onClick={basketClicked}
+                <div className="tipTitle">관련 팁 (총 {tipData.length}개)</div>
+                <div className="tipCollect">
+                  {tipData.map((tipData, index) => (
+                    <div
+                      className="tipStyle"
+                      key={index}
+                      onClick={() => {
+                        navigate(`/SchedulePage/${tipData.sno}`);
+                      }}
                     >
-                      장바구니
-                    </Button>
-                    <Button
-                      className="w-24 normal-case btn-sm"
-                      onClick={closeDetailClicked}
-                    >
-                      취소
-                    </Button>
-                  </ModalAction>
+                      {tipData.tip}
+                    </div>
+                  ))}
+                </div>
+                <div className="main-info-pagination-controls">
+                  {renderTipPagination()}
                 </div>
               </ModalContent>
             </Modal>

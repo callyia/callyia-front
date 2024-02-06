@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./SignUpPage.css";
 import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
@@ -47,7 +48,7 @@ const SignUp = () => {
       );
 
       if (response.data !== true) {
-        alert("이미 사용 중인 이메일입니다.");
+        toast.error("이미 사용 중인 이메일입니다.");
         setEmailCheck(false);
       }
     } catch (error) {
@@ -62,7 +63,7 @@ const SignUp = () => {
       );
 
       if (response.data !== true) {
-        alert("이미 사용 중인 닉네임입니다.");
+        toast.error("이미 사용 중인 닉네임입니다.");
         setNickNameCheck(false);
       }
     } catch (error) {
@@ -78,7 +79,7 @@ const SignUp = () => {
       );
 
       if (response.data !== true) {
-        alert("이미 사용 중인 전화번호입니다.");
+        toast.error("이미 사용 중인 전화번호입니다.");
         setPhoneCheck(false);
       }
     } catch (error) {
@@ -128,42 +129,42 @@ const SignUp = () => {
     e.preventDefault();
     // 이메일 유효성 검사
     if (email === "") {
-      alert("Email을 입력하세요.");
+      toast.error("Email을 입력하세요.");
       return;
     } else {
       if (!isEmailValid(email)) {
-        alert("유효한 Email을 입력하세요.");
+        toast.error("유효한 Email을 입력하세요.");
         // if (refEmail.current !== null) refEmail.current.focus();
         return;
       }
     }
     // 비밀번호 유효성 검사
     if (password === "") {
-      alert("비밀번호를 입력하세요.");
+      toast.error("비밀번호를 입력하세요.");
       return;
     } else {
       if (password !== confirmPassword) {
-        alert("비밀번호가 일치하지 않습니다. 다시 확인해주세요.");
+        toast.error("비밀번호가 일치하지 않습니다. 다시 확인해주세요.");
         return;
       }
     }
     // 이름 유효성 검사
     if (name === "") {
-      alert("이름을 입력해주세요.");
+      toast.error("이름을 입력해주세요.");
       // if (name.current !== null) name.current.focus();
       return;
     } else {
       if (!isNameValid(name)) {
-        alert("올바른 이름을 입력해주세요.");
+        toast.error("올바른 이름을 입력해주세요.");
         return;
       }
     }
     if (tel1 !== "010" && tel1 !== "011") {
-      alert("전화번호 앞자리를 선택해주세요");
+      toast.error("전화번호 앞자리를 선택해주세요");
       return;
     }
     if (tel2.length !== 4 || tel3.length !== 4) {
-      alert("전화번호를 올바르게 입력해주세요");
+      toast.error("전화번호를 올바르게 입력해주세요");
       return;
     }
 
@@ -243,7 +244,7 @@ const SignUp = () => {
       navigate("/"); // 원하는 경로로 변경
     } catch (error: any) {
       if (error.response && error.response.status === 409) {
-        alert("중복되는 값이 있습니다.");
+        toast.error("중복되는 값이 있습니다.");
       } else {
         console.error("Error accepting data:", error.message);
       }
@@ -397,6 +398,7 @@ const SignUp = () => {
           </div>
         </div>
       </div>
+      <Toaster position="top-center" reverseOrder={false} />
     </div>
   );
 };

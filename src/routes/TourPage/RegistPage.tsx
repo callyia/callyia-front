@@ -504,6 +504,7 @@ const RegistPage: React.FC<RegistPageProps> = ({ checkColumnData }) => {
           </div>
         </div>
       </div>
+      <Toaster position="top-center" reverseOrder={false} />
       <section>
         {renderRegisterButton()}
         <Modal className="" open={openModal}>

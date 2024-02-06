@@ -540,3 +540,26 @@ input[type="text"] {
     background-position: 100px 0px;
   }
 }
+
+.tipTitle {
+  margin-top: 20px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #000;
+  text-align: center;
+}
+.tipStyle {
+  font-size: 20px;
+  font-weight: bold;
+  color: #ff7f50;
+  cursor: pointer;
+}
+
+.tipStyle:hover {
+  text-decoration: underline; /* hover 시에 밑줄이 나오도록 설정 */
+}
+
+.modalActionbtn {
+  position: relative;
+  transform: translate(0%, -50%);
+}

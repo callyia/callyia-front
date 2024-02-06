@@ -3,6 +3,7 @@ import { FormEvent } from "react";
 import "./SignInPage.css"; // Import your stylesheet
 import { useNavigate } from "react-router-dom";
 import axios, { AxiosResponse } from "axios";
+import toast, { Toaster } from "react-hot-toast";
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -20,19 +21,19 @@ const LoginPage: React.FC = () => {
 
     // 이메일 유효성 검사
     if (email === "") {
-      alert("Email을 입력하세요.");
+      toast.error("Email을 입력하세요.");
       // email.focus();
       return;
     } else {
       if (!isEmailValid(email)) {
-        alert("유효한 Email을 입력하세요.");
+        toast.error("유효한 Email을 입력하세요.");
         // if (refEmail.current !== null) refEmail.current.focus();
         return;
       }
     }
     // 비밀번호 유효성 검사
     if (password === "") {
-      alert("비밀번호를 입력하세요.");
+      toast.error("비밀번호를 입력하세요.");
       return;
     }
     // if (loginForm) {
@@ -66,7 +67,7 @@ const LoginPage: React.FC = () => {
       console.log(response.data);
     } catch (error) {
       console.error("로그인 실패", error);
-      alert("로그인에 실패하였습니다.");
+      toast.error("로그인에 실패하였습니다.");
     }
   };
 
@@ -132,6 +133,7 @@ const LoginPage: React.FC = () => {
           </div>
         </div>
       </div>
+      <Toaster position="top-center" reverseOrder={false} />
     </div>
   );
 };
