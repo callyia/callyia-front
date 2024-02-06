@@ -20,8 +20,6 @@ const FindPassword = () => {
   const [email, setEmail] = useState("");
   const [phoneCheck, setPhoneCheck] = useState("");
   const [memberData, setMemberData] = useState<MemberData[]>([]);
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [tel1, setTel1] = useState("");
   const [tel2, setTel2] = useState("");
   const [tel3, setTel3] = useState("");
