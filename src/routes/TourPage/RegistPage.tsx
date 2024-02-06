@@ -4,6 +4,7 @@ import Upload from "./Upload";
 import RegistMap from "./RegistMap";
 import CheckBox from "./CheckBox";
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import SwiperCore from "swiper";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -31,6 +32,11 @@ interface RegistPageProps {
   checkColumnData: string;
 }
 
+interface TipData {
+  sno: number;
+  tip: string;
+}
+
 SwiperCore.use([Navigation, Pagination, Autoplay]);
 
 const RegistPage: React.FC<RegistPageProps> = ({ checkColumnData }) => {
@@ -54,11 +60,19 @@ const RegistPage: React.FC<RegistPageProps> = ({ checkColumnData }) => {
   const [openDetail, setOpenDetail] = useState(false);
   const [selectedTour, setSelectedTour] = useState<TourData | null>(null); //List에 선택한 데이터 정보 저장 공간
   const [totalPages, setTotalPages] = useState<number>(1); //전체 페이지
+  const [tipData, setTipData] = useState<TipData[]>([]);
+  const [tipCurrentPage, setTipCurrentPage] = useState(1);
+  const [tipTotalPages, setTipTotalPages] = useState(1);
 
   const pagesToShow = 10;
   const startPage =
     Math.floor((currentPage - 1) / pagesToShow) * pagesToShow + 1;
   const endPage = Math.min(startPage + pagesToShow - 1, totalPages);
+
+  const startTipPage =
+    Math.floor((tipCurrentPage - 1) / pagesToShow) * pagesToShow + 1;
+  const endTipPage = Math.min(startTipPage + pagesToShow - 1, tipTotalPages);
+  const navigate = useNavigate();
 
   console.log(checkColumn);
 
@@ -432,6 +446,89 @@ const RegistPage: React.FC<RegistPageProps> = ({ checkColumnData }) => {
     return pages;
   };
 
+  useEffect(() => {
+    if (selectedTour) {
+      axios
+        .get(
+          `http://localhost:8080/Callyia/Schedule/getTip?placeId=${selectedTour?.placeId}&page=${tipCurrentPage}`
+        )
+        .then((response) => {
+          console.log(response.data);
+          console.log(">>>>>>>>", response.data.totalPages);
+
+          setTipData(response.data.content);
+          setTipTotalPages(response.data.totalPages);
+        })
+        .catch((error) => {
+          console.error("Error fetching get Tip:", error);
+        });
+    }
+  }, [selectedTour, tipCurrentPage]);
+
+  const goToTipPage = (page: number) => {
+    setTipCurrentPage(Math.max(1, Math.min(tipTotalPages, page)));
+  };
+
+  const renderTipPagination = () => {
+    let pages = [];
+
+    pages.push(
+      <button
+        className="main-info-pagination-controls-key"
+        key="page's first"
+        onClick={() => goToTipPage(Math.ceil(tipCurrentPage / 10) * 10 - 10)}
+        disabled={tipCurrentPage === 1}
+      >
+        {"<<"}
+      </button>
+    );
+    pages.push(
+      <button
+        className="main-info-pagination-controls-key"
+        key="prev"
+        onClick={() => goToTipPage(tipCurrentPage - 1)}
+        disabled={tipCurrentPage === 1}
+      >
+        {"<"}
+      </button>
+    );
+
+    for (let i = startTipPage; i <= endTipPage; i++) {
+      pages.push(
+        <button
+          key={i}
+          onClick={() => goToTipPage(i)}
+          disabled={i === tipCurrentPage}
+        >
+          {i}
+        </button>
+      );
+    }
+
+    pages.push(
+      <button
+        className="main-info-pagination-controls-key"
+        key="next"
+        onClick={() => goToTipPage(tipCurrentPage + 1)}
+        disabled={tipCurrentPage === tipTotalPages}
+      >
+        {">"}
+      </button>
+    );
+    pages.push(
+      <button
+        className="main-info-pagination-controls-key"
+        key="page's last"
+        onClick={() => goToTipPage(Math.ceil(tipCurrentPage / 10) * 10 + 1)}
+        disabled={tipCurrentPage === tipTotalPages}
+      >
+        {">>"}
+      </button>
+    );
+
+    return pages;
+  };
+
   const userRole = localStorage.getItem("authorities");
 
   const userAuthorities = JSON.parse(userRole || "[]");
@@ -582,7 +679,7 @@ const RegistPage: React.FC<RegistPageProps> = ({ checkColumnData }) => {
           <Modal className="" open={openDetail}>
             <ModalContent
               onCloseIconClicked={closeDetailClicked}
-              className="modal_cc"
+              className="p-4 bg-white rounded-lg  h-[auto] w-[700px] relative"
             >
               <div className="flex flex-row mt-3">
                 <div className="flex items-center justify-center flex-1">
@@ -601,39 +698,56 @@ const RegistPage: React.FC<RegistPageProps> = ({ checkColumnData }) => {
                   {selectedTour && (
                     <div>
                       <div className="flex items-center mt-2">
-                        <p className="flex-grow p-1 text-style">
+                        <p className="flex-grow max-h-[28px] max-w-[334px] p-1 text-style">
                           {selectedTour.address}
                         </p>
                       </div>
                       <div className="flex items-center">
-                        <p className="flex-grow p-1 text-style-second">
+                        <p className="flex-grow max-h-[59px] max-w-[334px] p-1 text-style-second">
                           {selectedTour.placeName}
                         </p>
                       </div>
                       <div className="flex items-center">
-                        <p className="flex-grow h-auto p-1">
+                        <p className="flex-grow min-h-[150px] max-h-[150px] p-1">
                           {selectedTour.placeContent}
                         </p>
                       </div>
                     </div>
                   )}
+                  <div className="modalActionbtn">
+                    <ModalAction className="flex flex-row">
+                      <Button
+                        className="w-24 mr-2 normal-case btn-primary btn-sm"
+                        onClick={basketClicked}
+                      >
+                        장바구니
+                      </Button>
+                      <Button
+                        className="w-24 normal-case btn-sm"
+                        onClick={closeDetailClicked}
+                      >
+                        취소
+                      </Button>
+                    </ModalAction>
+                  </div>
                 </div>
               </div>
-              <div className="absolute bottom-4 right-4">
-                <ModalAction className="flex flex-row">
-                  <Button
-                    className="w-24 mr-2 normal-case btn-primary btn-sm"
-                    onClick={basketClicked}
+              <div className="tipTitle">관련 팁 (총 {tipData.length}개)</div>
+              <div className="tipCollect">
+                {tipData.map((tipData, index) => (
+                  <div
+                    className="tipStyle"
+                    key={index}
+                    onClick={() => {
+                      navigate(`/SchedulePage/${tipData.sno}`);
+                    }}
                   >
-                    장바구니
-                  </Button>
-                  <Button
-                    className="w-24 normal-case btn-sm"
-                    onClick={closeDetailClicked}
-                  >
-                    취소
-                  </Button>
-                </ModalAction>
+                    {tipData.tip}
+                  </div>
+                ))}
+              </div>
+              <div className="main-info-pagination-controls">
+                {renderTipPagination()}
               </div>
             </ModalContent>
           </Modal>
