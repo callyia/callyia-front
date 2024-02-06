@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./FindPassword.css";
 import swal from "sweetalert";
+import toast, { Toaster } from "react-hot-toast";
 
 interface MemberData {
   email: string;
@@ -89,11 +90,11 @@ const FindPassword = () => {
     e.preventDefault();
     // 이메일 유효성 검사
     if (email === "") {
-      alert("Email을 입력하세요.");
+      toast.error("Email을 입력하세요.");
       return;
     } else {
       if (!isEmailValid(email)) {
-        alert("유효한 Email을 입력하세요.");
+        toast.error("유효한 Email을 입력하세요.");
         // if (refEmail.current !== null) refEmail.current.focus();
         return;
       }
@@ -275,6 +276,7 @@ const FindPassword = () => {
           </div>
         </div>
       </div>
+      <Toaster position="top-center" reverseOrder={false} />
     </div>
   );
 };
