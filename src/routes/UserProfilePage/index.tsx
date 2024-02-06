@@ -205,7 +205,7 @@ export default function UserProfilePage() {
                       </span>
                     </div>
                     <div style={{fontFamily: "GmarketSans500", fontSize: "16px"}}>
-                      <span style={{fontFamily: "GmarketSans700", color: "blue"}}>{scheduleThumbnailDTO.scheduleDTO.total_Day}</span>일의 일정
+                      <span style={{fontFamily: "GmarketSans700", color: "blue"}}>{scheduleThumbnailDTO.scheduleDTO.total_Day}</span>일 동안의 일정
                     </div>
                   </div>
                 )

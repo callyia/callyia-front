@@ -445,7 +445,7 @@ const ListPage = () => {
                   alt={`${result.placeName}의 location`}
                 />
                 <p>
-                  <a className="list-user-nickname">{result.placeName}</a>
+                  <span className="list-user-nickname">{result.placeName}</span>
                 </p>
                 <p>
                   <span className="list-user-email">{result.address}</span>

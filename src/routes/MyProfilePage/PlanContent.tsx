@@ -73,7 +73,7 @@ const PlanContent = () => {
         > 
           <div>
             <div className="profile-plan-title">{formatTitle(plan.title)}</div>
-            <div className="profile-plan-day"><span className="profile-plan-day-num">{plan.day}</span>일의 일정</div>
+            <div className="profile-plan-day"><span className="profile-plan-day-num">{plan.day}</span>일 동안의 일정</div>
           </div>
         </div>
       ))}

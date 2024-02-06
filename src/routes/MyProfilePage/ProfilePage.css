@@ -288,10 +288,53 @@
   display: none !important;
 }
 
-.profile-plan-title {
+.profile-schedule-details {
+  margin-left: 30px;
+}
+
+.profile-plan-title,
+.profile-schedule-details {
   text-align: center;
+  color: rgba(36, 39, 42, 0.5);
+  --color-start: rgba(36, 39, 42, 0.5); 
+  --color-end: black; 
   font-family: "GmarketSans700";
   font-size: 30px;
+  color: transparent; 
+  background: var(--color-start);
+  -webkit-background-clip: text;
+  background-clip: text;
+  transition: background 0.5s ease; 
+}
+
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+.profile-plan-div:hover .profile-plan-title,
+.profile-list-card:hover .profile-schedule-details {
+  --color-start: rgba(36, 39, 42, 0.2); 
+  --color-end: black; 
+  background: linear-gradient(
+    to right,
+    var(--color-start) 25%, 
+    var(--color-end) 50%, 
+    var(--color-end) 75%, 
+    var(--color-start) 100% 
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gradient-shift 2s infinite linear;
 }
 
 .profile-plan-day,
@@ -430,12 +473,6 @@
   /* border-radius: 50%;/ */
   width: 120px;
   height: 120px;
-}
-
-.profile-schedule-details {
-  font-size: 24px;
-  font-family: "GmarketSans500";
-  margin-left: 50px;
 }
 
 .profile-plan-posts {

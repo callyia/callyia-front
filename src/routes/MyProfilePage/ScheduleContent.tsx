@@ -107,7 +107,7 @@ const ScheduleContent = () => {
                 src={matchingDetail.detailImages}
                 alt="Profile"
               />
-            <div className="profile-schedule-details" style={{ fontSize: "30px", fontWeight: "bold" }} >
+            <div className="profile-schedule-details" >
               {schedule.sName}
             </div>
           </div>

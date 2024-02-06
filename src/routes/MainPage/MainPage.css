@@ -90,7 +90,78 @@ input[type="text"] {
   margin-left: 42%;
 }
 
-/* 여행 계획 main container */
+.main-tooltip-container {
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  display: inline-block;
+  padding: 0 10px;
+}
+
+.main-tooltip-button {
+  cursor: pointer;
+  color: white;
+  width: 30px;
+  height: 30px;
+}
+
+.main-tooltip-text {
+  display: grid;
+  color: #fff;
+  font-family: "GmarketSans500";
+  font-size: 10px;
+}
+
+.main-tooltip-text-right,
+.main-tooltip-text-left {
+  top: 70px;
+  position: absolute;
+  background-color: white;
+  color: black;
+  text-align: center;
+  border-radius: 15px;
+  transition: all 0.5s ease;
+  opacity: 0;
+  visibility: hidden;
+  font-size: 16px;
+  font-family: 'GmarketSans500';
+  white-space: pre-wrap;
+  padding: 10px;
+}
+
+.main-tooltip-text-left {
+  width: 270px;
+}
+
+.main-tooltip-text-right {
+  width: 400px;
+}
+
+.main-tooltip-container:hover .main-tooltip-text-left {
+  visibility: visible;
+  opacity: 1;
+  transform: translateX(-430%);
+}
+
+.main-tooltip-container:hover .main-tooltip-text-right {
+  visibility: visible;
+  opacity: 1;
+  transform: translateX(-180%);
+}
+
+.main-tooltip-text-right::after,
+.main-tooltip-text-left::after {
+  content: "";
+  position: absolute;
+  top: -20px; 
+  left: 50%;
+  margin-left: -5px; 
+  border-width: 10px; 
+  border-style: solid;
+  border-color: transparent transparent white transparent; 
+  transform: translateX(-50%); 
+}
+
 .main-trip-plan-container {
   display: flex;
   justify-content: center;
