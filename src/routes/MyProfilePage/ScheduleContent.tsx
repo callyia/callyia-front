@@ -1,8 +1,8 @@
-
-import React from 'react';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Modal, ModalContent } from "../../theme/daisyui/Modal";
 
+import { useToggle } from "../../hooks";
 import './ProfilePage.css';
 
 interface ScheduleData {
@@ -28,6 +28,7 @@ const ScheduleContent = () => {
 
   const navigate = useNavigate();
 
+  const [loading, toggleLoading] = useToggle();
   const [scheduleData, setScheduleData] = useState<ScheduleData[]>([]);
   const [detailScheduleData, setDetailScheduleData] = useState<DetailScheduleData[]>([]);
   const matchingDetailImages: any[] = [];
@@ -91,7 +92,7 @@ const ScheduleContent = () => {
       fetchDetailScheduleData();
     }, [currentPage]);
     
-  return (
+    return (
     <div className="profile-schedule-posts">
       {scheduleData.map((schedule) => {
             // schedule.sno에 해당하는 매칭 데이터 찾기
@@ -99,7 +100,7 @@ const ScheduleContent = () => {
           (detail) => detail.sno === schedule.sno
         );
         // 매칭 데이터가 있을 때 렌더링
-        return (
+         if(matchingDetail) { return (
           <div key={schedule.sno} className="profile-list-card"
             onClick={() => navigate(`/SchedulePage/${matchingDetail.sno}`)} >
               <img
@@ -112,7 +113,9 @@ const ScheduleContent = () => {
             </div>
           </div>
         );
-        })}
+          }
+        })
+        } 
     </div>
   );
 };
