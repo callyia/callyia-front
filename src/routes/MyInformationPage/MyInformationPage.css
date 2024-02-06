@@ -71,6 +71,12 @@
   background-color: lightgray;
   border: 1px solid gray;
 }
+.editable {
+  min-width: 400px;
+  padding: 8px;
+  background-color: lightgray;
+  border: 1px solid blue;
+}
 
 .mybutton {
   padding: 6px 12px;
