@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 
+import { MdOutlineDeleteOutline } from "react-icons/md";
+
 import { useToggle } from "../../hooks";
 import { Modal, ModalContent } from "../../theme/daisyui/Modal";
 import "./ProfilePage.css";
@@ -29,7 +31,6 @@ const CartContent = () => {
           throw new Error(`Http error! Status: ${response.status}`);
         }
         const data = await response.json();
-        console.log(data);
         setTourData(data);
       } catch (error) {
         console.error("Error fetching user tour data: ", error);
@@ -39,7 +40,6 @@ const CartContent = () => {
   }, []);
 
   const renderTourItems = () => {
-    console.log(tourData);
     if (!tourData) {
       return (
         <Modal open={loading}>
@@ -52,35 +52,16 @@ const CartContent = () => {
       </Modal>
       )
     }
-    console.log(tourData);
     
     return tourData.map((tour, index) => (
-      <div key={tour.placeId} className="cart-card">
+      <div key={tour.placeId} className="cart-cards">
         <div
           className="ListContent shadowList"
+          style={{filter: "brightness(0.4)"}}
           role="button"
           tabIndex={0}
-          onMouseOver={(e) => {
-            const targetContent = e.currentTarget;
-
-            // 마우스 오버 시 위로 올라가는 애니메이션 클래스 추가
-            targetContent.classList.add("hoverAnimation");
-          }}
-          onMouseLeave={(e) => {
-            const targetContent = e.currentTarget;
-
-            // 마우스 떠날 때 아래로 내려가는 애니메이션 클래스 추가
-            targetContent.classList.add("leaveAnimation");
-
-            // 일정 시간 후 클래스 제거
-            setTimeout(() => {
-              targetContent.classList.remove(
-                "hoverAnimation",
-                "leaveAnimation"
-              );
-            }, 300);
-          }}
         >
+          <MdOutlineDeleteOutline className="card-close-button"/>
           <div>
             <div className="profile-cart-container">
               {tour.image && (
