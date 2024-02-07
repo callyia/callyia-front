@@ -1,4 +1,4 @@
-.cart-card {
+.cart-cards {
   min-width: 350px;
   min-height: 400px;
   display: grid;
@@ -518,4 +518,21 @@
 .profile-id:active {
   text-decoration: underline;
   cursor: pointer;
+}
+
+.card-close-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: transparent;
+  border: none;
+  color: black;
+  cursor: pointer;
+  font-size: 50px;
+  padding: 10px;
+  color: red;
+}
+
+.card-close-button:hover {
+  color: red; /* Optional: change color on hover for better visibility */
 }
