@@ -1,6 +1,6 @@
 .div-container {
-  width: 1920px;
-  height: 807px;
+  width: 100%;
+  height: calc(100vh - 141px);
 }
 
 .div-left {
