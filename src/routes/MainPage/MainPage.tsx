@@ -67,9 +67,10 @@ const Main: React.FC<MainPageProps> = () => {
   const [selectedDay, setSelectedDay] = useState(1);
   const [tourCount, setTourCount] = useState<number>(0);
 
-  const tooltipLeft = "예) 3일의 여행을 계획할 때,\n 위의 숫자를 클릭 후에 3을 선택.";
-  const tooltipRight = "검색 가능한 여행 계획의 제목을 입력(제목 변경 가능)\n 예) 부산 투어, 서울 배낭여행 등";
-
+  const tooltipLeft =
+    "예) 3일의 여행을 계획할 때,\n 위의 숫자를 클릭 후에 3을 선택.";
+  const tooltipRight =
+    "검색 가능한 여행 계획의 제목을 입력(제목 변경 가능)\n 예) 부산 투어, 서울 배낭여행 등";
 
   const pagesToShow = 10;
   const startPage =
@@ -447,11 +448,11 @@ const Main: React.FC<MainPageProps> = () => {
                 계획하러 가기
               </button>
               <div className="main-tooltip-container">
-                  <BsFillQuestionCircleFill className="main-tooltip-button"/>
-                  <span className="main-tooltip-text-left">{tooltipLeft}</span> 
-                  <span className="main-tooltip-text-right">{tooltipRight}</span>
-                    <span className="main-tooltip-text" >HELP</span>
-                </div> 
+                <BsFillQuestionCircleFill className="main-tooltip-button" />
+                <span className="main-tooltip-text-left">{tooltipLeft}</span>
+                <span className="main-tooltip-text-right">{tooltipRight}</span>
+                <span className="main-tooltip-text">HELP</span>
+              </div>
             </div>
           </section>
         </div>
@@ -608,7 +609,7 @@ const Main: React.FC<MainPageProps> = () => {
                     </div>
                   </div>
                 </div>
-                <div className="tipTitle">관련 팁 (총 {tipData.length}개)</div>
+                <div className="tipTitle">관련 팁</div>
                 <div className="tipCollect">
                   {tipData.map((tipData, index) => (
                     <div
