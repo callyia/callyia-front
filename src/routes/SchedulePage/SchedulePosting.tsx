@@ -619,31 +619,31 @@ export default function SchedulePosting() {
 
     const replyContents = scheduleData.replyDTOList
       .filter((reply) => reply.dno === detailItem.dno)
-      .reverse().map((reply) => reply.replyContents);
+      .map((reply) => reply.replyContents);
 
     const replyer = scheduleData.replyDTOList
       .filter((reply) => reply.dno === detailItem.dno)
-      .reverse().map((reply) => reply.replyer);
+      .map((reply) => reply.replyer);
 
     const replyerNickname = scheduleData.replyDTOList
       .filter((reply) => reply.dno === detailItem.dno)
-      .reverse().map((reply) => reply.replyer_nickname);
+      .map((reply) => reply.replyer_nickname);
 
     const replyerImg = scheduleData.replyDTOList
       .filter((reply) => reply.dno === detailItem.dno)
-      .reverse().map((reply) => reply.replyer_img);
+      .map((reply) => reply.replyer_img);
 
     const rno = scheduleData.replyDTOList
       .filter((reply) => reply.dno === detailItem.dno)
-      .reverse().map((reply) => reply.rno);
+      .map((reply) => reply.rno);
 
     const reply_regdate = scheduleData.replyDTOList
       .filter((reply) => reply.dno === detailItem.dno)
-      .reverse().map((reply) => reply.reply_regDate);
+      .map((reply) => reply.reply_regDate);
 
     const reply_moddate = scheduleData.replyDTOList
       .filter((reply) => reply.dno === detailItem.dno)
-      .reverse().map((reply) => reply.reply_modDate);
+      .map((reply) => reply.reply_modDate);
 
     return {
       ...detailItem,
