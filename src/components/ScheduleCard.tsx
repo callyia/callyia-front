@@ -365,7 +365,8 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
               // <li key={index} onClick={() => handlereplyClick(reply, index)}>
                 <li key={index} onClick={(e) => {
                 e.stopPropagation(); 
-                }}>
+                handlereplyClick(reply_contents[index], index)
+              }}>
                 <span
                   style={{
                     fontSize: "1.1em",
