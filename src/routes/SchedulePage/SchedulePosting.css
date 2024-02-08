@@ -17,12 +17,14 @@
   borderbottom: 2px solid #abcdef;
   padding: 16px;
   margin: 8px;
+  height: 50%;
 }
 .right-bottom {
   flex: 1;
   bordertop: 2px solid #abcdef;
   padding: 16px;
   margin: 8px;
+  height: 50%;
 }
 
 .Schedule {
@@ -169,7 +171,6 @@
 }
 
 .MapArea h2 {
-  margin-left: 4px;
   font-size: 40px;
   font-weight: bold;
 }
@@ -290,4 +291,9 @@
 
 .reply-Date {
   text-align: right;
+}
+
+.star {
+  font-size: 15px;
+  display: flex;
 }
