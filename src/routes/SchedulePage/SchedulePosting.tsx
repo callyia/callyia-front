@@ -6,7 +6,7 @@ import ScheduleCard, { ScheduleItem } from "../../components/ScheduleCard";
 import "./SchedulePosting.css";
 import { TbBasket, TbBasketMinus, TbMapPin2 } from "react-icons/tb";
 import { FaStar } from "react-icons/fa";
-
+import swal from "sweetalert";
 // 지도
 declare global {
   interface Window {
@@ -110,6 +110,49 @@ export default function SchedulePosting() {
   const [starData, setStarData] = useState<ScheduleStarDTO[]>([]);
   const [starMemberData, setStarMemberData] = useState<ScheduleStarDTO>();
   const [selectedStars, setSelectedStars] = useState<number>(0);
+
+  const DeleteSchedule = async () => {
+    try {
+      // 댓글 삭제 여부를 묻는 모달 띄우기
+      const willDelete = await swal({
+        title: "삭제 확인",
+        text: "일정후기를 삭제하시겠습니까?",
+        icon: "warning",
+        buttons: ["취소", "삭제"], // 취소 버튼 누르면 false, 삭제 버튼 누르면 true 반환
+        dangerMode: true,
+      });
+
+      if (willDelete) {
+        // 서버에 삭제를 요청
+        const response = await fetch(
+          `http://localhost:8080/Callyia/Schedule/deleteSchedule?sno=${sno}`,
+          {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (!response.ok) {
+          const errorMessage = await response.text();
+          throw new Error(
+            `HTTP error! Status: ${response.status}, Message: ${errorMessage}`
+          );
+        }
+
+        // 삭제 완료 모달 띄우기
+        swal("삭제되었습니다.", {
+          icon: "success",
+        }).then(() => {
+          navigate("http://localhost:3000/");
+        });
+      }
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+    }
+  };
 
   const handleStarClick = async (index: number) => {
     if (!starMemberData) {
@@ -691,6 +734,11 @@ export default function SchedulePosting() {
                         />
                       ))}
                     </div>
+                  </div>
+                  <div>
+                    <button onClick={() => DeleteSchedule()}>
+                      여행 일정 후기 삭제
+                    </button>
                   </div>
                 </div>
               </div>
