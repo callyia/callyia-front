@@ -1,9 +1,11 @@
 //ScheduleCard.tsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../routes/SchedulePage/SchedulePosting.css"; // Schedule.css 파일을 import
+
 import swal from "sweetalert";
 import { TbBasketPlus, TbBasketCheck } from "react-icons/tb";
+
+import "../routes/SchedulePage/SchedulePosting.css"; // Schedule.css 파일을 import
 
 interface ScheduleItem {
   place_id: number;
@@ -62,6 +64,20 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
 
   const handleReplyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputData(event.target.value); //사용자가 입력한 텍스트를 setReply
+  };
+
+  const getSortedReplyIndices = () => {
+    const indices = reply_contents.map((_, index) => index);
+    indices.sort((a, b) => {
+      const dateAObj = reply_modDate[a] || reply_regDate[a] || new Date();
+      const dateBObj = reply_modDate[b] || reply_regDate[b] || new Date();
+  
+      const timestampA = dateAObj instanceof Date ? dateAObj.getTime() : 0;
+      const timestampB = dateBObj instanceof Date ? dateBObj.getTime() : 0;
+  
+      return timestampB - timestampA;
+    });
+    return indices;
   };
 
   const handleRegister = async () => {
@@ -272,6 +288,8 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
     // setExpanded(!expanded);
   };
 
+  const sortedReplyIndices = getSortedReplyIndices();
+
   return (
     <div
       className={`schedule-card ${expanded ? "expanded" : ""}`}
@@ -343,8 +361,11 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
                 입력
               </button>
             </div>
-            {reply_contents.map((reply, index) => (
-              <li key={index} onClick={() => handlereplyClick(reply, index)}>
+            {sortedReplyIndices.map((reply, index) => (
+              // <li key={index} onClick={() => handlereplyClick(reply, index)}>
+                <li key={index} onClick={(e) => {
+                e.stopPropagation(); 
+                }}>
                 <span
                   style={{
                     fontSize: "1.1em",
@@ -411,7 +432,7 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
                     whiteSpace: "nowrap",
                   }}
                 >
-                  {reply}
+                  {reply_contents[index]}
                 </div>
               </li>
             ))}

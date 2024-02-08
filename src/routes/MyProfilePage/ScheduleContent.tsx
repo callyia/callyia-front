@@ -28,11 +28,32 @@ interface DetailScheduleData {
 const ScheduleContent = () => {
   const navigate = useNavigate();
 
+  const token = localStorage.getItem('token');
   const [scheduleData, setScheduleData] = useState<ScheduleData[]>([]);
   const [detailScheduleData, setDetailScheduleData] = useState<DetailScheduleData[]>([]);
   const matchingDetailImages: any[] = [];
 
   const [hoverStates, setHoverStates] = useState<{ [key: number]: boolean }>({});
+
+  const DeleteSchedule = async (sno:number) => {
+    try {
+        // Assuming you have a function to delete the schedule, e.g., deleteScheduleAPI(sno)
+        const response = await fetch(`http://localhost:8080/Callyia/Schedule/deleteSchedule?sno=${sno}`, {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json"
+          },
+        });
+
+        if (!response.ok) throw new Error('Network response was not ok.');
+        setScheduleData(scheduleData.filter(schedule => schedule.sno !== sno));
+        window.location.reload();
+    } catch (error) {
+      console.error("Error deleting schedule:", error);
+    }
+  };
+
 
   const handleMouseHover = (sno: number, isHovering: boolean) => {
     setHoverStates(prev => ({ ...prev, [sno]: isHovering }));
@@ -108,9 +129,9 @@ const ScheduleContent = () => {
           <div key={schedule.sno} className="profile-list-card" onClick={() => navigate(`/SchedulePage/${matchingDetail.sno}`)}>
               <div onMouseEnter={() => handleMouseHover(schedule.sno, true)} onMouseLeave={() => handleMouseHover(schedule.sno, false)}>
               {hoverStates[schedule.sno] ? (
-                  <IoMdCloseCircle className="profile-schedule-delete-button"/>
+                  <IoMdCloseCircle className="profile-schedule-delete-button" onClick={() => DeleteSchedule(schedule.sno)}/>
                 ) : (
-                  <FaCircle className="profile-schedule-button"/> // OnClick
+                  <FaCircle className="profile-schedule-button"/>
                 )}
               </div>
               <img

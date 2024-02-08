@@ -134,7 +134,7 @@ const RegistPage: React.FC<RegistPageProps> = ({ checkColumnData }) => {
       console.log("결과:", result);
 
       toast.success(
-        `장바구니에 추가하였습니다. 내용: ${selectedTour?.placeId}`
+        `장바구니에 추가하였습니다. 내용: ${selectedTour?.placeName}`
       );
     } catch (error: any) {
       console.error("Error accepting data:", error.message);
