@@ -5,6 +5,30 @@
   justify-content: center;
 }
 
+.cart-card:hover {
+  filter: brightness(0.9);
+}
+
+.card-close-button {
+  display: hidden;
+  position: absolute;
+  right: 0; 
+  background-color: transparent;
+  border: none;
+  color: black;
+  cursor: pointer;
+  font-size: 50px;  
+  opacity: 0;
+}
+
+.cart-card:hover .card-close-button{
+  opacity: 1;
+}
+
+.card-close-button:hover {
+  color: red; 
+}
+
 .profile-container {
   display: grid;
   grid-gap: 100px;
@@ -292,6 +316,15 @@
   margin-left: 30px;
 }
 
+.profile-plan-button {
+  color: rgb(253, 83, 80);
+  position: absolute;
+  width: 14x;
+  height: 14px;
+  top: 9.9%;
+  right: 6.2%;
+}
+
 .profile-plan-title,
 .profile-schedule-details {
   text-align: center;
@@ -454,6 +487,7 @@
   display: flex;
   align-items: center;
   transition: transform 0.5s ease-in-out;
+  position: relative;
 }
 
 .profile-list-card:hover {
@@ -469,10 +503,26 @@
 }
 
 .profile-schedule-image {
-  /* margin: 0px 10px 20px 10px; */
-  /* border-radius: 50%;/ */
   width: 120px;
   height: 120px;
+}
+
+.profile-schedule-delete-button {
+  color: rgb(253, 83, 80);
+  position: absolute;
+  top: 12.3px;
+  right: 16.7px;
+  width: 19.4px;
+  height: 19.4px;
+}
+
+.profile-schedule-button {
+  color: rgb(253, 83, 80);
+  position: absolute;
+  width: 14x;
+  height: 14px;
+  top: 9.3%;
+  right: 1.4%;
 }
 
 .profile-plan-posts {
@@ -507,32 +557,34 @@
   transition: transform 0.5s, box-shadow 0.5s;
   height: 150px;
   width: 300px;
+  position: relative; 
 }
 
 .profile-plan-div:hover {
   transform: scale(1.04);
-  box-shadow: 4px 2px 3px;
+  box-shadow: 4px 2px 3px rgba(0, 0, 0, 0.2);
+}
+
+.profile-plan-delete-button {
+  color: rgb(253, 83, 80);
+  position: absolute;
+  top: 12.3px;
+  right: 16.7px;
+  width: 19.4px;
+  height: 19.4px;
+}
+
+.profile-plan-button {
+  color: rgb(253, 83, 80);
+  position: absolute;
+  width: 14x;
+  height: 14px;
+  top: 9.9%;
+  right: 6.2%;
 }
 
 .profile-id:hover,
 .profile-id:active {
   text-decoration: underline;
   cursor: pointer;
-}
-
-.card-close-button {
-  position: absolute;
-  top: 0;
-  right: 0;
-  background-color: transparent;
-  border: none;
-  color: black;
-  cursor: pointer;
-  font-size: 50px;
-  padding: 10px;
-  color: red;
-}
-
-.card-close-button:hover {
-  color: red; /* Optional: change color on hover for better visibility */
 }

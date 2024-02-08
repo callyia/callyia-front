@@ -2,9 +2,16 @@ import React, { useState, useEffect } from "react";
 
 import { MdOutlineDeleteOutline } from "react-icons/md";
 
-import { useToggle } from "../../hooks";
-import { Modal, ModalContent } from "../../theme/daisyui/Modal";
+import { ModalContent } from "../../theme/daisyui/Modal";
 import "./ProfilePage.css";
+
+interface BasketData {
+  bno: number;
+  placeId: number;
+  userId: string;
+  placeName: string;
+  image: string;
+}
 
 interface TourData {
   placeId: number;
@@ -18,9 +25,32 @@ interface TourData {
 }
 
 const CartContent = () => {
-  const [loading, toggleLoading] = useToggle();
-
   const [tourData, setTourData] = useState<TourData[]>([]);
+
+  const removeCart = async (itemBno: number) => {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await fetch(
+        `http://localhost:8080/Callyia/Basket/delete/${itemBno}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (!response.ok) {
+        const errorMessage = await response.text();
+        throw new Error(
+          `HTTP error! Status: ${response.status}, Message: ${errorMessage}`
+        );
+      }
+      window.location.reload();
+    } catch (error) {
+      console.error("Error deleting:", error);
+    }
+  };
 
   useEffect(() => {
     const email = localStorage.getItem("email");
@@ -42,25 +72,23 @@ const CartContent = () => {
   const renderTourItems = () => {
     if (!tourData) {
       return (
-        <Modal open={loading}>
         <ModalContent className="div-loading">
           <div className="div-loading-content">
             <div className="w-16 loading-dots loading" />
             <span className="text-lg font-semibold">잠시만 기다려주세요.</span>
           </div>
         </ModalContent>
-      </Modal>
       )
     }
     
     return tourData.map((tour, index) => (
       <div key={tour.placeId} className="cart-cards">
         <div
-          className="ListContent shadowList"
-          style={{filter: "brightness(0.4)"}}
+          className="ListContent shadowList cart-card"
           role="button"
           tabIndex={0}
         >
+          {/* <MdOutlineDeleteOutline className="card-close-button" onClick={() => removeCart(tour.bno)}/> */}
           <MdOutlineDeleteOutline className="card-close-button"/>
           <div>
             <div className="profile-cart-container">
