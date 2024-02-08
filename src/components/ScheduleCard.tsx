@@ -1,5 +1,5 @@
 //ScheduleCard.tsx
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../routes/SchedulePage/SchedulePosting.css"; // Schedule.css 파일을 import
 import swal from "sweetalert";
@@ -333,97 +333,88 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
                 placeholder="댓글 입력"
                 onChange={handleReplyChange}
                 value={inputData}
-                style={{ backgroundColor: "white", marginTop: "9px" }}
+                style={{
+                  backgroundColor: "white",
+                  marginTop: "9px",
+                  width: "88%",
+                }}
               />
-              <button onClick={handleRegister}>입력</button>
+              <button onClick={handleRegister} style={{ width: "12%" }}>
+                입력
+              </button>
             </div>
-            {reply_contents
-              .slice()
-              .reverse()
-              .map((reply, index) => (
-                <li key={index} onClick={() => handlereplyClick(reply, index)}>
-                  <span
-                    style={{
-                      fontSize: "1.1em",
-                      display: "flex",
-                      justifyContent: "space-between", // 좌우 정렬
-                    }}
-                  >
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      <img
-                        src={replyer_img[replyer_img.length - 1 - index]}
-                        alt="프로필 이미지"
-                        onClick={(e) => {
-                          e.stopPropagation(); // 부모 태그로  이벤트 이벤트 전파 방지
-                          // 클릭 시 UserProfilePage로 이동
-                          navigate(
-                            `/UserProfilePage?userid=${
-                              replyer[replyer.length - 1 - index]
-                            }`
-                          );
-                        }}
-                        style={{
-                          cursor: "pointer",
-                          marginRight: "5px",
-                          borderRadius: "50%",
-                          width: "70px",
-                          height: "70px",
-                        }}
-                      />
-                      {replyer_nickname[replyer_nickname.length - 1 - index]}
-                    </div>
-                    <span className="reply-Date" style={{ float: "right" }}>
-                      {reply_regDate[reply_regDate.length - 1 - index]
-                        ? reply_regDate[
-                            reply_regDate.length - 1 - index
-                          ][0].toString()
-                        : "No Date"}
-                      년{" "}
-                      {reply_regDate[reply_regDate.length - 1 - index]
-                        ? reply_regDate[
-                            reply_regDate.length - 1 - index
-                          ][1].toString()
-                        : "No Date"}
-                      월{" "}
-                      {reply_regDate[reply_regDate.length - 1 - index]
-                        ? reply_regDate[
-                            reply_regDate.length - 1 - index
-                          ][2].toString()
-                        : "No Date"}
-                      일{" "}
-                      {reply_regDate[reply_regDate.length - 1 - index]
-                        ? reply_regDate[
-                            reply_regDate.length - 1 - index
-                          ][3].toString()
-                        : "No Date"}
-                      시{" "}
-                      {reply_regDate[reply_regDate.length - 1 - index]
-                        ? reply_regDate[
-                            reply_regDate.length - 1 - index
-                          ][4].toString()
-                        : "No Date"}
-                      분
-                    </span>
-                  </span>
-
-                  {"    "}
+            {reply_contents.map((reply, index) => (
+              <li key={index} onClick={() => handlereplyClick(reply, index)}>
+                <span
+                  style={{
+                    fontSize: "1.1em",
+                    display: "flex",
+                    justifyContent: "space-between", // 좌우 정렬
+                  }}
+                >
                   <div
                     style={{
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      whiteSpace: "nowrap",
+                      display: "flex",
+                      alignItems: "center",
+                      fontWeight: "bold",
                     }}
                   >
-                    {reply}
+                    <img
+                      src={replyer_img[index]}
+                      alt="프로필 이미지"
+                      onClick={(e) => {
+                        e.stopPropagation(); // 부모 태그로  이벤트 이벤트 전파 방지
+                        // 클릭 시 UserProfilePage로 이동
+                        navigate(`/UserProfilePage?userid=${replyer[index]}`);
+                      }}
+                      style={{
+                        cursor: "pointer",
+                        marginRight: "5px",
+                        borderRadius: "50%",
+                        width: "50px",
+                        height: "50px",
+                      }}
+                    />
+                    {replyer_nickname[index]}
                   </div>
-                </li>
-              ))}
+                  <span
+                    className="reply-Date"
+                    style={{ float: "right", color: "#848484" }}
+                  >
+                    {reply_regDate[index]
+                      ? reply_regDate[index][0].toString()
+                      : "No Date"}
+                    .
+                    {reply_regDate[index]
+                      ? reply_regDate[index][1].toString()
+                      : "No Date"}
+                    .
+                    {reply_regDate[index]
+                      ? reply_regDate[index][2].toString()
+                      : "No Date"}
+                    {"   "}
+                    {reply_regDate[index]
+                      ? reply_regDate[index][3].toString()
+                      : "No Date"}
+                    :
+                    {reply_regDate[index]
+                      ? reply_regDate[index][4].toString()
+                      : "No Date"}
+                  </span>
+                </span>
+
+                {"    "}
+                <div
+                  style={{
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {reply}
+                </div>
+              </li>
+            ))}
           </ul>
         </div>
       )}
