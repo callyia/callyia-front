@@ -53,7 +53,6 @@ const PlanContent = () => {
       )
 
       .then((response) => {
-        console.log(response.data);
         setPlanInfo(response.data);
       })
 
@@ -95,7 +94,6 @@ const PlanContent = () => {
       console.error("Error deleting the plan:", error);
       toast.error("삭제에 실패했어요.");
     }
-    console.log(11111);
     
   };
 
@@ -109,9 +107,9 @@ const PlanContent = () => {
         > 
         <div onMouseEnter={() => handleMouseHover(plan.pno, true)}  onMouseLeave={() => handleMouseHover(plan.pno, false)}>
           {hoverStates[plan.pno] ? (
-            <IoMdCloseCircle className="profile-plan-delete-button"/>
+            <IoMdCloseCircle className="profile-plan-delete-button" onClick={(e) => { e.stopPropagation(); deletePlan(plan.pno);}}/>
           ) : (
-            <FaCircle className="profile-plan-button" onClick={() => deletePlan(plan.pno)}/> 
+            <FaCircle className="profile-plan-button"/> 
           )}
         </div>
           <div>

@@ -2,11 +2,13 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 
+import swal from "sweetalert";
+
 import ScheduleCard, { ScheduleItem } from "../../components/ScheduleCard";
-import "./SchedulePosting.css";
 import { TbBasket, TbBasketMinus, TbMapPin2 } from "react-icons/tb";
 import { FaStar } from "react-icons/fa";
-import swal from "sweetalert";
+
+import "./SchedulePosting.css";
 // 지도
 declare global {
   interface Window {
@@ -146,7 +148,7 @@ export default function SchedulePosting() {
         swal("삭제되었습니다.", {
           icon: "success",
         }).then(() => {
-          navigate("http://localhost:3000/");
+          navigate("/");
         });
       }
     } catch (error) {

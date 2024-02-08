@@ -5,15 +5,8 @@ import { MdOutlineDeleteOutline } from "react-icons/md";
 import { ModalContent } from "../../theme/daisyui/Modal";
 import "./ProfilePage.css";
 
-interface BasketData {
+interface CartData {
   bno: number;
-  placeId: number;
-  userId: string;
-  placeName: string;
-  image: string;
-}
-
-interface TourData {
   placeId: number;
   placeName: string;
   address: string;
@@ -25,13 +18,13 @@ interface TourData {
 }
 
 const CartContent = () => {
-  const [tourData, setTourData] = useState<TourData[]>([]);
+  const [cartData, setCartData] = useState<CartData[]>([]);
 
-  const removeCart = async (itemBno: number) => {
+  const removeCart = async (bno: number) => {
     const token = localStorage.getItem("token");
     try {
       const response = await fetch(
-        `http://localhost:8080/Callyia/Basket/delete/${itemBno}`,
+        `http://localhost:8080/Callyia/Basket/delete/${bno}`,
         {
           method: "DELETE",
           headers: {
@@ -39,38 +32,49 @@ const CartContent = () => {
             "Content-Type": "application/json",
           },
         }
-      );
-      if (!response.ok) {
-        const errorMessage = await response.text();
-        throw new Error(
-          `HTTP error! Status: ${response.status}, Message: ${errorMessage}`
         );
-      }
-      window.location.reload();
-    } catch (error) {
-      console.error("Error deleting:", error);
-    }
-  };
-
-  useEffect(() => {
-    const email = localStorage.getItem("email");
-    const fetchUserTourData = async () => {
-      try {
-        const response = await fetch(`http://localhost:8080/Callyia/Basket/getBasket?email=${email}`); // 특정 유저만 받아오게
         if (!response.ok) {
-          throw new Error(`Http error! Status: ${response.status}`);
+          const errorMessage = await response.text();
+          throw new Error(
+            `HTTP error! Status: ${response.status}, Message: ${errorMessage}`
+            );
+          }
+          window.location.reload();
+        } catch (error) {
+          console.error("Error deleting:", error);
+        }
+      };
+      
+    const fetchCartData = async () => {
+      const email = localStorage.getItem("email");
+      const token = localStorage.getItem("token");
+      try {
+        const response = await fetch(
+          `http://localhost:8080/Callyia/Basket/getBasketPosting?email=${email}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
-        setTourData(data);
+        setCartData(data);
       } catch (error) {
-        console.error("Error fetching user tour data: ", error);
+        console.log("Error fetching tour data:", error);
       }
     };
-    fetchUserTourData();
-  }, []);
+    useEffect(() => {
+      fetchCartData();
+    }, []);
+
 
   const renderTourItems = () => {
-    if (!tourData) {
+    if (!cartData) {
       return (
         <ModalContent className="div-loading">
           <div className="div-loading-content">
@@ -81,15 +85,15 @@ const CartContent = () => {
       )
     }
     
-    return tourData.map((tour, index) => (
+    return cartData.map((tour, index) => (
       <div key={tour.placeId} className="cart-cards">
         <div
           className="ListContent shadowList cart-card"
           role="button"
           tabIndex={0}
         >
-          {/* <MdOutlineDeleteOutline className="card-close-button" onClick={() => removeCart(tour.bno)}/> */}
-          <MdOutlineDeleteOutline className="card-close-button"/>
+          <MdOutlineDeleteOutline className="card-close-button" onClick={() => removeCart(tour.bno)}/>
+          {/* <MdOutlineDeleteOutline className="card-close-button"/> */}
           <div>
             <div className="profile-cart-container">
               {tour.image && (

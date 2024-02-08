@@ -571,7 +571,7 @@ input[type="text"] {
 .main-frame {
   width: 100%;
   min-width: 1150px;
-  background-image: url();
+  /* background-image: url(); */
   /* background-size: cover; */
   /* background-position: center center; */
 }
