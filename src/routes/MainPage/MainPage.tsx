@@ -70,7 +70,7 @@ const Main: React.FC<MainPageProps> = () => {
   const tooltipLeft =
     "예) 3일의 여행을 계획할 때,\n 위의 숫자를 클릭 후에 3을 선택.";
   const tooltipRight =
-    "검색 가능한 여행 계획의 제목을 입력(제목 변경 가능)\n 예) 부산 투어, 서울 배낭여행 등";
+    "검색 가능한 여행 계획의 제목 입력\n 예) 부산 투어, 서울 배낭여행 등";
 
   const pagesToShow = 10;
   const startPage =
@@ -491,7 +491,7 @@ const Main: React.FC<MainPageProps> = () => {
             <div className="main-section-div-community-grid-right">
               {scheduleData.map((schedule) => {
                 // schedule.sno에 해당하는 매칭 데이터 찾기
-                const matchingDetail = matchingDetailImages.find(
+                matchingDetailImages.find(
                   (detail) => detail.sno === schedule.sno
                 );
 

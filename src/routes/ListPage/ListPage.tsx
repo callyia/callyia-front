@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import axios from "axios";
 import { Button } from "../../theme/daisyui";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 import { Modal, ModalAction, ModalContent } from "./../TourPage/Modal";
 import "./ListPage.css";
@@ -83,7 +83,6 @@ const ListPage = () => {
   const [selectedTour, setSelectedTour] = useState<LocationSearchResult | null>(
     null
   );
-  const [tourData, setTourData] = useState<LocationSearchResult[]>([]);
 
   const openDetailClicked = (selectedTour: LocationSearchResult) => {
     setSelectedTour(selectedTour); // 클릭된 관광지 정보 저장
@@ -216,18 +215,24 @@ const ListPage = () => {
       if (response.status !== 200) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-      const result = response.data;
-      console.log("결과:", result);
-
       toast.success(
         `장바구니에 추가하였습니다. 내용: ${selectedTour?.placeId}`
       );
     } catch (error: any) {
       console.error("Error accepting data:", error.message);
+      if (axios.isAxiosError(error) && error.response) {
+        if (error.response.status === 409) {
+          toast.error("해당 파일은 이미 등록되어 있습니다.");
+        } else {
+          // Handle other errors
+          toast.error(`An error occurred: ${error.message}`);
+        }
+      }
       if (error.message.includes("409")) {
         toast.error("해당 파일은 이미 등록되어 있습니다.");
       }
     }
+    
   };
 
   const userPaginatedResults = UserSearchResult.slice(

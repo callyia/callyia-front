@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Modal, ModalContent } from "../../theme/daisyui/Modal";
 
-import { useToggle } from "../../hooks";
+import { FaCircle } from "react-icons/fa";
+import { IoMdCloseCircle } from "react-icons/io";
+
 import './ProfilePage.css';
 
 interface ScheduleData {
@@ -25,16 +26,17 @@ interface DetailScheduleData {
 }
 
 const ScheduleContent = () => {
-
   const navigate = useNavigate();
 
-  const [loading, toggleLoading] = useToggle();
   const [scheduleData, setScheduleData] = useState<ScheduleData[]>([]);
   const [detailScheduleData, setDetailScheduleData] = useState<DetailScheduleData[]>([]);
   const matchingDetailImages: any[] = [];
-  const [currentPage, setCurrentPage] = useState(1);
 
-  const email = localStorage.getItem('email');
+  const [hoverStates, setHoverStates] = useState<{ [key: number]: boolean }>({});
+
+  const handleMouseHover = (sno: number, isHovering: boolean) => {
+    setHoverStates(prev => ({ ...prev, [sno]: isHovering }));
+  };
 
     // scheduleData 배열 순회
     detailScheduleData.forEach((schedule) => { // 현재 scheduleData는 undefined => scheduleData <-> detailScheduleData
@@ -56,6 +58,7 @@ const ScheduleContent = () => {
     useEffect(() => {
       const fetchScheduleData = async () => {
         try {
+          const email = localStorage.getItem('email');
           const response = await fetch(
             `http://localhost:8080/Callyia/Schedule/getMemberSchedule?email=${email}`
           );
@@ -70,7 +73,7 @@ const ScheduleContent = () => {
         }
       };
       fetchScheduleData();
-    }, [currentPage]);
+    }, []);
   
     // 모든 디테일스케쥴 가져옴
     useEffect(() => {
@@ -90,7 +93,7 @@ const ScheduleContent = () => {
         }
       };
       fetchDetailScheduleData();
-    }, [currentPage]);
+    }, []);
     
     return (
     <div className="profile-schedule-posts">
@@ -100,9 +103,16 @@ const ScheduleContent = () => {
           (detail) => detail.sno === schedule.sno
         );
         // 매칭 데이터가 있을 때 렌더링
-         if(matchingDetail) { return (
-          <div key={schedule.sno} className="profile-list-card"
-            onClick={() => navigate(`/SchedulePage/${matchingDetail.sno}`)} >
+         if(matchingDetail) { 
+          return (
+          <div key={schedule.sno} className="profile-list-card" onClick={() => navigate(`/SchedulePage/${matchingDetail.sno}`)}>
+              <div onMouseEnter={() => handleMouseHover(schedule.sno, true)} onMouseLeave={() => handleMouseHover(schedule.sno, false)}>
+              {hoverStates[schedule.sno] ? (
+                  <IoMdCloseCircle className="profile-schedule-delete-button"/>
+                ) : (
+                  <FaCircle className="profile-schedule-button"/> // OnClick
+                )}
+              </div>
               <img
                 className="profile-schedule-image"
                 src={matchingDetail.detailImages}
@@ -112,8 +122,9 @@ const ScheduleContent = () => {
               {schedule.sName}
             </div>
           </div>
-        );
+           );
           }
+          return null;
         })
         } 
     </div>

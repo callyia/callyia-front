@@ -129,12 +129,10 @@ input[type="text"] {
   padding: 10px;
 }
 
-.main-tooltip-text-left {
+.main-tooltip-text-left,
+.main-tooltip-text-right
+ {
   width: 270px;
-}
-
-.main-tooltip-text-right {
-  width: 400px;
 }
 
 .main-tooltip-container:hover .main-tooltip-text-left {
