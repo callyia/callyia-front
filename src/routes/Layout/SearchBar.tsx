@@ -66,7 +66,7 @@ const SearchBar: React.FC<SearchBarProps & { email: string }> = ({
     switch (combo) {
       case "user": return "유저";
       case "location": return "장소";
-      case "schedule": return "일정";
+      case "schedule": return "포스트";
       default: return combo;
     }
   };
@@ -87,7 +87,7 @@ const SearchBar: React.FC<SearchBarProps & { email: string }> = ({
       <select onChange={(e) => setSearchCombo(e.target.value)} value={searchCombo} className="header-search-dropdown">
         <option value="user">유저</option>
         <option value="location">장소</option>
-        <option value="schedule">일정</option>
+        <option value="schedule">포스트</option>
       </select>
       <input
         type="text"
