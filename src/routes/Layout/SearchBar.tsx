@@ -13,14 +13,20 @@ interface SearchBarProps {
   searchKeyword: string;
   setSearchKeyword: (keyword: string) => void;
   searchCombo: string;
-  setDate: (date:string) => void | string;
+  setDate: (date: string) => void | string;
   setSearchCombo: (combo: string) => void;
   onSearch: (event: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
-const SearchBar: React.FC<SearchBarProps & { email: string }> = ({ 
-  searchKeyword, setSearchKeyword, searchCombo, setSearchCombo, setDate, onSearch, email}) => {
-  
+const SearchBar: React.FC<SearchBarProps & { email: string }> = ({
+  searchKeyword,
+  setSearchKeyword,
+  searchCombo,
+  setSearchCombo,
+  setDate,
+  onSearch,
+  email,
+}) => {
   const navigate = useNavigate();
 
   const localStorageKey = `recentSearches_${email}`;
@@ -36,13 +42,17 @@ const SearchBar: React.FC<SearchBarProps & { email: string }> = ({
   }, [recentSearches, localStorageKey]);
 
   const handleDeleteRecentSearch = (searchToRemove: RecentSearch) => {
-    const filteredSearches = recentSearches.filter(search => search.keyword !== searchToRemove.keyword || search.combo !== searchToRemove.combo);
+    const filteredSearches = recentSearches.filter(
+      (search) =>
+        search.keyword !== searchToRemove.keyword ||
+        search.combo !== searchToRemove.combo
+    );
     setRecentSearches(filteredSearches);
   };
 
   const handleDeleteAllSearches = () => {
-    setRecentSearches([]); 
-    localStorage.setItem(localStorageKey, JSON.stringify([])); 
+    setRecentSearches([]);
+    localStorage.setItem(localStorageKey, JSON.stringify([]));
   };
 
   const handleFocus = () => {
@@ -53,21 +63,31 @@ const SearchBar: React.FC<SearchBarProps & { email: string }> = ({
     setTimeout(() => setShowRecentSearches(false), 100);
   };
 
-  const handleSelectRecentSearch = (search: { keyword: string; combo: string, date: string }) => {
+  const handleSelectRecentSearch = (search: {
+    keyword: string;
+    combo: string;
+    date: string;
+  }) => {
     setSearchKeyword(search.keyword);
     setDate(search.date);
-    setSearchCombo(search.combo); 
+    setSearchCombo(search.combo);
 
     setShowRecentSearches(false);
-    navigate(`/ListPage?searchcombo=${search.combo}&searchkeyword=${search.keyword}`);
+    navigate(
+      `/ListPage?searchcombo=${search.combo}&searchkeyword=${search.keyword}`
+    );
   };
 
   const displayComboText = (combo: string) => {
     switch (combo) {
-      case "user": return "유저";
-      case "location": return "장소";
-      case "schedule": return "일정";
-      default: return combo;
+      case "user":
+        return "유저";
+      case "location":
+        return "장소";
+      case "schedule":
+        return "일정";
+      default:
+        return combo;
     }
   };
 
@@ -84,7 +104,11 @@ const SearchBar: React.FC<SearchBarProps & { email: string }> = ({
 
   return (
     <div className="header-search-bar" onBlur={handleBlur}>
-      <select onChange={(e) => setSearchCombo(e.target.value)} value={searchCombo} className="header-search-dropdown">
+      <select
+        onChange={(e) => setSearchCombo(e.target.value)}
+        value={searchCombo}
+        className="header-search-dropdown"
+      >
         <option value="user">유저</option>
         <option value="location">장소</option>
         <option value="schedule">일정</option>
@@ -102,22 +126,33 @@ const SearchBar: React.FC<SearchBarProps & { email: string }> = ({
         <div className="recent-searches-dropdown">
           {recentSearches.map((search, index) => (
             <div key={index} className="recent-search-item">
-                <span className="recent-search-combo">
-                  {displayComboText(search.combo)}
-                </span> 
-                <span className="recent-search-keyword-container" >
-                  <span className="recent-search-keyword" onClick={() => handleSelectRecentSearch(search)}>
-                    {search.keyword}
-                  </span>
-                </span> 
-                <span className="recent-search-date">
-                  ({search.date})
-                </span> 
-              <button className="recent-search-delete" onClick={() => handleDeleteRecentSearch(search)}>x</button>
+              <span className="recent-search-combo">
+                {displayComboText(search.combo)}
+              </span>
+              <span className="recent-search-keyword-container">
+                <span
+                  className="recent-search-keyword"
+                  onClick={() => handleSelectRecentSearch(search)}
+                >
+                  {search.keyword}
+                </span>
+              </span>
+              <span className="recent-search-date">({search.date})</span>
+              <button
+                className="recent-search-delete"
+                onClick={() => handleDeleteRecentSearch(search)}
+              >
+                x
+              </button>
             </div>
           ))}
           {recentSearches.length > 0 && (
-            <button className="recent-search-all-delete" onClick={handleDeleteAllSearches}>전체 삭제</button>
+            <button
+              className="recent-search-all-delete"
+              onClick={handleDeleteAllSearches}
+            >
+              전체 삭제
+            </button>
           )}
         </div>
       )}
