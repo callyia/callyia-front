@@ -80,21 +80,14 @@ const SearchBar: React.FC<SearchBarProps & { email: string }> = ({
 
   const displayComboText = (combo: string) => {
     switch (combo) {
-<<<<<<< HEAD
       case "user":
         return "유저";
       case "location":
         return "장소";
       case "schedule":
-        return "일정";
+        return "포스트";
       default:
         return combo;
-=======
-      case "user": return "유저";
-      case "location": return "장소";
-      case "schedule": return "포스트";
-      default: return combo;
->>>>>>> 7cb2810e0205b97345a8305a92ed6e2dfc10cf91
     }
   };
 
