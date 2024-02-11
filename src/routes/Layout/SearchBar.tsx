@@ -80,6 +80,7 @@ const SearchBar: React.FC<SearchBarProps & { email: string }> = ({
 
   const displayComboText = (combo: string) => {
     switch (combo) {
+<<<<<<< HEAD
       case "user":
         return "유저";
       case "location":
@@ -88,6 +89,12 @@ const SearchBar: React.FC<SearchBarProps & { email: string }> = ({
         return "일정";
       default:
         return combo;
+=======
+      case "user": return "유저";
+      case "location": return "장소";
+      case "schedule": return "포스트";
+      default: return combo;
+>>>>>>> 7cb2810e0205b97345a8305a92ed6e2dfc10cf91
     }
   };
 
@@ -111,7 +118,7 @@ const SearchBar: React.FC<SearchBarProps & { email: string }> = ({
       >
         <option value="user">유저</option>
         <option value="location">장소</option>
-        <option value="schedule">일정</option>
+        <option value="schedule">포스트</option>
       </select>
       <input
         type="text"

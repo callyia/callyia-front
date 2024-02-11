@@ -5,6 +5,7 @@ import { Button } from "../../theme/daisyui";
 import toast, { Toaster } from "react-hot-toast";
 import { BsFillQuestionCircleFill } from "react-icons/bs";
 import { Modal, ModalAction, ModalContent } from "./../TourPage/Modal";
+import { FaStar } from "react-icons/fa";
 import "./MainPage.css";
 
 interface TourData {
@@ -37,6 +38,12 @@ interface DetailScheduleData {
   place_id: number;
 }
 
+interface ScheduleStarDTO {
+  starNum: number;
+  starScore: number;
+  sno: number;
+}
+
 interface MainPageProps {
   isLoggedIn: boolean;
   toggleLogin: () => void;
@@ -67,9 +74,10 @@ const Main: React.FC<MainPageProps> = () => {
   const [selectedDay, setSelectedDay] = useState(1);
   const [tourCount, setTourCount] = useState<number>(0);
 
-  const tooltipLeft = "예) 3일의 여행을 계획할 때,\n 위의 숫자를 클릭 후에 3을 선택.";
-  const tooltipRight = "검색 가능한 여행 계획의 제목을 입력(제목 변경 가능)\n 예) 부산 투어, 서울 배낭여행 등";
-
+  const tooltipLeft =
+    "예) 3일의 여행을 계획할 때,\n 위의 숫자를 클릭 후에 3을 선택.";
+  const tooltipRight =
+    "검색 가능한 여행 계획의 제목 입력\n 예) 부산 투어, 서울 배낭여행 등";
 
   const pagesToShow = 10;
   const startPage =
@@ -82,6 +90,8 @@ const Main: React.FC<MainPageProps> = () => {
 
   //sno에 해당하는 detailImage중에서 첫 요소의 이미지
   const matchingDetailImages: any[] = [];
+
+  const [starData, setStarData] = useState<ScheduleStarDTO[]>([]);
 
   // scheduleData 배열 순회
   scheduleData.forEach((schedule) => {
@@ -233,7 +243,7 @@ const Main: React.FC<MainPageProps> = () => {
       console.log("결과:", result);
 
       toast.success(
-        `장바구니에 추가하였습니다. 내용: ${selectedTour?.placeId}`
+        `장바구니에 추가하였습니다. 내용: ${selectedTour?.placeName}`
       );
     } catch (error: any) {
       console.error("Error accepting data:", error.message);
@@ -408,6 +418,51 @@ const Main: React.FC<MainPageProps> = () => {
     return pages;
   };
 
+  const calculateAverage = () => {
+    if (starData.length === 0) {
+      return 0;
+    }
+
+    const totalScore = starData.reduce((acc, star) => acc + star.starScore, 0);
+    const averageScore = totalScore / starData.length;
+
+    // 소수점 2번째 자리까지 반올림
+    return Math.round(averageScore * 10) / 10;
+  };
+  const averageScore = calculateAverage();
+
+  const renderStars = (averageScore: number) => {
+    const filledStars = Math.floor(averageScore); // 정수 부분
+    const remainingStar = averageScore - filledStars; // 소수 부분
+    return (
+      <div style={{ display: "flex" }}>
+        {Array.from({ length: filledStars }, (_, index) => (
+          <FaStar
+            key={index}
+            size="13"
+            style={{
+              color: "#FFBF00",
+              marginRight: "2px",
+            }}
+          />
+        ))}
+        {remainingStar > 0 && (
+          <FaStar
+            key={filledStars}
+            size="13"
+            style={{
+              color: "#FFBF00",
+              marginRight: "2px",
+              clipPath: `polygon(0 0, ${remainingStar * 100}% 0, ${
+                remainingStar * 100
+              }% 100%, 0% 100%)`,
+            }}
+          />
+        )}
+      </div>
+    );
+  };
+
   return (
     <div className="main-trip-plan-container">
       <main className="main-frame ">
@@ -447,11 +502,11 @@ const Main: React.FC<MainPageProps> = () => {
                 계획하러 가기
               </button>
               <div className="main-tooltip-container">
-                  <BsFillQuestionCircleFill className="main-tooltip-button"/>
-                  <span className="main-tooltip-text-left">{tooltipLeft}</span> 
-                  <span className="main-tooltip-text-right">{tooltipRight}</span>
-                    <span className="main-tooltip-text" >HELP</span>
-                </div> 
+                <BsFillQuestionCircleFill className="main-tooltip-button" />
+                <span className="main-tooltip-text-left">{tooltipLeft}</span>
+                <span className="main-tooltip-text-right">{tooltipRight}</span>
+                <span className="main-tooltip-text">HELP</span>
+              </div>
             </div>
           </section>
         </div>
@@ -490,9 +545,33 @@ const Main: React.FC<MainPageProps> = () => {
             <div className="main-section-div-community-grid-right">
               {scheduleData.map((schedule) => {
                 // schedule.sno에 해당하는 매칭 데이터 찾기
-                const matchingDetail = matchingDetailImages.find(
+                matchingDetailImages.find(
                   (detail) => detail.sno === schedule.sno
                 );
+                // 별점 GET
+                const fetchScheduleStarData = async () => {
+                  try {
+                    const response = await fetch(
+                      `http://localhost:8080/Callyia/Star/getStar?sno=${schedule.sno}`,
+                      {
+                        method: "GET",
+                        headers: {
+                          // Authorization: `Bearer ${token}`,
+                          "Content-Type": "application/json",
+                        },
+                      }
+                    );
+                    if (!response.ok) {
+                      throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    const data = await response.json();
+                    setStarData(data);
+                  } catch (error) {
+                    console.log("Error fetching tour data:", error);
+                  }
+                };
+
+                // fetchScheduleStarData();
 
                 // 매칭 데이터가 있을 때 렌더링
                 return (
@@ -501,7 +580,6 @@ const Main: React.FC<MainPageProps> = () => {
                     className="list-card test-btn"
                     onClick={() => navigate(`/SchedulePage/${schedule.sno}`)}
                   >
-                    {/* 프로필 클릭 시 해당 유저페이지로 이동 */}
                     <span className="profile-info">
                       <img
                         className="profile-image"
@@ -511,9 +589,7 @@ const Main: React.FC<MainPageProps> = () => {
                       <div className="profile-details">
                         <h1 style={{ fontSize: "20px", margin: 0 }}>
                           {schedule.member_nickname}
-                          {/* <p>{schedule.regDate.toDateString()}</p> */}
                         </h1>
-                        {/* Add other details as needed */}
                       </div>
                     </span>
                     <h1
@@ -524,6 +600,7 @@ const Main: React.FC<MainPageProps> = () => {
                       }}
                     >
                       {schedule.sName}
+                      {renderStars(averageScore)}
                     </h1>
                   </div>
                 );
@@ -608,7 +685,7 @@ const Main: React.FC<MainPageProps> = () => {
                     </div>
                   </div>
                 </div>
-                <div className="tipTitle">관련 팁 (총 {tipData.length}개)</div>
+                <div className="tipTitle">관련 팁</div>
                 <div className="tipCollect">
                   {tipData.map((tipData, index) => (
                     <div

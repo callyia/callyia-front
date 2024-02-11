@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 
-import { useToggle } from "../../hooks";
-import { Modal, ModalContent } from "../../theme/daisyui/Modal";
+import { MdOutlineDeleteOutline } from "react-icons/md";
+
+import { ModalContent } from "../../theme/daisyui/Modal";
 import "./ProfilePage.css";
 
-interface TourData {
+interface CartData {
+  bno: number;
   placeId: number;
   placeName: string;
   address: string;
@@ -16,71 +18,82 @@ interface TourData {
 }
 
 const CartContent = () => {
-  const [loading, toggleLoading] = useToggle();
+  const [cartData, setCartData] = useState<CartData[]>([]);
 
-  const [tourData, setTourData] = useState<TourData[]>([]);
-
-  useEffect(() => {
-    const email = localStorage.getItem("email");
-    const fetchUserTourData = async () => {
-      try {
-        const response = await fetch(`http://localhost:8080/Callyia/Basket/getBasket?email=${email}`); // 특정 유저만 받아오게
+  const removeCart = async (bno: number) => {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await fetch(
+        `http://localhost:8080/Callyia/Basket/delete/${bno}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+        );
         if (!response.ok) {
-          throw new Error(`Http error! Status: ${response.status}`);
+          const errorMessage = await response.text();
+          throw new Error(
+            `HTTP error! Status: ${response.status}, Message: ${errorMessage}`
+            );
+          }
+          window.location.reload();
+        } catch (error) {
+          console.error("Error deleting:", error);
+        }
+      };
+      
+    const fetchCartData = async () => {
+      const email = localStorage.getItem("email");
+      const token = localStorage.getItem("token");
+      try {
+        const response = await fetch(
+          `http://localhost:8080/Callyia/Basket/getBasketPosting?email=${email}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
-        console.log(data);
-        setTourData(data);
+        setCartData(data);
       } catch (error) {
-        console.error("Error fetching user tour data: ", error);
+        console.log("Error fetching tour data:", error);
       }
     };
-    fetchUserTourData();
-  }, []);
+    useEffect(() => {
+      fetchCartData();
+    }, []);
+
 
   const renderTourItems = () => {
-    console.log(tourData);
-    if (!tourData) {
+    if (!cartData) {
       return (
-        <Modal open={loading}>
         <ModalContent className="div-loading">
           <div className="div-loading-content">
             <div className="w-16 loading-dots loading" />
             <span className="text-lg font-semibold">잠시만 기다려주세요.</span>
           </div>
         </ModalContent>
-      </Modal>
       )
     }
-    console.log(tourData);
     
-    return tourData.map((tour, index) => (
-      <div key={tour.placeId} className="cart-card">
+    return cartData.map((tour, index) => (
+      <div key={tour.placeId} className="cart-cards">
         <div
-          className="ListContent shadowList"
+          className="ListContent shadowList cart-card"
           role="button"
           tabIndex={0}
-          onMouseOver={(e) => {
-            const targetContent = e.currentTarget;
-
-            // 마우스 오버 시 위로 올라가는 애니메이션 클래스 추가
-            targetContent.classList.add("hoverAnimation");
-          }}
-          onMouseLeave={(e) => {
-            const targetContent = e.currentTarget;
-
-            // 마우스 떠날 때 아래로 내려가는 애니메이션 클래스 추가
-            targetContent.classList.add("leaveAnimation");
-
-            // 일정 시간 후 클래스 제거
-            setTimeout(() => {
-              targetContent.classList.remove(
-                "hoverAnimation",
-                "leaveAnimation"
-              );
-            }, 300);
-          }}
         >
+          <MdOutlineDeleteOutline className="card-close-button" onClick={() => removeCart(tour.bno)}/>
+          {/* <MdOutlineDeleteOutline className="card-close-button"/> */}
           <div>
             <div className="profile-cart-container">
               {tour.image && (

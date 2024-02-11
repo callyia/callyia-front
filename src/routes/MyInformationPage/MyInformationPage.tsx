@@ -30,7 +30,7 @@ const MyInformation = () => {
   // 유효성 검사
   const isValidNickname = (nickname: string) =>
     /^[a-zA-Z가-힣]+$/.test(nickname);
-  const isValidName = (name: string) => /^[a-zA-Z가-힣]+$/.test(name);
+  const isValidName = (name: string) => /^[가-힣]+$/.test(name);
   const isValidPhoneNumber = (phoneNumber: string) => {
     // 하이픈(-)을 제거한 문자열의 길이가 11이어야 함
     const strippedPhoneNumber = phoneNumber.replace(/-/g, "");
@@ -126,11 +126,25 @@ const MyInformation = () => {
             },
           }
         )
+        .then((response) => {
+          toast.success("저장");
+          console.log("Save Clicked");
+        })
         .catch((error) => {
           console.error("Error fetching modify:", error);
+          if (error.response && error.response.status === 409) {
+            const { data } = error.response;
+
+            if (data.phone) {
+              toast.error(`이미 사용 중인 전화번호입니다.`);
+            }
+            if (data.nickname) {
+              toast.error(`이미 사용 중인 닉네임입니다.`);
+            }
+          } else {
+            toast.error("저장을 실패했습니다.");
+          }
         });
-      toast.success("저장");
-      console.log("Save Clicked");
     }
   };
 
@@ -189,7 +203,7 @@ const MyInformation = () => {
             value={nickName}
             onChange={(e) => handleNickNameChange(e.target.value)}
             readOnly={readOnly}
-            className="myinput"
+            className={`${!readOnly ? "editable" : "myinput"}`}
           />
         </div>
         <div>
@@ -199,7 +213,7 @@ const MyInformation = () => {
             value={name}
             onChange={(e) => handleNameChange(e.target.value)}
             readOnly={readOnly}
-            className="myinput"
+            className={`${!readOnly ? "editable" : "myinput"}`}
           />
         </div>
         <div>
@@ -209,7 +223,7 @@ const MyInformation = () => {
             value={phoneNumber}
             onChange={(e) => handlePhoneNumberChange(e.target.value)}
             readOnly={readOnly}
-            className="myinput"
+            className={`${!readOnly ? "editable" : "myinput"}`}
           />
         </div>
         <div className="flex translate-y-10">

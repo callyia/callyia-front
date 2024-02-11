@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import axios from "axios";
 import { Button } from "../../theme/daisyui";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 import { Modal, ModalAction, ModalContent } from "./../TourPage/Modal";
 import "./ListPage.css";
@@ -83,7 +83,6 @@ const ListPage = () => {
   const [selectedTour, setSelectedTour] = useState<LocationSearchResult | null>(
     null
   );
-  const [tourData, setTourData] = useState<LocationSearchResult[]>([]);
 
   const openDetailClicked = (selectedTour: LocationSearchResult) => {
     setSelectedTour(selectedTour); // 클릭된 관광지 정보 저장
@@ -110,7 +109,7 @@ const ListPage = () => {
       "- 장소의 경우 카카오맵을 기반으로 하고 있습니다.",
     ],
     schedule: [
-      "- 일정의 경우에는 일정 이름을 기반으로 검색합니다.",
+      "- 포스트의 경우에는 일정 이름을 기반으로 검색합니다.",
       "- 일정 이름의 경우 유저가 변경했을 수도 있습니다.",
     ],
   };
@@ -216,18 +215,24 @@ const ListPage = () => {
       if (response.status !== 200) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-      const result = response.data;
-      console.log("결과:", result);
-
       toast.success(
-        `장바구니에 추가하였습니다. 내용: ${selectedTour?.placeId}`
+        `장바구니에 추가하였습니다. 내용: ${selectedTour?.placeName}`
       );
     } catch (error: any) {
       console.error("Error accepting data:", error.message);
+      if (axios.isAxiosError(error) && error.response) {
+        if (error.response.status === 409) {
+          toast.error("해당 파일은 이미 등록되어 있습니다.");
+        } else {
+          // Handle other errors
+          toast.error(`An error occurred: ${error.message}`);
+        }
+      }
       if (error.message.includes("409")) {
         toast.error("해당 파일은 이미 등록되어 있습니다.");
       }
     }
+    
   };
 
   const userPaginatedResults = UserSearchResult.slice(
@@ -288,7 +293,7 @@ const ListPage = () => {
           <span className="list-search-combo">
             '{searchCombo === "user" && "유저"}
             {searchCombo === "location" && "장소"}
-            {searchCombo === "schedule" && "일정"}'
+            {searchCombo === "schedule" && "포스트"}'
           </span>
           (으)로 선택하여
           <span className="list-search-keyword"> {searchKeyword}</span>를 검색한
@@ -297,7 +302,7 @@ const ListPage = () => {
           <span className="list-search-keyword">
             해당하는 {searchCombo === "user" && "유저"}
             {searchCombo === "location" && "장소"}
-            {searchCombo === "schedule" && "일정"}
+            {searchCombo === "schedule" && "포스트"}
             (을)를 찾을 수 없습니다. 해당하는 TIP을 확인바랍니다.
           </span>
         </div>
@@ -315,7 +320,7 @@ const ListPage = () => {
                     ? "유저"
                     : type === "location"
                     ? "장소"
-                    : "일정"
+                    : "포스트"
                 }에 관한 검색 TIP`}
                 <div className="list-tips-card-content">
                   앞에 선택하는 콤보박스와 오타를 확인하세요!
@@ -567,7 +572,7 @@ const ListPage = () => {
       <div className="list-page">
         <div className="list-search-keyword-header">
           <span className="list-search-combo">
-            '{searchCombo === "schedule" && "일정"}'
+            '{searchCombo === "schedule" && "포스트"}'
           </span>
           (으)로 선택하여
           <span className="list-search-keyword"> {searchKeyword}</span>를 검색한

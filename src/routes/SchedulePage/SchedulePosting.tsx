@@ -2,10 +2,13 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 
-import ScheduleCard, { ScheduleItem } from "../../components/ScheduleCard";
-import "./SchedulePosting.css";
-import { TbBasket, TbBasketMinus, TbMapPin2 } from "react-icons/tb";
+import swal from "sweetalert";
 
+import ScheduleCard, { ScheduleItem } from "../../components/ScheduleCard";
+import { TbBasket, TbBasketMinus, TbMapPin2 } from "react-icons/tb";
+import { FaStar } from "react-icons/fa";
+
+import "./SchedulePosting.css";
 // 지도
 declare global {
   interface Window {
@@ -20,8 +23,14 @@ interface ScheduleDTO {
   member_email: string;
   sName: string;
   member_nickname: string;
-  // regdate: Date;
-  // moddate: Date;
+  regdate: Date;
+  moddate: Date;
+}
+
+interface ScheduleStarDTO {
+  starNum: number;
+  starScore: number;
+  sno: number;
 }
 
 //back쪽 DTO에 있는 변수명이랑 완전 똑같이
@@ -91,14 +100,195 @@ export default function SchedulePosting() {
     replyDTOList: [],
     tourDTOList: [],
   });
-  const [cartData, setCartData] = useState<BasketDTO[]>([]); // 초기값을 배열로 설정
+  const [cartData, setCartData] = useState<BasketDTO[]>([]);
+
   const navigate = useNavigate();
   const { sno } = useParams();
 
   const email = localStorage.getItem("email");
   const token = localStorage.getItem("token");
 
-  const [redirectCountdown, setRedirectCountdown] = useState(2);
+  // const [redirectCountdown, setRedirectCountdown] = useState(2);
+  const [starData, setStarData] = useState<ScheduleStarDTO[]>([]);
+  const [starMemberData, setStarMemberData] = useState<ScheduleStarDTO>();
+  const [selectedStars, setSelectedStars] = useState<number>(0);
+
+  const DeleteSchedule = async () => {
+    try {
+      // 댓글 삭제 여부를 묻는 모달 띄우기
+      const willDelete = await swal({
+        title: "삭제 확인",
+        text: "일정후기를 삭제하시겠습니까?",
+        icon: "warning",
+        buttons: ["취소", "삭제"], // 취소 버튼 누르면 false, 삭제 버튼 누르면 true 반환
+        dangerMode: true,
+      });
+
+      if (willDelete) {
+        // 서버에 삭제를 요청
+        const response = await fetch(
+          `http://localhost:8080/Callyia/Schedule/deleteSchedule?sno=${sno}`,
+          {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (!response.ok) {
+          const errorMessage = await response.text();
+          throw new Error(
+            `HTTP error! Status: ${response.status}, Message: ${errorMessage}`
+          );
+        }
+
+        // 삭제 완료 모달 띄우기
+        swal("삭제되었습니다.", {
+          icon: "success",
+        }).then(() => {
+          navigate("/");
+        });
+      }
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+    }
+  };
+
+  const handleStarClick = async (index: number) => {
+    if (!starMemberData) {
+      setSelectedStars((prevStars) => {
+        const newStars = index + 1;
+        submitRating(newStars); // 최신 값으로 submitRating 호출
+        window.location.reload();
+        return newStars;
+      });
+    } else {
+      setSelectedStars((prevStars) => {
+        const modStars = index + 1;
+        modifyRating(modStars); // 최신 값으로 submitRating 호출
+        window.location.reload();
+        return modStars;
+      });
+    }
+  };
+
+  const modifyRating = async (stars: number) => {
+    try {
+      // 서버에 수정된 댓글을 전송
+      const response = await fetch(
+        "http://localhost:8080/Callyia/Star/modifyStar",
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            starNum: starMemberData?.starNum,
+            starScore: stars,
+            sno: sno,
+            email: email,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        const errorMessage = await response.text(); // 실패한 경우 응답 본문을 가져옴
+        throw new Error(
+          `HTTP error! Status: ${response.status}, Message: ${errorMessage}`
+        );
+      }
+    } catch (error) {
+      console.error("Error editing comment:", error);
+    }
+  };
+
+  const submitRating = async (stars: number) => {
+    try {
+      const response = await fetch(
+        "http://localhost:8080/Callyia/Star/registerStar",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            starScore: stars,
+            sno: sno,
+            email: email,
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      // Handle success (optional)
+      console.log("Rating submitted successfully!");
+    } catch (error) {
+      console.error("Error submitting rating:", error);
+    }
+  };
+
+  // 로그인한 멤버가 현재 여행후기에 평가한 별점 GET
+  const StarMemberData = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/Callyia/Star/getStarMember?email=${email}&sno=${sno}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const data = await response.json();
+      setStarMemberData(data);
+    } catch (error) {
+      console.log("Error fetching tour data:", error);
+    }
+  };
+  useEffect(() => {
+    StarMemberData();
+  }, [email, sno]);
+
+  const renderStars = (averageScore: number) => {
+    const filledStars = Math.floor(averageScore); // 정수 부분
+    const remainingStar = averageScore - filledStars; // 소수 부분
+    return (
+      <div style={{ display: "flex" }}>
+        {Array.from({ length: filledStars }, (_, index) => (
+          <FaStar
+            key={index}
+            size="13"
+            style={{
+              color: "#FFBF00",
+              marginRight: "2px",
+            }}
+          />
+        ))}
+        {remainingStar > 0 && (
+          <FaStar
+            key={filledStars}
+            size="13"
+            style={{
+              color: "#FFBF00",
+              marginRight: "2px",
+              clipPath: `polygon(0 0, ${remainingStar * 100}% 0, ${
+                remainingStar * 100
+              }% 100%, 0% 100%)`,
+            }}
+          />
+        )}
+      </div>
+    );
+  };
 
   // ScheduleCard를 DAY별로 그룹화하는 함수
   const groupByDay = (schedule: DetailScheduleItem[]) => {
@@ -145,6 +335,47 @@ export default function SchedulePosting() {
   useEffect(() => {
     fetchScheduleData();
   }, [sno]);
+
+  // 별점 GET
+  const fetchScheduleStarData = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/Callyia/Star/getStar?sno=${sno}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const data = await response.json();
+      setStarData(data);
+    } catch (error) {
+      console.log("Error fetching tour data:", error);
+    }
+  };
+  useEffect(() => {
+    fetchScheduleStarData();
+  }, [sno]);
+  console.log(starData);
+
+  // starScore의 평균 1단위 계산
+  const calculateAverage = () => {
+    if (starData.length === 0) {
+      return 0;
+    }
+
+    const totalScore = starData.reduce((acc, star) => acc + star.starScore, 0);
+    const averageScore = totalScore / starData.length;
+
+    // 소수점 2번째 자리까지 반올림
+    return Math.round(averageScore * 10) / 10;
+  };
+  const averageScore = calculateAverage();
 
   //Map -------------------------------------------------------------------------------
   var moreOverlay: any = null;
@@ -388,31 +619,31 @@ export default function SchedulePosting() {
 
     const replyContents = scheduleData.replyDTOList
       .filter((reply) => reply.dno === detailItem.dno)
-      .map((reply) => reply.replyContents);
+      .reverse().map((reply) => reply.replyContents);
 
     const replyer = scheduleData.replyDTOList
       .filter((reply) => reply.dno === detailItem.dno)
-      .map((reply) => reply.replyer);
+      .reverse().map((reply) => reply.replyer);
 
     const replyerNickname = scheduleData.replyDTOList
       .filter((reply) => reply.dno === detailItem.dno)
-      .map((reply) => reply.replyer_nickname);
+      .reverse().map((reply) => reply.replyer_nickname);
 
     const replyerImg = scheduleData.replyDTOList
       .filter((reply) => reply.dno === detailItem.dno)
-      .map((reply) => reply.replyer_img);
+      .reverse().map((reply) => reply.replyer_img);
 
     const rno = scheduleData.replyDTOList
       .filter((reply) => reply.dno === detailItem.dno)
-      .map((reply) => reply.rno);
+      .reverse().map((reply) => reply.rno);
 
     const reply_regdate = scheduleData.replyDTOList
       .filter((reply) => reply.dno === detailItem.dno)
-      .map((reply) => reply.reply_regDate);
+      .reverse().map((reply) => reply.reply_regDate);
 
     const reply_moddate = scheduleData.replyDTOList
       .filter((reply) => reply.dno === detailItem.dno)
-      .map((reply) => reply.reply_modDate);
+      .reverse().map((reply) => reply.reply_modDate);
 
     return {
       ...detailItem,
@@ -431,32 +662,8 @@ export default function SchedulePosting() {
     };
   };
 
-  //변경해야함
-  if (!sno) {
-    return (
-      <div className="user-from-list-page">
-        <div className="user-from-list-search-keyword-header">
-          <span className="user-from-danger-message">
-            잘못된 접근입니다. URL을 조작하지 마세요
-          </span>
-          <img
-            src="./dummyimages/error.png"
-            alt="error img"
-            className="user-from-danger-image"
-          />
-          <div className="user-danger-timeout-message">
-            <span style={{ color: "red", fontWeight: "bold" }}>
-              {redirectCountdown}
-            </span>{" "}
-            초후 메인페이지로 이동합니다.
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="WholePage" style={{ display: "flex", height: "1050px" }}>
+    <div className="WholePage" style={{ display: "flex", height: "1100px" }}>
       <div className="left">
         <div style={{ flex: 1 }}>
           {/* 왼쪽 상단 */}
@@ -486,8 +693,55 @@ export default function SchedulePosting() {
                     {scheduleData.scheduleDTO?.member_nickname}
                   </p>
                 </div>
-                <div>
-                  <h2>{scheduleData.scheduleDTO?.sName}</h2>
+                <div style={{ display: "flex" }}>
+                  <h2
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                    }}
+                  >
+                    {scheduleData.scheduleDTO?.sName}
+                    <p style={{ fontSize: "15px" }}>
+                      평균평점({averageScore})/ 평가인원(
+                      {starData.length}명)
+                      {averageScore && renderStars(averageScore)}
+                    </p>
+                  </h2>
+
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      paddingLeft: "20px",
+                    }}
+                  >
+                    <p>평가하기</p>
+                    <div className="star">
+                      {Array.from({ length: 5 }, (_, index) => (
+                        <FaStar
+                          key={index}
+                          size="40"
+                          style={{
+                            color:
+                              index < (starMemberData?.starScore ?? 0)
+                                ? "#FFBF00"
+                                : "#BDBDBD",
+                            marginRight: "2px",
+                            cursor: "pointer",
+                          }}
+                          onClick={() => {
+                            handleStarClick(index);
+                          }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <button onClick={() => DeleteSchedule()}>
+                      여행 일정 후기 삭제
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>

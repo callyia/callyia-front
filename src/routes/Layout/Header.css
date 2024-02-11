@@ -13,9 +13,7 @@
 }
 
 .header-button:hover {
-  transform: scale(1.1);
-  brightness: 0.5;
-  transition: transform 0.5s ease-in-out;
+  filter: brightness(2.0);
 }
 
 .header-button-message {
@@ -23,6 +21,10 @@
   font-size: 14px;
 }
 
+.header-button:hover .header-button-message {
+  color: red;
+  font-size: 20px;
+}
 /* search-bar */
 .header-search-input {
   font-family: "GmarketSans500";

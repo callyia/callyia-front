@@ -70,6 +70,7 @@ export default function Planning() {
   const [area2, toggleArea2] = useToggle();
   const [loading, toggleLoading] = useToggle();
   const [isModalOpen, setModalOpen] = useState(false);
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [isPostModalOpen, setPostModalOpen] = useState(false);
 
   const location = useLocation();
@@ -576,24 +577,28 @@ export default function Planning() {
     return content;
   };
 
-  // const fetchByPno = async (pno: number) => {
-  //   const token = localStorage.getItem("token");
-  //   console.log(token);
+  const deletePlan = async () => {
+    if (pnoParam) {
+      // fetch 해서 삭제하는 코드 작성할  것
+      const url = `http://localhost:8080/Callyia/planning/delete/${pnoParam}`;
 
-  //   try {
-  //     const response = await axios.get(
-  //       `http://localhost:8080/Callyia/access/resource-by-pno/${pno}`,
-  //       {
-  // headers: {
-  //   Authorization: `Bearer ${token}`,
-  // },
-  //       }
-  //     );
-  //     console.log(response.data);
-  //   } catch (error) {
-  //     console.error("ERROR : ", error);
-  //   }
-  // };
+      const options = {
+        Authorization: `Bearer ${token}`,
+        method: "DELETE",
+      };
+      try {
+        const response = await fetch(url, options);
+
+        if (response.ok) {
+          navigate("..");
+        }
+      } catch (error) {
+        toast.error("삭제에 실패했어요.");
+      }
+    } else {
+      navigate("..");
+    }
+  };
 
   const fetchSearch = (searchKeyword: string) => {
     const url = `http://localhost:8080/Callyia/planning/search?keyword=${searchKeyword}`;
@@ -824,6 +829,14 @@ export default function Planning() {
     setModalOpen(false);
   };
 
+  const openDeleteModal = () => {
+    setDeleteModalOpen(true);
+  };
+
+  const closeDeleteModal = () => {
+    setDeleteModalOpen(false);
+  };
+
   const openPostModal = () => {
     if (
       planData.length +
@@ -871,8 +884,8 @@ export default function Planning() {
 
   useEffect(() => {
     const mainPosition = new window.kakao.maps.LatLng(
-      35.14299044,
-      129.03409987
+      37.5600030088843,
+      126.975313124237
     );
     const container = document.getElementById("map"); //지도를 담을 영역의 DOM 레퍼런스
     const options = {
@@ -1383,6 +1396,13 @@ export default function Planning() {
             )}
           </Droppable>
           <div className="div-plan-button">
+            <button
+              className="float-left mt-1 ml-1 btn"
+              onClick={openDeleteModal}
+            >
+              삭제
+            </button>
+
             <button className="float-right mt-1 mr-1 btn" onClick={openModal}>
               여행 이름 변경
             </button>
@@ -1402,6 +1422,7 @@ export default function Planning() {
         </DragDropContext>
       </div>
       <Toaster position="top-center" reverseOrder={false} />
+
       <Modal open={isModalOpen}>
         <ModalContent>
           <h1>변경할 여행의 이름을 입력하세요.</h1>
@@ -1423,6 +1444,27 @@ export default function Planning() {
           >
             Save
           </button>
+        </ModalContent>
+      </Modal>
+
+      <Modal open={isDeleteModalOpen}>
+        <ModalContent>
+          <div className="w-full h-6">
+            <span>정말로 일정을 삭제하시겠어요?</span>
+            <button
+              className="float-right btn btn-warning"
+              onClick={closeDeleteModal}
+            >
+              Close
+            </button>
+            <button
+              className="float-right mr-1 btn btn-success"
+              id="updateBtn"
+              onClick={deletePlan}
+            >
+              Delete
+            </button>
+          </div>
         </ModalContent>
       </Modal>
 

@@ -129,12 +129,10 @@ input[type="text"] {
   padding: 10px;
 }
 
-.main-tooltip-text-left {
+.main-tooltip-text-left,
+.main-tooltip-text-right
+ {
   width: 270px;
-}
-
-.main-tooltip-text-right {
-  width: 400px;
 }
 
 .main-tooltip-container:hover .main-tooltip-text-left {
@@ -153,7 +151,7 @@ input[type="text"] {
 .main-tooltip-text-left::after {
   content: "";
   position: absolute;
-  top: -20px; 
+  top: -18px; 
   left: 50%;
   margin-left: -5px; 
   border-width: 10px; 
@@ -573,7 +571,7 @@ input[type="text"] {
 .main-frame {
   width: 100%;
   min-width: 1150px;
-  background-image: url();
+  /* background-image: url(); */
   /* background-size: cover; */
   /* background-position: center center; */
 }
