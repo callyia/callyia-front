@@ -114,7 +114,7 @@ export default function Planning() {
 
     markers = [];
 
-    // planData.forEach((plan, index) => {
+
     pd.forEach((plan, index) => {
       const imageSrc =
           "../../../dummyimages/NumberImage/number" + (index + 1) + ".png", // 마커이미지의 주소입니다
@@ -193,7 +193,6 @@ export default function Planning() {
         return planData6.slice();
       case "droppable7":
         return planData7.slice();
-      // Add more cases as needed for additional droppables
       default:
         return [];
     }
@@ -222,8 +221,6 @@ export default function Planning() {
       case "droppable7":
         setPlanData7(items);
         break;
-
-      // Add more cases as needed for additional droppables
       default:
         break;
     }
@@ -927,7 +924,6 @@ export default function Planning() {
     } else if (!dayParam && !pnoParam) {
       planDay = 1;
     }
-    // console.log(planDay);
   }, []);
 
   useEffect(() => {
@@ -945,7 +941,6 @@ export default function Planning() {
       var planData_tour;
       var planData_day;
       if (pnoParam) {
-        // fetchByPno(parseInt(pnoParam, 10));
 
         const headers = {
           Authorization: `Bearer ${token}`,
@@ -1060,6 +1055,14 @@ export default function Planning() {
   }, []);
 
   useEffect(() => {
+    const writerText = document.querySelector(
+      "#writerText"
+    ) as HTMLHeadingElement;
+
+      writerText.textContent = email;
+  }, [])
+
+  useEffect(() => {
     const headers = {
       Authorization: `Bearer ${token}`,
     };
@@ -1076,7 +1079,6 @@ export default function Planning() {
         return response.json();
       })
       .then((data) => {
-        // console.log(data);
         setBasketData(data);
       })
       .catch((error) => {
@@ -1085,7 +1087,6 @@ export default function Planning() {
   }, []);
 
   useEffect(() => {
-    // console.log(viewable);
     if (!viewable) navigate("../UnAuthorized");
   }, [viewable]);
 
@@ -1095,9 +1096,7 @@ export default function Planning() {
 
   const handleInputChange = (day: any, index: any, type: any, value: any) => {
     setInputValues((prevValues) => {
-      // Copy the previous values
       const newValues = [...prevValues];
-      // Initialize the array for the specific day if not exists
       newValues[day - 1] = newValues[day - 1] || [];
 
       var placeId;
@@ -1118,7 +1117,6 @@ export default function Planning() {
         placeId = planData7[index].placeId;
       }
 
-      // Update the value for the specific input
       newValues[day - 1][index] = newValues[day - 1][index] || {
         day,
         detailImages: "",
@@ -1128,7 +1126,7 @@ export default function Planning() {
         sno: null,
       };
       newValues[day - 1][index][type] = value;
-      // console.log(newValues[day - 1][index][type]);
+
 
       return newValues;
     });
@@ -1212,9 +1210,9 @@ export default function Planning() {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json", // 전송하는 데이터 타입 설정
+        "Content-Type": "application/json", 
       },
-      body: JSON.stringify(requestBody), // 데이터를 JSON 문자열로 변환하여 전송
+      body: JSON.stringify(requestBody), 
     };
 
     fetch(url, options)
@@ -1237,12 +1235,12 @@ export default function Planning() {
   };
 
   const dndListStyle = (isDraggingOver: any) => ({
-    background: isDraggingOver ? "#fbfbf2" : "white",
+    background: isDraggingOver ? "#ebe3eb" : "white",
   });
 
   const dndTrashStyle = (isDraggingOver: any) => ({
-    backgroundColor: isDraggingOver ? "#343a40" : "#e9ecef",
-    color: isDraggingOver ? "#e9ecef" : "#343a40",
+    backgroundColor: isDraggingOver ? "#343a40" : "white",
+    color: isDraggingOver ? "white" : "#343a40",
     backgroundSize: "auto 100%",
     backgroundPosition: "center",
     backgroundRepeat: "no-repeat",
@@ -1330,10 +1328,14 @@ export default function Planning() {
       {/* 플랜 리스트 관련 컴포넌트 (좌측) */}
       <div className="div-left">
         <div className="div-left-title">
-          <h2 id="titleText">초기 제목</h2>
+          <h2 id="titleText" className="planning-font">초기 제목</h2>
+          
+          <div className="bottom-border mt-0.5" />
         </div>
+        
         <div className="div-left-writer">
-          <h1 id="writerText">Writer</h1>
+          <h1 id="writerText" className="planning-font">Writer</h1>
+          <div className="bottom-border mt-0.5" />
         </div>
         <DragDropContext onDragEnd={onDragEnd}>
           <div className="div-plan-list">
@@ -1346,7 +1348,8 @@ export default function Planning() {
                     ref={provided.innerRef}
                     style={dndListStyle(snapshot.isDraggingOver)}
                   >
-                    <div className="day-plan-title">{droppable.title}</div>
+                    <div className="day-plan-title planning-day-font">{droppable.title}</div>
+                    <div className="day-bottom-border"></div>
                     <div>
                       {droppable.data.map((plan, index) => (
                         <Draggable
@@ -1382,6 +1385,7 @@ export default function Planning() {
               </Droppable>
             ))}
           </div>
+          <div className="div-plan-line" ><div className="bottom-border"/></div>
           <Droppable droppableId="droppable_trash">
             {(provided, snapshot) => (
               <div
@@ -1442,7 +1446,7 @@ export default function Planning() {
             id="updateBtn"
             onClick={updateTitle}
           >
-            Save
+            Change
           </button>
         </ModalContent>
       </Modal>
@@ -1477,23 +1481,6 @@ export default function Planning() {
               const form = event.target as HTMLFormElement;
               const formData = new FormData(form);
 
-              // const response = await axios.post(
-              //   "http://localhost:8080/Callyia/s3/posting",
-              //   formData,
-              //   {
-              //     headers: {
-              //       "Content-Type": "multipart/form-data",
-              //     },
-              //   }
-              // );
-
-              // if (response.status !== 200) {
-              //   throw new Error(`HTTP error! Status: ${response.status}`);
-              // }
-
-              // const uploadedData = response.data;
-              // console.log(uploadedData);
-
               handleButtonClick(formData);
             }}
           >
@@ -1516,14 +1503,7 @@ export default function Planning() {
                         </h1>
                         <span>Image :</span>
                         <input
-                          // onChange={(e) =>
-                          //   handleInputChange(
-                          //     index + 1,
-                          //     i,
-                          //     "detailImages",
-                          //     e.target.value
-                          //   )
-                          // }
+
                           id={`detailImages-${index + 1}-${i}`}
                           className="ml-2"
                           type="file"
@@ -1554,14 +1534,7 @@ export default function Planning() {
                         </h1>
                         <span>Image :</span>
                         <input
-                          // onChange={(e) =>
-                          //   handleInputChange(
-                          //     index + 1,
-                          //     i,
-                          //     "detailImages",
-                          //     e.target.value
-                          //   )
-                          // }
+
                           id={`detailImages-${index + 1}-${i}`}
                           className="ml-2"
                           type="file"
@@ -1592,14 +1565,7 @@ export default function Planning() {
                         </h1>
                         <span>Image :</span>
                         <input
-                          // onChange={(e) =>
-                          //   handleInputChange(
-                          //     index + 1,
-                          //     i,
-                          //     "detailImages",
-                          //     e.target.value
-                          //   )
-                          // }
+
                           id={`detailImages-${index + 1}-${i}`}
                           className="ml-2"
                           type="file"
@@ -1630,14 +1596,7 @@ export default function Planning() {
                         </h1>
                         <span>Image :</span>
                         <input
-                          // onChange={(e) =>
-                          //   handleInputChange(
-                          //     index + 1,
-                          //     i,
-                          //     "detailImages",
-                          //     e.target.value
-                          //   )
-                          // }
+
                           id={`detailImages-${index + 1}-${i}`}
                           className="ml-2"
                           type="file"
@@ -1668,14 +1627,7 @@ export default function Planning() {
                         </h1>
                         <span>Image :</span>
                         <input
-                          // onChange={(e) =>
-                          //   handleInputChange(
-                          //     index + 1,
-                          //     i,
-                          //     "detailImages",
-                          //     e.target.value
-                          //   )
-                          // }
+
                           id={`detailImages-${index + 1}-${i}`}
                           className="ml-2"
                           type="file"
@@ -1706,14 +1658,7 @@ export default function Planning() {
                         </h1>
                         <span>Image :</span>
                         <input
-                          // onChange={(e) =>
-                          //   handleInputChange(
-                          //     index + 1,
-                          //     i,
-                          //     "detailImages",
-                          //     e.target.value
-                          //   )
-                          // }
+
                           id={`detailImages-${index + 1}-${i}`}
                           className="ml-2"
                           type="file"
