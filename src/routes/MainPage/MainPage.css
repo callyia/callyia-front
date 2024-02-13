@@ -703,6 +703,17 @@ input[type="text"] {
   text-decoration: underline; /* hover 시에 밑줄이 나오도록 설정 */
 }
 
+.tipStyle_2 {
+  font-size: 20px;
+  font-weight: bold;
+  color: #00bfff;
+  cursor: pointer;
+}
+
+.tipStyle_2:hover {
+  text-decoration: underline; /* hover 시에 밑줄이 나오도록 설정 */
+}
+
 .modalActionbtn {
   position: relative;
   transform: translate(0%, -50%);

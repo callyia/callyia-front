@@ -35,6 +35,7 @@ interface RegistPageProps {
 interface TipData {
   sno: number;
   tip: string;
+  nickname: string;
 }
 
 SwiperCore.use([Navigation, Pagination, Autoplay]);
@@ -610,22 +611,22 @@ const RegistPage: React.FC<RegistPageProps> = ({ checkColumnData }) => {
             className="modalContent"
           >
             <div className="modal_sz">
-              <div className="grid w-1/2">
+              <div className="w-1/2 min-h-[500px] max-h-[500px]">
                 <CheckBox onCheckChange={handleCheckBoxChange} />
-                <div className="modal_cn">
+                <div className="h-10 modal_cn">
                   <label className="mr-2 padd">이름 :</label>
                   <div className="modal_cz" style={{ height: "30px" }}>
                     {selectedPlace?.place_name}
                   </div>
                 </div>
-                <div className="modal_cn">
+                <div className="modal_cn min-h-[40px] max-h-[40px]">
                   <label className="mr-2">지역 :</label>
                   <div className="modal_cz" style={{ height: "30px" }}>
                     {selectedPlace?.road_address_name ||
                       selectedPlace?.address_name}
                   </div>
                 </div>
-                <div className="modal_cn">
+                <div className="modal_cn min-h-[40px] max-h-[40px]">
                   <label className="mr-2">좌표 :</label>
                   <div className="modal_cz" style={{ height: "30px" }}>
                     {selectedPlace?.x && selectedPlace?.y ? (
@@ -637,17 +638,15 @@ const RegistPage: React.FC<RegistPageProps> = ({ checkColumnData }) => {
                     )}
                   </div>
                 </div>
-                <div className="modal_cn">
+                <div className="modal_cn min-h-[100px] ">
                   <label className="mr-2">내용 :</label>
-                  <input
-                    className="modal_cz"
-                    type="text"
-                    name=""
-                    id=""
+                  <textarea
+                    className="modal_cz min-h-[100px] overflow-y-hidden resize-none"
                     style={{ backgroundColor: "white" }}
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
                     placeholder="내용을 작성해주세요"
+                    rows={3}
                   />
                 </div>
                 <div>
@@ -688,7 +687,7 @@ const RegistPage: React.FC<RegistPageProps> = ({ checkColumnData }) => {
                       <img
                         src={selectedTour.image}
                         alt={"그림"}
-                        style={{ width: "250px", height: "250px" }}
+                        style={{ width: "280px", height: "280px" }}
                         className="shadow-md shadow-slate-500 rounded-2xl"
                       />
                     </div>
@@ -708,7 +707,7 @@ const RegistPage: React.FC<RegistPageProps> = ({ checkColumnData }) => {
                         </p>
                       </div>
                       <div className="flex items-center">
-                        <p className="flex-grow min-h-[150px] max-h-[150px] p-1">
+                        <p className="flex-grow min-h-[150px] max-h-[150px] p-1 overflow-y-auto">
                           {selectedTour.placeContent}
                         </p>
                       </div>
@@ -732,17 +731,23 @@ const RegistPage: React.FC<RegistPageProps> = ({ checkColumnData }) => {
                   </div>
                 </div>
               </div>
-              <div className="tipTitle">관련 팁 (총 {tipData.length}개)</div>
-              <div className="tipCollect">
+              <div className="border-b-2"></div>
+              <div className="tipTitle">관련 팁</div>
+              <div className="tipCollect min-w-[668px] max-w-[668px] ">
                 {tipData.map((tipData, index) => (
-                  <div
-                    className="tipStyle"
-                    key={index}
-                    onClick={() => {
-                      navigate(`/SchedulePage/${tipData.sno}`);
-                    }}
-                  >
-                    {tipData.tip}
+                  <div className="flex ">
+                    <div className="flex-row tipStyle min-w-[500px] max-w-[500px] overflow-ellipsis text-nowrap overflow-hidden">
+                      {tipData.nickname}
+                    </div>
+                    <div
+                      className="flex-row text-right tipStyle_2 min-w-[168px] max-w-[168px]"
+                      key={index}
+                      onClick={() => {
+                        navigate(`/SchedulePage/${tipData.sno}`);
+                      }}
+                    >
+                      {tipData.tip}
+                    </div>
                   </div>
                 ))}
               </div>
