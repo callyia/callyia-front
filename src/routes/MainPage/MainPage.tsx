@@ -418,49 +418,18 @@ const Main: React.FC<MainPageProps> = () => {
     return pages;
   };
 
-  // 별점 GET
-  const fetchScheduleStarData = async (sno: number) => {
-    try {
-      const response = await fetch(
-        `http://localhost:8080/Callyia/Star/getStar?sno=${sno}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      const data = await response.json();
-      setStarData(data);
-    } catch (error) {
-      console.log("Error fetching star data:", error);
-    }
-  };
-
-  // Calculate average star score for a given sno
-  const calculateAverage = (sno: number) => {
-    const filteredStarData = starData.filter((star) => star.sno === sno);
-
-    if (filteredStarData.length === 0) {
+  const calculateAverage = () => {
+    if (starData.length === 0) {
       return 0;
     }
 
-    const totalScore = filteredStarData.reduce(
-      (acc, star) => acc + star.starScore,
-      0
-    );
-    const averageScore = totalScore / filteredStarData.length;
+    const totalScore = starData.reduce((acc, star) => acc + star.starScore, 0);
+    const averageScore = totalScore / starData.length;
 
-    // Round to 1 decimal place
+    // 소수점 2번째 자리까지 반올림
     return Math.round(averageScore * 10) / 10;
   };
-
-  useEffect(() => {
-    scheduleData.forEach((schedule) => fetchScheduleStarData(schedule.sno));
-  }, [scheduleData]);
+  const averageScore = calculateAverage();
 
   const renderStars = (averageScore: number) => {
     const filledStars = Math.floor(averageScore); // 정수 부분
@@ -628,7 +597,30 @@ const Main: React.FC<MainPageProps> = () => {
                 matchingDetailImages.find(
                   (detail) => detail.sno === schedule.sno
                 );
-                const averageScore = calculateAverage(schedule.sno);
+                // 별점 GET
+                const fetchScheduleStarData = async () => {
+                  try {
+                    const response = await fetch(
+                      `http://localhost:8080/Callyia/Star/getStar?sno=${schedule.sno}`,
+                      {
+                        method: "GET",
+                        headers: {
+                          // Authorization: `Bearer ${token}`,
+                          "Content-Type": "application/json",
+                        },
+                      }
+                    );
+                    if (!response.ok) {
+                      throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    const data = await response.json();
+                    setStarData(data);
+                  } catch (error) {
+                    console.log("Error fetching tour data:", error);
+                  }
+                };
+
+                // fetchScheduleStarData();
 
                 // 매칭 데이터가 있을 때 렌더링
                 return (
@@ -657,7 +649,7 @@ const Main: React.FC<MainPageProps> = () => {
                       }}
                     >
                       {schedule.sName}
-                      <span>{averageScore && renderStars(averageScore)}</span>
+                      {renderStars(averageScore)}
                     </h1>
                   </div>
                 );

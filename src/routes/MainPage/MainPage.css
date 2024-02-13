@@ -134,10 +134,6 @@ input[type="text"] {
   width: 270px;
 }
 
-.main-tooltip-text-right {
-  width: 400px;
-}
-
 .main-tooltip-container:hover .main-tooltip-text-left {
   visibility: visible;
   opacity: 1;
@@ -470,6 +466,7 @@ input[type="text"] {
 .profile-details {
   margin: 10px;
   display: flex;
+  flex-direction: column;
 }
 
 .middle-navigate {
@@ -649,7 +646,7 @@ input[type="text"] {
 .main-frame {
   width: 100%;
   min-width: 1150px;
-  background-image: url();
+  /* background-image: url(); */
   /* background-size: cover; */
   /* background-position: center center; */
 }
