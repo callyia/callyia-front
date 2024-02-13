@@ -541,19 +541,68 @@ const Main: React.FC<MainPageProps> = () => {
             </div>
           </section>
         </div>
-        <div className="middle-navigate">
-          <div className="place-navigate">
-            <span onClick={() => navigate(`/TourPage/Tourist`)}>Place</span>
+
+        <div className="headers">
+          {/* Content before waves */}
+          <div className="flex-header inner-header">
+            {/* Just the logo.. Don't mind this */}
+            <div className="middle-navigate">
+              <div className="place-navigate">
+                <span onClick={() => navigate(`/TourPage/Tourist`)}>Place</span>
+              </div>
+              <div className="restaurant-navigate">
+                <span onClick={() => navigate(`/TourPage/Food`)}>
+                  Restaurant
+                </span>
+              </div>
+              <div className="community-navigate">
+                <span onClick={() => navigate(`/ScheduleListPage/`)}>
+                  Community
+                </span>
+              </div>
+            </div>
           </div>
-          <div className="restaurant-navigate">
-            <span onClick={() => navigate(`/TourPage/Food`)}>Restaurant</span>
+
+          {/* Waves Container */}
+          <div className="wave-container">
+            <svg
+              className="waves"
+              viewBox="0 24 150 28"
+              preserveAspectRatio="none"
+              shape-rendering="auto"
+            >
+              <defs>
+                <path
+                  id="gentle-wave"
+                  d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"
+                />
+              </defs>
+              <g className="parallax">
+                <use
+                  xlinkHref="#gentle-wave"
+                  x="48"
+                  y="0"
+                  fill="rgba(255,255,255,0.7"
+                />
+                <use
+                  xlinkHref="#gentle-wave"
+                  x="48"
+                  y="3"
+                  fill="rgba(255,255,255,0.5)"
+                />
+                <use
+                  xlinkHref="#gentle-wave"
+                  x="48"
+                  y="5"
+                  fill="rgba(255,255,255,0.3)"
+                />
+                <use xlinkHref="#gentle-wave" x="48" y="7" fill="#fff" />
+              </g>
+            </svg>
           </div>
-          <div className="community-navigate">
-            <span onClick={() => navigate(`/ScheduleListPage/`)}>
-              Community
-            </span>
-          </div>
+          {/* Waves end */}
         </div>
+
         <div className="main-section-container">
           <section className="main-section-div-community-left">
             <span className="main-community-section-span-title">
@@ -562,7 +611,7 @@ const Main: React.FC<MainPageProps> = () => {
           </section>
           <section className="main-section-div-community-right">
             <div className="main-section-div-community-top-right">
-              <span className="ml-4 text-xl font-semibold">
+              <span className="ml-4 text-xl font-semibold text-white">
                 가장 최근에 공유된 여행 일정들입니다.
               </span>
               <button
