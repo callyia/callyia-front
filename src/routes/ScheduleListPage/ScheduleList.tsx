@@ -117,26 +117,31 @@ export default function ScheduleList() {
   }, []);
 
   // 별점 GET
-  const fetchScheduleStarData = async (sno: number) => {
-    try {
-      const response = await fetch(
-        `http://localhost:8080/Callyia/Star/getStar?sno=${sno}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
+  useEffect(() => {
+    const fetchScheduleStarData = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:8080/Callyia/Star/getAllStar`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
         }
-      );
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+        const data = await response.json();
+        setStarData(data);
+      } catch (error) {
+        console.log("Error fetching star data:", error);
       }
-      const data = await response.json();
-      setStarData(data);
-    } catch (error) {
-      console.log("Error fetching star data:", error);
-    }
-  };
+    };
+
+    // 컴포넌트가 처음 마운트될 때 한 번만 실행
+    fetchScheduleStarData();
+  }, []);
 
   // Calculate average star score for a given sno
   const calculateAverage = (sno: number) => {
@@ -155,10 +160,6 @@ export default function ScheduleList() {
     // Round to 1 decimal place
     return Math.round(averageScore * 10) / 10;
   };
-
-  useEffect(() => {
-    scheduleData.forEach((schedule) => fetchScheduleStarData(schedule.sno));
-  }, [scheduleData]);
 
   const renderStars = (averageScore: number) => {
     const filledStars = Math.floor(averageScore); // 정수 부분
