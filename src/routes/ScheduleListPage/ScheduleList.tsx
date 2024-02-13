@@ -11,7 +11,7 @@ interface ScheduleData {
   sName: string;
   member_nickname: string;
   member_profile_image: string;
-  regDate: Date;
+  regDate: string;
 }
 
 interface DetailScheduleData {
@@ -124,6 +124,8 @@ export default function ScheduleList() {
             (detail) => detail.sno === schedule.sno
           );
 
+          // console.log(schedule.regDate[0]);
+
           // 매칭 데이터가 있을 때 렌더링
           return (
             <div
@@ -133,36 +135,48 @@ export default function ScheduleList() {
             >
               {matchingDetail && (
                 <img
+                  className="schedule-list-card-thumbnail"
                   src={matchingDetail.detailImages}
                   alt={`Detail Img for ${schedule.sno}`}
                 />
               )}
-              <span className="ScheduleList-profile-info">
-                <img
-                  className="ScheduleList-profile-image"
-                  src={schedule.member_profile_image}
-                  alt="Profile"
-                  onClick={() => {
-                    navigate(
-                      `/UserProfilePage?userid=${schedule.member_email}`
-                    );
-                  }}
-                />
-                <div className="ScheduleList-profile-details">
-                  <h1 style={{ fontSize: "20px", margin: 0 }}>
-                    {schedule.member_nickname}
+              <div className="schedule-card-info">
+                <div className="schedule-card-info-top">
+                  <div className="schedule-card-title">{schedule.sName}</div>
+                  <div className="schedule-card-day">
+                    {schedule.total_Day === 1 ? (
+                      <span>{schedule.total_Day} day</span>
+                    ) : (
+                      <span>{schedule.total_Day} days</span>
+                    )}
+                    <span>별점들어갈곳</span>
+                  </div>
+                </div>
+                <div className="schedule-card-info-bottom">
+                  <span className="ScheduleList-profile-info">
+                    <img
+                      className="ScheduleList-profile-image"
+                      src={schedule.member_profile_image}
+                      alt="Profile"
+                      onClick={() => {
+                        navigate(
+                          `/UserProfilePage?userid=${schedule.member_email}`
+                        );
+                      }}
+                    />
+                    <div className="ScheduleList-profile-details">
+                      <h1 style={{ fontSize: "20px", margin: 0 }}>
+                        {schedule.member_nickname}
+                      </h1>
+                    </div>
+                  </span>
+                  <h1 className="scheduleList-date">
+                    {schedule.regDate[0]}-{schedule.regDate[1]}-
+                    {schedule.regDate[2]} {schedule.regDate[3]}:
+                    {schedule.regDate[4]}
                   </h1>
                 </div>
-              </span>
-              <h1
-                style={{
-                  fontSize: "30px",
-                  fontWeight: "bold",
-                  margin: "15px",
-                }}
-              >
-                {schedule.sName}
-              </h1>
+              </div>
             </div>
           );
         })}
