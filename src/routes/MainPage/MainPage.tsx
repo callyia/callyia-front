@@ -52,6 +52,7 @@ interface MainPageProps {
 interface TipData {
   sno: number;
   tip: string;
+  nickname: string;
 }
 
 const Main: React.FC<MainPageProps> = () => {
@@ -690,7 +691,7 @@ const Main: React.FC<MainPageProps> = () => {
                         <img
                           src={selectedTour.image}
                           alt={"그림"}
-                          style={{ width: "250px", height: "250px" }}
+                          style={{ width: "280px", height: "280px" }}
                           className="shadow-md shadow-slate-500 rounded-2xl"
                         />
                       </div>
@@ -710,7 +711,7 @@ const Main: React.FC<MainPageProps> = () => {
                           </p>
                         </div>
                         <div className="flex items-center">
-                          <p className="flex-grow min-h-[150px] max-h-[150px] p-1">
+                          <p className="flex-grow min-h-[150px] max-h-[150px] p-1 overflow-y-auto">
                             {selectedTour.placeContent}
                           </p>
                         </div>
@@ -734,17 +735,23 @@ const Main: React.FC<MainPageProps> = () => {
                     </div>
                   </div>
                 </div>
+                <div className="border-b-2"></div>
                 <div className="tipTitle">관련 팁</div>
-                <div className="tipCollect">
+                <div className="tipCollect min-w-[668px] max-w-[668px] ">
                   {tipData.map((tipData, index) => (
-                    <div
-                      className="tipStyle"
-                      key={index}
-                      onClick={() => {
-                        navigate(`/SchedulePage/${tipData.sno}`);
-                      }}
-                    >
-                      {tipData.tip}
+                    <div className="flex ">
+                      <div className="flex-row tipStyle min-w-[500px] max-w-[500px] overflow-ellipsis text-nowrap overflow-hidden">
+                        {tipData.nickname}
+                      </div>
+                      <div
+                        className="flex-row text-right tipStyle_2 min-w-[168px] max-w-[168px]"
+                        key={index}
+                        onClick={() => {
+                          navigate(`/SchedulePage/${tipData.sno}`);
+                        }}
+                      >
+                        {tipData.tip}
+                      </div>
                     </div>
                   ))}
                 </div>
