@@ -124,15 +124,17 @@ input[type="text"] {
   opacity: 0;
   visibility: hidden;
   font-size: 16px;
-  font-family: 'GmarketSans500';
+  font-family: "GmarketSans500";
   white-space: pre-wrap;
   padding: 10px;
 }
 
-.main-tooltip-text-left,
-.main-tooltip-text-right
- {
+.main-tooltip-text-left {
   width: 270px;
+}
+
+.main-tooltip-text-right {
+  width: 400px;
 }
 
 .main-tooltip-container:hover .main-tooltip-text-left {
@@ -151,13 +153,13 @@ input[type="text"] {
 .main-tooltip-text-left::after {
   content: "";
   position: absolute;
-  top: -18px; 
+  top: -18px;
   left: 50%;
-  margin-left: -5px; 
-  border-width: 10px; 
+  margin-left: -5px;
+  border-width: 10px;
   border-style: solid;
-  border-color: transparent transparent white transparent; 
-  transform: translateX(-50%); 
+  border-color: transparent transparent white transparent;
+  transform: translateX(-50%);
 }
 
 .main-trip-plan-container {
@@ -459,7 +461,6 @@ input[type="text"] {
 .profile-details {
   margin: 10px;
   display: flex;
-  flex-direction: column;
 }
 
 .middle-navigate {
@@ -571,7 +572,7 @@ input[type="text"] {
 .main-frame {
   width: 100%;
   min-width: 1150px;
-  /* background-image: url(); */
+  background-image: url();
   /* background-size: cover; */
   /* background-position: center center; */
 }
