@@ -2,13 +2,13 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 
-import swal from "sweetalert";
-
 import ScheduleCard, { ScheduleItem } from "../../components/ScheduleCard";
+import "./SchedulePosting.css";
 import { TbBasket, TbBasketMinus, TbMapPin2 } from "react-icons/tb";
 import { FaStar } from "react-icons/fa";
+import swal from "sweetalert";
+import { TiDocumentDelete } from "react-icons/ti";
 
-import "./SchedulePosting.css";
 // 지도
 declare global {
   interface Window {
@@ -148,7 +148,7 @@ export default function SchedulePosting() {
         swal("삭제되었습니다.", {
           icon: "success",
         }).then(() => {
-          navigate("/");
+          navigate("http://localhost:3000/");
         });
       }
     } catch (error) {
@@ -361,7 +361,6 @@ export default function SchedulePosting() {
   useEffect(() => {
     fetchScheduleStarData();
   }, [sno]);
-  console.log(starData);
 
   // starScore의 평균 1단위 계산
   const calculateAverage = () => {
@@ -619,31 +618,31 @@ export default function SchedulePosting() {
 
     const replyContents = scheduleData.replyDTOList
       .filter((reply) => reply.dno === detailItem.dno)
-      .reverse().map((reply) => reply.replyContents);
+      .map((reply) => reply.replyContents);
 
     const replyer = scheduleData.replyDTOList
       .filter((reply) => reply.dno === detailItem.dno)
-      .reverse().map((reply) => reply.replyer);
+      .map((reply) => reply.replyer);
 
     const replyerNickname = scheduleData.replyDTOList
       .filter((reply) => reply.dno === detailItem.dno)
-      .reverse().map((reply) => reply.replyer_nickname);
+      .map((reply) => reply.replyer_nickname);
 
     const replyerImg = scheduleData.replyDTOList
       .filter((reply) => reply.dno === detailItem.dno)
-      .reverse().map((reply) => reply.replyer_img);
+      .map((reply) => reply.replyer_img);
 
     const rno = scheduleData.replyDTOList
       .filter((reply) => reply.dno === detailItem.dno)
-      .reverse().map((reply) => reply.rno);
+      .map((reply) => reply.rno);
 
     const reply_regdate = scheduleData.replyDTOList
       .filter((reply) => reply.dno === detailItem.dno)
-      .reverse().map((reply) => reply.reply_regDate);
+      .map((reply) => reply.reply_regDate);
 
     const reply_moddate = scheduleData.replyDTOList
       .filter((reply) => reply.dno === detailItem.dno)
-      .reverse().map((reply) => reply.reply_modDate);
+      .map((reply) => reply.reply_modDate);
 
     return {
       ...detailItem,
@@ -738,8 +737,11 @@ export default function SchedulePosting() {
                     </div>
                   </div>
                   <div>
-                    <button onClick={() => DeleteSchedule()}>
-                      여행 일정 후기 삭제
+                    <button
+                      onClick={() => DeleteSchedule()}
+                      style={{ fontSize: "100px" }}
+                    >
+                      <TiDocumentDelete />
                     </button>
                   </div>
                 </div>

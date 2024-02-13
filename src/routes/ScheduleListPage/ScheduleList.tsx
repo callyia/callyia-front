@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./ScheduleList.css";
 
-import { FaPlus } from "react-icons/fa";
+import { FaPlus, FaStar } from "react-icons/fa";
 
 interface ScheduleData {
   sno: number;
@@ -23,6 +23,11 @@ interface DetailScheduleData {
   place_id: number;
 }
 
+interface ScheduleStarDTO {
+  starNum: number;
+  starScore: number;
+  sno: number;
+}
 export default function ScheduleList() {
   const [scheduleData, setScheduleData] = useState<ScheduleData[]>([]);
   const [detailScheduleData, setDetailScheduleData] = useState<
@@ -31,6 +36,7 @@ export default function ScheduleList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [cardsToShow, setCardsToShow] = useState(10);
   const [showTopButton, setShowTopButton] = useState(false);
+  const [starData, setStarData] = useState<ScheduleStarDTO[]>([]);
 
   const navigate = useNavigate();
   //sno에 해당하는 detailImage중에서 첫 요소의 이미지
@@ -110,6 +116,82 @@ export default function ScheduleList() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // 별점 GET
+  const fetchScheduleStarData = async (sno: number) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/Callyia/Star/getStar?sno=${sno}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const data = await response.json();
+      setStarData(data);
+    } catch (error) {
+      console.log("Error fetching star data:", error);
+    }
+  };
+
+  // Calculate average star score for a given sno
+  const calculateAverage = (sno: number) => {
+    const filteredStarData = starData.filter((star) => star.sno === sno);
+
+    if (filteredStarData.length === 0) {
+      return 0;
+    }
+
+    const totalScore = filteredStarData.reduce(
+      (acc, star) => acc + star.starScore,
+      0
+    );
+    const averageScore = totalScore / filteredStarData.length;
+
+    // Round to 1 decimal place
+    return Math.round(averageScore * 10) / 10;
+  };
+
+  useEffect(() => {
+    scheduleData.forEach((schedule) => fetchScheduleStarData(schedule.sno));
+  }, [scheduleData]);
+
+  const renderStars = (averageScore: number) => {
+    const filledStars = Math.floor(averageScore); // 정수 부분
+    const remainingStar = averageScore - filledStars; // 소수 부분
+    return (
+      <div style={{ display: "flex" }}>
+        {Array.from({ length: filledStars }, (_, index) => (
+          <FaStar
+            key={index}
+            size="13"
+            style={{
+              color: "#FFBF00",
+              marginRight: "2px",
+            }}
+          />
+        ))}
+        {remainingStar > 0 && (
+          <FaStar
+            key={filledStars}
+            size="13"
+            style={{
+              color: "#FFBF00",
+              marginRight: "2px",
+              clipPath: `polygon(0 0, ${remainingStar * 100}% 0, ${
+                remainingStar * 100
+              }% 100%, 0% 100%)`,
+            }}
+          />
+        )}
+      </div>
+    );
+  };
+
   return (
     <div className="ScheduleList-section-container">
       <section className="ScheduleList-section-div-community">
@@ -124,7 +206,7 @@ export default function ScheduleList() {
             (detail) => detail.sno === schedule.sno
           );
 
-          // console.log(schedule.regDate[0]);
+          const averageScore = calculateAverage(schedule.sno);
 
           // 매칭 데이터가 있을 때 렌더링
           return (
@@ -149,7 +231,7 @@ export default function ScheduleList() {
                     ) : (
                       <span>{schedule.total_Day} days</span>
                     )}
-                    <span>별점들어갈곳</span>
+                    <span>{averageScore && renderStars(averageScore)}</span>
                   </div>
                 </div>
                 <div className="schedule-card-info-bottom">
