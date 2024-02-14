@@ -749,7 +749,12 @@ const Main: React.FC<MainPageProps> = () => {
                 <div className="tipCollect min-w-[668px] max-w-[668px] ">
                   {tipData.map((tipData, index) => (
                     <div className="flex ">
-                      <div className="flex-row tipStyle min-w-[500px] max-w-[500px] overflow-ellipsis text-nowrap overflow-hidden">
+                      <div
+                        onClick={() => {
+                          navigate(`/SchedulePage/${tipData.sno}`);
+                        }}
+                        className="flex-row tipStyle min-w-[500px] max-w-[500px] overflow-ellipsis text-nowrap overflow-hidden"
+                      >
                         {tipData.nickname}
                       </div>
                       <div
