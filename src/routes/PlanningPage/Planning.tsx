@@ -239,7 +239,7 @@ export default function Planning() {
     panTo(lat, lng);
 
     if (index >= 1) {
-      if (dropIndex == 1) {
+      if (dropIndex === 1) {
         var beforePos = new window.kakao.maps.LatLng(
           planData[index - 1].latitude,
           planData[index - 1].longitude
@@ -248,7 +248,7 @@ export default function Planning() {
           planData[index].latitude,
           planData[index].longitude
         );
-      } else if (dropIndex == 2) {
+      } else if (dropIndex === 2) {
         var beforePos = new window.kakao.maps.LatLng(
           planData2[index - 1].latitude,
           planData2[index - 1].longitude
@@ -257,7 +257,7 @@ export default function Planning() {
           planData2[index].latitude,
           planData2[index].longitude
         );
-      } else if (dropIndex == 3) {
+      } else if (dropIndex === 3) {
         var beforePos = new window.kakao.maps.LatLng(
           planData3[index - 1].latitude,
           planData3[index - 1].longitude
@@ -266,7 +266,7 @@ export default function Planning() {
           planData3[index].latitude,
           planData3[index].longitude
         );
-      } else if (dropIndex == 4) {
+      } else if (dropIndex === 4) {
         var beforePos = new window.kakao.maps.LatLng(
           planData4[index - 1].latitude,
           planData4[index - 1].longitude
@@ -275,7 +275,7 @@ export default function Planning() {
           planData4[index].latitude,
           planData4[index].longitude
         );
-      } else if (dropIndex == 5) {
+      } else if (dropIndex === 5) {
         var beforePos = new window.kakao.maps.LatLng(
           planData5[index - 1].latitude,
           planData5[index - 1].longitude
@@ -284,7 +284,7 @@ export default function Planning() {
           planData5[index].latitude,
           planData5[index].longitude
         );
-      } else if (dropIndex == 6) {
+      } else if (dropIndex === 6) {
         var beforePos = new window.kakao.maps.LatLng(
           planData6[index - 1].latitude,
           planData6[index - 1].longitude
@@ -293,7 +293,7 @@ export default function Planning() {
           planData6[index].latitude,
           planData6[index].longitude
         );
-      } else if (dropIndex == 7) {
+      } else if (dropIndex === 7) {
         var beforePos = new window.kakao.maps.LatLng(
           planData7[index - 1].latitude,
           planData7[index - 1].longitude
@@ -317,26 +317,26 @@ export default function Planning() {
 
       distance = Math.round(polyline.getLength());
 
-      if (dropIndex == 1)
+      if (dropIndex === 1)
         distanceContent = getTimeHTML(distance, planData[index].placeName);
-      else if (dropIndex == 2)
+      else if (dropIndex === 2)
         distanceContent = getTimeHTML(distance, planData2[index].placeName);
-      else if (dropIndex == 3)
+      else if (dropIndex === 3)
         distanceContent = getTimeHTML(distance, planData3[index].placeName);
-      else if (dropIndex == 4)
+      else if (dropIndex === 4)
         distanceContent = getTimeHTML(distance, planData4[index].placeName);
-      else if (dropIndex == 5)
+      else if (dropIndex === 5)
         distanceContent = getTimeHTML(distance, planData5[index].placeName);
-      else if (dropIndex == 6)
+      else if (dropIndex === 6)
         distanceContent = getTimeHTML(distance, planData6[index].placeName);
-      else if (dropIndex == 7)
+      else if (dropIndex === 7)
         distanceContent = getTimeHTML(distance, planData7[index].placeName);
 
       showDistance(distanceContent, currentPos);
-    } else if (index == 0) {
-      if (dropIndex != 1) {
+    } else if (index === 0) {
+      if (dropIndex !== 1) {
         try {
-          if (dropIndex == 2) {
+          if (dropIndex === 2) {
             var beforePos = new window.kakao.maps.LatLng(
               planData[planData.length - 1].latitude,
               planData[planData.length - 1].longitude
@@ -345,7 +345,7 @@ export default function Planning() {
               planData2[index].latitude,
               planData2[index].longitude
             );
-          } else if (dropIndex == 3) {
+          } else if (dropIndex === 3) {
             var beforePos = new window.kakao.maps.LatLng(
               planData2[planData2.length - 1].latitude,
               planData2[planData2.length - 1].longitude
@@ -354,7 +354,7 @@ export default function Planning() {
               planData3[index].latitude,
               planData3[index].longitude
             );
-          } else if (dropIndex == 4) {
+          } else if (dropIndex === 4) {
             var beforePos = new window.kakao.maps.LatLng(
               planData3[planData3.length - 1].latitude,
               planData3[planData3.length - 1].longitude
@@ -363,7 +363,7 @@ export default function Planning() {
               planData4[index].latitude,
               planData4[index].longitude
             );
-          } else if (dropIndex == 5) {
+          } else if (dropIndex === 5) {
             var beforePos = new window.kakao.maps.LatLng(
               planData4[planData4.length - 1].latitude,
               planData4[planData4.length - 1].longitude
@@ -372,7 +372,7 @@ export default function Planning() {
               planData5[index].latitude,
               planData5[index].longitude
             );
-          } else if (dropIndex == 6) {
+          } else if (dropIndex === 6) {
             var beforePos = new window.kakao.maps.LatLng(
               planData5[planData5.length - 1].latitude,
               planData5[planData5.length - 1].longitude
@@ -381,7 +381,7 @@ export default function Planning() {
               planData6[index].latitude,
               planData6[index].longitude
             );
-          } else if (dropIndex == 7) {
+          } else if (dropIndex === 7) {
             var beforePos = new window.kakao.maps.LatLng(
               planData6[planData6.length - 1].latitude,
               planData6[planData6.length - 1].longitude
@@ -405,19 +405,19 @@ export default function Planning() {
 
           distance = Math.round(polyline.getLength());
 
-          if (dropIndex == 1)
+          if (dropIndex === 1)
             distanceContent = getTimeHTML(distance, planData[index].placeName);
-          else if (dropIndex == 2)
+          else if (dropIndex === 2)
             distanceContent = getTimeHTML(distance, planData2[index].placeName);
-          else if (dropIndex == 3)
+          else if (dropIndex === 3)
             distanceContent = getTimeHTML(distance, planData3[index].placeName);
-          else if (dropIndex == 4)
+          else if (dropIndex === 4)
             distanceContent = getTimeHTML(distance, planData4[index].placeName);
-          else if (dropIndex == 5)
+          else if (dropIndex === 5)
             distanceContent = getTimeHTML(distance, planData5[index].placeName);
-          else if (dropIndex == 6)
+          else if (dropIndex === 6)
             distanceContent = getTimeHTML(distance, planData6[index].placeName);
-          else if (dropIndex == 7)
+          else if (dropIndex === 7)
             distanceContent = getTimeHTML(distance, planData7[index].placeName);
 
           showDistance(distanceContent, currentPos);
@@ -442,7 +442,7 @@ export default function Planning() {
     if (polyline) polyline.setMap(null);
 
     panTo(latitude, longitude);
-    if (isBtnClick == true) {
+    if (isBtnClick === true) {
       if (pd.length >= 99)
         toast.error("플랜은 최대 99개까지 저장할 수 있어요!");
       else {
@@ -868,7 +868,7 @@ export default function Planning() {
       "#updateBtn"
     ) as HTMLButtonElement;
 
-    if (titleInput.value != "") {
+    if (titleInput.value !== "") {
       titleText.textContent = titleInput.value;
       toast.success("이름 변경 성공!");
       titleInput.value = "";
@@ -975,13 +975,13 @@ export default function Planning() {
           var newd7: typeof plans = [];
 
           data1.map((data: any, index: any) => {
-            if (data2[index] == 1) newd1 = [...newd1, data];
-            else if (data2[index] == 2) newd2 = [...newd2, data];
-            else if (data2[index] == 3) newd3 = [...newd3, data];
-            else if (data2[index] == 4) newd4 = [...newd4, data];
-            else if (data2[index] == 5) newd5 = [...newd5, data];
-            else if (data2[index] == 6) newd6 = [...newd6, data];
-            else if (data2[index] == 7) newd7 = [...newd7, data];
+            if (data2[index] === 1) newd1 = [...newd1, data];
+            else if (data2[index] === 2) newd2 = [...newd2, data];
+            else if (data2[index] === 3) newd3 = [...newd3, data];
+            else if (data2[index] === 4) newd4 = [...newd4, data];
+            else if (data2[index] === 5) newd5 = [...newd5, data];
+            else if (data2[index] === 6) newd6 = [...newd6, data];
+            else if (data2[index] === 7) newd7 = [...newd7, data];
           });
           setPlanData([...planData, ...newd1]);
           setPlanData2([...planData, ...newd2]);
@@ -1101,19 +1101,19 @@ export default function Planning() {
 
       var placeId;
 
-      if (day == 1) {
+      if (day === 1) {
         placeId = planData[index].placeId;
-      } else if (day == 2) {
+      } else if (day === 2) {
         placeId = planData2[index].placeId;
-      } else if (day == 3) {
+      } else if (day === 3) {
         placeId = planData3[index].placeId;
-      } else if (day == 4) {
+      } else if (day === 4) {
         placeId = planData4[index].placeId;
-      } else if (day == 5) {
+      } else if (day === 5) {
         placeId = planData5[index].placeId;
-      } else if (day == 6) {
+      } else if (day === 6) {
         placeId = planData6[index].placeId;
-      } else if (day == 7) {
+      } else if (day === 7) {
         placeId = planData7[index].placeId;
       }
 
@@ -1154,7 +1154,7 @@ export default function Planning() {
       ...planData7,
     ].length;
 
-    if (planLength != flattenedValues.length) {
+    if (planLength !== flattenedValues.length) {
       toggleLoading();
       toast.error("각 계획별로 사진이나 팁을 남겨주세요!");
       return;
@@ -1178,7 +1178,7 @@ export default function Planning() {
     const data = response.data;
     console.log(data);
 
-    if (data.length == 0) {
+    if (data.length === 0) {
       toggleLoading();
       toast.error("각 계획별로 사진이나 팁을 남겨주세요!");
       return;
@@ -1495,7 +1495,7 @@ export default function Planning() {
                       Day {index + 1}
                     </span>
                   </div>
-                  {index + 1 == 1 &&
+                  {index + 1 === 1 &&
                     planData.map((plan, i) => (
                       <div key={`${index}-${i}`}>
                         <h1 className="post-modal-day-placeName">
@@ -1526,7 +1526,7 @@ export default function Planning() {
                         />
                       </div>
                     ))}
-                  {index + 1 == 2 &&
+                  {index + 1 === 2 &&
                     planData2.map((plan, i) => (
                       <div key={`${index}-${i}`}>
                         <h1 className="post-modal-day-placeName">
@@ -1557,7 +1557,7 @@ export default function Planning() {
                         />
                       </div>
                     ))}
-                  {index + 1 == 3 &&
+                  {index + 1 === 3 &&
                     planData3.map((plan, i) => (
                       <div key={`${index}-${i}`}>
                         <h1 className="post-modal-day-placeName">
@@ -1588,7 +1588,7 @@ export default function Planning() {
                         />
                       </div>
                     ))}
-                  {index + 1 == 4 &&
+                  {index + 1 === 4 &&
                     planData4.map((plan, i) => (
                       <div key={`${index}-${i}`}>
                         <h1 className="post-modal-day-placeName">
@@ -1619,7 +1619,7 @@ export default function Planning() {
                         />
                       </div>
                     ))}
-                  {index + 1 == 5 &&
+                  {index + 1 === 5 &&
                     planData5.map((plan, i) => (
                       <div key={`${index}-${i}`}>
                         <h1 className="post-modal-day-placeName">
@@ -1650,7 +1650,7 @@ export default function Planning() {
                         />
                       </div>
                     ))}
-                  {index + 1 == 6 &&
+                  {index + 1 === 6 &&
                     planData6.map((plan, i) => (
                       <div key={`${index}-${i}`}>
                         <h1 className="post-modal-day-placeName">
@@ -1681,7 +1681,7 @@ export default function Planning() {
                         />
                       </div>
                     ))}
-                  {index + 1 == 7 &&
+                  {index + 1 === 7 &&
                     planData7.map((plan, i) => (
                       <div key={`${index}-${i}`}>
                         <h1 className="post-modal-day-placeName">
