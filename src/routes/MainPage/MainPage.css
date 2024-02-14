@@ -246,9 +246,9 @@ input[type="text"] {
   margin-bottom: 100px;
   padding: 30px;
   word-break: keep-all;
-  background-image: url("../../../public/dummyimages/main-community-image3.jpg");
+  background-image: url("../../../public/dummyimages/main-community-image.jpg");
   background-size: cover;
-  background-position: center center;
+  background-position: center -240px;
 }
 
 .main-section-div-community-right {
@@ -274,6 +274,7 @@ input[type="text"] {
 }
 
 .main-section-div-sm {
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -549,7 +550,7 @@ input[type="text"] {
   display: flex;
   width: 346px;
   height: 288px;
-  background-image: url("https://static.wixstatic.com/media/5bfb6f_9f2519d5fc2d41f990a10dd92eb8658d.jpg/v1/fill/w_314,h_260,al_c,q_80,usm_0.66_1.00_0.01,enc_auto/5bfb6f_9f2519d5fc2d41f990a10dd92eb8658d.jpg");
+  background-image: url("../../../public/dummyimages/santorini.jpg");
   background-size: cover;
   background-position: center center;
   z-index: 99;
@@ -583,7 +584,7 @@ input[type="text"] {
   display: flex;
   width: 346px;
   height: 288px;
-  background-image: url("https://static.wixstatic.com/media/5bfb6f_ea37f67cad544b348df9f3d0ff40f282.jpg/v1/fill/w_314,h_260,al_c,q_80,usm_0.66_1.00_0.01,enc_auto/5bfb6f_ea37f67cad544b348df9f3d0ff40f282.jpg");
+  background-image: url("../../../public/dummyimages/food.jpg");
   margin: 15px;
   background-size: cover;
   background-position: center center;
@@ -617,7 +618,7 @@ input[type="text"] {
   display: flex;
   width: 346px;
   height: 288px;
-  background-image: url("https://static.wixstatic.com/media/5bfb6f_c667d0c9bd634b1aa2b29311795f3c51.jpg/v1/fill/w_315,h_260,al_c,q_80,usm_0.66_1.00_0.01,enc_auto/5bfb6f_c667d0c9bd634b1aa2b29311795f3c51.jpg");
+  background-image: url("../../../public/dummyimages/zakynthos.jpg");
   background-size: cover;
   background-position: center center;
   z-index: 99;

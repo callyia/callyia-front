@@ -540,6 +540,9 @@ const Main: React.FC<MainPageProps> = () => {
                 <span className="main-tooltip-text">HELP</span>
               </div>
             </div>
+            <span className="absolute text-white bottom-1 right-1">
+              Designed by Freepik
+            </span>
           </section>
         </div>
 
