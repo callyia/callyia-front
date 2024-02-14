@@ -651,6 +651,7 @@ const Main: React.FC<MainPageProps> = () => {
                       </div>
                     </span>
                     <h1
+                      className="min-h-[84px] max-h-[84px] overflow-hidden"
                       style={{
                         fontSize: "30px",
                         fontWeight: "bold",
@@ -658,8 +659,8 @@ const Main: React.FC<MainPageProps> = () => {
                       }}
                     >
                       {schedule.sName}
-                      <span>{averageScore && renderStars(averageScore)}</span>
                     </h1>
+                    <span>{averageScore && renderStars(averageScore)}</span>
                   </div>
                 );
               })}
@@ -709,7 +710,7 @@ const Main: React.FC<MainPageProps> = () => {
                     {selectedTour && (
                       <div>
                         <div className="flex items-center mt-2">
-                          <p className="flex-grow max-h-[28px] max-w-[334px] p-1 text-style">
+                          <p className="flex-grow max-h-[59px] max-w-[334px] p-1 text-style">
                             {selectedTour.address}
                           </p>
                         </div>

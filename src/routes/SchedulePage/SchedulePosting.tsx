@@ -692,16 +692,11 @@ export default function SchedulePosting() {
                     {scheduleData.scheduleDTO?.member_nickname}
                   </p>
                 </div>
-                <div style={{ display: "flex" }}>
-                  <h2
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                    }}
-                  >
+                <div style={{ display: "flex", width: "650px" }}>
+                  <h2 className="min-w-[320px] max-w-[320px] overflow-hidden text-nowrap overflow-ellipsis">
                     {scheduleData.scheduleDTO?.sName}
                     <p style={{ fontSize: "15px" }}>
-                      평균평점({averageScore})/ 평가인원(
+                      평균평점({averageScore}) / 평가인원(
                       {starData.length}명)
                       {averageScore && renderStars(averageScore)}
                     </p>
