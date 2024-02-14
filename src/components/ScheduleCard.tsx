@@ -71,10 +71,10 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
     indices.sort((a, b) => {
       const dateAObj = reply_modDate[a] || reply_regDate[a] || new Date();
       const dateBObj = reply_modDate[b] || reply_regDate[b] || new Date();
-  
+
       const timestampA = dateAObj instanceof Date ? dateAObj.getTime() : 0;
       const timestampB = dateBObj instanceof Date ? dateBObj.getTime() : 0;
-  
+
       return timestampB - timestampA;
     });
     return indices;
@@ -299,8 +299,9 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
       <div className="before-card">
         <div>
           <span className="schedule-number">{place_name}</span>
-          <h3>{place_content}</h3>
-          <p>TIP : {tip}</p>
+          <h3 className="max-w-[550px]">{place_content}</h3>
+          <p className="font-bold text-[19px]">TIP</p>
+          <p className="max-w-[550px] text-ellipsis overflow-hidden ">{tip}</p>
         </div>
         <div>
           <div className="card-buttons" style={{ display: "flex" }}>
@@ -363,10 +364,13 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
             </div>
             {sortedReplyIndices.map((reply, index) => (
               // <li key={index} onClick={() => handlereplyClick(reply, index)}>
-                <li key={index} onClick={(e) => {
-                e.stopPropagation(); 
-                handlereplyClick(reply_contents[index], index)
-              }}>
+              <li
+                key={index}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handlereplyClick(reply_contents[index], index);
+                }}
+              >
                 <span
                   style={{
                     fontSize: "1.1em",

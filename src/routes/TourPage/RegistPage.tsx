@@ -697,7 +697,7 @@ const RegistPage: React.FC<RegistPageProps> = ({ checkColumnData }) => {
                   {selectedTour && (
                     <div>
                       <div className="flex items-center mt-2">
-                        <p className="flex-grow max-h-[28px] max-w-[334px] p-1 text-style">
+                        <p className="flex-grow max-h-[59px] max-w-[334px] p-1 text-style">
                           {selectedTour.address}
                         </p>
                       </div>

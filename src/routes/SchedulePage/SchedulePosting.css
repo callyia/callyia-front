@@ -267,6 +267,8 @@
   flex-direction: column;
   align-items: center;
   margin-right: 10px;
+  width: 80px;
+  height: 117px;
 }
 
 .add-to-cart-btn {
