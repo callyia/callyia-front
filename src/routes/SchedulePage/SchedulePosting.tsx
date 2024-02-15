@@ -732,12 +732,14 @@ export default function SchedulePosting() {
                     </div>
                   </div>
                   <div>
-                    <button
-                      onClick={() => DeleteSchedule()}
-                      style={{ fontSize: "100px" }}
-                    >
-                      <TiDocumentDelete />
-                    </button>
+                    {scheduleData.scheduleDTO?.member_email === email && (
+                      <button
+                        onClick={() => DeleteSchedule()}
+                        style={{ fontSize: "100px" }}
+                      >
+                        <TiDocumentDelete />
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
